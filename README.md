@@ -6,3 +6,5 @@ After groundbreaking "TA-RG-ET संस्कृतम्" hackathon (https://w
 We aspire to collect/create at least 100 "Teaching Aids" or "Recreational Games" or "Edutainment Tools" for Sanskrit here!
 
 जयतु संस्कृतम्।
+
+PS: more details/updates will be added as we proceed further - a movement is impossible without movers and shakers to come together - all are welcome!
