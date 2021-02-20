@@ -8,8 +8,12 @@ body {
   background-color: #031927;
 }
 .coming-soon {
-  font-size: 7rem;
+  margin-left: 50px;
+  font-size: 4rem;
   color: #9dd1f1;
+}
+.small {
+  font-size: 2rem;
 }
 .floating-img {
   width: 150px;
@@ -56,6 +60,10 @@ body {
   .coming-soon {
     font-size: 4rem;
     color: #9dd1f1;
+  }
+
+  .small {
+    font-size: 2rem;
   }
 
   .floating-img {
