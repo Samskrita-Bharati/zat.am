@@ -21,6 +21,8 @@ body {
   width: 250px;
   height: 250px;
   margin: 10px;
+  cursor: pointer;
+  border-radius: 10px;
 }
 
 .image-container {
