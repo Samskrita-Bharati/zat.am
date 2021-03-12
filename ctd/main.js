@@ -4,8 +4,14 @@ const image_container = document.querySelector('.image-container');
 
 let address = []; 
 let img;
+let words = ['चटका','हृदय', 'फल' , 'अस्थि', 'नरचिह्न', 'प्रसेव' , 'चमस', 'धेनु', 'कादम्ब', 'गज', 'अभ्र' , 'चन्द्र', 'नक्षत्र', 'युतक', 'पर्ण', 'हस्त', 'भल्लूक', 'उष्ट्र', 'सेवम्', 'दन्त', 'left' , 'वर्तुल', 'अण्ड', 'left' , 'काष्ठीला'];
 
 for(let i =0 ; i<25 ; ++i){
+
+
+        //this is the indi container
+        let container_indi = document.createElement('div');
+        container_indi.classList.add('container-indi');
     
     //making the img tag
      img = document.createElement('img');
@@ -15,7 +21,23 @@ for(let i =0 ; i<25 ; ++i){
     img.setAttribute('src', address[i]);   // <img src='1.....21.jpg'>
     img.classList.add('ctd-image');
 
-    image_container.appendChild(img);
+    //  let br = document.createElement('br');
+
+    //boiler plate
+    let p = document.createElement('span');
+    p.classList.add('p-boilerplate');
+
+    p.innerHTML = words[i];
+    p.style.color = 'white';
+    container_indi.appendChild(img);
+ //   container_indi.appendChild(br);
+    container_indi.appendChild(p);
+
+    image_container.appendChild(container_indi);
+    
+
+    
+
 }
  
 
@@ -47,12 +69,14 @@ for(let i = 0 ; i<25 ; ++i){
             pwa.document.close();
         }
        PrintImage();
-        
-    
-      
-
     }
 
 }
 
 
+/*
+
+let words = ['' , '', '', '', '',]
+
+
+*/

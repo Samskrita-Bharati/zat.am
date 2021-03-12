@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 * {
   margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
@@ -23,10 +25,30 @@ body {
   margin: 10px;
   cursor: pointer;
   border-radius: 10px;
+  -webkit-transition: -webkit-transform 0.1s ease-in-out;
+  transition: -webkit-transform 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out, -webkit-transform 0.1s ease-in-out;
+}
+
+.ctd-image:hover {
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
 }
 
 .image-container {
   text-align: center;
+}
+
+.container-indi {
+  display: inline-block;
+  margin-top: 50px;
+  width: 290px;
+  height: 290px;
+}
+
+.p-boilerplate {
+  font-size: 1.4rem;
 }
 
 @media (max-width: 400px) {

@@ -2,6 +2,7 @@
 
 * {
   margin: 0;
+  box-sizing: border-box;
 }
 body {
   margin: 0;
@@ -21,9 +22,25 @@ body {
   margin: 10px;
   cursor: pointer;
   border-radius: 10px;
+  transition: transform 0.1s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
+
 .image-container {
   text-align: center;
+}
+
+.container-indi {
+  display: inline-block;
+  margin-top: 50px;
+  width: 290px;
+  height: 290px;
+}
+.p-boilerplate {
+  font-size: 1.4rem;
 }
 
 @media (max-width: 400px) {
