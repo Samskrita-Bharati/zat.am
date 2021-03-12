@@ -4,50 +4,30 @@ const image_container = document.querySelector('.image-container');
 
 let address = []; 
 let img;
-let words = ['चटका','हृदय', 'फल' , 'अस्थि', 'नरचिह्न', 'प्रसेव' , 'चमस', 'धेनु', 'कादम्ब', 'गज', 'अभ्र' , 'चन्द्र', 'नक्षत्र', 'युतक', 'पर्ण', 'हस्त', 'भल्लूक', 'उष्ट्र', 'सेवम्', 'दन्त', 'left' , 'वर्तुल', 'अण्ड', 'left' , 'काष्ठीला'];
+let words = ['चटका','हृदयम्', 'फलम्' , 'अस्थि', 'नरचिह्न', 'प्रसेव' , 'चमस', 'धेनु', 'कादम्ब', 'गज', 'अभ्र' , 'चन्द्र', 'नक्षत्रम्', 'युतकम्', 'पर्णम्', 'हस्त', 'भल्लूक', 'उष्ट्र', 'सेवम्', 'दन्त', 'left' , 'वर्तुल', 'अण्ड', 'left' , 'काष्ठीला'];
+//hht 
+var lnk="";
+let i=0;
+lnk+='https://api.github.com/repos/Samskrita-Bharati/zat.am/contents/ctd/Images';
+(async () => {
+        const response = await fetch(lnk);
+        const data = await response.json();
+        let htmlString = '';
+        for (let file of data) {
+			     
+                  htmlString += `<div class="container-indi"> <img src="Images/${file.name}" onlick="PrintImage();" class="ctd-image"><span class="p-boilerplate" style="color:white">`+words[i]+`</span></div>`;
+          i++;
+        }
+		//console.log(htmlString);
+        document.getElementsByClassName('image-container')[0].innerHTML += htmlString;
+      })()
+// hht 
 
-for(let i =0 ; i<25 ; ++i){
-
-
-        //this is the indi container
-        let container_indi = document.createElement('div');
-        container_indi.classList.add('container-indi');
-    
-    //making the img tag
-     img = document.createElement('img');
-
-    //setting src to the image
-    address[i] = 'Images/' + (i+1) + '.jpg' ;
-    img.setAttribute('src', address[i]);   // <img src='1.....21.jpg'>
-    img.classList.add('ctd-image');
-
-    //  let br = document.createElement('br');
-
-    //boiler plate
-    let p = document.createElement('span');
-    p.classList.add('p-boilerplate');
-
-    p.innerHTML = words[i];
-    p.style.color = 'white';
-    container_indi.appendChild(img);
- //   container_indi.appendChild(br);
-    container_indi.appendChild(p);
-
-    image_container.appendChild(container_indi);
-    
-
-    
-
-}
  
 
-let images_array = document.querySelectorAll('.ctd-image');
 
-console.log(images_array);
-
-for(let i = 0 ; i<25 ; ++i){
   
-    images_array[i].onclick = function(){
+
          
         //window.open(address[i],'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
 
@@ -68,10 +48,8 @@ for(let i = 0 ; i<25 ; ++i){
             pwa.document.write(ImagetoPrint(address[i]));
             pwa.document.close();
         }
-       PrintImage();
-    }
-
-}
+      
+ 
 
 
 /*
