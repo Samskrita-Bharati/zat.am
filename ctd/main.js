@@ -15,7 +15,7 @@ lnk+='https://api.github.com/repos/Samskrita-Bharati/zat.am/contents/ctd/Images'
         let htmlString = '';
         for (let file of data) {
 			     
-                  htmlString += `<div class="container-indi"> <img src="Images/${file.name}" onlick="PrintImage();" class="ctd-image"><span class="p-boilerplate" style="color:white">`+words[i]+`</span></div>`;
+                  htmlString += `<div class="container-indi"> <img src="Images/${file.name}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:white">`+words[i]+`</span></div>`;
           i++;
         }
 		//console.log(htmlString);
@@ -23,38 +23,20 @@ lnk+='https://api.github.com/repos/Samskrita-Bharati/zat.am/contents/ctd/Images'
       })()
 // hht 
 
- 
-
-
-  
-
-         
-        //window.open(address[i],'Image','width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
-
-        function ImagetoPrint()
+        function ImagetoPrint(inp)
         {
             return "<html><head><scri"+"pt>function step1(){\n" +
                     "setTimeout('step2()', 10);}\n" +
                     "function step2(){window.print();window.close()}\n" +
                     "</scri" + "pt></head><body onload='step1()'>\n" +
-                    "<img src='" + address[i] + "' /></body></html>";
+                    "<img src='" + inp + "' /></body></html>";
         }
     
-        function PrintImage()
+        function PrintImage(obj)
         {
             var Pagelink = "about:blank";
             var pwa = window.open(Pagelink, "_new");
             pwa.document.open();
-            pwa.document.write(ImagetoPrint(address[i]));
+            pwa.document.write(ImagetoPrint(obj.src));
             pwa.document.close();
         }
-      
- 
-
-
-/*
-
-let words = ['' , '', '', '', '',]
-
-
-*/
