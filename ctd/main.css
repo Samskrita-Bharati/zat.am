@@ -1,15 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 * {
   margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #151515;
+  background: #031927;
+  text-align: center;
 }
 
 .heading {
-  color: #c7493a;
+  color: #9DD1F1;
   font-size: 2.6rem;
   font-family: "Poppins", sans-serif;
   font-weight: bold;
@@ -23,10 +26,51 @@ body {
   margin: 10px;
   cursor: pointer;
   border-radius: 10px;
+  -webkit-transition: -webkit-transform 0.1s ease-in-out;
+  transition: -webkit-transform 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out, -webkit-transform 0.1s ease-in-out;
+}
+
+.ctd-image:hover {
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
 }
 
 .image-container {
   text-align: center;
+}
+
+.container-indi {
+  display: inline-block;
+  margin-top: 50px;
+  width: 290px;
+  height: 290px;
+}
+
+.p-boilerplate {
+  font-size: 1.4rem;
+}
+
+.btn {
+  background-color: #151515;
+  border: 1px solid  #9DD1F1;
+  color: #9DD1F1;
+}
+
+.btn:hover {
+  background-color: #9DD1F1;
+  color: #031927;
+  border: 1px solid  #9DD1F1;
+}
+
+#name-of-picture {
+  padding: 9px;
+  vertical-align: middle;
+  border: 1px solid  #9DD1F1;
+  background: #151515;
+  border-radius: 3px;
+  color: #9DD1F1;
 }
 
 @media (max-width: 400px) {
