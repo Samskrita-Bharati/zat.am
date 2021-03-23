@@ -12,7 +12,7 @@ body {
 }
 
 .heading {
-  color: #9DD1F1;
+  color: #9dd1f1;
   font-size: 2.6rem;
   font-family: "Poppins", sans-serif;
   font-weight: bold;
@@ -54,23 +54,28 @@ body {
 
 .btn {
   background-color: #151515;
-  border: 1px solid  #9DD1F1;
-  color: #9DD1F1;
+  border: 1px solid #9dd1f1;
+  color: #9dd1f1;
 }
 
 .btn:hover {
-  background-color: #9DD1F1;
+  background-color: #9dd1f1;
   color: #031927;
-  border: 1px solid  #9DD1F1;
+  border: 1px solid #9dd1f1;
 }
 
 #name-of-picture {
   padding: 9px;
   vertical-align: middle;
-  border: 1px solid  #9DD1F1;
+  border: 1px solid #9dd1f1;
   background: #151515;
   border-radius: 3px;
-  color: #9DD1F1;
+  color: #9dd1f1;
+}
+
+.upload_image_svg {
+  width: 400px;
+  height: 400px;
 }
 
 @media (max-width: 400px) {

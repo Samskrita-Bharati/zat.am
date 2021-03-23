@@ -1,0 +1,81 @@
+"use strict";
+/*--------------------------
+        |  FIREBASE CONFIGURATIONS  |
+        ----------------------------*/
+var firebaseConfig = {
+  apiKey: "AIzaSyB_Ef-PKY6fIonfQqhwDcFF1YdNXQKkQNM",
+  authDomain: "ctdimagedatabase.firebaseapp.com",
+  projectId: "ctdimagedatabase",
+  storageBucket: "ctdimagedatabase.appspot.com",
+  messagingSenderId: "113395032208",
+  appId: "1:113395032208:web:a87b0e63b9775df1e2f815",
+};
+firebase.initializeApp(firebaseConfig);
+
+/*-----------------------------
+            | FIREBASE CONFIGURATIONS END |
+             ----------------------------*/
+
+const image_file = document.getElementById("upload_file");
+const image_file_button = document.getElementById("upload_file_button");
+let photoName = "";
+let name_of_pic = document.getElementById("name-of-picture");
+let image_links = [];
+let img_indi_link = ""; //for saving the image temporarily and push it to the array.
+// const image_container = document.querySelector('.image-container');
+
+let uploadImage = () => {
+  if (name_of_pic.value == "") {
+    alert("please Enter Something!");
+  } else {
+    photoName = name_of_pic.value;
+  }
+  var formData = new FormData();
+  formData.append("image", image_file.files[0]);
+  $.ajax({
+    url: "https://api.imgur.com/3/image",
+    type: "POST",
+    datatype: "json",
+    headers: {
+      Authorization: "Client-ID 62570b23d77cc20",
+    },
+    data: formData,
+    success: function (response) {
+      console.log(response);
+      img_indi_link = response.data.link;
+
+      //saving images to the firebase
+      let firebase_ref = firebase.database().ref("image_links");
+      const links = {
+        img_indi_link,
+        photoName,
+      };
+      firebase_ref.push(links);
+      image_links.push(img_indi_link);
+      console.log(image_links);
+      var photo_hash = response.data.deletehash;
+    },
+    cache: false,
+    contentType: false,
+    processData: false,
+  });
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
+};
+
+window.addEventListener("load", function (e) {
+  let fetch_ref = firebase.database().ref("image_links");
+  fetch_ref.on("value", (snapshot) => {
+    const fetchedImagesLink = snapshot.val();
+    for (let id in fetchedImagesLink) {
+      console.log(fetchedImagesLink[id].img_indi_link);
+      let image =
+        `<div class="container-indi"> <img src="${fetchedImagesLink[id].img_indi_link}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:#9DD1F1">` +
+        fetchedImagesLink[id].photoName +
+        `</span></div>`;
+      document.getElementsByClassName("image-container")[0].innerHTML += image;
+    }
+  });
+});
+//end
