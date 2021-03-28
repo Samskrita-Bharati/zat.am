@@ -1,24 +1,39 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Mar. 20, 2021, 9:06:20 p.m.
-    Author     : parth
-*/
 @charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 /* CSS Document */
 
-
+.animated_div:hover {
+    width: 60px;
+    height: 40px;
+    background: #92B901;
+    color: #ffffff;
+    position: absolute;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px;
+    float: left;
+    margin: 5px;
+    -webkit-transition: -webkit-transform 1s,opacity 1s,background 1s,width 1s,height 1s,font-size 1s;
+    -webkit-border-radius: 5px;
+    -o-transition-property: width,height,-o-transform,background,font-size,opacity;
+    -o-transition-duration: 1s,1s,1s,1s,1s,1s;
+    -moz-transition-property: width,height,-o-transform,background,font-size,opacity;
+    -moz-transition-duration: 1s,1s,1s,1s,1s,1s;
+    transition-property: width,height,transform,background,font-size,opacity;
+    transition-duration: 1s,1s,1s,1s,1s,1s;
+    border-radius: 5px;
+    opacity: 0.4;
+}
 body {
 	font-size: 28px;
 	background-color: black;
+	font-family: 'Montserrat', sans-serif;
 }
 
 
 /*-----------Navigation bar-------------------*/
 ul {
+  z-index: 100;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -56,6 +71,53 @@ li a:hover {
 	
 }
 
+/*-----------Image Slide-------------------*/
+
+.container {
+  position: relative;
+  width: 80%;
+  border: solid #43F20E;
+
+}
+
+.image {
+	
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.8);
+  overflow: hidden;
+  width: 100%;
+  height:0;
+  transition: .5s ease;
+}
+
+.container:hover .overlay {
+  bottom: 0;
+  height: 100%;
+ 
+}
+
+.text {
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+
 /*-----------Footer-------------------*/
 .footer {
    padding: 14px 16px;
@@ -73,23 +135,32 @@ li a:hover {
 }
 
 .flex-container {
+
+  margin-top: 15px;
   display: flex;
   flex-direction: row;
   font-size: 30px;
   text-align: center;
-  border: solid #111010;
+	border: solid #E45C5E;
+  
 }
 
 .flex-item-left {
-  background-color: #f1f1f1;
-  padding: 10px;
-  flex: 50%;
+  background-color: black;
+  padding: 30px;
+  flex: 33.33%;
+  border: solid #D5C9C9;
+}
+
+.flex-item-center {
+	padding: 10px;
+	flex: 33.33%;
 }
 
 .flex-item-right {
-  background-color: dodgerblue;
+  background-color: black;
   padding: 10px;
-  flex: 50%;
+  flex: 33.33%;
 }
 
 /* Responsive layout - makes a one column-layout instead of two-column layout */
