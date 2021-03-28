@@ -1,0 +1,187 @@
+
+body {
+	position: relative;
+	text-align: center;
+}
+
+img.logo {
+	display: block;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+	height: auto;
+}
+
+table.container {
+	position: relative;
+	border-spacing: 0;
+	border: 4px solid #0abb9c;
+	border-collapse: collapse;
+	display: none;
+	color: #686868;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    margin-top: 1em;
+}
+
+td.cell {
+	border: 2px dotted #0abb9c;
+	padding: 0;
+	cursor: context-menu;
+}
+
+td.emptyCell {
+	border: 2px dotted #0abb9c;
+	padding: 0;
+	cursor: pointer;
+}
+
+#t0x2, #t0x5, #t1x2, #t1x5, #t2x5,
+#t3x2,#t3x5, #t4x2, #t4x5, #t5x2, #t5x5,
+#t6x2, #t6x5, #t7x2, #t7x5, #t8x2, #t8x5 {
+	border-right: 3px solid #0abb9c;
+}
+
+#t2x0, #t2x1, #t2x3, #t2x4, #t2x6, #t2x7,
+#t5x0, #t5x1, #t5x3, #t5x4, #t5x6, #t5x7 {
+	border-bottom: 3px solid #0abb9c;
+}
+
+#t2x2, #t2x5, #t2x8, #t5x2, #t5x5, #t5x8 {
+	border-bottom: 3px solid #0abb9c;
+	border-right: 3px solid #0abb9c;
+}
+
+.inner td {
+	width: 60px;
+	height: 60px;
+	text-align: center;
+	font-size: 2.0em;
+}
+
+.inner td:hover {
+	background-color:#f2e5ee;
+}
+
+.inner td.selected {
+	background-color:#ffbce2;
+}
+
+.mistakeScreen {
+	position: absolute;
+	width: 300px;
+	height: 300px;
+	top:50%;
+    left:50%;
+    margin:-70px 0 0 -150px;
+	display: none;
+	background-color: #6e802f;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-o-border-radius: 20px;
+	-ms-border-radius: 20px;
+	border-radius: 20px;
+	cursor: context-menu;
+	z-index: 1000;
+}
+
+.mistakeText {
+	text-align: center;
+	padding: 65px;
+	line-height: 40px;
+	font-size: 25px;
+	color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.winScreen {
+	position: absolute;
+	width: 500px;
+	height: 500px;
+	top:50%;
+    left:50%;
+    margin:-170px 0 0 -250px;
+	display: none;
+	background-color: #e2525f;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-o-border-radius: 20px;
+	-ms-border-radius: 20px;
+	border-radius: 20px;
+	cursor: context-menu;
+	z-index: 1000;
+}
+
+.winText {
+	text-align: center;
+	padding: 100px;
+	line-height: 70px;
+	font-size: 50px;
+	color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    cursor: context-menu;
+}
+
+#sudokuPuzzle {
+	position: relative;
+}
+
+.formbutton {
+	position: relative;
+	background: #689fce;
+	display: inline-block;
+	padding: 8px;
+	color: #fff;
+	text-decoration: none;
+	font-family: Arial, sans-serif;
+    font-weight: bold;
+	line-height: 1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer; 
+	margin-top: 1.1em;
+}
+
+#numPad {
+	position: absolute;
+	width: 200px;
+	height: 80px;
+	display: none;
+	background-color: #689fce;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-o-border-radius: 20px;
+	-ms-border-radius: 20px;
+	border-radius: 20px;
+	cursor: pointer;
+	z-index: 500;
+}
+
+.padNumbers {
+	text-align: center;
+	padding: 6px;
+	line-height: 40px;
+	font-size: 20px;
+	color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#numPad span:hover {
+	color: #e2525f;
+}
+
+footer {
+	font: 10px Arial, sans-serif;
+	text-align: center;
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50em;
+}
