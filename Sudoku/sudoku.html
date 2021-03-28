@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<title>सुडोकू!</title>
+		<link href="style.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="sudoku.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><script language="javascript" type="text/javascript">
+			let sa = ["","क","ख","ग","घ","ङ","च","छ","ज","झ"];
+			let nums=["","१","२","३","४","५","६","७","८","९"];
+			var puzzle;
+			var selectedTile;
+			var r, c;
+var numtmod="num";
+			$(document).ready(function() {
+				init();
+				$("#grid").fadeIn(500);
+				$(".emptyCell").click(function(e) {
+					r = selectedTile.getAttribute('id').charAt(1);
+					c = selectedTile.getAttribute('id').charAt(3);
+				    $("#numPad").fadeIn(100);
+				    $("#numPad").offset({left: e.pageX - 78,top: e.pageY - 40});
+				});
+				$("#np2").click(function() { numberPad(2); });
+				$("#np3").click(function() { numberPad(3); });
+				$("#np1").click(function() { numberPad(1); });
+				$("#np4").click(function() { numberPad(4); });
+				$("#np5").click(function() { numberPad(5); });
+				$("#np6").click(function() { numberPad(6); });
+				$("#np7").click(function() { numberPad(7); });
+				$("#np8").click(function() { numberPad(8); });
+				$("#np9").click(function() { numberPad(9); });
+				$("#npx").click(function() { numberPad(0); });
+				$(".mistakeScreen").click(function() {
+					$(".mistakeScreen").fadeOut(100);
+				});
+				$("#newGame").click(function() { newGame(); });
+				$("#tognum").click(function(){ numtog();});
+				$("#solve").click(function() {
+					$("#numPad").fadeOut(100);
+				    solve();
+				});
+				
+			});
+
+			function numtog()
+			{
+			//debugger;
+			
+			
+			//if ($("td")[numtc].innerText == "क")
+			//$("td")[numtc].innerText = "1";
+			
+				if (numtmod=="num")
+				{
+				for (numtc=0;numtc<81;numtc++)
+				switch ($("td")[numtc].innerText) 
+						{
+						case "क" : $("td")[numtc].innerText = "१";
+							break;
+						case "ख" : $("td")[numtc].innerText = "२";
+							break;
+						case "ग" : $("td")[numtc].innerText = "३";
+							break;
+						case "घ" : $("td")[numtc].innerText = "४";
+							break;
+						case "ङ" : $("td")[numtc].innerText = "५";
+							break;
+						case "च" : $("td")[numtc].innerText = "६";
+							break;							
+						case "छ" : $("td")[numtc].innerText = "७";
+							break;
+						case "ज" : $("td")[numtc].innerText = "८";
+							break;
+						case "झ" : $("td")[numtc].innerText = "९";
+							break;							
+			} ;
+			numtmod="letter";
+			for (numtc=1;numtc<=9;numtc++)
+			   document.getElementById("np"+numtc).innerText=nums[numtc];
+			}
+			else{
+			for (numtc=0;numtc<81;numtc++)
+			switch ($("td")[numtc].innerText) 
+						{
+						case "१" : $("td")[numtc].innerText = "क";
+							break;
+						case "२" : $("td")[numtc].innerText = "ख";
+							break;
+						case "३" : $("td")[numtc].innerText = "ग";
+							break;
+						case "४" : $("td")[numtc].innerText = "घ";
+							break;							
+						case "५" : $("td")[numtc].innerText = "ङ";
+							break;
+						case "६" : $("td")[numtc].innerText = "च";
+							break;
+						case "७" : $("td")[numtc].innerText = "छ";
+							break;
+						case "८" : $("td")[numtc].innerText = "ज";
+							break;
+						case "९" : $("td")[numtc].innerText = "झ";
+							break;						
+			}
+			numtmod="num";
+			for (numtc=1;numtc<=9;numtc++)
+			   document.getElementById("np"+numtc).innerText=sa[numtc];
+			}
+			
+			
+			}
+			
+			function init() {
+				puzzle = new generateSudoku();
+				for(var i = 0; i < 9; i++) {
+					for(var j = 0; j < 9; j++) {
+						var tile = document.getElementById("t" + i + "x" + j);
+						if(puzzle.getTileNumber(i, j) === 0) {
+							tile.className = "emptyCell";
+							tile.innerHTML = "";
+							tile.onclick = tOnClick;
+						}
+						else {
+							tile.style.backgroundColor = "#ecf4f3";
+							tile.className = "cell";
+							tile.innerHTML = sa[puzzle.getTileNumber(i, j)];
+						}
+					}
+				}
+			}
+
+			function tOnClick() {
+				if(selectedTile == null) {
+					selectedTile = this;
+					selectedTile.className = "emptyCell selected";
+				}
+				else {
+					deselect();
+					$("#numPad").fadeOut(100);
+				}
+			}
+
+			function numberPad(value) {
+				if (numtmod=="num") 
+				   selectedTile.innerHTML = sa[value]
+				else
+				   selectedTile.innerHTML = nums[value];
+				deselect();
+				$("#numPad").fadeOut(100);
+				if(checkForEmptyCells() === true) {
+					var fGrid = getFinishedGrid();
+					for(var i = 0; i < 9; i++) {
+						for(var j = 0; j < 9; j++) {
+							var t = document.getElementById("t" + i + "x" + j);
+							if(t.classList.contains("emptyCell")) {
+								console.log("outside target")
+								console.log(fGrid);
+								if(puzzle.isValid(fGrid, i, j, sa.indexOf(t.innerHTML))) {
+									//console.log("inside target")
+									continue;
+								}
+								else {
+									$(".mistakeScreen").fadeIn(100);
+									return;
+								}
+							}
+						}
+					}
+					$(".winScreen").fadeIn(100);
+					return;
+				}
+			}
+
+			function getFinishedGrid() {
+				var fGrid = new Array(9);
+				for(var i = 0; i < 9; i++) {
+					fGrid[i] = new Array(9);
+					for(var j = 0; j < 9; j++) {
+						fGrid[i][j] = sa.indexOf(document.getElementById("t" + i + "x" + j).innerHTML);
+					}
+				}
+				return fGrid;
+			}
+
+			function checkForEmptyCells() {
+				for(var l = 0; l < 9; l++) {
+					for(var k = 0; k < 9; k++) {
+						var tile = document.getElementById("t" + l + "x" + k);
+						if(tile.innerHTML == "") return false;
+					}
+				}
+				return true;
+			}
+
+			function deselect() {
+				selectedTile.className = "emptyCell";
+				selectedTile = null;
+			}
+
+			function newGame() {
+				location.reload();
+			}
+
+			function solve() {
+				for(var i = 0; i < 9; i++) {
+					for(var j = 0; j < 9; j++) {
+						var tile = document.getElementById("t" + i + "x" + j);
+						tile.innerHTML = sa[puzzle.getSolution(i, j)];
+					}
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="mistakeScreen">
+			<center class="mistakeText">पुनरपि एकवारं प्रयत्नं कुर्म:</center>
+		</div>
+		<div class="winScreen">
+			<center class="winText">अभिनन्दनानि!!!</center>
+		</div>
+		<section id="logosection">
+			<!-- <img class="logo" src="img/sudokuberlogo.png" /> -->
+			<p style="font-size: 60px; margin: -10px -10px; padding: 0px;">सुडोकू</p>
+		</section>
+		<section id="sudokuPuzzle">
+			<div id='numPad'>
+				<center>
+					<div>
+						<!-- ["क्","ख्","ग","घ्","ङ्","च्","छ्","ज्","झ्","ञ्"] -->
+						<span id="np1" class='padNumbers' value='1'>क</span>
+						<span id="np2" class='padNumbers' value='2'>ख</span>
+						<span id="np3" class='padNumbers' value='3'>ग</span>
+						<span id="np4" class='padNumbers' value='4'>घ</span>
+						<span id="np5" class='padNumbers' value='5'>ङ</span>
+					</div>
+					<div>
+						<span id="np6" class='padNumbers' value='6'>च</span>
+						<span id="np7" class='padNumbers' value='7'>छ</span>
+						<span id="np8" class='padNumbers' value='8'>ज</span>
+						<span id="np9" class='padNumbers' value='9'>झ</span>
+						<span id="npx" class='padNumbers' value='x'>x</span>
+					</div>
+				</center>
+			</div>
+			<center>
+				<form id="formwrapper">
+					<span id="newGame" class="formbutton">नूतनं सुडोकू (sudoku)</span>
+					<span id="solve" class="formbutton">उत्तरम्</span>
+					<span id="tognum" class="formbutton">व्यञ्जनम्/संख्या अनुवर्तनम् (Toggle letters/numbers)</span>
+				</form>
+			</center>
+			<table class="inner container" align="center" id="grid">
+				<tr>
+					<td id='t0x0'></td><td id='t0x1'></td><td id='t0x2'></td>
+					<td id='t0x3'></td><td id='t0x4'></td><td id='t0x5'></td>
+					<td id='t0x6'></td><td id='t0x7'></td><td id='t0x8'></td>
+				</tr>
+				<tr>
+					<td id='t1x0'></td><td id='t1x1'></td><td id='t1x2'></td>
+					<td id='t1x3'></td><td id='t1x4'></td><td id='t1x5'></td>
+					<td id='t1x6'></td><td id='t1x7'></td><td id='t1x8'></td>
+				</tr>
+				<tr>
+					<td id='t2x0'></td><td id='t2x1'></td><td id='t2x2'></td>
+					<td id='t2x3'></td><td id='t2x4'></td><td id='t2x5'></td>
+					<td id='t2x6'></td><td id='t2x7'></td><td id='t2x8'></td>
+				</tr>
+
+
+				<tr>
+					<td id='t3x0'></td><td id='t3x1'></td><td id='t3x2'></td>
+					<td id='t3x3'></td><td id='t3x4'></td><td id='t3x5'></td>
+					<td id='t3x6'></td><td id='t3x7'></td><td id='t3x8'></td>
+				</tr>
+				<tr>
+					<td id='t4x0'></td><td id='t4x1'></td><td id='t4x2'></td>
+					<td id='t4x3'></td><td id='t4x4'></td><td id='t4x5'></td>
+					<td id='t4x6'></td><td id='t4x7'></td><td id='t4x8'></td>
+				</tr>
+				<tr>
+					<td id='t5x0'></td><td id='t5x1'></td><td id='t5x2'></td>
+					<td id='t5x3'></td><td id='t5x4'></td><td id='t5x5'></td>
+					<td id='t5x6'></td><td id='t5x7'></td><td id='t5x8'></td>
+				</tr>
+
+
+				<tr>
+					<td id='t6x0'></td><td id='t6x1'></td><td id='t6x2'></td>
+					<td id='t6x3'></td><td id='t6x4'></td><td id='t6x5'></td>
+					<td id='t6x6'></td><td id='t6x7'></td><td id='t6x8'></td>
+				</tr>
+				<tr>
+					<td id='t7x0'></td><td id='t7x1'></td><td id='t7x2'></td>
+					<td id='t7x3'></td><td id='t7x4'></td><td id='t7x5'></td>
+					<td id='t7x6'></td><td id='t7x7'></td><td id='t7x8'></td>
+				</tr>
+				<tr>
+					<td id='t8x0'></td><td id='t8x1'></td><td id='t8x2'></td>
+					<td id='t8x3'></td><td id='t8x4'></td><td id='t8x5'></td>
+					<td id='t8x6'></td><td id='t8x7'></td><td id='t8x8'></td>
+				</tr>
+			</table>
+		</section>
+	</body>
+
+	<footer>
+		Sudoku Source: https://github.com/artbtjr/Sudoku
+	</footer>
+</html>
