@@ -52,15 +52,22 @@ li a {
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 16px;
+  padding: 10px 16px;
   text-decoration: none;
 }
 
-li a:hover {
+.tli a:hover {
+	padding: 15px;
+  background-color: #111;
+}
+
+.sli a:hover {
+	padding: 10px;
   background-color: #111;
 }
 
 .active {
+	padding: 15px 16px;
   background-color: #4CAF50;
 }
 
