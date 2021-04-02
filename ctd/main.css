@@ -39,6 +39,7 @@ body {
 
 .image-container {
   text-align: center;
+  margin-top: -30px;
 }
 
 .container-indi {
@@ -70,6 +71,35 @@ body {
   border: 1px solid #9dd1f1;
   background: #151515;
   border-radius: 3px;
+  color: #9dd1f1;
+}
+
+#tags_input {
+  padding: 9px;
+  vertical-align: middle;
+  border: 1px solid #9dd1f1;
+  background: #151515;
+  border-radius: 3px;
+  color: #9dd1f1;
+}
+
+.tags_container {
+  color: #9dd1f1;
+  padding: 16px;
+}
+
+.tags_indi {
+  border: 2px solid #9dd1f1;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.tags_container_home {
+  margin-top: 15px;
+  padding: 5px;
+  font-size: 1.1rem;
   color: #9dd1f1;
 }
 

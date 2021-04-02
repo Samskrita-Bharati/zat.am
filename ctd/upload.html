@@ -20,6 +20,7 @@
       src="./uploadImage.svg"
       alt=""
     /><br />
+    <div class="tags_container"></div>
     <input
       id="upload_file"
       accept="image/*"
@@ -27,6 +28,10 @@
       type="file"
     />
     <input placeholder="Name of the Picture" id="name-of-picture" type="text" />
+
+    <!--This is for tags-->
+    <input type="text" id="tags_input" placeholder="Enter Your Tags" />
+
     <button
       type="submit"
       onclick="uploadImage();"

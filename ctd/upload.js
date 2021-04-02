@@ -23,6 +23,19 @@ let name_of_pic = document.getElementById("name-of-picture");
 let image_links = [];
 let img_indi_link = ""; //for saving the image temporarily and push it to the array.
 // const image_container = document.querySelector('.image-container');
+let tags_input = document.getElementById("tags_input"); //this is fetching of tags_input field
+let tags_array = [];
+
+//attaching event listener to the tags input
+tags_input.addEventListener("change", function () {
+  tags_array.push(tags_input.value);
+  console.log(tags_array);
+  //adding to the screen
+  let tags_container = document.getElementsByClassName("tags_container")[0];
+  tags_container.innerHTML += `<span class='tags_indi'>${tags_input.value} </span> `;
+
+  tags_input.value = "";
+});
 
 let uploadImage = () => {
   if (name_of_pic.value == "") {
@@ -47,8 +60,10 @@ let uploadImage = () => {
       //saving images to the firebase
       let firebase_ref = firebase.database().ref("image_links");
       const links = {
+        //these are the object to push it to the firebase
         img_indi_link,
         photoName,
+        tags_array,
       };
       firebase_ref.push(links);
       image_links.push(img_indi_link);

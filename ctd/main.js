@@ -33,26 +33,40 @@ let words = [
   "कादम्ब",
 ];
 //hht
-var lnk = "";
-let i = 0;
-lnk +=
-  "https://api.github.com/repos/Samskrita-Bharati/zat.am/contents/ctd/Images";
-(async () => {
-  const response = await fetch(lnk);
-  const data = await response.json();
-  let htmlString = "";
-  console.log(data);
-  for (let file of data) {
-    htmlString +=
-      `<div class="container-indi"> <img src="Images/${file.name}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:#9DD1F1">` +
-      words[i] +
-      `</span></div>`;
-    i++;
-  }
+// var lnk = "";
+// let i = 0;
+// lnk +=
+//   "https://api.github.com/repos/Samskrita-Bharati/zat.am/contents/ctd/Images";
+// (async () => {
+//   const response = await fetch(lnk);
+//   const data = await response.json();
+//   let htmlString = "";
+//   console.log(data);
+//   for (let file of data) {
+//     htmlString +=
+//       `<div class="container-indi"> <img src="Images/${file.name}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:#9DD1F1">` +
+//       words[i] +
+//       `</span></div>`;
+//     i++;
+//   }
 
-  document.getElementsByClassName("image-container")[0].innerHTML += htmlString;
-})();
+//   document.getElementsByClassName("image-container")[0].innerHTML += htmlString;
+// })();
 
+window.addEventListener("load", function (e) {
+  let fetch_ref = firebase.database().ref("image_links");
+  fetch_ref.on("value", (snapshot) => {
+    const fetchedImagesLink = snapshot.val();
+    for (let id in fetchedImagesLink) {
+      console.log(fetchedImagesLink[id].img_indi_link);
+      let image =
+        `<div class="container-indi"> <img src="${fetchedImagesLink[id].img_indi_link}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:#9DD1F1">` +
+        fetchedImagesLink[id].photoName +
+        `</span></div>`;
+      document.getElementsByClassName("image-container")[0].innerHTML += image;
+    }
+  });
+});
 function ImagetoPrint(inp) {
   return (
     "<html><head><scri" +
