@@ -79,18 +79,4 @@ let uploadImage = () => {
   }, 1000);
 };
 
-window.addEventListener("load", function (e) {
-  let fetch_ref = firebase.database().ref("image_links");
-  fetch_ref.on("value", (snapshot) => {
-    const fetchedImagesLink = snapshot.val();
-    for (let id in fetchedImagesLink) {
-      console.log(fetchedImagesLink[id].img_indi_link);
-      let image =
-        `<div class="container-indi"> <img src="${fetchedImagesLink[id].img_indi_link}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:#9DD1F1">` +
-        fetchedImagesLink[id].photoName +
-        `</span></div>`;
-      document.getElementsByClassName("image-container")[0].innerHTML += image;
-    }
-  });
-});
 //end

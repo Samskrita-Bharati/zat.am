@@ -1,9 +1,7 @@
 "use strict";
 
 const image_container = document.querySelector(".image-container");
-
-let address = [];
-
+let n = 0;
 let img;
 let words = [
   "चटका",
@@ -54,19 +52,97 @@ let words = [
 // })();
 
 window.addEventListener("load", function (e) {
-  let fetch_ref = firebase.database().ref("image_links");
+  let all_tags = [];
+  let fetch_ref = firebase.database().ref("image_links"); //this is the ref variable of firebase database
+  let tags_container = document.getElementsByClassName(
+    "tags_container_home"
+  )[0];
   fetch_ref.on("value", (snapshot) => {
     const fetchedImagesLink = snapshot.val();
     for (let id in fetchedImagesLink) {
-      console.log(fetchedImagesLink[id].img_indi_link);
+      //console.log(fetchedImagesLink[id].img_indi_link);
       let image =
-        `<div class="container-indi"> <img src="${fetchedImagesLink[id].img_indi_link}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:#9DD1F1">` +
+        `<div class='container-indi ${fetchedImagesLink[id].photoName}'> <img src="${fetchedImagesLink[id].img_indi_link}" onclick="PrintImage(this);" class="ctd-image"><span class="p-boilerplate" style="color:#9DD1F1">` +
         fetchedImagesLink[id].photoName +
         `</span></div>`;
+
       document.getElementsByClassName("image-container")[0].innerHTML += image;
     }
   });
+
+  //getting tags from the firebase
+  fetch_ref.on("value", (snapshot) => {
+    const fetched_tags = snapshot.val();
+
+    for (let id in fetched_tags) {
+      // console.log(fetched_tags[id].tags_array);
+      for (let i = 0; i < fetched_tags[id].tags_array.length; ++i) {
+        all_tags.push(fetched_tags[id].tags_array[i]);
+      }
+    }
+
+    let tags_set = new Set(all_tags);
+
+    for (let i of tags_set) {
+      if (i == undefined) {
+        continue;
+      }
+      tags_container.innerHTML += `<span class='tags_indi' onclick=filteredImage(this) >${i}</span>`;
+    }
+  });
 });
+function filteredImage() {
+  let displayAll = document.getElementsByClassName("container-indi");
+  for (let elm of displayAll) {
+    console.log("done");
+    elm.style.display = "inline-block";
+  }
+  let n = 0;
+  let tags_on_home = document.getElementsByClassName("tags_indi");
+
+  for (let i = 0; i < tags_on_home.length; ++i) {
+    tags_on_home[i].onclick = function () {
+      let displayAll = document.getElementsByClassName("container-indi");
+      for (let elm of displayAll) {
+        console.log("done");
+        elm.style.display = "inline-block";
+      }
+      //alert(tags_on_home[i].innerHTML);
+      let fetch_ref = firebase.database().ref("image_links"); //this is the ref variable of firebase database
+      fetch_ref.on("value", (snapshot) => {
+        let selected_tags = snapshot.val();
+
+        for (let id in selected_tags) {
+          for (let m = 0; m < selected_tags[id].tags_array.length; ++m) {
+            if (selected_tags[id].tags_array[m] !== tags_on_home[i].innerHTML) {
+              // console.log(selected_tags[id].photoName);
+              // console.log(
+              //   selected_tags[id].tags_array[m] +
+              //     " " +
+              //     tags_on_home[i].innerHTML +
+              //     " " +
+              //     selected_tags[id].photoName
+              // );
+              n = n + 1;
+            }
+          }
+          if (n === selected_tags[id].tags_array.length) {
+            //console.log(selected_tags[id].photoName);
+            let displayNone = document.getElementsByClassName(
+              selected_tags[id].photoName
+            );
+            console.log(displayNone);
+            for (let elm of displayNone) {
+              elm.style.display = "none";
+            }
+          }
+          n = 0;
+        }
+      });
+    };
+  }
+}
+
 function ImagetoPrint(inp) {
   return (
     "<html><head><scri" +

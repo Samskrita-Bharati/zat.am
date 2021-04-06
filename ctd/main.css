@@ -9,6 +9,8 @@ body {
   margin: 0;
   background: #031927;
   text-align: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .heading {
@@ -39,7 +41,7 @@ body {
 
 .image-container {
   text-align: center;
-  margin-top: -30px;
+  margin-top: 10px;
 }
 
 .container-indi {
@@ -63,6 +65,7 @@ body {
   background-color: #9dd1f1;
   color: #031927;
   border: 1px solid #9dd1f1;
+  cursor: pointer;
 }
 
 #name-of-picture {
@@ -94,6 +97,13 @@ body {
   margin: 5px;
   border-radius: 3px;
   display: inline-block;
+}
+
+.tags_indi:hover {
+  background-color: #9dd1f1;
+  color: #031927;
+  border: 1px solid #9dd1f1;
+  cursor: pointer;
 }
 
 .tags_container_home {
