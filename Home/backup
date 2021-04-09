@@ -1,0 +1,93 @@
+   <ul>
+      <li style="font-size: 15pt" class="tli">
+        <a href="#contact">Contact</a>
+      </li>
+      <li style="font-size: 15pt" class="tli">
+        <a href="about.html">About</a>
+      </li>
+      <li style="font-size: 15pt" class="tli">
+        <a class="active" href="index.html">Projects</a>
+      </li>
+      <li style="float: left" class="sli">
+        <a href="index.html"
+          ><img
+            src="zatamlogo.png"
+            style="height: 20px; width: 50px"
+            alt="logo not found!!!!"
+        /></a>
+      </li>
+    </ul>
+    <!---------
+    <!---gride-------------------------------------------------------------------------------->
+    <div class="flex-container">
+      <div class="flex-item-left">
+        <!------------------------------------CTD----------------------------------------------->
+
+        <a href="https://zat.am/ctd/">
+          <div class="container">
+            <img
+              src="connectdots[1].jpg"
+              alt=" Opps Img not found!!1"
+              class="image"
+            />
+            <div class="overlay">
+              <div class="text">
+                This game will be used teach counting in Sanskrit in the form of
+                game.
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="flex-item-center">
+        <!--------------------------------Sudoku--------------------------------------------------->
+
+        <a href="https://zat.am/Sudoku/index.html">
+          <div class="container">
+            <img
+              src="WhatsApp Image 2021-03-28 at 6.48.31 PM.jpeg"
+              alt=" Opps Img not found!!1"
+              class="image"
+            />
+            <div class="overlay">
+              <div class="text">
+                This game will be used teach counting in Sanskrit in the form of
+                game.
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="flex-item-right">2</div>
+
+      <a href="Https://zat.am/memorygame/index.html">
+        <div class="container">
+          <img
+            src="key-memory-game-small.webp"
+            alt=" Opps Img not found!!1"
+            class="image"
+          />
+          <div class="overlay">
+            <div class="text">
+              This game will be used teach counting in Sanskrit in the form of
+              game.
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="flex-container">
+      <div class="flex-item-left">3</div>
+      <div class="flex-item-center">0</div>
+      <div class="flex-item-right">4</div>
+    </div>
+
+    <div class="flex-container">
+      <div class="flex-item-left">5</div>
+      <div class="flex-item-center">0</div>
+      <div class="flex-item-right">6</div>
+    </div>
+    ------>
