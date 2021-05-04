@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+ <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="ss.css" type="text/css" rel="stylesheet">
+<script type="application/javascript" src="ss.js"></script>
+<link rel="icon" type="image/png" href="sopansarpicon.png">
+    <meta name="description" content="sopaanasarpaaH - सोपानसर्पाः"/>
+    <meta property="og:title" content="सोपानसर्पाः" />
+    <meta property="og:url" content="http://www.123kakha.ga/so" />
+    <meta property="og:description" content="सोपानसर्पाः - Ladder & Snakes in Sanskrit" />
+	<meta property="og:type" content="website" />
+    <meta property="og:image:type" content="image/jpeg">
+    <meta name="twitter:card" content="सोपानसर्पाः" />
+    <meta property="og:image" content="sopansarpicon.png"/>
+    <meta property="og:image:width" content="300"/>
+    <meta property="og:image:height" content="300"/>
+</head><body>
+<div style="position: relative;">
+    <canvas id="canvas" width="900" height="900"></canvas>
+    <canvas style="display: block;" id="dcanvas" width="900" height="900"></canvas>
+<div id="rtColumn">
+		<div id="controls">
+			<div id="music"><button>Sound On</button></div>
+		</div>
+		<div id="dice" class="" onclick="rollDice()">
+			<h4>Click on the dice to roll.</h4>
+			<img id="dice-anim" src="res/sdice.gif">
+			<div id="dice-static">
+
+				<img src="res/dice2.png">
+			</div>
+		</div>
+		<div id="players">
+			<div class="player">
+				<div class="name">Computer</div>
+				<img class="avatar" src="res/comp.png">
+				<div style="font-size: 12px;" id="compposdiv"> </div>
+			</div>
+			<div class="player">
+
+				<div class="name">You</div>
+				<img class="avatar" src="res/u.png">
+				<div style="font-size: 12px;" id="uposdiv"> <div>
+			</div>
+		   
+		</div>
+		
+
+
+	</div>
+</div>
+<script>
+GameEng.init();
+</script>
+<audio autobuffer preload=auto>
+<source src="1.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="2.wav" />
+<source src="2.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="3.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="4.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="5.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="6.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="7.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="8.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="9.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="10.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="11.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="12.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="13.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="14.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="15.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="16.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="17.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="18.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="19.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="20.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="21.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="22.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="23.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="24.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="25.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="26.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="27.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="28.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="29.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="30.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="31.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="32.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="33.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="34.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="35.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="36.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="37.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="38.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="39.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="40.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="41.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="42.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="43.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="44.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="45.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="46.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="47.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="48.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="49.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="50.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="51.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="52.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="53.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="54.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="55.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="56.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="57.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="58.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="59.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="60.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="61.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="62.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="63.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="64.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="65.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="66.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="67.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="68.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="69.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="70.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="71.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="72.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="73.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="74.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="75.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="76.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="77.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="78.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="79.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="80.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="81.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="82.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="83.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="84.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="85.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="86.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="87.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="88.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="89.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="90.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="91.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="92.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="93.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="94.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="95.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="96.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="97.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="98.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="99.mp3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="100.mp3.mp3" />
+</audio>
+</body>
+</html>

@@ -1,0 +1,119 @@
+* {
+    font-family: Arial, Verdana;
+    font-size: 17px;
+}
+#canvas {
+    width: 900px;
+    height: 900px;
+}
+#dcanvas {
+    width: 900px;
+    height: 900px;
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#dice  {
+    width: 194px; 
+    height: 185px; 
+    background: transparent url('res/table.png') no-repeat left 45px;
+	margin-left:20px;
+}
+#dice h4{
+    font-size: 15px;
+    text-indent: 20px;
+}
+#dice-anim {
+    margin-top: 2.5em; margin-left: 60px; display: none;
+}
+#dice-static {
+    margin-top: 3.6em; margin-left: 60px;
+}
+#dice-static img {
+    cursor: pointer;
+}
+#dice.roll #dice-anim {
+    display: block;
+}
+#dice.roll #dice-static {
+    display: none;
+}
+.hide {
+    display: none;
+}
+#emotions {
+    display: none;
+}
+#emotions img{
+    cursor: pointer;
+    width: 140px;
+    height: 145px;
+}
+#messenger {
+    display: none;
+}
+#message {
+    background: lightblue;
+    border: 1px solid blue;
+    width: 320px;
+    height: 360px;
+    overflow: auto;
+    -moz-border-radius: 4px;
+}
+#send input {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 25px;
+}
+#send input.txt {
+    width: 250px;
+    border: 1px solid blue;
+    border-top: 0;
+    margin-top: 0px;
+}
+#send input.btn {
+    width: 73px;
+    border: 1px solid blue;
+    border-top: 0;
+    margin-left: -1px;
+    font-weight: bold;
+    padding-bottom: 2px;
+}
+#intro {
+}
+#intro p{
+    padding: 1px;
+    margin: 1px;
+    font-weight: bold;
+}
+#intro a{
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+#players {
+    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+    width: 100px;
+}
+#players .player {
+    margin-bottom: 10px;
+	margin-top:20px;
+}
+#controls{
+    margin-left:61px;
+	margin-top:20px;
+}
+
+#controls button {
+    width: 120px;
+    margin-bottom: 30px;
+}
+#rtColumn {
+	position: absolute;
+    left: 980px;
+    top: 0px;
+}
