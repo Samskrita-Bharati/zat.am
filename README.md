@@ -8,3 +8,8 @@ We aspire to collect/create at least 100 "Teaching Aids" or "Recreational Games"
 जयतु संस्कृतम्।
 
 PS: more details/updates will be added as we proceed further - a movement is impossible without movers and shakers to come together - all are welcome!
+
+--
+Home page currently inspired from https://github.com/john-smilga/javascript-basic-projects/tree/master/08-menu
+
+ideas/comments/questions? - email to code@SamskritaBharati.ca
