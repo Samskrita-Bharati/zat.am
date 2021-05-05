@@ -1,51 +1,18 @@
 const menu = [
-  {
-    id: 1,
-    title: "श्रीमद् भगवद्गीता",
-    category: "TA",
-    dir: "001-sbg",
-    desc: `-तः पदानि अन्वेषयन्तु । <br> Find words jumbled up from any verse (shlokaH) of <pre>shriimad bhagavadgiitaa </pre>`,
+  { id: 1, title: "श्रीमद् भगवद्गीता", category: "TA", dir: "001-sbg", desc: `-तः पदानि अन्वेषयन्तु । <br> Find words jumbled up from any verse (shlokaH) of <pre>shriimad bhagavadgiitaa </pre>`,},
+  { id: 2, title: "शिलाखण्डः , पत्रम् , कर्तरी", category: "RG", dir: "002-zpk", desc: `क्रीडतु । <br> Play Rock,Paper,Scissors - <pre>shilaakhaNDaH , patram , kartarii</pre> `,},
+  { id: 3, title: "सोपानसर्पाः च", category: "ET", dir: "003-ssc", desc: `क्रीडतु ।<br> Play Ladders & Snakes game and learn with fun - <pre>sopaanasarpaaH cha</pre>`,},
+  { id: 4, title: "सुडोकू ", category: "RG", dir: "004-sis",	desc : `क्रीडतु । <br> Challenge yourself to a Sudoku in <pre>saMskRRitam</pre>`,},
+  { id: 5, title: "द्वन्द्वयुद्धम् ", category: "RG", dir: "005-dy",	 desc : `क्रीडतु । <br> Shall we call Tic-Tac-Toe in Sanskrit as <pre>dvandvayuddham ? :)</pre>`,  },
+  { id: 6, title: "नाम किम्? ", category: "TA", dir: "006-nk", desc : `!? <br> Generate randomly (funny?) English-Sanskrit nick-<pre>naama</pre>`,
   },
-  {
-    id: 2,
-    title: "शिलाखण्डः , पत्रम् , कर्तरी",
-    category: "RG",
-    dir: "002-zpk",
-    desc: `क्रीडतु । <br> Play Rock,Paper,Scissors - <pre>shilaakhaNDaH , patram , kartarii</pre> `,
-  },
-  {
-    id: 3,
-    title: "सोपानसर्पाः च",
-    category: "ET",
-    dir: "003-ssc",
-    desc: `क्रीडतु ।<br> Play Ladders & Snakes game and learn with fun - <pre>sopaanasarpaaH cha</pre>`,
-	},
-  {
-    id: 4,
-    title: "सुडोकू ",
-    category: "RG",
-    dir: "004-sis",
-	desc : `क्रीडतु । <br> Challenge yourself to a Sudoku in <pre>saMskRRitam</pre>`,
- },
-  {
-    id: 5,
-    title: "शीघ्रम् आगमिष्यति ...",
-    category: "TA",
-    dir: "999-cs",
+  { id: 7, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  {
-    id: 6,
-    title: "Connect the Dots",
-    category: "RG",
-    dir: "999-cs",
+  { id: 8, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  {
-    id: 7,
-    title: "Paint by सङ्ख्या ",
-    category: "ET",
-    dir: "999-cs",
+  { id: 9, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];
@@ -122,10 +89,7 @@ function displayMenuButtons() {
   });
 }
 /*
-var lnk = "";
-	var yrmt = window.location.href.substr(window.location.href.lastIndexOf(".ml")+3,8);
-	$(".title").html(Sanscript.t(yrmt.replace(/\//g, " "), 'itrans','devanagari'));
-	lnk+='https://api.github.com/repos/thakkaha/baalamodinii/contents'+yrmt;
+var lnk = 'https://api.github.com/repos/thakkaha/baalamodinii/contents';
       (async () => {
         const response = await fetch(lnk);
         const data = await response.json();
