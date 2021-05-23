@@ -6,8 +6,7 @@ const menu = [
   { id: 5, title: "द्वन्द्वयुद्धम् ", category: "RG", dir: "005-dy",	 desc : `क्रीडतु । <br> Shall we call Tic-Tac-Toe in Sanskrit as <pre>dvandvayuddham ? :)</pre>`,  },
   { id: 6, title: "नाम किम्? ", category: "TA", dir: "006-nk", desc : `!? <br> Generate randomly (funny?) English-Sanskrit nick-<pre>naama</pre>`,
   },
-  { id: 7, title: "श्रीकृष्णस्य वा अर्जुनस्य", category: "TA", dir: "007-ask", desc:`नामपदानि अन्वेषयन्तु । <br> Find words jumbled up from names of Shri Krishna or Arjuna from <pre>shriimad bhagavadgiitaa </pre>`
-  }
+  { id: 7, title: "श्रीकृष्णस्य वा अर्जुनस्य", category: "TA", dir: "007-ask", desc : ` नामपदानि अन्वेषयन्तु । <br> Find words jumbled up from names of Shri Krishna or Arjuna from <pre>shriimad bhagavadgiitaa </pre>`,},
   { id: 8, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
@@ -29,9 +28,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
 function diplayMenuItems(menuItems) {
   let displayMenu = menuItems.map(function (item) {
-     console.log(item.img);
-
-    return `<article class="menu-item">
+       return `<article class="menu-item">
           <img src=${item.dir}/cover.jpg alt="${item.title}" class="photo" />
           <div class="item-info">
             <header>
@@ -69,7 +66,7 @@ function displayMenuButtons() {
 
   btnContainer.innerHTML = categoryBtns;
   const filterBtns = btnContainer.querySelectorAll(".filter-btn");
-  console.log(filterBtns);
+  //console.log(filterBtns);
 
   filterBtns.forEach(function (btn) {
     btn.addEventListener("click", function (e) {
