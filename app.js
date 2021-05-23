@@ -6,13 +6,15 @@ const menu = [
   { id: 5, title: "द्वन्द्वयुद्धम् ", category: "RG", dir: "005-dy",	 desc : `क्रीडतु । <br> Shall we call Tic-Tac-Toe in Sanskrit as <pre>dvandvayuddham ? :)</pre>`,  },
   { id: 6, title: "नाम किम्? ", category: "TA", dir: "006-nk", desc : `!? <br> Generate randomly (funny?) English-Sanskrit nick-<pre>naama</pre>`,
   },
-  { id: 7, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
+  { id: 7, title: "श्रीकृष्णस्य वा अर्जुनस्य", category: "TA", dir: "007-ask", desc:`नामपदानि अन्वेषयन्तु । <br> Find words jumbled up from names of Shri Krishna or Arjuna from <pre>shriimad bhagavadgiitaa </pre>`
+  }
+  { id: 8, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  { id: 8, title: "Connect the Dots", category: "RG", dir: "999-cs",
+  { id: 9, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  { id: 9, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
+  { id: 10, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];
