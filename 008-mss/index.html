@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 <style>
 BODY {
@@ -43,6 +44,7 @@ BUTTON {
 </head>
 <body>
 <H1>संस्कृतम्  Minesweeper</H1>
+<progress id="mss" value="0" max="80"> 0% </progress>
 <table id=grid>
 </table>
 <BUTTON onclick="generateGrid();">पुनः - Again</BUTTON>
@@ -57,12 +59,13 @@ generateGrid();
 
 function generateGrid() {
   //generate 10 by 10 grid
+  document.getElementById("mss").value=0;
   grid.innerHTML="";
   for (var i=0; i<10; i++) {
     row = grid.insertRow(i);
     for (var j=0; j<10; j++) {
       cell = row.insertCell(j);
-      cell.onclick = function() { clickCell(this); };
+      cell.onclick = function(ev) { clickCell(this); };
       var mine = document.createAttribute("data-mine");       
       mine.value = "false";             
       cell.setAttributeNode(mine);
@@ -100,8 +103,9 @@ function checkLevelCompletion() {
       }
   }
   if (levelComplete) {
-    alert("You Win!");
+    alert("जयः 🙂");
     revealMines();
+	 
   }
 }
 
@@ -109,9 +113,15 @@ function clickCell(cell) {
   //Check if the end-user clicked on a mine
   if (cell.getAttribute("data-mine")=="true") {
     revealMines();
-    alert("Game Over");
+    alert("पराजयः 🙁");
+	for (var i=0; i<10; i++) {
+	for (var j=0; j<10; j++) {
+      var cell = grid.rows[i].cells[j];
+      cell.onclick = "" }
+	  }
   } else {
     cell.className="clicked";
+	document.getElementById("mss").value+=1;
     //Count and display the number of adjacent mines
     var mineCount=0;
     var cellRow = cell.parentNode.rowIndex;
