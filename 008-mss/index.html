@@ -23,8 +23,8 @@ H1 {
 #grid TR TD{
   border:1px solid white;
   background: #999999;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   text-align: center;
 }
 
@@ -39,6 +39,8 @@ H1 {
 BUTTON {
   margin: 12px;
 }
+#gm{
+background-color:red}
 </style>
 
 </head>
@@ -47,11 +49,14 @@ BUTTON {
 <progress id="mss" value="0" max="80"> 0% </progress>
 <table id=grid>
 </table>
+<progress id="gm" value="0" max="20"> 0% </progress>
+<br>
 <BUTTON onclick="generateGrid();">पुनः - Again</BUTTON>
 <br>
 <br>
 <p> Based on minesweeper game by 101computing.net
 <script>
+document.addEventListener('contextmenu', event => event.preventDefault());
 //minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
 var grid = document.getElementById("grid");
 var testMode = false; //Turn this variable to true to see where the mines are
@@ -60,12 +65,18 @@ generateGrid();
 function generateGrid() {
   //generate 10 by 10 grid
   document.getElementById("mss").value=0;
+  document.getElementById("gm").value=0;
   grid.innerHTML="";
   for (var i=0; i<10; i++) {
     row = grid.insertRow(i);
     for (var j=0; j<10; j++) {
       cell = row.insertCell(j);
-      cell.onclick = function(ev) { clickCell(this); };
+      cell.onmousedown = function(ev) { if (ev.button==2) {
+	  markCell(this);
+	  //ev.returnValue = false;ev.preventDefault();return false;
+	  } 
+	  else clickCell(this); 
+	  };
       var mine = document.createAttribute("data-mine");       
       mine.value = "false";             
       cell.setAttributeNode(mine);
@@ -90,7 +101,7 @@ function revealMines() {
     for (var i=0; i<10; i++) {
       for(var j=0; j<10; j++) {
         var cell = grid.rows[i].cells[j];
-        if (cell.getAttribute("data-mine")=="true") cell.className="mine";
+        if (cell.getAttribute("data-mine")=="true") cell.style.backgroundColor="#FF0000";
       }
     }
 }
@@ -108,8 +119,20 @@ function checkLevelCompletion() {
 	 
   }
 }
-
+function markCell(cell) {
+if (cell.style.backgroundColor=="tomato")
+{
+cell.style.backgroundColor="";
+document.getElementById("gm").value-=1;
+}
+else
+{
+document.getElementById("gm").value+=1;
+cell.style.backgroundColor="tomato";
+}
+}
 function clickCell(cell) {
+cell.style.backgroundColor="";
   //Check if the end-user clicked on a mine
   if (cell.getAttribute("data-mine")=="true") {
     revealMines();
@@ -120,8 +143,10 @@ function clickCell(cell) {
       cell.onclick = "" }
 	  }
   } else {
+  if (cell.className!="clicked")
+  document.getElementById("mss").value+=1;
     cell.className="clicked";
-	document.getElementById("mss").value+=1;
+	
     //Count and display the number of adjacent mines
     var mineCount=0;
     var cellRow = cell.parentNode.rowIndex;
@@ -132,8 +157,8 @@ function clickCell(cell) {
         if (grid.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
       }
     }
-    cell.innerHTML=mineCount;
-	//hht
+    if (mineCount==0) cell.innerHTML=" ";
+	else
 	cell.innerHTML=Sanscript.t(String(mineCount),'iast', 'devanagari')
     if (mineCount==0) { 
       //Reveal all adjacent cells as they do not have a mine
