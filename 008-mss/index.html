@@ -66,7 +66,7 @@ background-color:red}
 	width: 40px;
 	height: 20px;
 	text-align:center;
-	font-size:20px;
+	font-size:18px;
 	font-weight:bold;
 	color:black;
 }
@@ -157,39 +157,39 @@ background-color:red}
 <div class="checkbox">
 	<input type="checkbox" id="ckb"/>
 	<label for="ckb">
-		<div class="ball">10</div>
+		<div class="ball">१०</div>
 	</label>
 </div>
 </center>
 <BUTTON onclick="generateGrid();">पुनः - Again</BUTTON>
-<script>
-const checkbox = document.getElementById('ckb');
-
-checkbox.addEventListener('change', () => {
-	checkbox.classList.add('active');
-	if (document.getElementsByClassName('ball')[0].innerHTML=="7") {
-	document.getElementsByClassName('ball')[0].innerHTML="10"; siz=10;}
-	else {
-	document.getElementsByClassName('ball')[0].innerHTML="7";siz=7;}
-	generateGrid();
-});
-</script>
 <br>
 <p> Based on minesweeper game by 101computing.net
 <script>
+function chg() {
+	checkbox.classList.add('active');
+	if (document.getElementsByClassName('ball')[0].innerHTML=="७") {
+	document.getElementsByClassName('ball')[0].innerHTML="१०"; siz=10;}
+	else {
+	document.getElementsByClassName('ball')[0].innerHTML="७";siz=7;}
+	generateGrid();
+}
+const checkbox = document.getElementById('ckb');
+
+checkbox.addEventListener('change', chg);
 	const urlParams = new URLSearchParams(window.location.search);
 var siz = urlParams.get('s');
 	//var d = parseInt(getQueryStringValue("d"));
 if (siz && (siz == 10) || (siz == 7)) {
 }
 else
-	siz=7;
+	siz=10;
+
 document.addEventListener('contextmenu', event => event.preventDefault());
 //minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
 var grid = document.getElementById("grid");
 var testMode = false; //Turn this variable to true to see where the mines are
 generateGrid();
-
+if (siz==7) chg();
 function generateGrid() {
   document.getElementById("mss").value=0;
   document.getElementById("mss").max=parseInt((siz*siz)-(siz*siz)/5)
