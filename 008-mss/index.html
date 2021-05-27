@@ -41,6 +41,108 @@ BUTTON {
 }
 #gm{
 background-color:red}
+
+.checkbox label {
+	background-color: red;
+	border-radius: 50px;
+   	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+	display: block;
+	position: relative;
+	height: 30px;
+	width: 150px;
+	user-select: none;
+	transform: rotate(0deg);
+	transition: background-color 1s ease-in;
+}
+
+.checkbox label .ball {
+	background-color: #f1f1f1;
+	border-radius: 40%;
+   	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.75);
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 40px;
+	height: 20px;
+	text-align:center;
+	font-size:20px;
+	font-weight:bold;
+	color:black;
+}
+
+.checkbox #ckb {
+	display: none;
+}
+
+.checkbox #ckb.active:not(:checked) + label {
+	background-color: red;
+	animation: uncheck 1.5s ease-in forwards;
+}
+
+@keyframes uncheck {
+	0% {
+		transform: rotate(0deg);
+	}
+	
+	25%, 50% {
+		transform: rotate(-20deg);
+	}
+	
+	100% {
+		transform: rotate(0deg);
+	}
+}
+
+.checkbox #ckb.active:not(:checked) + label .ball {
+	animation: moveBallLeft 1.5s ease-in forwards;
+}
+
+@keyframes moveBallLeft {
+	0%, 25% {
+		transform: translateX(100px);
+	}
+	
+	50%, 100% {
+		transform: translateX(0px);
+	}
+}
+
+.checkbox #ckb.active:checked + label {
+	background-color: #4cd137;
+	animation: check 1.5s ease-in forwards;
+}
+
+@keyframes check {
+	0% {
+		transform: rotate(0deg);
+	}
+	
+	25%, 50% {
+		transform: rotate(20deg);
+	}
+	
+	100% {
+		transform: rotate(0deg);
+	}
+}
+
+.checkbox #ckb.active:checked + label .ball {
+/* 	left: 105px; */
+	animation: moveBallRight 2s ease-in forwards;
+}
+
+@keyframes moveBallRight {
+	0%, 25% {
+		transform: translateX(0px);
+	}
+	
+	50%, 100% {
+		transform: translateX(100px);
+	}
+}
+
+
 </style>
 
 </head>
@@ -49,13 +151,39 @@ background-color:red}
 <progress id="mss" value="0" max="80"> 0% </progress>
 <table id=grid>
 </table>
-<progress id="gm" value="0" max="20"> 0% </progress>
+<progress id="gm" value="0" max="20" style="display:none"> 0% </progress>
 <br>
+<center>
+<div class="checkbox">
+	<input type="checkbox" id="ckb"/>
+	<label for="ckb">
+		<div class="ball">10</div>
+	</label>
+</div>
+</center>
 <BUTTON onclick="generateGrid();">पुनः - Again</BUTTON>
-<br>
+<script>
+const checkbox = document.getElementById('ckb');
+
+checkbox.addEventListener('change', () => {
+	checkbox.classList.add('active');
+	if (document.getElementsByClassName('ball')[0].innerHTML=="7") {
+	document.getElementsByClassName('ball')[0].innerHTML="10"; siz=10;}
+	else {
+	document.getElementsByClassName('ball')[0].innerHTML="7";siz=7;}
+	generateGrid();
+});
+</script>
 <br>
 <p> Based on minesweeper game by 101computing.net
 <script>
+	const urlParams = new URLSearchParams(window.location.search);
+var siz = urlParams.get('s');
+	//var d = parseInt(getQueryStringValue("d"));
+if (siz && (siz == 10) || (siz == 7)) {
+}
+else
+	siz=7;
 document.addEventListener('contextmenu', event => event.preventDefault());
 //minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
 var grid = document.getElementById("grid");
@@ -63,13 +191,13 @@ var testMode = false; //Turn this variable to true to see where the mines are
 generateGrid();
 
 function generateGrid() {
-  //generate 10 by 10 grid
   document.getElementById("mss").value=0;
+  document.getElementById("mss").max=parseInt((siz*siz)-(siz*siz)/5)
   document.getElementById("gm").value=0;
   grid.innerHTML="";
-  for (var i=0; i<10; i++) {
+  for (var i=0; i<siz; i++) {
     row = grid.insertRow(i);
-    for (var j=0; j<10; j++) {
+    for (var j=0; j<siz; j++) {
       cell = row.insertCell(j);
       cell.onmousedown = function(ev) { if (ev.button==2) {
 	  markCell(this);
@@ -87,10 +215,12 @@ function generateGrid() {
 
 function addMines() {
   //Add mines randomly
-  for (var i=0; i<20; i++) {
-    var row = Math.floor(Math.random() * 10);
-    var col = Math.floor(Math.random() * 10);
+  for (var i=0; i<parseInt((siz*siz)/5); i++) {
+    var row = Math.floor((Math.random() * 10) % siz);
+    var col = Math.floor((Math.random() * 10) % siz);
     var cell = grid.rows[row].cells[col];
+//	if (cell.innerHTML=="X") cell.innerHTML="y" ;else cell.innerHTML="X";
+	 //if (cell.getAttribute("data-mine")) console.log("repeat");
     cell.setAttribute("data-mine","true");
     if (testMode) cell.innerHTML="X";
   }
@@ -98,8 +228,8 @@ function addMines() {
 
 function revealMines() {
     //Highlight all mines in red
-    for (var i=0; i<10; i++) {
-      for(var j=0; j<10; j++) {
+    for (var i=0; i<siz; i++) {
+      for(var j=0; j<siz; j++) {
         var cell = grid.rows[i].cells[j];
         if (cell.getAttribute("data-mine")=="true") cell.style.backgroundColor="#FF0000";
       }
@@ -108,8 +238,8 @@ function revealMines() {
 
 function checkLevelCompletion() {
   var levelComplete = true;
-    for (var i=0; i<10; i++) {
-      for(var j=0; j<10; j++) {
+    for (var i=0; i<siz; i++) {
+      for(var j=0; j<siz; j++) {
         if ((grid.rows[i].cells[j].getAttribute("data-mine")=="false") && (grid.rows[i].cells[j].innerHTML=="")) levelComplete=false;
       }
   }
@@ -137,8 +267,8 @@ cell.style.backgroundColor="";
   if (cell.getAttribute("data-mine")=="true") {
     revealMines();
     alert("पराजयः 🙁");
-	for (var i=0; i<10; i++) {
-	for (var j=0; j<10; j++) {
+	for (var i=0; i<siz; i++) {
+	for (var j=0; j<siz; j++) {
       var cell = grid.rows[i].cells[j];
       cell.onclick = "" }
 	  }
@@ -152,8 +282,8 @@ cell.style.backgroundColor="";
     var cellRow = cell.parentNode.rowIndex;
     var cellCol = cell.cellIndex;
     //alert(cellRow + " " + cellCol);
-    for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,9); i++) {
-      for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,9); j++) {
+    for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,siz-1); i++) {
+      for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,siz-1); j++) {
         if (grid.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
       }
     }
@@ -162,8 +292,8 @@ cell.style.backgroundColor="";
 	cell.innerHTML=Sanscript.t(String(mineCount),'iast', 'devanagari')
     if (mineCount==0) { 
       //Reveal all adjacent cells as they do not have a mine
-      for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,9); i++) {
-        for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,9); j++) {
+      for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,siz-1); i++) {
+        for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,siz-1); j++) {
           //Recursive Call
           if (grid.rows[i].cells[j].innerHTML=="") clickCell(grid.rows[i].cells[j]);
         }
