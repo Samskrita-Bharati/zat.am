@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Memory क्रीडा</title>
+<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+   <link href="mmk.css" rel="stylesheet" type="text/css" />
+   <script src="data.json"></script>
+</head>
+<body>
+
+<font size="+18" color=blue> Memory क्रीडा <span style="color:red"></span></font>
+    <font id="timer" class="pos1" size="+20" color=green></font> <br>
+<!--    <audio controls>
+    <source src="/views/resources/GwentGame/Gwent soundtrack.mp3" type="audio/mpeg">
+    </audio> -->
+	<br>
+   <button class="pos2" onclick="restart()">Restart</button>
+    <!-- <center> -->
+
+      <p style="color: green; font-size: 40px;">Wrong Moves: <span id=nowt>०</span> </p>
+
+
+
+  <center>
+  <progress id=pr max=12 value=0></progress>
+  <div id="mytable">
+  </div> </center>
+
+  <script src="mmk.js"></script>
+
+</body>
+</html>

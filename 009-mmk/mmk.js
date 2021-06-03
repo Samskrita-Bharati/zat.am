@@ -4,7 +4,7 @@ matchesdone=0;
 triesElement=document.getElementById("nowt");
 const urlParams = new URLSearchParams(window.location.search);
 var set = urlParams.get('s');
-debugger;
+
 if (!set || isNaN(set))
 	set=0;
 
@@ -22,20 +22,18 @@ function countSecs(elem) {
       }
 
 
-do{
+
        var rowLength = 4;//prompt("Please enter number of rows (must not exceed 6) \n NOTE THAT : the multiplier of row and columns must be even number for the game to work");
        var colLength = 6;//prompt("Please enter number of columns (must not exceed 6) \n NOTE THAT : the multiplier of row and columns must be even number for the game to work");
        var gamesize = rowLength*colLength;
        var height= 570/rowLength;
        var width = 900/colLength;
+	   width = document.documentElement.offsetWidth/8;
+	   height = document.documentElement.offsetHeight/3;
 	 	var timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
        //countSecs("timer");
-      }
-    while (isNaN(gamesize) || gamesize %2 !==0  || gamesize<1 || rowLength>6 || colLength>6)
-        {
-            code();
-        }
-      function code(){
+
+function code(){
 		  
 var temp = []
 var waiting = {value: false};
@@ -197,5 +195,5 @@ genTable(rowLength, colLength, D2Data); // generate table..
   clickedCards.splice(0,1);
 
 }
-
-      }
+}
+   code();
