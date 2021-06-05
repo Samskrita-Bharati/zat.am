@@ -1,12 +1,21 @@
 var secs=0;
 var numberOfWrongTries=0;
 matchesdone=0;
+var timer;
 triesElement=document.getElementById("nowt");
 const urlParams = new URLSearchParams(window.location.search);
+var o = urlParams.get('o');
+if (!o) // open mode - 1 is true - not flipped
+	o=0;
 var set = urlParams.get('s');
-
 if (!set || isNaN(set))
 	set=0;
+var l = urlParams.get('l'); // learn mode - 1 is true
+if (!l)
+	l=0;
+var t = urlParams.get('t'); // transliterate mode - 1 is true
+if (!t)
+	t=0;
 
 function countSecs(elem) {
 	//console.log(secs);
@@ -22,7 +31,6 @@ function countSecs(elem) {
       }
 
 
-
        var rowLength = 4;//prompt("Please enter number of rows (must not exceed 6) \n NOTE THAT : the multiplier of row and columns must be even number for the game to work");
        var colLength = 6;//prompt("Please enter number of columns (must not exceed 6) \n NOTE THAT : the multiplier of row and columns must be even number for the game to work");
        var gamesize = rowLength*colLength;
@@ -30,7 +38,8 @@ function countSecs(elem) {
        var width = 900/colLength;
 	   width = document.documentElement.offsetWidth/8;
 	   height = document.documentElement.offsetHeight/3;
-	 	var timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
+	   if (l!=1)
+	 	timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
        //countSecs("timer");
 
 function code(){
@@ -39,8 +48,7 @@ var temp = []
 var waiting = {value: false};
 var image = ilist[parseInt(set)];
 var words=wlist[parseInt(set)];
-//var words2 = ["🐏","🐂","👬","🦀","🦁","👧","⚖","🦂","️🏹","🐊","🏺","🐟"];
-var D1Data = [];                          // D1Data has duplicated image objects.
+var D1Data = [];          // D1Data has duplicated image objects.
 var D2Data = [];
 var count=0;
 for(var x = 0; x < gamesize/2; x++){
@@ -51,25 +59,34 @@ for(var x = 0; x < gamesize/2; x++){
 for(var x = 0; x < D1Data.length; x++){
   //console.log('index: ' + x + ' ' + D1Data[x].src)
 }
-
+ var rand=0;
 // fill D2Data 2D array. (2D array is a group 1D arrays)
-    for(var y = 0; y<rowLength; y++){ // 2 times
+    for(var y = 0; y<rowLength; y++){ 
         var temp = [];
         var x = 0;
 
-        while(x < colLength)   // 4 times
+        while(x < colLength)  
         {
-          var rand = Math.floor(Math.random() * D1Data.length );
-
+		if (l!=1){	
+           rand = Math.floor(Math.random() * D1Data.length );
+			
           temp.push(D1Data[rand]);
           temp[x].y = x;
           temp[x].x = y;
+		        D1Data.splice(rand, 1)
+		}
+		else
+		{
 
+			temp.push(D1Data[rand]);
+			rand+=1;
+		}
           //console.log('iteration: ' + y +' removed at index: ' + rand);
-          D1Data.splice(rand, 1)
+
           x++;
         }
-        D2Data.push(temp)
+        D2Data.push(temp);
+
       }
 
 // functions and variables
@@ -79,6 +96,7 @@ var bg = '../शत.म्.png'
 
 function genTable(rowLength, colLength, imageData2D)
 {
+	
     var table = document.createElement("TABLE");
     table.id = 'tbl';
     var myTableDiv = document.getElementById("mytable");
@@ -94,7 +112,10 @@ function genTable(rowLength, colLength, imageData2D)
 			if (!imageData2D[i][j].wrd)
 			{
             var img = document.createElement("img");
-            img.src = '../शत.म्.png';
+            if (o!=1) 
+				img.src = '../शत.म्.png';
+			else
+				img.src = imageData2D[i][j].src;
             img.height=height;
             img.width=width;
             td.appendChild(img);
@@ -102,27 +123,23 @@ function genTable(rowLength, colLength, imageData2D)
 			else
 			{
 var p = document.createElement("p");
-            //img.src = '../शत.म्.png';
-            //img.height=height;
-            //img.width=width;
+
 			p.className="myp";
 			p.innerHTML=imageData2D[i][j].wrd;
+			if (t==1) p.innerHTML+= " - " + Sanscript.t(imageData2D[i][j].wrd, 'devanagari','itrans');
             td.appendChild(p);
 			}
         }
         }
         myTableDiv.appendChild(table);
-
 }
 
 genTable(rowLength, colLength, D2Data); // generate table..
-
-	var clkfn = function(){               // THE ONCLICK EVENT FOR ALL IMAGES.
-
+	
+	var clkfn = function(){    // THE ONCLICK EVENT FOR ALL IMAGES.
 
     var row = this.parentElement.parentElement.rowIndex;
     var column = this.parentElement.cellIndex;
-
           if(!D2Data[row][column].clicked && !waiting.value) {
           if(clickedCards.length == 0){            // if it is the only card, add it to clickedCards, set clicked to true, set background
             this.src = D2Data[row][column].src;
@@ -131,10 +148,8 @@ genTable(rowLength, colLength, D2Data); // generate table..
             D2Data[row][column].clicked = true;
             clickedCards.push(D2Data[row][column]);
           }
-
           else{        // compare card to one in the list..
             //console.log('comparing to one in the lisst')
-//debugger;
             if(D2Data[row][column].src === clickedCards[0].src){    // if it matches..
 			d=document.getElementsByTagName("tr")[clickedCards[0].x];
 			r=d.getElementsByTagName("td")[clickedCards[0].y].style.border="2px solid #" + String(matchesdone) + String(matchesdone) + String(matchesdone);
@@ -149,7 +164,7 @@ genTable(rowLength, colLength, D2Data); // generate table..
             D2Data[row][column].clicked = true;
             clickedCards = [];  // empty the matrix.
                 count+=2;
-                console.log(count);
+                //console.log(count);
                 if(count==gamesize)
                     {
                         window.alert("उत्तमम् ! You Won in "+ Sanscript.t(String(secs),'iast', 'devanagari') + " seconds while making " + Sanscript.t(String(numberOfWrongTries),'iast', 'devanagari') + " wrong moves");
@@ -170,10 +185,9 @@ genTable(rowLength, colLength, D2Data); // generate table..
             setTimeout(flipback , 700, row, column, this, clickedCards,waiting, D2Data)
             }
           }
-
       }
-
     }	;
+	if (l!=1){
   var list = document.getElementsByTagName("img");
   for(var i =0; i< list.length; i++){
     list[i].onclick= clkfn;
@@ -181,6 +195,7 @@ genTable(rowLength, colLength, D2Data); // generate table..
 	var plist = document.getElementsByClassName("myp");
   for(var i =0; i< plist.length; i++){
     plist[i].onclick= clkfn;
+	}
 	}
   function flipback(row, column, This, clickedCards,waiting, D2Data){  // flip both cards back to facedown
 
@@ -193,7 +208,6 @@ genTable(rowLength, colLength, D2Data); // generate table..
 
   waiting.value = false;
   clickedCards.splice(0,1);
-
 }
 }
-   code();
+code();
