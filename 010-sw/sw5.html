@@ -1,0 +1,153 @@
+<html>
+<head>
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  background-color: #2196F3;
+  background-color:tomato;
+  padding: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.loader {
+  cursor:pointer;
+  border: 11px solid #e2e2e2;
+  border-radius: 50%;
+  border-top: 11px solid tomato;
+  width: 50px;
+  height: 50px;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+wrongtries=0;
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  //if (document.getElementById(data).innerHTML==ev.target.getAttribute('r'))
+  if (document.getElementById(data).getAttribute('pos')==ev.target.getAttribute('r'))
+  {
+   filled.push(document.getElementById("new").innerHTML);
+   opt2=[];
+  for (i=0;i<opt1.length;i++)
+  {
+   if (filled.indexOf(opt1[i])<0)
+   opt2.push(opt1[i]);
+   }
+  ev.target.innerHTML=document.getElementById(data).innerHTML;
+  document.getElementById("p").value+=1;
+  
+  document.getElementById("new").innerHTML=Sanscript.t(document.getElementById("p").value+ " / 12",'iast', 'devanagari') ;
+  
+  }
+  else
+  {
+  wrongtries++;
+  document.getElementById("wt").innerHTML=Sanscript.t(String(wrongtries),'iast', 'devanagari') ;
+  }
+ if (document.getElementById("p").value==document.getElementById("p").max)
+  {
+    if (confirm("पुनः ? ")) 
+	   window.location.reload();
+	   else
+	   {
+	   	document.getElementById("spin").cursor="none";
+		document.getElementById("spin").onclick="";
+		}
+	}
+	else{
+	document.getElementById("spin").style.animation="spin 2s linear infinite";
+	 document.getElementById("spin").style.borderTop="11px solid tomato";
+	 }  
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+</head>
+<body>
+<center>
+<div class="grid-container">
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r='12'>❓</div>
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r='1'>❓</div>
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r='2'>❓</div>  
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r='3'>❓</div>
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="11">❓</div>
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="4">❓</div>  
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="10">❓</div>
+  <div class="grid-item" r="d" style=" grid-area: 2/ 2 /4/ 4;">
+  <progress id="p" max=12 min=0 value=0></progress>
+  <p id="new" draggable="true" ondragstart="drag(event)">--</p>
+ <div id="spin" class="loader" onclick="stop()"></div>
+ <p style="float:right">❌ = <span id="wt">०</span></p>
+  </div>
+
+  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="5">❓</div> 
+    <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="9">❓</div> 
+	  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="8">❓</div> 
+	    <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="7">❓</div> 
+		  <div class="grid-item" ondrop="drop(event)" ondragover="allowDrop(event)" r="6">❓</div> 
+</div>
+</center>
+<script>
+function stop()
+{
+document.getElementById("spin").style.animation="none";
+document.getElementById("spin").style.border="11px solid #e2e2e2";
+pos=Math.floor(Math.random()*100)%opt2.length;
+text=opt2[pos];
+document.getElementById("new").innerHTML=text;
+ document.getElementById("new").setAttribute("pos",opt1.indexOf(text)+1);
+}
+  document.getElementById("new").innerHTML=Sanscript.t(document.getElementById("p").value+ " / 12",'iast', 'devanagari') ;
+var options = ["मेषः 🐏 meShaH",
+"वृषभः 🐂 vRRiShabhaH",
+"मिथुनम् 👫 mithunam",
+"कर्कटः 🦀 karkaTaH"	,
+"सिंहः 🦁 siMhaH",
+"कन्या 👩 kanyaa",
+"तुला ⚖ tulaa",
+"वृश्चिकः 🦂 vRRishchikaH",
+"धनुः 🏹 dhanuH",
+"मकरः 🐊 makaraH",
+"कुम्भः 🏺 kumbhaH",
+"मीनः 🐟 miinaH"];
+var opt1=[
+"🐏",
+"🐂",
+"👫",
+"🦀"	,
+"🦁",
+"👩",
+"⚖",
+"🦂",
+"🏹",
+"🐊",
+"🏺",
+"🐟"]
+var opt2=opt1;
+var filled=[];
+
+//document.getElementById("spin").addEventListener("click", spin);
+</script>
+</body>
+</html>
