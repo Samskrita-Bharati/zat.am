@@ -13,15 +13,18 @@ const menu = [
 	 { id: 11, title: "मासाः ", category: "RG", dir: "011-m", desc : ` Fun with मासाः । <br> Indian months !`,},  
 	 { id: 12, title: "सूर्यनमस्कारः  ", category: "RG", dir: "012-sn", desc : ` Salute the Sun ! <br> सूर्यः <pre>suuryaH</pre>`,}, 
 		 {
-			id: 12, title: "सङ्ख्या matching", category: "RG", dir: "013-mts", desc : ` Match the सङ्ख्या ! (numbers in संस्कृतम् ) <br> <pre>sa~Nkhyaa</pre>`, 
+			id: 13, title: "सङ्ख्या matching", category: "RG", dir: "013-mts", desc : ` Match the सङ्ख्या ! (numbers in संस्कृतम् ) <br> <pre>sa~Nkhyaa</pre>`, 
 		 },
-  { id: 13, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
+		  {
+			id: 14, title: "सङ्ख्या typer", category: "RG", dir: "014-st", desc : ` Type the सङ्ख्या  (number) <br> before it hits the center and you lose a 'life' !`, 
+		 },
+  { id: 15, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  { id: 14, title: "Connect the Dots", category: "RG", dir: "999-cs",
+  { id: 16, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  { id: 15, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
+  { id: 17, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];
