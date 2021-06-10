@@ -28,7 +28,7 @@ const label = {
 let labels = [];
 
 const modalElements = [[['Rows', 'rows', 2, 99, 'number'], ['Min Digit', 'min', 0, 8, 'number'], ['<u>C</u>hange <span id="moveText">target</span> digit', 'move', 'c', 'check']], [['Columns', 'cols', 2, 99, 'number'], ['Max Digit', 'max', 1, 9, 'number'], ['<span id="increaseText">Increase</span> <u>d</u>igit', 'increase', 'd', 'check']]];
-const buttonElements = [['info', 'restart()', 'r', 'sync', '<u>R</u>estart'], ['info', '', 's', 'cog', '<u>S</u>ettings']];
+const buttonElements = [['info', 'restart()', 'r', 'sync', '<u>R</u>estart'], ['info', '', 's', 'cog', '<u>S</u>ettings'],['info', 'window.open("mts_ins2.html","_blank");', 'h', 'help', '<u>H</u>elp']];
 const buttonGroup = createButtonGroup('btn-group btn-group-lg btn-group-center', buttonElements);
 document.body.insertBefore(createModalButton(buttonGroup, 1), canvas);
 createModal(modalElements);
