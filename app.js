@@ -12,6 +12,9 @@ const menu = [
 	 { id: 10, title: "राशयः  ", category: "RG", dir: "010-sw", desc : ` Fun with राशिः । <br> Learning will happen too !`,}, 
 	 { id: 11, title: "मासाः ", category: "RG", dir: "011-m", desc : ` Fun with मासाः । <br> Indian months !`,},  
 	 { id: 12, title: "सूर्यनमस्कारः  ", category: "RG", dir: "012-sn", desc : ` Salute the Sun ! <br> सूर्यः <pre>suuryaH</pre>`,}, 
+		 {
+			id: 12, title: "सङ्ख्या matching", category: "RG", dir: "013-mts", desc : ` Match the सङ्ख्या ! (numbers in संस्कृतम् ) <br> <pre>sa~Nkhyaa</pre>`, 
+		 },
   { id: 13, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },

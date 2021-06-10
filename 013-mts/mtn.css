@@ -1,0 +1,18 @@
+body {
+  background: #eee;
+  overflow: hidden;
+}
+
+canvas {
+  margin-top: 40px;
+}
+
+input[type="number"] {
+  width: 5em;
+}
+
+.btn-group-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
