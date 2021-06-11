@@ -16,7 +16,12 @@ if (!l)
 var t = urlParams.get('t'); // transliterate mode - 1 is true
 if (!t)
 	t=0;
-
+if (l==1)
+{
+	document.getElementById("ss").style.display="inline-block";
+	document.getElementById("pr").style.display="none";
+	document.getElementById("wm").style.display="none";
+	}
 function countSecs(elem) {
 	//console.log(secs);
 	var element = document.getElementById(elem);
@@ -169,7 +174,7 @@ genTable(rowLength, colLength, D2Data); // generate table..
                     {
                         window.alert("उत्तमम् ! You Won in "+ Sanscript.t(String(secs),'iast', 'devanagari') + " seconds while making " + Sanscript.t(String(numberOfWrongTries),'iast', 'devanagari') + " wrong moves");
 						clearTimeout(timer); //stop timer function
-                        var ask=confirm(" press ok to play again");
+                        var ask=confirm("पुनः ? Press 'ok' to play again");
                         if (ask){
                         restart();
                         }
