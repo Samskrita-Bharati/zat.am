@@ -41,8 +41,8 @@ function countSecs(elem) {
        var gamesize = rowLength*colLength;
        var height= 570/rowLength;
        var width = 900/colLength;
-	   width = document.documentElement.offsetWidth/8;
-	   height = document.documentElement.offsetHeight/3;
+	   width = document.documentElement.offsetWidth/6; //8;
+	   height = document.documentElement.offsetHeight/2; //3;
 	   if (l!=1)
 	 	timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
        //countSecs("timer");
