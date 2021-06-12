@@ -43,6 +43,8 @@ function countSecs(elem) {
        var width = 900/colLength;
 	   width = document.documentElement.offsetWidth/6; //8;
 	   height = document.documentElement.offsetHeight/2; //3;
+	   width=150;
+	   height=120;
 	   if (l!=1)
 	 	timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
        //countSecs("timer");
