@@ -18,6 +18,9 @@ const menu = [
 		  {
 			id: 14, title: "सङ्ख्या typer", category: "RG", dir: "014-st", desc : ` Type the सङ्ख्या  (number) <br> before it hits the center and you lose a 'life' !`, 
 		 },
+		 {
+			id: 15, title: "२०४८", category: "RG", dir: "015-2048", desc : ` २०४८ क्रीडतु <br> 2048` , 
+		 },
   { id: 15, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
