@@ -1,0 +1,169 @@
+<html style="--mypic:url(../शत.म्.png)">
+<head><title>समस्या [samasyaa = puzzle]</title>
+<!-- Sliding Puzzle by 101Computing - www.101computing.net/sliding-puzzle/-->
+<style>
+:root{
+--picurl:url(../शत.म्.png); 
+}
+BODY { 
+background-color: rgba(255,63,47,0.5);
+}
+div,p{
+font-weight:bold;
+}
+.tile1, .tile2, .tile3, .tile4, .tile5, .tile6, .tile7, .tile8, .tile9 {
+  display: table-cell;
+  width: 120px;
+  height: 120px;
+  border: 1px solid white;
+  background: var(--mypic);
+  cursor: pointer;
+  background-size: 360px 360px;
+}
+#hint{
+  width: 120px;
+  height: 120px;
+  background-size: 120px 120px;
+  background-image: var(--mypic);
+  display:none;
+  
+  }
+
+.tile1 {background-position: left top;}
+.tile2 {background-position: center top;}
+.tile3 {background-position: right top;}
+.tile4 {background-position: left center;}
+.tile5 {background-position: center center;}
+.tile6 {background-position: right center;}
+.tile7 {background-position: left bottom;}
+.tile8 {background-position: center bottom;}
+.tile9 {background:white; cursor: default;border: 2px solid red;}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+</head>
+<body>
+<center><div id="table" style="display: table;">
+   <div id="row1" style="display: table-row;">
+      <div id="cell11" class="tile1" onClick="clickTile(1,1);">१</div>
+      <div id="cell12" class="tile2" onClick="clickTile(1,2);">२</div>
+      <div id="cell13" class="tile3" onClick="clickTile(1,3);">३</div>
+   </div>
+   <div id="row2" style="display: table-row;">
+      <div id="cell21" class="tile4" onClick="clickTile(2,1);">४</div>
+      <div id="cell22" class="tile5" onClick="clickTile(2,2);">५</div>
+      <div id="cell23" class="tile6" onClick="clickTile(2,3);">६</div>
+   </div>
+   <div id="row3" style="display: table-row;">
+      <div id="cell31" class="tile7" onClick="clickTile(3,1);">७</div>
+      <div id="cell32" class="tile8" onClick="clickTile(3,2);">८</div>
+      <div id="cell33" class="tile9" onClick="clickTile(3,3);">९</div>
+   </div>
+</div>
+  <button onClick="shuffle();">New Game</button>
+  <button id="hintbtn" onClick="hint();">Show Hint for 1 second</button>
+  <p id="turns"></p>
+</center>
+<div style="float:right" id="hint">0<div>
+</body>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+var pic = urlParams.get('pic');
+if (pic)
+document.getElementsByTagName('html')[0].style.setProperty("--mypic","url("+pic+")");
+function hint()
+{
+document.getElementById("hint").style.display="block";
+setTimeout(function(){document.getElementById("hint").style.display="none"},1000)
+}
+function swapTiles(cell1,cell2) {
+  var temp = document.getElementById(cell1).className;
+  var temptext = document.getElementById(cell1).innerHTML;
+  document.getElementById(cell1).className = document.getElementById(cell2).className;
+   document.getElementById(cell1).innerHTML  = document.getElementById(cell2).innerHTML ;
+  document.getElementById(cell2).className = temp;
+  document.getElementById(cell2).innerHTML = temptext;
+   isdone();
+}
+
+function shuffle() {
+numclicks=0;
+	 document.getElementById("hint").innerHTML=Sanscript.t(String(numclicks), 'itrans','devanagari');
+//Use nested loops to access each cell of the 3x3 grid
+for (var row=1;row<=3;row++) { //For each row of the 3x3 grid
+   for (var column=1;column<=3;column++) { //For each column in this row
+  
+    var row2=Math.floor(Math.random()*3 + 1); //Pick a random row from 1 to 3
+    var column2=Math.floor(Math.random()*3 + 1); //Pick a random column from 1 to 3
+     
+    swapTiles("cell"+row+column,"cell"+row2+column2); //Swap the look & feel of both cells
+  } 
+} 
+}
+var numclicks=0;
+function clickTile(row,column) {
+  var cell = document.getElementById("cell"+row+column);
+  var tile = cell.className;
+  if (tile!="tile9") { 
+       numclicks++;
+	 document.getElementById("turns").innerHTML=Sanscript.t(String(numclicks), 'itrans','devanagari');
+       //Checking if white tile on the right
+       if (column<3) {
+         if ( document.getElementById("cell"+row+(column+1)).className=="tile9") {
+           swapTiles("cell"+row+column,"cell"+row+(column+1));
+           return;
+         }
+       }
+       //Checking if white tile on the left
+       if (column>1) {
+         if ( document.getElementById("cell"+row+(column-1)).className=="tile9") {
+           swapTiles("cell"+row+column,"cell"+row+(column-1));
+           return;
+         }
+       }
+         //Checking if white tile is above
+       if (row>1) {
+         if ( document.getElementById("cell"+(row-1)+column).className=="tile9") {
+           swapTiles("cell"+row+column,"cell"+(row-1)+column);
+           return;
+         }
+       }
+       //Checking if white tile is below
+       if (row<3) {
+         if ( document.getElementById("cell"+(row+1)+column).className=="tile9") {
+           swapTiles("cell"+row+column,"cell"+(row+1)+column);
+           return;
+         }
+       } 
+  }
+  
+}
+function isdone()
+{
+done=true;
+  if (document.getElementById("cell11").className!="tile1")
+     done=false;
+  if (document.getElementById("cell12").className!="tile2")
+     done=false;
+ if (document.getElementById("cell13").className!="tile3")
+     done=false;
+ if (document.getElementById("cell21").className!="tile4")
+     done=false;
+	  if (document.getElementById("cell22").className!="tile5")
+     done=false;
+	  if (document.getElementById("cell23").className!="tile6")
+     done=false;
+	  if (document.getElementById("cell31").className!="tile7")
+     done=false;
+	  if (document.getElementById("cell32").className!="tile8")
+     done=false;
+	  if (document.getElementById("cell33").className!="tile9")
+     done=false;
+ if (done) { 
+
+ alert("done");
+ };
+ 
+ 
+}
+</script>
+</html>
