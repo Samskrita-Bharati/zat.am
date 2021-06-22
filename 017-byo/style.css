@@ -1,0 +1,154 @@
+html{
+	background-color: rgb(138,204,224);
+}
+
+body{
+	line-height: 0px;
+}
+
+.clear{ clear:both }
+
+
+#container{
+	margin: auto;
+	width: 1024px;
+	height: 673px;
+	background-color: rgb(148,214,234);
+	border-left: 1px solid rgb(108,174,194);
+	border-right: 1px solid rgb(108,174,194);
+	border-bottom: 1px solid rgb(108,174,194);
+}
+
+#presidents{
+	overflow: hidden;
+	width:731px;
+	position: relative;
+	float:right;
+	background: #fff;
+}
+
+#top-sections{
+	position: relative;
+	width:7310px;
+	height:174px;
+}
+
+#mid-sections{
+	position: relative;
+	width:7310px;
+	height:156px;
+}
+
+#bottom-sections{
+	position: relative;
+	width:7310px;
+	height: 265px;
+}
+
+.section{
+	float: left;
+	position: absolute;
+	left: 731px;
+}
+
+#left-column{
+	position: relative;
+	float:left;
+	width: 293px;
+	height: 700px;
+}
+
+#left-nav{
+	float:left;
+	width:274px;
+}
+#section-edges{
+	float:right;
+	width: 19px;
+}
+
+#btn-top-next{
+	position:relative;
+	left:254px;
+	top:47px;
+}
+
+#btn-top-prev{
+	position:relative;
+	left:254px;
+	top:59px;
+}
+
+#btn-mid-next{
+	position:relative;
+	left:254px;
+	top:138px;
+}
+
+#btn-mid-prev{
+	position:relative;
+	left:254px;
+	top:150px;
+}
+
+#btn-bottom-next{
+	position:relative;
+	left:254px;
+	top:221px;
+}
+
+#btn-bottom-prev{
+	position:relative;
+	left:254px;
+	top:233px;
+}
+
+
+
+#random-button{
+	position: absolute;
+	top: 245px;
+	left: 50px;
+}
+
+#random-button:hover{
+	background-image:url("img/giphy-wheel.gif");
+}
+
+.btn{
+	cursor: pointer;
+}
+
+#meet-candidates{
+	position:absolute;
+	top: 462px;
+	left: 0px;
+}
+
+#pres-btns{
+	position: absolute;
+	left: 48px;
+	top: 512px;
+	height: 140px;
+	width: 180px;
+}
+
+.pres-btn{
+	cursor: pointer;
+	margin-left: 3px;
+	margin-bottom: 12px;
+}
+
+
+
+#footer{
+}
+
+#footer-links{
+	position: relative;
+	float: left;
+}
+
+
+
+
