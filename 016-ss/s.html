@@ -65,12 +65,20 @@ font-weight:bold;
   <button id="turns"></button>
 </center>
 <div style="float:right" id="hint">0<div>
+<script src="../cmpk.json"></script>
 </body>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 var pic = urlParams.get('pic');
 if (pic)
 document.getElementsByTagName('html')[0].style.setProperty("--mypic","url("+pic+")");
+var set = urlParams.get('s');
+if (set && !isNaN(set))
+{
+	var imgs = ilist[parseInt(set/12)];
+	var img = parseInt(set%12);
+document.getElementsByTagName('html')[0].style.setProperty("--mypic","url("+imgs[img]+")");
+}
 function hint()
 {
 document.getElementById("hint").style.display="block";
