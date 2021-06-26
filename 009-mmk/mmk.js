@@ -8,7 +8,7 @@ var o = urlParams.get('o');
 if (!o) // open mode - 1 is true - not flipped
 	o=0;
 var set = urlParams.get('s');
-if (!set || isNaN(set))
+if (!set || isNaN(set) || (set>=wlist.length))
 	set=0;
 var l = urlParams.get('l'); // learn mode - 1 is true
 if (!l)

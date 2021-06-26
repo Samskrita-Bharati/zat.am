@@ -21,13 +21,19 @@ const menu = [
 		 {
 			id: 15, title: "२०४८", category: "RG", dir: "015-2048", desc : ` २०४८ क्रीडतु <br> 2048` , 
 		 },
-  { id: 15, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
+		 {
+			id: 16, title: "समस्या ", category: "RG", dir: "016-ss", desc : ` [samasyaa = puzzle]` , 
+		 },
+		 {
+			id: 17, title: "रचयतु ", category: "RG", dir: "017-byo", desc : ` Create by mixing/matching :)` , 
+		 },
+  { id: 18, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  { id: 16, title: "Connect the Dots", category: "RG", dir: "999-cs",
+  { id: 19, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  { id: 17, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
+  { id: 20, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];
