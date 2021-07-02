@@ -7,8 +7,8 @@
     <meta property="og:description" content="An online jigsaw puzzle by Marcelo Ricardo de Oliveira using the stunning features of the Paper JS framework">
     <link href="content/Puzzle.css" rel="stylesheet" type="text/css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js" integrity="sha512-ovjLI1ZcZe6bw+ImQ21r+sv8q/Vwob2kq7tFidK6E1LWfi0T4uobbmpfEU1//a9h9o5Kkt+MnMWf6rWlg0EiMw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!--<script src="content/js/paper.js" type="text/javascript"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js" integrity="sha512-ovjLI1ZcZe6bw+ImQ21r+sv8q/Vwob2kq7tFidK6E1LWfi0T4uobbmpfEU1//a9h9o5Kkt+MnMWf6rWlg0EiMw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+<script src="content/js/paper.js" type="text/javascript"></script>
 <script src="https://zat.am/cmpk-jul.json"></script>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
@@ -17,7 +17,18 @@ if (!set || set<0 || set>=ilist.length)
 set=0;
 inum=parseInt(Math.random()*100)%12;
 </script>
-    <script type="text/paperscript" canvas="canvas">
+</head>
+<body>
+    <img width="920" height="120" src="content/images/logo.png" class="logo"/>
+    <canvas id="canvas" class="canvas" resize></canvas>
+    <div class="charms">
+        <img width="50" height="50" src="content/images/zoomIn.png" class="zoomIn"/>
+        <img width="50" height="50" src="content/images/zoomOut.png" class="zoomOut"/>
+        <img width="50" height="50" src="content/images/help.png" class="help"/>
+    </div>
+    <img width="256" height="256" id="puzzle-image" class="puzzle-image" style="display: none;" src="../img/0/0.png" />
+    <img width="128" height="128" id="empty" style="display: none;" src="content/images/empty.png" />
+<script type="text/paperscript" canvas="canvas">
         Array.prototype.remove = function(start, end) {
             this.splice(start, end);
             return this;
@@ -28,7 +39,11 @@ inum=parseInt(Math.random()*100)%12;
         var scrollMargin = 32;
 
         //$('#puzzle-image').attr('src', 'content/images/Earth.png');
-		$('#puzzle-image').attr('src', ilist[set][inum]);
+//if (set==0)		
+//   $('#puzzle-image').attr('src','../img/2/1-kru-Shika-H.png');
+//else
+  //$('#puzzle-image').attr('src', ilist[set][inum]);
+  $('#puzzle-image').attr('src', '../img/'+set+'/'+inum+'.png');
 //		 $('#puzzle-image').attr('crossOrigin', 'anonymous');
 
         var imgWidth = $('.puzzle-image').css('width').replace('px', '');
@@ -108,12 +123,6 @@ inum=parseInt(Math.random()*100)%12;
                 }
         }
 
-//        function onFrame(event) {
-//            if (puzzle.selectedTile) {
-//                puzzle.selectedTile.rotate(5);
-//            }
-//        }
-
         function Html5Puzzle(config) {
             instance = this;
             this.currentZoom = 1;
@@ -156,8 +165,8 @@ inum=parseInt(Math.random()*100)%12;
                         );
 
                         var border = mask.clone();
-                        border.strokeColor = '#ccc';
-                        border.strokeWidth = 5;
+                        border.strokeColor = '#000';
+                        border.strokeWidth = 2;
 
                         var tile = new Group(mask, border, img, border);
                         tile.clipped = true;
@@ -330,9 +339,9 @@ inum=parseInt(Math.random()*100)%12;
             };
 
             function getTileRaster(sourceRaster, size, offset) {
-                var targetRaster = new Raster('empty');
+                //var targetRaster = new Raster('empty');
 				//hht
-				//var targetRaster = new Raster('puzzle-image');
+				var targetRaster = new Raster('puzzle-image');
                 var tileWithMarginWidth = size.width + instance.tileMarginWidth * 2;
                 var data = sourceRaster.getData(new Rectangle(
                     offset.x - instance.tileMarginWidth, 
@@ -518,21 +527,9 @@ inum=parseInt(Math.random()*100)%12;
                 return errors;
             }
         }
-    </script>
-</head>
-<body>
-    <img width="920" height="120" src="content/images/logo.png" class="logo"/>
-    <canvas id="canvas" class="canvas" resize></canvas>
-    <div class="charms">
-        <img width="50" height="50" src="content/images/zoomIn.png" class="zoomIn"/>
-        <img width="50" height="50" src="content/images/zoomOut.png" class="zoomOut"/>
-        <img width="50" height="50" src="content/images/help.png" class="help"/>
-    </div>
-    <img width="256" height="256" id="puzzle-image" class="puzzle-image" style="display: none;" src="content/images/Earth.png" />
-    <img width="128" height="128" id="empty" style="display: none;" src="content/images/empty.png" />
-</body>
+  </script>
 <script>
-debugger;
-$('#puzzle-image').attr('src', ilist[set][inum]);
+ $('#puzzle-image').attr('src', '../img/'+set+'/'+inum+'.png');
 </script>
+</body>
 </html>
