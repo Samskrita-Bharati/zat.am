@@ -339,9 +339,9 @@ inum=parseInt(Math.random()*100)%12;
             };
 
             function getTileRaster(sourceRaster, size, offset) {
-                //var targetRaster = new Raster('empty');
+                var targetRaster = new Raster('empty');
 				//hht
-				var targetRaster = new Raster('puzzle-image');
+				//var targetRaster = new Raster('puzzle-image');
                 var tileWithMarginWidth = size.width + instance.tileMarginWidth * 2;
                 var data = sourceRaster.getData(new Rectangle(
                     offset.x - instance.tileMarginWidth, 
