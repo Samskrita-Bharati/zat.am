@@ -7,8 +7,8 @@
     <meta property="og:description" content="An online jigsaw puzzle by Marcelo Ricardo de Oliveira using the stunning features of the Paper JS framework">
     <link href="content/Puzzle.css" rel="stylesheet" type="text/css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js" integrity="sha512-ovjLI1ZcZe6bw+ImQ21r+sv8q/Vwob2kq7tFidK6E1LWfi0T4uobbmpfEU1//a9h9o5Kkt+MnMWf6rWlg0EiMw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
-<script src="content/js/paper.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js" integrity="sha512-ovjLI1ZcZe6bw+ImQ21r+sv8q/Vwob2kq7tFidK6E1LWfi0T4uobbmpfEU1//a9h9o5Kkt+MnMWf6rWlg0EiMw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!--<script src="content/js/paper.js" type="text/javascript"></script>-->
 <script src="https://zat.am/cmpk-jul.json"></script>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
@@ -531,4 +531,8 @@ inum=parseInt(Math.random()*100)%12;
     <img width="256" height="256" id="puzzle-image" class="puzzle-image" style="display: none;" src="content/images/Earth.png" />
     <img width="128" height="128" id="empty" style="display: none;" src="content/images/empty.png" />
 </body>
+<script>
+debugger;
+$('#puzzle-image').attr('src', ilist[set][inum]);
+</script>
 </html>
