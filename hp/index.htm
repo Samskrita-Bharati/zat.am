@@ -26,8 +26,8 @@ inum=parseInt(Math.random()*100)%12;
         <img width="50" height="50" src="content/images/zoomOut.png" class="zoomOut"/>
         <img width="50" height="50" src="content/images/help.png" class="help"/>
     </div>
-    <!--<img width="256" height="256" id="puzzle-image" class="puzzle-image" style="display: none;" src="../img/0/0.png" />-->
-	<img width="550" height="550" id="puzzle-image" class="puzzle-image" style="display: none;" src="../img/0/0.png" />
+<img width="256" height="256" id="puzzle-image" class="puzzle-image" style="display: none;" src="../img/0/0.png" />
+	<!--<img width="550" height="550" id="puzzle-image" class="puzzle-image" style="display: none;" src="../img/0/0.png" />-->
     <img width="128" height="128" id="empty" style="display: none;" src="content/images/empty.png" />
 <script type="text/paperscript" canvas="canvas">
         Array.prototype.remove = function(start, end) {
@@ -131,13 +131,14 @@ inum=parseInt(Math.random()*100)%12;
             this.imgName = config.imgName;
             this.shadowWidth = config.shadowWidth;
             this.puzzleImage = new Raster(config.imgName);
+			this.puzzleImage.fitBounds(view.bounds);
             this.puzzleImage.position = view.center;
             this.puzzleImage.visible = false;
             this.tileWidth = config.tileWidth;
             this.tilesPerRow = Math.ceil(config.imgWidth / config.tileWidth);
             this.tilesPerColumn = Math.ceil(config.imgHeight / config.tileWidth);
-            this.tilesPerRow = 4;
-            this.tilesPerColumn = 4;			
+//            this.tilesPerRow = 4;
+//            this.tilesPerColumn = 4;			
             this.tileMarginWidth = this.tileWidth * 0.203125;
             this.selectedTile = undefined;
             this.selectedTileIndex = undefined;
