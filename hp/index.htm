@@ -14,8 +14,10 @@
 const urlParams = new URLSearchParams(window.location.search);
 var set = urlParams.get('s');
 if (!set || set<0 || set>=ilist.length)
-set=0;
-inum=parseInt(Math.random()*100)%12;
+ set=0;
+var inum = urlParams.get('i');
+if (!inum || inum<0 || inum>=12)
+ inum=parseInt(Math.random()*100)%12;
 </script>
 </head>
 <body>
