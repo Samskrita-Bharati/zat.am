@@ -97,7 +97,7 @@ span{
     place-items: center;
     border: 1px solid white;
 }
-#nPresent,#nFound,#lead2,#sk{
+#nPresent,#nFound,#lead2,#sk,.nob{
 	display: inline;
     border: none;
 }

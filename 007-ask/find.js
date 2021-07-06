@@ -355,7 +355,7 @@ var putWord = function (strWord) {
               (slotColIdx + wordIdx);
           default:
         }
-        $(targetCell).html("<span>" + charToPut + "</span>");
+         $(targetCell).html("<span title='"+Sanscript.t(String(charToPut), 'devanagari','iast')+"'>" + charToPut + "</span>");
       }
       //placed the word
       return true;
@@ -430,7 +430,8 @@ var findEmptySlots = function () {
 var fillRandom = function () {
   $("#grid td").each(function (idx, cell) {
     if ($(cell).text().trim().length == 0) {
-      $(cell).html("<span>" + getRandomAkshara() + "</span>");
+      ra=getRandomAkshara();
+      $(cell).html("<span title='"+Sanscript.t(String(ra), 'devanagari','itrans')+"'>" + ra + "</span>");
     }
   });
 };
@@ -530,17 +531,7 @@ function showHint2()
 	$("#lead2").html("");
 for (var i=0;i<wordList.length;i++)
 {
-	$("#lead2").append(wordList[i]+" ");
-}
-/*
-$("#lead2").html("");
-for (var i=0;i<wordList.length;i++)
-{
-	if (answers.includes(wordList[i]))
-	$("#lead2").append("<strong>"+wordList[i]+"</strong> ");
-else
-	$("#lead2").append(wordList[i]+" ");
+	$("#lead2").append("<span class=nob title='"+Sanscript.t(wordList[i], 'devanagari','iast')+"'>"+wordList[i]+" </span>");
 }
 
-*/
 };

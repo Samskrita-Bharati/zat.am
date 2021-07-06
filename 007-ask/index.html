@@ -74,7 +74,7 @@ input:checked + .slider:before {
 </head>
 <body>
     <div class="mangalam">&#x0965 श्रीः &#x0965</div>
-    <div id="lead">अस्मिन् अक्षरसमूहे श्रीमद् भगवद्गीता-तः श्रीकृष्णस्य वा अर्जुनस्य <span style="font-weight:bold" id="nPresent"></span> नामपदानि सन्ति । अन्वेषयन्तु । <br><span id="lead2"></span> </div>
+    <div id="lead">अस्मिन् अक्षरसमूहे श्रीमद् भगवद्गीता-तः श्रीकृष्णस्य वा अर्जुनस्य <span style="font-weight:bold" id="nPresent"></span> नामपदानि सन्ति । करोतु अन्वेषणम् । <br><span id="lead2"></span> </div>
     <div id="statusMessage"><span id="nFound"></span> नामपदानि अन्वेषितानि</div>
     <div id="finishMessage">।। शुभमस्तु ।। </div>
     <div id="gridParent">
@@ -82,46 +82,20 @@ input:checked + .slider:before {
     </div>
     <div id="level">
         <div class="leveltext">
-		<!--
-		<p>अध्यायः</p>
-		    <div class="dropdown"> 
-<button class="btn btn-primary dropdown-toggle chapter-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          ---
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        </div>
-      </div>
-		<p>श्लोकः</p>
-		 <div class="dropdown " id='dropdown-verse'> 
-       <button class="btn btn-primary dropdown-toggle verse-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          ---
-        </button>
-        <div class="dropdown-menu " id='menu-verses' aria-labelledby="dropdownMenuButton">
-        </div>
-      </div>-->
-	  <!--
-	  <button class="btn btn-primary " id="gobtn" disabled onclick="selectVerse()">Go</button>-->
-	<!--  <label class="switch">
-  अर्जुन<input type="checkbox">sk
-  <span class="slider round"></span>
-</label>-->
 
 <div class="custom-control custom-switch">
   <input type="checkbox" class="custom-control-input" checked id="customSwitch1" onchange="selectNames()">
   <label class="custom-control-label" for="customSwitch1"> अर्जुनः / <span id="sk" style="color:blue;font-weight:bold">श्रीकृष्णः</span></label>
 </div>
-
-
         <p>कठिनता</p> 
         <ul>
-            <li><a href="index.html?size=5" onclick="sV(this)">सरल</a></li>
-            <li><a href="index.html?size=7" onclick="sV(this)">माध्यम</a></li>
-            <li><a href="index.html?size=10" onclick="sV(this)">कठिन</a></li>
+            <li><a href="index.html?size=5" onclick="sV(this)">सरलम् </a></li>
+            <li><a href="index.html?size=7" onclick="sV(this)">मध्यमम् </a></li>
+            <li><a href="index.html?size=10" onclick="sV(this)">कठिनम् </a></li>
         </ul>
     </div>
     </div>
     </div>
-	
     <div id="hintLink">
         <div><a onclick="showHint2()" href="#"><img src="hint.png" alt="help"><div> नामपदानि  कानि?</div></a></div>
 
