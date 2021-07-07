@@ -30,13 +30,19 @@ const menu = [
 		 {
 			id: 18, title: "Arrange सुभाषितम्  ", category: "RG", dir: "018-as", desc : ` Order the words of a सुभाषितम्  in correct sequence! <pre>subhaaShitam</pre>` , 
 		 },
-  { id: 19, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
+		 {
+			id: 19, title: "चित्र-समस्या ", category: "RG", dir: "019-cs", desc : ` Jigsaw puzzle for a <pre>chitram</pre>` , 
+		 },
+		 {
+			id: 20, title: "शीघ्रम् आगमिष्यति ... ", category: "RG", dir: "999-cs", desc : ` कथा game <pre>shiighram aagamiShyati... </pre>` , 
+		 },
+  { id: 21, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  { id: 20, title: "Connect the Dots", category: "RG", dir: "999-cs",
+  { id: 22, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  { id: 21, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
+  { id: 23, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];
