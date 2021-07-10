@@ -2,6 +2,10 @@ const urlParams = new URLSearchParams(window.location.search);
 var set = urlParams.get('s');
 if (!set || isNaN(set))
 	set=0;
+
+var h = urlParams.get('h');
+if (!h || isNaN(h))
+	h=1;
 var imgs = ilist[parseInt(set)];
 var words=wlist[parseInt(set)];
 
@@ -101,10 +105,12 @@ $(function(){
 	
 	function clearActiveEC(){
 		if ((curTop == curMid) && (curMid== curBottom)) 
-			document.getElementById("wrd").innerHTML=words[curMid-1];
-		// + " - " +  Sanscript.t(words[curMid-1], 'devanagari','itrans');
+			document.getElementById("wrd").innerHTML=Sanscript.t(words[curMid-1], 'devanagari','itrans');
 		else
 			document.getElementById("wrd").innerHTML="?";
+
+		document.getElementById("wrd").title =Sanscript.t(document.getElementById("wrd").innerHTML,'itrans', 'devanagari');
+
 		var activeBtn = $(".active");
 		if(activeBtn.length){
 			$(activeBtn).removeClass("active");
@@ -191,5 +197,6 @@ document.getElementsByClassName(cid)[0].style.backgroundImage="url('"+imgs[i-1]+
 pid="btn-"+i;
 document.getElementById(pid).innerHTML=words[i-1];
 }
-	
+  if (h==1)
+	$("#pres-btns").hide();
 });
