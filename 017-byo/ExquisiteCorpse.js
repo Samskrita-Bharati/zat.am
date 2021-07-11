@@ -2,7 +2,9 @@ const urlParams = new URLSearchParams(window.location.search);
 var set = urlParams.get('s');
 if (!set || isNaN(set))
 	set=0;
-
+var t = urlParams.get('t');
+if (!t || isNaN(t))
+	t=1;
 var h = urlParams.get('h');
 if (!h || isNaN(h))
 	h=1;
@@ -105,12 +107,13 @@ $(function(){
 	
 	function clearActiveEC(){
 		if ((curTop == curMid) && (curMid== curBottom)) 
-			document.getElementById("wrd").innerHTML=Sanscript.t(words[curMid-1], 'devanagari','itrans');
+			document.getElementById("wrd").innerHTML=words[curMid-1];
 		else
 			document.getElementById("wrd").innerHTML="?";
 
 		document.getElementById("wrd").title =Sanscript.t(document.getElementById("wrd").innerHTML,'itrans', 'devanagari');
-
+if (t==1)
+	document.getElementById("wrd").innerHTML +=  " - " + Sanscript.t(document.getElementById("wrd").innerHTML, 'devanagari','itrans');
 		var activeBtn = $(".active");
 		if(activeBtn.length){
 			$(activeBtn).removeClass("active");
