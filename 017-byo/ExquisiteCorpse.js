@@ -111,7 +111,7 @@ $(function(){
 		else
 			document.getElementById("wrd").innerHTML="?";
 
-		document.getElementById("wrd").title =Sanscript.t(document.getElementById("wrd").innerHTML,'itrans', 'devanagari');
+		//document.getElementById("wrd").title =Sanscript.t(document.getElementById("wrd").innerHTML,'itrans', 'devanagari');
 if (t==1)
 	document.getElementById("wrd").innerHTML +=  " - " + Sanscript.t(document.getElementById("wrd").innerHTML, 'devanagari','itrans');
 		var activeBtn = $(".active");
