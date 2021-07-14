@@ -40,9 +40,10 @@ cursor:pointer;
   Johan Karlsson
   https://github.com/DonKarlssonSan/vectory
 */
+ var nums = [['०','१','२','३','४','५','६','७','८','९'],['क','ख','ग','घ'],['च','छ','ज','झ']];
 const urlParams = new URLSearchParams(window.location.search);
 var set = urlParams.get('s');
-if (!set || isNaN(set))
+if (!set || isNaN(set) || set>nums.length)
 	set=0;
 "use strict";
 var minvalue = Infinity; 
@@ -160,7 +161,7 @@ class Vector {
 }
 
  var numa = ['\u0966','\u0967','\u0968','\u0969','\u096a','\u096b','\u096c','\u096d','\u096e','\u096f'];
- var nums = [['०','१','२','३','४','५','६','७','८','९'],['क','ख','ग','घ'],['च','छ','ज','झ']];
+
  counts['०']=counts['१']=counts['२']=counts['३']=counts['४']=counts['५']=counts['६']=counts['७']=counts['८']=counts['९']=0;
  var colors=['violet','indigo','blue','green','yellow','orange','red'];
 /*
