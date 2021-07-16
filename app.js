@@ -39,13 +39,17 @@ const menu = [
 		 {
 			id: 21, title: "अन्वेषणम् ", category: "RG", dir: "021-a", desc : ` 'Finding Waldo'-style fun!?<pre>anveShaNam </pre>` , 
 		 },
-  { id: 22, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
+		 {
+			id: 22, title: "पाशः", category: "RG", dir: "022-p", desc : ` <pre>paashaH/jaalam </pre> means net/trap/maze` , 
+		 },
+		  
+  { id: 23, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  { id: 23, title: "Connect the Dots", category: "RG", dir: "999-cs",
+  { id: 24, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  { id: 24, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
+  { id: 25, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];
