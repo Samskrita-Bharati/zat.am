@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>पाशः paashaH</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- https://www.the-art-of-web.com/javascript/maze-game/ -->
+<link rel="stylesheet" type="text/css" href="mazing.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+</body>
+<div id="maze_container"><div id="maze" data-steps="???"></div></div>
+<div id="buttons" style="float:right;left:60%">
+<button id="l" title="👈" onclick="myfn('l')">वामतः  vaamataH</button>
+<button id="u" title="👆" onclick="myfn('u')"> उपरि   upari</button>
+<button id="d" title="👇" onclick="myfn('d')"> अधः   adhaH</button>
+<button id="r" title="👉" onclick="myfn('r')">दक्षिणतः  dakShiNataH</button>
+<p><strong>पाशः </strong> paashaH</p>
+<ul>
+<li>प्रथमं कुञ्चिकां स्वीकरोतु 🔑 prathamaM ku~nchikaaM sviikarotu </li>
+<li>अनन्तरं द्वारं प्रति गच्छतु 🚪 anantaraM dvaaraM prati gachChatu</li>
+</ul>
+<p><strong>🙂 </strong> </p>
+<ul>
+
+<li>🌼 + 10 (१०)</li>
+<li>🍄 + 10 (१०)</li>
+<li>🌻 + 10 (१०)</li>
+<li>💎 + 10 (१०)</li>
+<li>🎁 + 10 (१०)</li>
+</ul>
+<p><strong>🙁 </strong> </p>
+<ul>
+<li>🐊 - 5 (५)</li>
+<li>🐍 - 5 (५)</li>
+</ul>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+<script src="maze-builder.js"></script>
+<script src="fancy-maze-builder.js"></script>
+<script src="mazing2.js"></script>
+<script>
+
+  var Maze, MazeGame;
+
+  const makeMaze = (id, width, height, speech = false) => {
+    Maze = new FancyMazeBuilder(width, height);
+    Maze.display(id);
+    MazeGame = new Mazing("maze");
+    if(speech) {
+      MazeGame.enableSpeech();
+    }
+  }
+
+  makeMaze("maze_container", 12, 12);
+
+</script>
+</html>
