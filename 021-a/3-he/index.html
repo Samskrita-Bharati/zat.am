@@ -42,12 +42,17 @@ font-size:2.5em;
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 var r = parseInt(urlParams.get('r'));
-
+var inp=urlParams.get('inp');
  var colors=['violet','indigo','blue','green','yellow','orange','red'];
  var set = urlParams.get('s');
  var found=wt=0;
  if (!set || isNaN(set) || set>=nums.length)
 	set=0;
+if (inp != null)
+{
+//debugger;
+  nums[set]=inp.split("");
+  }
 if (!r || isNaN(r))
 {
 //r=40;
@@ -67,7 +72,12 @@ found++;
   + (minvalue - found);
 if (found >= minvalue) 
 {
-  alert("done");
+msg = "उत्तमम् ! You found all!";
+	window.alert(msg);
+    var ask=confirm("पुनः ? Press 'ok' to play again");
+    if (ask){
+       location.reload();
+    }
   var txtnods=document.querySelectorAll("text");
 for (var i=0;i<txtnods.length;i++){
   txtnods[i].onclick="";
