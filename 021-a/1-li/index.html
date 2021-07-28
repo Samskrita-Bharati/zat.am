@@ -1,0 +1,565 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../data.json"></script>
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+svg {
+  position: relative;
+  left:25%;
+  top:25%;
+  width: 50%;
+  height: 50%;
+}
+text{
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+<center>
+<p>Find<span id=msg></span> <a href="#" onclick=showall()>I give up!</a><span id="remain"></span></p></center>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" version="1.1" overflow="auto">
+<defs>
+    <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="red"/>
+      <stop offset="100%" stop-color="blue"/>
+    </linearGradient>
+  </defs>
+  <!-- 
+    Johan Karlsson, 2020
+    https://twitter.com/DonKarlssonSan 
+	
+	https://codepen.io/DonKarlssonSan/pen/ExawemK
+	
+  -->
+</svg>
+
+<script>
+/*
+  Johan Karlsson
+  https://github.com/DonKarlssonSan/vectory
+*/
+const urlParams = new URLSearchParams(window.location.search);
+var set = urlParams.get('s');
+if (!set || isNaN(set) || set>nums.length)
+	set=0;
+"use strict";
+var minvalue = Infinity; 
+var val="";
+var found=0;
+let texts = [];
+let counts=[];
+for (i=0;i<nums.length;i++) 
+  for (j=0;j<nums[i].length;j++)
+     counts[nums[i][j]]=0;
+class Vector {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  add(v) {
+    return new Vector(
+      this.x + v.x,
+      this.y + v.y);
+  }
+
+  addTo(v) {
+    this.x += v.x;
+    this.y += v.y;
+  }
+
+  sub(v) {
+    return new Vector(
+      this.x - v.x,
+      this.y - v.y);
+  }
+  
+  subFrom(v) {
+    this.x -= v.x;
+    this.y -= v.y;
+  }
+  
+  mult(n) {
+    return new Vector(this.x * n, this.y * n);
+  }
+  
+  multTo(n) {
+    this.x *= n;
+    this.y *= n;
+    return this;
+  }
+  
+  div(n) {
+    return new Vector(this.x / n, this.y / n);
+  }
+  
+  setAngle(angle) {
+    var length = this.getLength();
+    this.x = Math.cos(angle) * length;
+    this.y = Math.sin(angle) * length;
+  }
+  
+  setLength(length) {
+    var angle = this.getAngle();
+    this.x = Math.cos(angle) * length;
+    this.y = Math.sin(angle) * length;
+    return this;
+  }
+  
+  getAngle() {
+    return Math.atan2(this.y, this.x);
+  }
+  
+  getLength() {
+    return Math.hypot(this.x, this.y);
+  }
+
+  getLengthSq() {
+    return this.x * this.x + this.y * this.y;
+  }
+
+  distanceTo(v) {
+    return this.sub(v).getLength();
+  }
+
+  copy() {
+    return new Vector(this.x, this.y);
+  }
+  
+  equals(v) {
+    return this.x == v.x && this.y == v.y;
+  }
+  
+  rotate(angle) {
+    return new Vector(this.x * Math.cos(angle) - this.y * Math.sin(angle), this.x * Math.sin(angle) + this.y * Math.cos(angle));
+  }
+  
+  rotateAround(v, angle) {
+    let x = (this.x - v.x) * Math.cos(angle) - (v.y - this.y) * Math.sin(angle) + v.x;
+    let y = (v.y - this.y) * Math.cos(angle) + (this.x - v.x) * Math.sin(angle) + v.y;
+    return new Vector(x, y);
+  }
+  
+  lerp(v, t) {
+    let delta = v.sub(this).mult(t);
+    return this.add(delta);
+  }
+
+  lerpTo(v, t) {
+    let delta = v.sub(this).mult(t);
+    this.addTo(delta);
+  }
+
+  moveTowards(v, length) {
+    let delta = v.sub(this).setLength(length);
+    return this.add(delta);
+  }
+  
+  toString() {
+    return `${this.x},${this.y}`;
+  }
+}
+
+ var colors=['violet','indigo','blue','green','yellow','orange','red'];
+/*
+  Johan Karlsson, 2020
+  https://twitter.com/DonKarlssonSan
+  MIT License, see Details View
+  
+  https://en.wikipedia.org/wiki/Voronoi_diagram
+  https://en.wikipedia.org/wiki/Delaunay_triangulation
+  https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
+  https://en.wikipedia.org/wiki/Circumscribed_circle
+*/
+
+const svgNs = "http://www.w3.org/2000/svg";
+let svg;
+let w;
+let h;
+
+class Triangle {
+  constructor(a, b, c) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+  }
+  
+  vertexes() {
+    return [this.a, this.b, this.c];
+  }
+  
+  vertexesAsString() {
+    return this.vertexes().map(vertex => `${vertex.x}, ${vertex.y}`).join(", ");
+  }
+  
+  draw(groupElement) {
+    let polygon = document.createElementNS(svgNs, "polygon");
+    polygon.setAttribute("points", this.vertexesAsString());
+    polygon.setAttribute("fill", "none");
+    polygon.setAttribute("stroke-linecap", "round");
+    polygon.setAttribute("stroke-linejoin", "round");
+    groupElement.appendChild(polygon);    
+  }
+  
+  getPoints(p1, p2, nrOfPoints) {
+    let points = [];
+    let delta = p1.sub(p2).div(nrOfPoints+1);
+    for(let i = 1; i < nrOfPoints+1; i++) {
+      let currentPos = p2.add(delta.mult(i));
+      points.push(currentPos);
+    }
+    return points;
+  }
+
+  edges() {
+    return [
+      [this.a, this.b],
+      [this.b, this.c],
+      [this.c, this.a]
+    ];
+  }
+  
+  sharesAVertexWith(triangle) {
+    // TODO: optimize me please!
+    for(let i = 0; i < 3; i++) {
+      for(let j = 0; j < 3; j++) {
+        let v = this.vertexes()[i];
+        let vv = triangle.vertexes()[j];
+        if(v.equals(vv)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  
+  sharesAnEdgeWith(triangle) {
+    let edges = triangle.edges();
+    for(let i = 0; i < edges.length; i++) {
+      let edge = edges[i];
+      if(this.hasEdge(edge)) {
+        return true;
+      }
+    } 
+    return false;
+  }
+
+  hasEdge(edge) {
+    for(let i = 0; i < 3; i++) {
+      let e = this.edges()[i];
+      if(e[0].equals(edge[0]) && e[1].equals(edge[1]) || 
+         e[1].equals(edge[0]) && e[0].equals(edge[1])) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  get centroid() {
+    if(!this._centroid) {
+      this._centroid = this.a.add(this.b).add(this.c).div(3);
+    }
+    return this._centroid;
+  }
+  
+  get circumcenter() {
+    if(this._circumcenter) {
+      return this._circumcenter;
+    }
+    let d = 2 * (this.a.x * (this.b.y - this.c.y) + 
+                 this.b.x * (this.c.y - this.a.y) + 
+                 this.c.x * (this.a.y - this.b.y));
+    
+    let x = 1 / d * ((this.a.x * this.a.x + this.a.y * this.a.y) * (this.b.y - this.c.y) + 
+                     (this.b.x * this.b.x + this.b.y * this.b.y) * (this.c.y - this.a.y) + 
+                     (this.c.x * this.c.x + this.c.y * this.c.y) * (this.a.y - this.b.y));
+    
+    let y = 1 / d * ((this.a.x * this.a.x + this.a.y * this.a.y) * (this.c.x - this.b.x) + 
+                     (this.b.x * this.b.x + this.b.y * this.b.y) * (this.a.x - this.c.x) + 
+                     (this.c.x * this.c.x + this.c.y * this.c.y) * (this.b.x - this.a.x));
+    this._circumcenter = new Vector(x, y);
+    return this._circumcenter;
+  }
+  
+  circumradius() {
+    return this.circumcenter.sub(this.a).getLength();    
+  }
+  
+  pointIsInsideCircumcircle(point) {
+    let circumcenter = this.circumcenter;
+    let circumradius = circumcenter.sub(this.a).getLength();
+    let dist = point.sub(circumcenter).getLength();
+    return dist < circumradius;
+  }
+}
+
+function getRandomPoints() {
+  let pointList = [];
+  let div = Math.random() * 3000 + 1000;
+  let nrOfPoints = w * h / div;
+  for(let i = 0; i < nrOfPoints; i++) {
+    pointList.push(new Vector(
+      Math.random() * w,
+      Math.random() * h
+    ));
+  }
+  return pointList;
+}
+
+function bowyerWatson (superTriangle, pointList) {
+  // pointList is a set of coordinates defining the 
+  // points to be triangulated
+  let triangulation = [];
+
+  // add super-triangle to triangulation 
+  // must be large enough to completely contain all 
+  // the points in pointList
+  triangulation.push(superTriangle);
+  
+  // add all the points one at a time to the triangulation
+  pointList.forEach(point => {
+    let badTriangles = [];
+    
+    // first find all the triangles that are no 
+    // longer valid due to the insertion
+    triangulation.forEach(triangle => { 
+      if(triangle.pointIsInsideCircumcircle(point)) {
+        badTriangles.push(triangle); 
+      }
+    });
+    let polygon = [];
+    
+    // find the boundary of the polygonal hole
+    badTriangles.forEach(triangle => {
+      triangle.edges().forEach(edge => {
+        let edgeIsShared = false;
+        badTriangles.forEach(otherTriangle => {
+          if(triangle !== otherTriangle &&  otherTriangle.hasEdge(edge)) {
+            edgeIsShared = true;
+          }
+        });
+        if(!edgeIsShared) {
+          //edge is not shared by any other 
+          // triangles in badTriangles
+          polygon.push(edge);
+        }
+      });
+    });
+    
+    // remove them from the data structure
+    badTriangles.forEach(triangle => {
+      let index = triangulation.indexOf(triangle);
+      if (index > -1) {
+        triangulation.splice(index, 1);
+      }
+    });
+    
+    // re-triangulate the polygonal hole
+    polygon.forEach(edge => {
+      //form a triangle from edge to point
+      let newTri = new Triangle(edge[0], edge[1], point);
+      triangulation.push(newTri);
+    });
+  });
+  
+  // done inserting points, now clean up
+  let i = triangulation.length;
+  while(i--) {
+    let triangle = triangulation[i];
+    if(triangle.sharesAVertexWith(superTriangle)) {
+      //remove triangle from triangulation
+      let index = triangulation.indexOf(triangle);
+      if (index > -1) {
+        triangulation.splice(index, 1);
+      }
+    }  
+  }
+  
+  return triangulation;
+}
+
+function getVoronoiLines(triangles) {
+  let lines = [];
+  for(let i = 0; i < triangles.length; i++) {
+    let currentTriangle = triangles[i];
+
+    for(let j = i+1; j < triangles.length; j++) {
+      let otherTriangle = triangles[j];
+      if(currentTriangle.sharesAnEdgeWith(otherTriangle)) {
+        let line = {
+          x1: currentTriangle.circumcenter.x,
+          y1: currentTriangle.circumcenter.y,
+          x2: otherTriangle.circumcenter.x,
+          y2: otherTriangle.circumcenter.y
+        };
+        lines.push(line);
+		let txt = {x:(currentTriangle.circumcenter.x+otherTriangle.circumcenter.x)/2,y:  (currentTriangle.circumcenter.y+otherTriangle.circumcenter.y)/2}; 
+	    texts.push(txt);		
+      }
+    }
+  }
+  return lines;
+}
+
+function drawLines(groupElement, lines) {
+  lines.forEach(line => {
+    let lineElement = createLineElement(line);
+    groupElement.appendChild(lineElement);
+  });
+/*  lines.forEach(line => {
+    let textElement = createTextElement(line);
+    groupElement.appendChild(textElement);
+  });
+  */
+
+  texts.forEach(txt => {
+  if (txt.x >10 && txt.y >10 && txt.x<window.innerWidth/2-10 && txt.y<window.innerHeight/2-10)
+  {
+    let textElement = createTextElement(txt);
+    groupElement.appendChild(textElement);
+	}
+  });
+
+// debugger;
+for(i=0;i<nums[set].length;i++) {
+    if(counts[nums[set][i]] < minvalue) {
+       minvalue = counts[nums[set][i]];
+		val = nums[set][i];
+    }    
+}
+//console.log(minvalue);
+//console.log(" - "+val);
+document.getElementById("msg").innerHTML = " " + minvalue + " instances of <strong>" + val + "</strong>";
+
+}
+
+function createLineElement(line) {
+  let lineElement = document.createElementNS(svgNs, "line");
+  lineElement.setAttribute("x1", line.x1);
+  lineElement.setAttribute("y1", line.y1);
+  lineElement.setAttribute("x2", line.x2);
+  lineElement.setAttribute("y2", line.y2);
+  lineElement.setAttribute("stroke", colors[Math.floor(Math.random() * 7)]);
+  return lineElement;
+}
+
+function createTextElement(txt) {
+  let textElement = document.createElementNS(svgNs, "text");
+  textElement.setAttribute("x", txt.x);
+  textElement.setAttribute("y", txt.y);
+   textElement.onclick=abc;
+  textElement.innerHTML=nums[set][Math.floor(Math.random() * nums[set].length)];
+  counts[textElement.innerHTML]++;
+  return textElement;
+}
+var abc=function(evt) { 
+if (evt.target.innerHTML==val) 
+{
+evt.target.onclick="";
+evt.target.setAttribute("stroke","blue");
+found++;
+  document.getElementById("remain").innerHTML = " Still to find : "
+  + (minvalue - found);
+if (found >= minvalue) 
+{
+  var msg = "उत्तमम् ! You found all!";
+	window.alert(msg);
+    var ask=confirm("पुनः ? Press 'ok' to play again");
+    if (ask){
+       location.reload();
+    }
+  txtnods=document.querySelectorAll("text");
+for (var i=0;i<txtnods.length;i++){
+  txtnods[i].onclick="";
+}
+  }
+}
+else 
+{
+evt.target.setAttribute("stroke","red")
+//console.log("to find " + (minvalue - found));
+}
+};
+
+function setup() {
+  svg = document.querySelector("svg");
+  //document.addEventListener("click", draw);
+  document.addEventListener("keydown", onKeyDown);
+  //window.addEventListener("resize", onResize);
+  onResize();
+}
+
+function onResize() {
+  w = window.innerWidth/2;
+  h = window.innerHeight/2;
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  draw();
+}
+
+function onKeyDown (e) {
+  if(e.code === "KeyD") {
+    download();
+  }
+}
+
+function download() {
+  let svgDoc = svg.outerHTML;
+  let filename = "voronoi.svg";
+  let element = document.createElement("a");
+  element.setAttribute("href", "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgDoc));
+  element.setAttribute("download", filename);
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.addEventListener("click", e => e.stopPropagation());
+  element.click();
+  document.body.removeChild(element);
+}
+function showall()
+{
+txtnods=document.querySelectorAll("text");
+for (var i=0;i<txtnods.length;i++){
+//debugger;
+ 
+  if (txtnods[i].innerHTML == val)
+     if (txtnods[i].getAttribute("stroke") != "blue")
+	 {
+	 	     txtnods[i].setAttribute("stroke","url(#linear)");
+			 txtnods[i].setAttribute("stroke-width","2.5");
+         //txtnods[i].classList.add("blinkclass");
+         //txtnods[i].setAttribute("stroke","tomato");
+		 }
+}
+}
+function draw() {
+texts = [];
+  let group = document.querySelector("g");
+  if(group) {
+    group.remove();
+  }
+  group = document.createElementNS(svgNs, "g");
+  group.setAttribute("stroke", "black");
+  
+  let pointList = getRandomPoints();
+  
+  let superTriangle = new Triangle(
+    new Vector(-w * 10, h * 10),
+    new Vector(w * 10, h * 10),
+    new Vector(w / 2, -h * 10)
+  );
+  
+  let triangles = bowyerWatson(superTriangle, pointList);
+  let lines = getVoronoiLines(triangles);
+  drawLines(group, lines);
+  svg.appendChild(group);
+}
+
+setup();
+
+</script>
+</body>
+</html>

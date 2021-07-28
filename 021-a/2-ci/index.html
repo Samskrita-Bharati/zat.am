@@ -1,0 +1,210 @@
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../data.json"></script>
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+circle{
+stroke-width : 3;
+}
+circle:hover{
+fill:white;
+}
+svg {
+  position: relative;
+  left:10%;
+  top:5%;
+  width: 80%;
+  height: 80%;
+}
+text{
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+<center>
+<p>Find<span id=msg></span> <a href="#" onclick=showall()>I give up!</a><span id="remain"></span> ❌ = <span id="wt">0<span></p></center>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" version="1.1" overflow="hidden">
+<defs>
+    <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="red"/>
+      <stop offset="100%" stop-color="blue"/>
+    </linearGradient>
+  </defs>
+</svg>
+<script>
+"use strict";
+const urlParams = new URLSearchParams(window.location.search);
+var set = urlParams.get('s');
+
+let texts = [];
+var found=0;
+ var numa = ['\u0966','\u0967','\u0968','\u0969','\u096a','\u096b','\u096c','\u096d','\u096e','\u096f'];
+
+ if (!set || isNaN(set) || set>=nums.length)
+	set=0;
+ var colors=['violet','indigo','blue','green','yellow','orange','red'];
+const svgNs = "http://www.w3.org/2000/svg";
+let svg;
+let w;
+let wt=0;
+let h;
+let gc=0;
+let counts=[];
+var minvalue = Infinity; 
+var val="";
+for (var i=0;i<nums.length;i++) 
+  for (var j=0;j<nums[i].length;j++)
+     counts[nums[i][j]]=0;
+
+var tclick=function(evt) { 
+if (evt.target.innerHTML==val) 
+{
+evt.target.onclick="";
+evt.target.setAttribute("stroke","blue");
+found++;
+  document.getElementById("remain").innerHTML = " Still to find : "
+  + (minvalue - found);
+if (found >= minvalue) 
+{
+  msg = "उत्तमम् ! You found all!";
+	window.alert(msg);
+    var ask=confirm("पुनः ? Press 'ok' to play again");
+    if (ask){
+       location.reload();
+    }
+  var txtnods=document.querySelectorAll("text");
+for (var i=0;i<txtnods.length;i++){
+  txtnods[i].onclick="";
+}
+  }
+}
+else 
+{
+evt.target.setAttribute("stroke","red");
+wt++;
+document.getElementById("wt").innerHTML = wt;
+}
+};
+
+function getRandomPoints() {
+  let pointList = [];
+  let div = Math.random() * 3000 + 1000;
+  let nrOfPoints = w * h / div;
+  for(let i = 0; i < nrOfPoints; i++) {
+    pointList.push({x: Math.random() * w, y: Math.random() * h});
+  }
+  return pointList;
+}
+
+function drawGs(groupElement, points) {
+  points.forEach(circ => {
+    let circElement = createGElement(circ);
+    groupElement.appendChild(circElement);
+  });
+  
+  for(var i=0;i<nums[set].length;i++) {
+  if (counts[nums[set][i]] > 0)
+    if(counts[nums[set][i]] < minvalue) {
+       minvalue = counts[nums[set][i]];
+		val = nums[set][i];
+    }    
+}
+document.getElementById("msg").innerHTML = " " + minvalue + " instances of <strong>" + val + "</strong>";
+}
+
+function createGElement(circ) {
+gc++;
+let gElement = document.createElementNS(svgNs, "g");
+gElement.setAttribute("id", gc);
+let r=Math.floor(Math.random() * 25);
+  let circElement = document.createElementNS(svgNs, "circle");
+  circElement.setAttribute("cx", circ.x);
+  circElement.setAttribute("cy", circ.y);
+  circElement.setAttribute("r", r);
+  circElement.setAttribute("fill", colors[Math.floor(Math.random() * 7)]);
+  
+  gElement.appendChild(circElement);
+  
+ if (r>12)
+ {
+  let textElement = document.createElementNS(svgNs, "text");
+  textElement.setAttribute("x", circ.x);
+  textElement.setAttribute("y", circ.y);
+  textElement.setAttribute("text-anchor","middle");
+   textElement.setAttribute("fill","black");
+    textElement.setAttribute("stroke","white");
+  textElement.onclick=tclick;
+  textElement.innerHTML=nums[set][Math.floor(Math.random() * nums[set].length)];
+ counts[textElement.innerHTML]++;
+ gElement.appendChild(textElement);
+  }  
+  return gElement;
+}
+function showall()
+{
+let txtnods=document.querySelectorAll("text");
+for (var i=0;i<txtnods.length;i++){
+  if (txtnods[i].innerHTML == val)
+     if (txtnods[i].getAttribute("stroke") != "blue")
+	 {
+	 	     txtnods[i].setAttribute("stroke","url(#linear)");
+			 txtnods[i].setAttribute("stroke-width","2.5");
+		 }
+}
+}
+function setup() {
+  svg = document.querySelector("svg");
+  document.addEventListener("keydown", onKeyDown);
+  onResize();
+}
+
+function onResize() {
+  w = window.innerWidth/1.5;
+  h = window.innerHeight/1.5;
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  draw();
+}
+
+function onKeyDown (e) {
+  if(e.code === "KeyD") {
+    download();
+  }
+}
+
+function download() {
+  let svgDoc = svg.outerHTML;
+  let filename = "circs.svg";
+  let element = document.createElement("a");
+  element.setAttribute("href", "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgDoc));
+  element.setAttribute("download", filename);
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.addEventListener("click", e => e.stopPropagation());
+  element.click();
+  document.body.removeChild(element);
+}
+
+function draw() {
+texts = [];
+  let group = document.querySelector("g");
+  if(group) {
+    group.remove();
+  }
+  group = document.createElementNS(svgNs, "g");
+  group.setAttribute("stroke", "black");
+  
+  let pointList = getRandomPoints();  
+
+  drawGs(group, pointList);
+  svg.appendChild(group);
+}
+
+setup();
+
+</script>
+</body>
+</html>
