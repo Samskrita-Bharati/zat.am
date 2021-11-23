@@ -48,14 +48,18 @@ const menu = [
 		 {
 			id: 25, title: "Arrange श्लोकः", category: "RG", dir: "025-sr", desc : `from <pre>सङ्क्षेपरामायणम्  sa~NkSheparaamaayaNam</pre>` , 
 		 },
+		 {
+			id: 26, title: "स्वराः-painting", category: "RG", dir: "026-sp", desc : `learn to write <pre>स्वराः  svaraaH</pre>` , 
+		 },		 
+		 
 		   
-  { id: 26, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
+  { id: 27, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  { id: 27, title: "Connect the Dots", category: "RG", dir: "999-cs",
+  { id: 28, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  { id: 28, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
+  { id: 29, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];

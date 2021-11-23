@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta name="viewport" content="width=device-width">
+  <meta charset="UTF-8">
+  <title>स्वराः-paint</title>
+  <link rel="stylesheet" type="text/css" href="letterpaint.css">
+</head>
+<body>
+  <div id="container" class="container">
+
+    <div id="chars" class="gamedata">अआइईउऊऋॠएऐओऔ</div>
+
+    <canvas></canvas>
+
+    <h1 class="toppanel">स्वराः-paint</h1>
+
+    <div id="intro" class="cover">
+      <p>Paint over the letter you see on the screen. Can you write it without going outside of it?</p>
+      <button class="actionbutton">➜</button>
+    </div>
+
+    <button id="sound" class="navbutton">♬</button>
+
+    <div id="win" class="cover check">
+      <p>उत्तमम् !  (uttamam) Good job!</p> 
+      <button class="actionbutton">➜</button>
+    </div>
+
+    <div id="error" class="cover">
+      <p>Try पुनः (punaH = again) .. You painted outside the letter!</p> 
+      <button class="actionbutton">➜</button>
+    </div>
+
+
+    <button class="actionbutton undo" id="reload">X</button>
+  </div>
+
+  <!-- http://freesound.org/people/NenadSimic/sounds/150879/ -->
+  <audio src="win.ogg" id="winsound"></audio>
+  <!-- http://freesound.org/people/Autistic%20Lucario/sounds/142608/ -->
+  <audio src="error.ogg" id="errorsound"></audio>
+
+  <script src="letterpaint.js"></script>
+</body>
+</html>
