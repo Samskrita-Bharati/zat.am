@@ -51,15 +51,17 @@ const menu = [
 		 {
 			id: 26, title: "स्वराः-painting", category: "RG", dir: "026-sp", desc : `learn to write <pre>स्वराः  svaraaH</pre>` , 
 		 },		 
-		 
+			 {
+			id: 27, title: "१५ समस्या", category: "RG", dir: "027-15s", desc : `play the classic 15-puzzle <pre>समस्या samasyaa</pre>` , 
+		 },	 
 		   
-  { id: 27, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
+  { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
-  { id: 28, title: "Connect the Dots", category: "RG", dir: "999-cs",
+  { id: 29, title: "Connect the Dots", category: "RG", dir: "999-cs",
     desc: `coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
-  { id: 29, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
+  { id: 30, title: "Paint by सङ्ख्या ", category: "ET", dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
 ];
