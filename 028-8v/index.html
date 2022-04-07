@@ -1,0 +1,260 @@
+<html>
+
+<head>
+    <title>Eight Colors</title>
+ <meta charset="utf-8" />
+    <meta name="description" content="Eight Colors is a block shifting game where the goal is to shift circular blocks to reach the target.">
+    
+    <meta property="og:title" content="Eight Colors" />
+    <meta property="og:description" content="Eight Colors is a block shifting game where the goal is to shift circular blocks to reach the target." />
+    <meta property="og:image" content="https://eightcolors.net/assets/logo.jpg" />
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/sfb5otu.css">
+
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="eightcolors.net">
+    <meta property="twitter:url" content="https://eightcolors.net/">
+    <meta name="twitter:title" content="Eight Colors">
+    <meta name="twitter:description" content="Eight Colors is a block shifting game where the goal is to shift circular blocks to reach the target.">
+    <meta name="twitter:image" content="https://eightcolors.net/assets/logo.jpg">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body class="bg-bg h-screen overflow-hidden">
+    <div class="absolute h-full w-full -z-10 transition-opacity duration-300 flex-center" id="base-modal" style="opacity: 0;">
+        <!-- backdrop is button because iOS safari is a fucking idiot. -->
+        <button class="bg-black opacity-50 w-full h-full absolute z-10 inset-0" data-hide-modal="true" role="button"></button>
+        <div
+            data-modal-body="gameWon"
+            class="bg-white rounded-lg max-w-md px-4 py-6 top-5 z-50 max-h-[512px] w-full overflow-auto">
+            <div class="md:flex items-center">
+                <div>
+                    <p class="font-bold text-xl text-green-700">Level Completed!</p>
+                    <p class="mt-2">
+                        Awesome! You completed the puzzle in <span data-timer>0m 0s</span>. Head over the next puzzle or replay the same level. 
+                    </p>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end bg-[#f9fafb] border-[#e0e6eb] border-t -mx-4 -mb-6 py-4">
+                <button class="btn btn-hollow mr-2" data-replay>Re-play</button>
+                <button class="btn btn-primary mr-4" data-next>
+                    <svg id="spinner" class="-ml-1 mr-3 h-5 w-5 text-white animate-spin hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    Goto Next &rarr;
+                </button>
+            </div>
+        </div>
+
+        <div
+            data-modal-body="allCompleted"
+            class="bg-white rounded-lg max-w-md px-4 py-6 z-50 max-h-[512px] w-full overflow-auto">
+            <div class="md:flex items-center">
+                <div>
+                    <p class="font-bold text-lg text-green-700">You have completed the last level!</p>
+                    <p class="mt-2">
+                        You can now try to completing the existing puzzles in a better time by replaying the levels using 'All Levels'.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div
+            data-modal-body="feedback"
+            class="bg-white rounded-lg max-w-md px-4 py-6 z-50 max-h-[512px] w-full overflow-auto">
+            <div class="md:flex items-center">
+                <div>
+                    <p class="font-bold text-2xl text-primary ">Feedback?</p>
+                    <p class="mt-2">
+                        Hey! I am <a href="https://twitter.com/shubhamjainco" class="text-primary underline underline-offset-1">Shubham</a>, and I am the author of this game. Have any feedback, suggestion, bug to report?
+                        Feel free to shoot me a mesage.
+                    </p>
+
+                    <p class="mt-2">
+                        <form class="my-4" action="https://formspree.io/f/mpzbjaqw" method="POST">
+                            <div>
+                                <input type="email" placeholder="Email Address (e.g, john@example.com)" name="_replyto" class="border p-2 block w-full">
+                            </div>
+                            <div class="mt-3">
+                                <textarea name="message" class="border p-2 w-full  resize-none" rows="6" placeholder="Your message"></textarea>
+                            </div>
+    
+                            <button class="btn btn-primary mt-3" type="submit">
+                                Send 
+                            </button>
+                        </form>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg max-w-md px-4 py-6 z-50 max-h-[512px] w-full overflow-auto"
+            data-modal-body="howToPlay">
+            <div class="md:flex items-center">
+                <div>
+                    <p class="font-bold text-2xl text-primary">How To Play?</p>
+                    <p class="mt-2">
+                        <strong>Eight Colors</strong> is a block shifting game. The Goal? Shift circular blocks to
+                        reach the target given on the right hand side. 
+                    </p>
+
+                    <p class="mt-3 hidden md:block">
+                        <strong>Controls:</strong> Pressing W/A/S/D will change the rows/columns that you want to shift.
+                        Pressing arrow keys will shift the circular blocks. 
+                    </p>
+
+                    <p class="mt-3 block md:hidden">
+                        <strong>Controls:</strong> To shift a circular block, simply swipe in that direction over the row or column.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg max-w-md px-4 py-6 z-50 max-h-[512px] w-full overflow-auto"
+            data-modal-body="stats">
+            <div>
+                <p class="font-bold text-2xl text-primary ">All Levels</p>
+                <div class="relative overflow-x-auto mt-4 rounded border">
+                    <table class="text-sm text-left w-full">
+                        <thead class="text-xs text-primary border-b uppercase bg-bg">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Level
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Best Time
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="high-scores-body">
+                        </tbody>
+                    </table>
+                </div>    
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/template" id="high-scores">
+        <% for (const score of scores) { %>
+            <tr>
+                <td class="px-6 py-3 font-semibold">
+                    Level <%= score.id + 1 %>
+                </td>
+                <td class="px-6 py-3">
+                    <%- score.bestTime ? score.bestTime : 'Not Played' %> 
+                </td>
+                <td>
+                    <a 
+                        href=""
+                        data-play="<%= score.id %>"
+                        class="text-primary underline underline-offset-2 font-semibold hover:text-primaryDark cursor-pointer">
+                        Play
+                    </a>
+                </td>
+            </tr>
+        <% } %>
+   </script>
+
+   <script type="text/template" id="time-elapsed">
+       <span class="font-variant-nums font-bold">
+            <%= mins %> <span class="opacity-50 uppercase text-xs">m</span>
+            <%= secs %> <span class="opacity-50 uppercase text-xs">s</span><!---
+        --></span>
+    </script>
+
+    <div class="md:max-w-2xl mx-auto">
+        <div class="flex justify-between text-primary py-6 md:py-8 px-4">
+            <div class="font-extrabold uppercase lg:text-3xl text-2xl">Eight Colors</div>
+            <div class="bg-primaryLight text-sm py-2 flex-center font-bold rounded px-4 border-primary ">
+                Level #<span data-puzzle-count>1</span>
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row md:justify-between justify-center items-center px-2">
+            <div class="relative container" id="container"></div>
+            <div class="flex mt-6 justify-between w-full md:w-auto">
+                <div class="relative container flex-1" id="containerTarget"></div>
+                <div class="flex mt-1 mx-2 md:hidden flex-col justify-between w-48">
+           
+                    <div>
+                    <div class="flex">
+                        <button class="btn btn-primary" data-show-modal="howToPlay">How To Play?</button>
+                        <button class="ml-2 btn btn-primary w-24" data-show-modal="stats">All Levels</button>
+                    </div>
+                    <div class="flex mt-2">
+                        <button class="btn btn-hollow w-full" name="reset">Reset</button>
+                        <button class="btn btn-hollow ml-2 w-full" data-show-modal="feedback">Feedback</button>
+                    </div>
+                </div>
+
+                    <div class="flex mt-2">
+                        <div class="bg-primaryLight text-primary rounded px-4 py-2 text-sm w-full text-center" data-timer> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-3 container mx-2 hidden md:flex justify-between items-center ">
+            <div class="bg-primaryLight text-primary rounded px-4 py-2" data-timer></div>
+            <button class="btn btn-primary md:w-32" name="reset">Reset</button>
+        </div>
+
+        <div id="controlsContainer" class="bg-bgLight py-4 md:mx-2 mt-6 border-[#00000019] border md:rounded-lg items-end justify-between px-4 hidden md:flex">
+            <div class="flex">
+
+                <div class="mt-3 arrow-grid">
+                    <a class="btn btn-controller btn-controller-sm up" data-key="w">
+                        W
+                    </a>
+    
+                    <a class="btn btn-controller btn-controller-sm left" data-key="a">
+                       A
+                    </a>
+    
+                    <a class="btn btn-controller btn-controller-sm down" data-key="s">
+                        S
+                    </a>
+                    <a class="btn btn-controller btn-controller-sm right" data-key="d">
+                        D
+                    </a>
+                </div>
+            </div>
+
+            <div class="arrow-grid">
+                <a class="btn btn-controller btn-controller-sm up" data-key="up">
+                    &uparrow;
+                </a>
+
+                <a class="btn btn-controller btn-controller-sm left" data-key="left">
+                    &leftarrow;
+                </a>
+
+                <a class="btn btn-controller btn-controller-sm down" data-key="down">
+                    &downarrow;
+                </a>
+                <a class="btn btn-controller btn-controller-sm right" data-key="right">
+                    &rightarrow;
+                </a>
+            </div>
+        </div>
+
+        <div class="hidden md:flex justify-between px-2 mt-6">
+            <div class="flex">
+                <button class="btn btn-primary md:w-32" data-show-modal="howToPlay">How To Play?</button>
+                <button class="ml-2 btn btn-primary md:w-32" data-show-modal="stats">All Levels</button>
+            </div>
+            <div>
+                <button class="btn btn-hollow md:w-32" data-show-modal="feedback">Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" type="text/javascript"></script>
+</body>
+
+</html>
