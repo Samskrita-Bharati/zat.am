@@ -54,6 +54,10 @@ const menu = [
 			 {
 			id: 27, title: "१५ समस्या", category: "RG", dir: "027-15s", desc : `play the classic 15-puzzle <pre>समस्या samasyaa</pre>` , 
 		 },	 
+                 {
+                        id: 31, title: "Flash", category: "ET", dir: "031-flash",
+                        desc: `Flash cards for learning Sanskrit: alphabet, sentences, and more...</br>(Audio coming soon)`
+                 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
