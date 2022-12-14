@@ -41,8 +41,8 @@ var sentences = {
     {
       "subjectId": 2,
       "audioUrl": null,
-      "unicode": "अश्वः धावति",
-      "latin": "Aśvaḥ dhāvati",
+      "unicode": "अश्वः खादति",
+      "latin": "Aśvaḥ khādati",
       "localName": "The horse eats.",
       "description": ""
     },
@@ -57,8 +57,8 @@ var sentences = {
     {
       "subjectId": 4,
       "audioUrl": null,
-      "unicode": "अम्बा पचति",
-      "latin": "Ambā pacati",
+      "unicode": "अम्बा गायति",
+      "latin": "Ambā gāyati",
       "localName": "Mother sings.",
       "description": ""
     },
