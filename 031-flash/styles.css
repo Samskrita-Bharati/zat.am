@@ -1,0 +1,177 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: azure;
+}
+
+#container {
+  padding: 10px;
+  width: 70%;
+  margin: auto;
+}
+
+.center {
+  text-align: center;
+}
+
+img {
+  margin: auto;
+  display: block;
+  height: 306px;
+  width: 306px;
+}
+
+audio {
+  width: 350px;
+  margin: 0 auto;
+  display: table;
+}
+
+p {
+  margin: 5px;
+}
+
+tr.mainPart {
+  font-size: 18pt;
+  font-weight: bold;
+  text-align: center;
+}
+
+tr.minorPart {
+  font-size: 16pt;
+  text-align: center;
+}
+
+.descriptionBlock {
+  height: 80px;
+}
+
+.descriptionText {
+  font-size: 20px;
+  text-align: center;
+  font-style: italic;
+  word-wrap: break-word;
+}
+
+.descriptionQuiz {
+  min-height: 260px;
+}
+
+tr.audio {
+  height: 60px;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.correct {
+  color: green;
+  font-weight: bold;
+}
+
+.card {
+  width: 100%
+}
+
+td {
+  padding: 2px;
+}
+
+td.correct {
+  border: 2px solid green;
+  padding-left: 8px;
+  padding-top: 2px;
+  padding-right: 2px;
+  padding-bottom: 2px;
+}
+
+
+.quiz {
+  padding-left: 10px;
+  padding-top: 4px;
+  padding-right: 4px;
+  padding-bottom: 4px;
+  font-size: 14pt;
+}
+
+.quizHeader {
+  font-weight: bold;
+  text-align: left;
+}
+
+.incorrect {
+  color: red
+}
+
+#buttons button,
+.startButton {
+  border: none;
+  color: white;
+  padding: 15px 64px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button {
+  background-color: darkcyan;
+}
+
+
+.disabledButton {
+  background-color: gray;
+}
+
+.end-button {
+  background-color: darkred;
+}
+
+
+.score {
+  color: green;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 12pt;
+}
+
+
+@media (max-width: 618px) {
+  #container {
+    width: 95%;
+    margin-top: -20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 0px;
+    font-size: 14pt;
+  }
+
+  tr.mainPart {
+    font-size: 16pt;
+  }
+
+  tr.minorPart {
+    font-size: 14pt;
+  }
+
+
+  .score {
+    font-size: 18px;
+  }
+
+  img {
+    margin: auto;
+    margin-bottom: -20px;
+    display: block;
+    height: 250px;
+    width: 250px;
+  }
+}
