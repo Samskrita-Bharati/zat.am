@@ -7839,43 +7839,6 @@ var $author$project$Main$scriptFieldSet = function (model) {
 										$elm$html$Html$input,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$id('latin'),
-												$elm$html$Html$Attributes$name('script'),
-												$elm$html$Html$Attributes$type_('radio'),
-												$elm$html$Html$Attributes$value('Latin'),
-												$elm$html$Html$Events$onInput($author$project$Types$SetScript),
-												$elm$html$Html$Attributes$checked(!model.bi.bf)
-											]),
-										_List_Nil)
-									])),
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$label,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$for('latin')
-											]),
-										$author$project$Main$radioScriptLabelHtml(0))
-									]))
-							])),
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
 												$elm$html$Html$Attributes$id('unicode'),
 												$elm$html$Html$Attributes$name('script'),
 												$elm$html$Html$Attributes$type_('radio'),
@@ -7897,6 +7860,43 @@ var $author$project$Main$scriptFieldSet = function (model) {
 												$elm$html$Html$Attributes$for('unicode')
 											]),
 										$author$project$Main$radioScriptLabelHtml(1))
+									]))
+							])),
+						A2(
+						$elm$html$Html$tr,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$td,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('latin'),
+												$elm$html$Html$Attributes$name('script'),
+												$elm$html$Html$Attributes$type_('radio'),
+												$elm$html$Html$Attributes$value('Latin'),
+												$elm$html$Html$Events$onInput($author$project$Types$SetScript),
+												$elm$html$Html$Attributes$checked(!model.bi.bf)
+											]),
+										_List_Nil)
+									])),
+								A2(
+								$elm$html$Html$td,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$label,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$for('latin')
+											]),
+										$author$project$Main$radioScriptLabelHtml(0))
 									]))
 							]))
 					]))
