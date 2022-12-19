@@ -518,18 +518,18 @@ var alphabet = {
     },
     {
       "subjectId": 62,
-      "audioUrl": "decks/varnamala/assets/audio/kṁ.mp3",
+      "audioUrl": "decks/varnamala/assets/audio/kaṁ.mp3",
       "unicode": "कं",
       "latin": "",
-      "localName": "kṁ",
+      "localName": "kaṁ",
       "description": "anusvāra (guṇita)"
     },
     {
       "subjectId": 63,
-      "audioUrl": "decks/varnamala/assets/audio/kḥ.mp3",
+      "audioUrl": "decks/varnamala/assets/audio/kaḥ.mp3",
       "unicode": "कः",
       "latin": "",
-      "localName": "kḥ",
+      "localName": "kaḥ",
       "description": "visarga (guṇita)"
     },
   ]
