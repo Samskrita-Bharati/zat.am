@@ -1,15 +1,11 @@
-let p1, p2
-while (!p1) {
-  p1 = window.prompt('प्रथमस्य (१) नाम किम्? - 1st - prathamasya naama kim ? [x]')
-}
-
-while (!p2 && p1 !== p2) {
-  p2 = window.prompt(p1 === p2
-    ? `Please enter a different name than ${p1}.`
-    : 'द्वितीयस्य (२) नाम किम् - 2nd - dvitiiyasya naama kim ? [☺]')
-}
-
 window.onload = () => {
+  let p1 =  window.prompt('प्रथमस्य (१) नाम किम्? - 1st - prathamasya naama kim ? [x]', 'प्रथमः') 
+  p1 ??= 'प्रथमः'; // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment
+  let p2 = window.prompt(p1 === 'द्वितीयः'
+      ? `Please enter a different name than ${p1}.`
+      : 'द्वितीयस्य (२) नाम किम् - 2nd - dvitiiyasya naama kim ? [☺]','द्वितीयः')
+  p2 ??= (p1 === 'द्वितीयः')? 'प्रथमः' : 'द्वितीयः';
+  
   const game = new Game(p1, p2)
   const turn = document.getElementById('turn')
   const player = document.getElementById('player')
