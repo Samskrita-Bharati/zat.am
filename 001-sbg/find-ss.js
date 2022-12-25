@@ -36,7 +36,7 @@ var main = function () {
 };
 
 var drawGrid = function () {
-  var table = $("<table><caption id=cap></caption></table>");
+  var table = $("<table id=bgtab><caption id=cap></caption></table>");
   var rowIdx = 0;
   var colIdx = 0;
   for (rowIdx = 0; rowIdx < N_ROWS; rowIdx++) {
