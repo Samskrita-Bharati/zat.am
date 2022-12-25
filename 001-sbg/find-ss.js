@@ -17,7 +17,7 @@ function checkAge(age) {
   return age >= t;
 }
 var t = parseInt(getQueryStringValue("sn"));
-if (!t || isNaN(t))
+if (!t || isNaN(t) || t>700)
 	t=1;
 var N_ROWS = 5;
 var N_COLS = 5;
@@ -481,5 +481,4 @@ $(document).ready(main);
 chv=[0,46,72,43,42,29,47,30,28,34,42,55,20,35,27,20,24,28,78];
 vCount = [0,46,118,161,203,232,279,309,337,371,413,468,488,523,550,570,594,622,700];
 //var t = vCount[parseInt(ch)-1] + parseInt(v)-1;
-var wordList = Sanscript.t(data[t]["t"],'iast', 'devanagari').split(" ");
-
+var wordList = Sanscript.t(data[t-1]["t"],'iast', 'devanagari').split(" ");
