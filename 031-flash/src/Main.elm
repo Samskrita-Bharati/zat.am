@@ -376,20 +376,6 @@ scriptFieldSet model =
             [ tr []
                 [ td []
                     [ input
-                        [ id "latin"
-                        , name "script"
-                        , type_ "radio"
-                        , value "Latin"
-                        , HE.onInput SetScript
-                        , checked <| model.settings.script == Latin
-                        ]
-                        []
-                    ]
-                , td [] [ label [ for "latin" ] <| radioScriptLabelHtml Latin ]
-                ]
-            , tr []
-                [ td []
-                    [ input
                         [ id "unicode"
                         , name "script"
                         , type_ "radio"
@@ -400,6 +386,20 @@ scriptFieldSet model =
                         []
                     ]
                 , td [] [ label [ for "unicode" ] <| radioScriptLabelHtml Unicode ]
+                ]
+            , tr []
+                [ td []
+                    [ input
+                        [ id "latin"
+                        , name "script"
+                        , type_ "radio"
+                        , value "Latin"
+                        , HE.onInput SetScript
+                        , checked <| model.settings.script == Latin
+                        ]
+                        []
+                    ]
+                , td [] [ label [ for "latin" ] <| radioScriptLabelHtml Latin ]
                 ]
             ]
         ]
