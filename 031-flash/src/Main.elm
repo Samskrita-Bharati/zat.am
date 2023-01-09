@@ -44,6 +44,7 @@ init configValue =
                         cfg
 
                     Err _ ->
+                        -- Debug.log (Decode.errorToString err) defaultConfig
                         defaultConfig
     in
     processSelectedDeck mdl
