@@ -14,7 +14,7 @@ var conjuncts = {
     "LocalName"
   ],
   "pluralSubjectName": "Conjunct Consonants",
-  "copyrightNotice": "",
+  "copyrightNotice": "Audio excerpted from Pravesha © Samskrita Bharati 2014",
   "numChoices": 5,
   "trainModeDisplay": {
     "Review": "Review",
