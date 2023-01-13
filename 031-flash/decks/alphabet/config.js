@@ -417,7 +417,7 @@ var alphabet = {
       "subjectId": 49,
       "unicode": "ॐ",
       "latin": "",
-      "localName": "auṁ",
+      "localName": "ōṁ",
       "description": "AUM"
     },
     {
