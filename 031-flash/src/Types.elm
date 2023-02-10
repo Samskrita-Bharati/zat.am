@@ -42,6 +42,7 @@ type alias Config =
     , landingPage : Maybe String
     , initialScript : Script
     , scriptCanBeSet : Bool
+    , showTooltipsForOtherScript : Bool
     , showDescriptionWithUrNameQuiz : Bool
     , showAudioWithUrNameQuiz : Bool
     , showDescriptionWithLocalNameQuiz : Bool
@@ -66,6 +67,7 @@ defaultConfig =
         "invalid deck"
         Nothing
         Latin
+        True
         True
         True
         True

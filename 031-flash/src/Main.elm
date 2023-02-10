@@ -432,7 +432,7 @@ viewCard model card =
                             case model.settings.trainMode of
                                 Review ->
                                     [ table [ class "card" ]
-                                        ([ tr mainPartAttributes [ viewUrname card.subject model.settings ]
+                                        ([ tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
                                          , tr [ class "minorPart" ] [ viewLocalName card.subject ]
                                          ]
                                             ++ showDescriptionInCard model card
@@ -483,7 +483,7 @@ viewCard model card =
                                                 []
                                     in
                                     [ table [ class "card" ] <|
-                                        tr mainPartAttributes [ viewUrname card.subject model.settings ]
+                                        tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
                                             :: descriptionHtml
                                             ++ audioHtml
                                             ++ [ viewQuiz (Config.showTrainMode model.config LocalName) model card ]
@@ -491,7 +491,7 @@ viewCard model card =
 
                                 Description ->
                                     [ table [ class "card" ]
-                                        ([ tr mainPartAttributes [ viewUrname card.subject model.settings ]
+                                        ([ tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
                                          , tr [ class "minorPart" ] [ viewLocalName card.subject ]
                                          ]
                                             ++ playAudio model card.subject.audioUrl
@@ -702,14 +702,32 @@ viewScore model =
                )
 
 
-viewUrname : Subject -> Settings -> Html Msg
-viewUrname subject settings =
+attrsForUrname : Subject -> Settings -> Config -> List (Attribute msg)
+attrsForUrname subject settings config =
+    if not config.showTooltipsForOtherScript then
+        []
+
+    else
+        case settings.script of
+            Latin ->
+                [ title subject.unicode ]
+
+            Unicode ->
+                [ title subject.latin ]
+
+
+viewUrname : Subject -> Settings -> Config -> Html Msg
+viewUrname subject settings config =
+    let
+        attrs =
+            attrsForUrname subject settings config
+    in
     case settings.script of
         Latin ->
-            p [ title subject.unicode ] [ text subject.latin ]
+            p attrs [ text subject.latin ]
 
         Unicode ->
-            p [ title subject.latin ] [ text subject.unicode ]
+            p attrs [ text subject.unicode ]
 
 
 viewLocalName : Subject -> Html Msg
