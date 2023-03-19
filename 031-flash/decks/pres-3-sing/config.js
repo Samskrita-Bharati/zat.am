@@ -72,7 +72,7 @@ var sentences = {
     },
     {
       "subjectId": 6,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/aśvaḥ_dhāvati.mp3",
       "unicode": "अश्वः धावति ।",
       "latin": "Aśvaḥ dhāvati.",
       "localName": "The horse runs.",
