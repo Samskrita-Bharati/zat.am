@@ -258,8 +258,8 @@ var sentences = {
       "subjectId": 29,
       "audioUrl": "decks/pres-3-sing/assets/audio/tat_patati.mp3",
       "unicode": "तत् पतति ।",
-      "latin": "It falls.",
-      "localName": "Tat patati.",
+      "latin": "Tat patati.",
+      "localName": "It falls.",
       "description": ""
     },
   ]
