@@ -14,7 +14,7 @@ var conjuncts = {
     "LocalName"
   ],
   "pluralSubjectName": "Conjunct Consonants",
-  "copyrightNotice": "",
+  "copyrightNotice": "Audio excerpted from Pravesha © Samskrita Bharati 2014",
   "numChoices": 5,
   "trainModeDisplay": {
     "Review": "Review",
@@ -127,7 +127,7 @@ var conjuncts = {
       "unicode": "श्र",
       "latin": "",
       "localName": "śra",
-      "description": "श् + र = श्र"
+      "description": "श् + र = श्र (irreg.)"
     },
     {
       "subjectId": 13,
@@ -280,6 +280,34 @@ var conjuncts = {
       "latin": "",
       "localName": "dda",
       "description": "द् + द = द्द"
+    },
+    {
+      "subjectId": 32,
+      "unicode": "त्त",
+      "latin": "",
+      "localName": "tta",
+      "description": "त् + त = त्त (irreg.)"
+    },
+    {
+      "subjectId": 33,
+      "unicode": "त्र",
+      "latin": "",
+      "localName": "tra",
+      "description": "त् + र = त्र (irreg.)"
+    },
+    {
+      "subjectId": 34,
+      "unicode": "र्य",
+      "latin": "",
+      "localName": "rya",
+      "description": "र् + य = र्य"
+    },
+    {
+      "subjectId": 35,
+      "unicode": "क्ष",
+      "latin": "",
+      "localName": "kṣa",
+      "description": "क् + ष = क्ष (irreg.)"
     },
   ]
 }

@@ -13,7 +13,7 @@ var alphabet = {
     "LocalName"
   ],
   "pluralSubjectName": "Letters",
-  "copyrightNotice": "",
+  "copyrightNotice": "Audio excerpted from Pravesha © Samskrita Bharati 2014",
   "numChoices": 10,
   "trainModeDisplay": {
     "Review": "Review",
@@ -24,7 +24,7 @@ var alphabet = {
   "allSubjects": [
     {
       "subjectId": 0,
-      "audioUrl": "decks/varnamala/assets/audio/a.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/a.mp3",
       "unicode": "अ",
       "latin": "",
       "localName": "a",
@@ -32,7 +32,7 @@ var alphabet = {
     },
     {
       "subjectId": 1,
-      "audioUrl": "decks/varnamala/assets/audio/ā.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ā.mp3",
       "unicode": "आ",
       "latin": "",
       "localName": "ā",
@@ -40,7 +40,7 @@ var alphabet = {
     },
     {
       "subjectId": 2,
-      "audioUrl": "decks/varnamala/assets/audio/i.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/i.mp3",
       "unicode": "इ",
       "latin": "",
       "localName": "i",
@@ -48,7 +48,7 @@ var alphabet = {
     },
     {
       "subjectId": 3,
-      "audioUrl": "decks/varnamala/assets/audio/ī.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ī.mp3",
       "unicode": "ई",
       "latin": "",
       "localName": "ī",
@@ -56,7 +56,7 @@ var alphabet = {
     },
     {
       "subjectId": 4,
-      "audioUrl": "decks/varnamala/assets/audio/u.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/u.mp3",
       "unicode": "उ",
       "latin": "",
       "localName": "u",
@@ -64,7 +64,7 @@ var alphabet = {
     },
     {
       "subjectId": 5,
-      "audioUrl": "decks/varnamala/assets/audio/ū.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ū.mp3",
       "unicode": "ऊ",
       "latin": "",
       "localName": "ū",
@@ -72,7 +72,7 @@ var alphabet = {
     },
     {
       "subjectId": 6,
-      "audioUrl": "decks/varnamala/assets/audio/r̥.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/r̥.mp3",
       "unicode": "ऋ",
       "latin": "",
       "localName": "r̥",
@@ -80,7 +80,7 @@ var alphabet = {
     },
     {
       "subjectId": 7,
-      "audioUrl": "decks/varnamala/assets/audio/r̥̄.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/r̥̄.mp3",
       "unicode": "ॠ",
       "latin": "",
       "localName": "r̥̄",
@@ -88,7 +88,7 @@ var alphabet = {
     },
     {
       "subjectId": 8,
-      "audioUrl": "decks/varnamala/assets/audio/l̥.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/l̥.mp3",
       "unicode": "ऌ",
       "latin": "",
       "localName": "l̥",
@@ -96,7 +96,7 @@ var alphabet = {
     },
     {
       "subjectId": 9,
-      "audioUrl": "decks/varnamala/assets/audio/ē.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ē.mp3",
       "unicode": "ए",
       "latin": "",
       "localName": "ē",
@@ -104,7 +104,7 @@ var alphabet = {
     },
     {
       "subjectId": 10,
-      "audioUrl": "decks/varnamala/assets/audio/ai.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ai.mp3",
       "unicode": "ऐ",
       "latin": "",
       "localName": "ai",
@@ -112,7 +112,7 @@ var alphabet = {
     },
     {
       "subjectId": 11,
-      "audioUrl": "decks/varnamala/assets/audio/ō.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ō.mp3",
       "unicode": "ओ",
       "latin": "",
       "localName": "ō",
@@ -120,7 +120,7 @@ var alphabet = {
     },
     {
       "subjectId": 12,
-      "audioUrl": "decks/varnamala/assets/audio/au.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/au.mp3",
       "unicode": "औ",
       "latin": "",
       "localName": "au",
@@ -128,7 +128,7 @@ var alphabet = {
     },
     {
       "subjectId": 13,
-      "audioUrl": "decks/varnamala/assets/audio/aṁ.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/aṁ.mp3",
       "unicode": "अं",
       "latin": "",
       "localName": "aṁ",
@@ -136,7 +136,7 @@ var alphabet = {
     },
     {
       "subjectId": 14,
-      "audioUrl": "decks/varnamala/assets/audio/aḥ.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/aḥ.mp3",
       "unicode": "अः",
       "latin": "",
       "localName": "aḥ",
@@ -144,7 +144,7 @@ var alphabet = {
     },
     {
       "subjectId": 15,
-      "audioUrl": "decks/varnamala/assets/audio/ka.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ka.mp3",
       "unicode": "क",
       "latin": "",
       "localName": "ka",
@@ -152,7 +152,7 @@ var alphabet = {
     },
     {
       "subjectId": 16,
-      "audioUrl": "decks/varnamala/assets/audio/kha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kha.mp3",
       "unicode": "ख",
       "latin": "",
       "localName": "kha",
@@ -160,7 +160,7 @@ var alphabet = {
     },
     {
       "subjectId": 17,
-      "audioUrl": "decks/varnamala/assets/audio/ga.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ga.mp3",
       "unicode": "ग",
       "latin": "",
       "localName": "ga",
@@ -168,7 +168,7 @@ var alphabet = {
     },
     {
       "subjectId": 18,
-      "audioUrl": "decks/varnamala/assets/audio/gha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/gha.mp3",
       "unicode": "घ",
       "latin": "",
       "localName": "gha",
@@ -176,7 +176,7 @@ var alphabet = {
     },
     {
       "subjectId": 19,
-      "audioUrl": "decks/varnamala/assets/audio/ṅa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ṅa.mp3",
       "unicode": "ङ",
       "latin": "",
       "localName": "ṅa",
@@ -184,7 +184,7 @@ var alphabet = {
     },
     {
       "subjectId": 20,
-      "audioUrl": "decks/varnamala/assets/audio/ca.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ca.mp3",
       "unicode": "च",
       "latin": "",
       "localName": "ca",
@@ -192,7 +192,7 @@ var alphabet = {
     },
     {
       "subjectId": 21,
-      "audioUrl": "decks/varnamala/assets/audio/cha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/cha.mp3",
       "unicode": "छ",
       "latin": "",
       "localName": "cha",
@@ -200,7 +200,7 @@ var alphabet = {
     },
     {
       "subjectId": 22,
-      "audioUrl": "decks/varnamala/assets/audio/ja.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ja.mp3",
       "unicode": "ज",
       "latin": "",
       "localName": "ja",
@@ -208,7 +208,7 @@ var alphabet = {
     },
     {
       "subjectId": 23,
-      "audioUrl": "decks/varnamala/assets/audio/jha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/jha.mp3",
       "unicode": "झ",
       "latin": "",
       "localName": "jha",
@@ -216,7 +216,7 @@ var alphabet = {
     },
     {
       "subjectId": 24,
-      "audioUrl": "decks/varnamala/assets/audio/ña.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ña.mp3",
       "unicode": "ञ",
       "latin": "",
       "localName": "ña",
@@ -224,7 +224,7 @@ var alphabet = {
     },
     {
       "subjectId": 25,
-      "audioUrl": "decks/varnamala/assets/audio/ṭa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ṭa.mp3",
       "unicode": "ट",
       "latin": "",
       "localName": "ṭa",
@@ -232,7 +232,7 @@ var alphabet = {
     },
     {
       "subjectId": 26,
-      "audioUrl": "decks/varnamala/assets/audio/ṭha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ṭha.mp3",
       "unicode": "ठ",
       "latin": "",
       "localName": "ṭha",
@@ -240,7 +240,7 @@ var alphabet = {
     },
     {
       "subjectId": 27,
-      "audioUrl": "decks/varnamala/assets/audio/ḍa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ḍa.mp3",
       "unicode": "ड",
       "latin": "",
       "localName": "ḍa",
@@ -248,7 +248,7 @@ var alphabet = {
     },
     {
       "subjectId": 28,
-      "audioUrl": "decks/varnamala/assets/audio/ḍha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ḍha.mp3",
       "unicode": "ढ",
       "latin": "",
       "localName": "ḍha",
@@ -256,7 +256,7 @@ var alphabet = {
     },
     {
       "subjectId": 29,
-      "audioUrl": "decks/varnamala/assets/audio/ṇa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ṇa.mp3",
       "unicode": "ण",
       "latin": "",
       "localName": "ṇa",
@@ -264,7 +264,7 @@ var alphabet = {
     },
     {
       "subjectId": 30,
-      "audioUrl": "decks/varnamala/assets/audio/ta.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ta.mp3",
       "unicode": "त",
       "latin": "",
       "localName": "ta",
@@ -272,7 +272,7 @@ var alphabet = {
     },
     {
       "subjectId": 31,
-      "audioUrl": "decks/varnamala/assets/audio/tha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/tha.mp3",
       "unicode": "थ",
       "latin": "",
       "localName": "tha",
@@ -280,7 +280,7 @@ var alphabet = {
     },
     {
       "subjectId": 32,
-      "audioUrl": "decks/varnamala/assets/audio/da.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/da.mp3",
       "unicode": "द",
       "latin": "",
       "localName": "da",
@@ -288,7 +288,7 @@ var alphabet = {
     },
     {
       "subjectId": 33,
-      "audioUrl": "decks/varnamala/assets/audio/dha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/dha.mp3",
       "unicode": "ध",
       "latin": "",
       "localName": "dha",
@@ -296,7 +296,7 @@ var alphabet = {
     },
     {
       "subjectId": 34,
-      "audioUrl": "decks/varnamala/assets/audio/na.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/na.mp3",
       "unicode": "न",
       "latin": "",
       "localName": "na",
@@ -304,7 +304,7 @@ var alphabet = {
     },
     {
       "subjectId": 35,
-      "audioUrl": "decks/varnamala/assets/audio/pa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/pa.mp3",
       "unicode": "प",
       "latin": "",
       "localName": "pa",
@@ -312,7 +312,7 @@ var alphabet = {
     },
     {
       "subjectId": 36,
-      "audioUrl": "decks/varnamala/assets/audio/pha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/pha.mp3",
       "unicode": "फ",
       "latin": "",
       "localName": "pha",
@@ -320,7 +320,7 @@ var alphabet = {
     },
     {
       "subjectId": 37,
-      "audioUrl": "decks/varnamala/assets/audio/ba.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ba.mp3",
       "unicode": "ब",
       "latin": "",
       "localName": "ba",
@@ -328,7 +328,7 @@ var alphabet = {
     },
     {
       "subjectId": 38,
-      "audioUrl": "decks/varnamala/assets/audio/bha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/bha.mp3",
       "unicode": "भ",
       "latin": "",
       "localName": "bha",
@@ -336,7 +336,7 @@ var alphabet = {
     },
     {
       "subjectId": 39,
-      "audioUrl": "decks/varnamala/assets/audio/ma.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ma.mp3",
       "unicode": "म",
       "latin": "",
       "localName": "ma",
@@ -344,7 +344,7 @@ var alphabet = {
     },
     {
       "subjectId": 40,
-      "audioUrl": "decks/varnamala/assets/audio/ya.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ya.mp3",
       "unicode": "य",
       "latin": "",
       "localName": "ya",
@@ -352,7 +352,7 @@ var alphabet = {
     },
     {
       "subjectId": 41,
-      "audioUrl": "decks/varnamala/assets/audio/ra.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ra.mp3",
       "unicode": "र",
       "latin": "",
       "localName": "ra",
@@ -360,7 +360,7 @@ var alphabet = {
     },
     {
       "subjectId": 42,
-      "audioUrl": "decks/varnamala/assets/audio/la.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/la.mp3",
       "unicode": "ल",
       "latin": "",
       "localName": "la",
@@ -368,7 +368,7 @@ var alphabet = {
     },
     {
       "subjectId": 43,
-      "audioUrl": "decks/varnamala/assets/audio/va.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/va.mp3",
       "unicode": "व",
       "latin": "",
       "localName": "va",
@@ -376,7 +376,7 @@ var alphabet = {
     },
     {
       "subjectId": 44,
-      "audioUrl": "decks/varnamala/assets/audio/śa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/śa.mp3",
       "unicode": "श",
       "latin": "",
       "localName": "śa",
@@ -384,7 +384,7 @@ var alphabet = {
     },
     {
       "subjectId": 45,
-      "audioUrl": "decks/varnamala/assets/audio/ṣa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ṣa.mp3",
       "unicode": "ष",
       "latin": "",
       "localName": "ṣa",
@@ -392,7 +392,7 @@ var alphabet = {
     },
     {
       "subjectId": 46,
-      "audioUrl": "decks/varnamala/assets/audio/sa.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/sa.mp3",
       "unicode": "स",
       "latin": "",
       "localName": "sa",
@@ -400,7 +400,7 @@ var alphabet = {
     },
     {
       "subjectId": 47,
-      "audioUrl": "decks/varnamala/assets/audio/ha.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ha.mp3",
       "unicode": "ह",
       "latin": "",
       "localName": "ha",
@@ -417,12 +417,12 @@ var alphabet = {
       "subjectId": 49,
       "unicode": "ॐ",
       "latin": "",
-      "localName": "auṁ",
+      "localName": "ōṁ",
       "description": "AUM"
     },
     {
       "subjectId": 50,
-      "audioUrl": "decks/varnamala/assets/audio/kā.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kā.mp3",
       "unicode": "का",
       "latin": "",
       "localName": "kā",
@@ -430,7 +430,7 @@ var alphabet = {
     },
     {
       "subjectId": 51,
-      "audioUrl": "decks/varnamala/assets/audio/ki.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ki.mp3",
       "unicode": "कि",
       "latin": "",
       "localName": "ki",
@@ -438,7 +438,7 @@ var alphabet = {
     },
     {
       "subjectId": 52,
-      "audioUrl": "decks/varnamala/assets/audio/kī.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kī.mp3",
       "unicode": "की",
       "latin": "",
       "localName": "kī",
@@ -446,7 +446,7 @@ var alphabet = {
     },
     {
       "subjectId": 53,
-      "audioUrl": "decks/varnamala/assets/audio/ku.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/ku.mp3",
       "unicode": "कु",
       "latin": "",
       "localName": "ku",
@@ -454,7 +454,7 @@ var alphabet = {
     },
     {
       "subjectId": 54,
-      "audioUrl": "decks/varnamala/assets/audio/kū.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kū.mp3",
       "unicode": "कू",
       "latin": "",
       "localName": "kū",
@@ -462,7 +462,7 @@ var alphabet = {
     },
     {
       "subjectId": 55,
-      "audioUrl": "decks/varnamala/assets/audio/kr̥.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kr̥.mp3",
       "unicode": "कृ",
       "latin": "",
       "localName": "kr̥",
@@ -470,7 +470,7 @@ var alphabet = {
     },
     {
       "subjectId": 56,
-      "audioUrl": "decks/varnamala/assets/audio/kr̥̄.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kr̥̄.mp3",
       "unicode": "कॄ",
       "latin": "",
       "localName": "kr̥̄",
@@ -478,7 +478,7 @@ var alphabet = {
     },
     {
       "subjectId": 57,
-      "audioUrl": "decks/varnamala/assets/audio/kl̥.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kl̥.mp3",
       "unicode": "कॢ",
       "latin": "",
       "localName": "kl̥",
@@ -486,7 +486,7 @@ var alphabet = {
     },
     {
       "subjectId": 58,
-      "audioUrl": "decks/varnamala/assets/audio/kē.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kē.mp3",
       "unicode": "के",
       "latin": "",
       "localName": "kē",
@@ -494,7 +494,7 @@ var alphabet = {
     },
     {
       "subjectId": 59,
-      "audioUrl": "decks/varnamala/assets/audio/kai.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kai.mp3",
       "unicode": "कै",
       "latin": "",
       "localName": "kai",
@@ -502,7 +502,7 @@ var alphabet = {
     },
     {
       "subjectId": 60,
-      "audioUrl": "decks/varnamala/assets/audio/kō.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kō.mp3",
       "unicode": "को",
       "latin": "",
       "localName": "kō",
@@ -510,7 +510,7 @@ var alphabet = {
     },
     {
       "subjectId": 61,
-      "audioUrl": "decks/varnamala/assets/audio/kau.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kau.mp3",
       "unicode": "कौ",
       "latin": "",
       "localName": "kau",
@@ -518,7 +518,7 @@ var alphabet = {
     },
     {
       "subjectId": 62,
-      "audioUrl": "decks/varnamala/assets/audio/kaṁ.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kaṁ.mp3",
       "unicode": "कं",
       "latin": "",
       "localName": "kaṁ",
@@ -526,7 +526,7 @@ var alphabet = {
     },
     {
       "subjectId": 63,
-      "audioUrl": "decks/varnamala/assets/audio/kaḥ.mp3",
+      "audioUrl": "decks/alphabet/assets/audio/kaḥ.mp3",
       "unicode": "कः",
       "latin": "",
       "localName": "kaḥ",

@@ -88,6 +88,7 @@ configDecoder =
         |> optional "landingPage" (nullable string) Nothing
         |> required "initialScript" scriptDecoder
         |> required "scriptCanBeSet" bool
+        |> optional "showTooltipsForOtherScript" bool True
         |> optional "showDescriptionWithUrNameQuiz" bool True
         |> optional "showAudioWithUrNameQuiz" bool True
         |> optional "showDescriptionWithLocalNameQuiz" bool True

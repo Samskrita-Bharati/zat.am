@@ -1858,8 +1858,8 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 		flagDecoder,
 		args,
 		impl.a1,
-		impl.bw,
-		impl.bq,
+		impl.bx,
+		impl.br,
 		function() { return function() {} }
 	);
 });
@@ -3944,10 +3944,10 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 		flagDecoder,
 		args,
 		impl.a1,
-		impl.bw,
-		impl.bq,
+		impl.bx,
+		impl.br,
 		function(sendToApp, initialModel) {
-			var view = impl.by;
+			var view = impl.bz;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3980,11 +3980,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		flagDecoder,
 		args,
 		impl.a1,
-		impl.bw,
-		impl.bq,
+		impl.bx,
+		impl.br,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.Q && impl.Q(sendToApp)
-			var view = impl.by;
+			var view = impl.bz;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3997,7 +3997,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.br) && (_VirtualDom_doc.title = title = doc.br);
+				(title !== doc.bs) && (_VirtualDom_doc.title = title = doc.bs);
 			});
 		}
 	);
@@ -4088,9 +4088,9 @@ function _Browser_application(impl)
 		{
 			return A3(impl.a1, flags, _Browser_getUrl(), key);
 		},
-		by: impl.by,
-		bw: impl.bw,
-		bq: impl.bq
+		bz: impl.bz,
+		bx: impl.bx,
+		br: impl.br
 	});
 }
 
@@ -5241,21 +5241,23 @@ var $author$project$Types$Config = function (deckId) {
 		return function (landingPage) {
 			return function (initialScript) {
 				return function (scriptCanBeSet) {
-					return function (showDescriptionWithUrNameQuiz) {
-						return function (showAudioWithUrNameQuiz) {
-							return function (showDescriptionWithLocalNameQuiz) {
-								return function (showAudioWithLocalNameQuiz) {
-									return function (showDescription) {
-										return function (showAudio) {
-											return function (trainingModes) {
-												return function (pluralSubjectName) {
-													return function (copyrightNotice) {
-														return function (numChoices) {
-															return function (trainModeDisplay) {
-																return function (scriptHeading) {
-																	return function (mainPartFontSize) {
-																		return function (allSubjects) {
-																			return {aM: allSubjects, aT: copyrightNotice, aU: deckId, aV: deckTitle, a2: initialScript, J: landingPage, a4: mainPartFontSize, a6: numChoices, ba: pluralSubjectName, bg: scriptCanBeSet, bh: scriptHeading, bj: showAudio, bk: showAudioWithLocalNameQuiz, bl: showAudioWithUrNameQuiz, bm: showDescription, bn: showDescriptionWithLocalNameQuiz, bo: showDescriptionWithUrNameQuiz, bu: trainModeDisplay, bv: trainingModes};
+					return function (showTooltipsForOtherScript) {
+						return function (showDescriptionWithUrNameQuiz) {
+							return function (showAudioWithUrNameQuiz) {
+								return function (showDescriptionWithLocalNameQuiz) {
+									return function (showAudioWithLocalNameQuiz) {
+										return function (showDescription) {
+											return function (showAudio) {
+												return function (trainingModes) {
+													return function (pluralSubjectName) {
+														return function (copyrightNotice) {
+															return function (numChoices) {
+																return function (trainModeDisplay) {
+																	return function (scriptHeading) {
+																		return function (mainPartFontSize) {
+																			return function (allSubjects) {
+																				return {aM: allSubjects, aT: copyrightNotice, aU: deckId, aV: deckTitle, a2: initialScript, J: landingPage, a4: mainPartFontSize, a6: numChoices, ba: pluralSubjectName, bg: scriptCanBeSet, bh: scriptHeading, bj: showAudio, bk: showAudioWithLocalNameQuiz, bl: showAudioWithUrNameQuiz, bm: showDescription, bn: showDescriptionWithLocalNameQuiz, bo: showDescriptionWithUrNameQuiz, bp: showTooltipsForOtherScript, bv: trainModeDisplay, bw: trainingModes};
+																			};
 																		};
 																	};
 																};
@@ -5657,31 +5659,36 @@ var $author$project$Config$configDecoder = function () {
 															'showDescriptionWithUrNameQuiz',
 															$elm$json$Json$Decode$bool,
 															true,
-															A3(
-																$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																'scriptCanBeSet',
+															A4(
+																$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+																'showTooltipsForOtherScript',
 																$elm$json$Json$Decode$bool,
+																true,
 																A3(
 																	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																	'initialScript',
-																	scriptDecoder,
-																	A4(
-																		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-																		'landingPage',
-																		$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
-																		$elm$core$Maybe$Nothing,
-																		A3(
-																			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																			'deckTitle',
-																			$elm$json$Json$Decode$string,
+																	'scriptCanBeSet',
+																	$elm$json$Json$Decode$bool,
+																	A3(
+																		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+																		'initialScript',
+																		scriptDecoder,
+																		A4(
+																			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+																			'landingPage',
+																			$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
+																			$elm$core$Maybe$Nothing,
 																			A3(
 																				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																				'deckId',
+																				'deckTitle',
 																				$elm$json$Json$Decode$string,
-																				$elm$json$Json$Decode$succeed($author$project$Types$Config))))))))))))))))))));
+																				A3(
+																					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+																					'deckId',
+																					$elm$json$Json$Decode$string,
+																					$elm$json$Json$Decode$succeed($author$project$Types$Config)))))))))))))))))))));
 }();
-var $author$project$Types$defaultConfig = $author$project$Types$Config('invalid deck')('invalid deck')($elm$core$Maybe$Nothing)(0)(true)(true)(true)(true)(true)(true)(true)(_List_Nil)('')('')(0)($elm$core$Dict$empty)('')($elm$core$Maybe$Nothing)($author$project$Types$invalidSubjectList);
-var $author$project$Types$emptyCard = {aQ: _List_Nil, bp: $author$project$Types$invalidSubject};
+var $author$project$Types$defaultConfig = $author$project$Types$Config('invalid deck')('invalid deck')($elm$core$Maybe$Nothing)(0)(true)(true)(true)(true)(true)(true)(true)(true)(_List_Nil)('')('')(0)($elm$core$Dict$empty)('')($elm$core$Maybe$Nothing)($author$project$Types$invalidSubjectList);
+var $author$project$Types$emptyCard = {aQ: _List_Nil, bq: $author$project$Types$invalidSubject};
 var $author$project$Types$invalidCards = A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, $author$project$Types$emptyCard, _List_Nil);
 var $author$project$Config$defaultModel = {
 	aR: $author$project$Types$defaultConfig,
@@ -5689,10 +5696,10 @@ var $author$project$Config$defaultModel = {
 	bb: _List_Nil,
 	bc: $author$project$Types$invalidCards,
 	be: 0,
-	bi: {bf: 0, bt: 0},
+	bi: {bf: 0, bu: 0},
 	bj: true,
-	bs: 0,
-	bx: $elm$core$Maybe$Nothing
+	bt: 0,
+	by: $elm$core$Maybe$Nothing
 };
 var $author$project$Main$initialModel = function (cfg) {
 	var mdl = $author$project$Config$defaultModel;
@@ -6273,7 +6280,7 @@ var $author$project$Card$subjects2CardsGenerator = F2(
 				return A2(
 					$elm$random$Random$map,
 					function (chs) {
-						return {aQ: chs, bp: subj};
+						return {aQ: chs, bq: subj};
 					},
 					A3($author$project$Card$generateChoices, numChoices, allSubjects, subj));
 			});
@@ -6632,7 +6639,7 @@ var $author$project$Main$subscriptions = function (_v0) {
 var $author$project$Types$Next = {$: 0};
 var $author$project$Types$Settings = F2(
 	function (trainMode, script) {
-		return {bf: script, bt: trainMode};
+		return {bf: script, bu: trainMode};
 	});
 var $author$project$Types$ShowAudio = {$: 2};
 var $author$project$Types$Start = {$: 5};
@@ -6650,7 +6657,7 @@ var $elm$core$Basics$always = F2(
 		return a;
 	});
 var $author$project$Main$getAnswer = function (_v0) {
-	var trainMode = _v0.bt;
+	var trainMode = _v0.bu;
 	var script = _v0.bf;
 	switch (trainMode) {
 		case 0:
@@ -6692,8 +6699,8 @@ var $mgold$elm_nonempty_list$List$Nonempty$isSingleton = function (_v0) {
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$Main$nextEnabled = function (model) {
 	var notEnd = !$mgold$elm_nonempty_list$List$Nonempty$isSingleton(model.bc);
-	var inReview = !model.bi.bt;
-	var answered = $elm_community$maybe_extra$Maybe$Extra$isJust(model.bx);
+	var inReview = !model.bi.bu;
+	var answered = $elm_community$maybe_extra$Maybe$Extra$isJust(model.by);
 	return (!model.a0) && (notEnd && (inReview || answered));
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
@@ -6784,7 +6791,7 @@ var $author$project$Main$update = F2(
 						{
 							bi: A2(
 								$author$project$Types$Settings,
-								model.bi.bt,
+								model.bi.bu,
 								$author$project$Config$readScript(script))
 						});
 				case 6:
@@ -6802,9 +6809,9 @@ var $author$project$Main$update = F2(
 								A2(
 									$author$project$Main$getAnswer,
 									model.bi,
-									$mgold$elm_nonempty_list$List$Nonempty$head(model.bc).bp)) ? (model.be + 1) : model.be,
-							bs: model.bs + 1,
-							bx: $elm$core$Maybe$Just(str)
+									$mgold$elm_nonempty_list$List$Nonempty$head(model.bc).bq)) ? (model.be + 1) : model.be,
+							bt: model.bt + 1,
+							by: $elm$core$Maybe$Just(str)
 						});
 				case 5:
 					return _Utils_update(
@@ -6821,8 +6828,8 @@ var $author$project$Main$update = F2(
 							bb: A2($elm$core$List$cons, nextCard, model.bb),
 							bc: $mgold$elm_nonempty_list$List$Nonempty$pop(model.bc),
 							bj: !hasAudio(
-								$mgold$elm_nonempty_list$List$Nonempty$head(model.bc).bp),
-							bx: $elm$core$Maybe$Nothing
+								$mgold$elm_nonempty_list$List$Nonempty$head(model.bc).bq),
+							by: $elm$core$Maybe$Nothing
 						});
 				case 1:
 					var remaining = A2($mgold$elm_nonempty_list$List$Nonempty$cons, prevCard, model.bc);
@@ -6832,7 +6839,7 @@ var $author$project$Main$update = F2(
 						{
 							bb: newPrevDeck,
 							bc: remaining,
-							bj: !hasAudio(prevCard.bp)
+							bj: !hasAudio(prevCard.bq)
 						});
 				default:
 					return model;
@@ -6871,11 +6878,11 @@ var $author$project$Main$update = F2(
 				case 0:
 					return _Utils_Tuple2(
 						newModel,
-						sleepThenShowAudio(nextCard.bp));
+						sleepThenShowAudio(nextCard.bq));
 				case 1:
 					return _Utils_Tuple2(
 						newModel,
-						sleepThenShowAudio(prevCard.bp));
+						sleepThenShowAudio(prevCard.bq));
 				case 13:
 					return _Utils_Tuple2(
 						newModel,
@@ -7042,7 +7049,7 @@ var $author$project$Main$showDescriptionInCard = F2(
 					[
 						$elm$html$Html$Attributes$class('minorPart descriptionBlock')
 					]),
-				descriptionHtml(card.bp))
+				descriptionHtml(card.bq))
 			]) : _List_Nil;
 	});
 var $elm$core$Dict$get = F2(
@@ -7093,7 +7100,7 @@ var $author$project$Config$showTrainMode = F2(
 		return A2(
 			$elm$core$Maybe$withDefault,
 			'invalid',
-			A2($elm$core$Dict$get, modeAsString, cfg.bu));
+			A2($elm$core$Dict$get, modeAsString, cfg.bv));
 	});
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -7247,15 +7254,15 @@ var $elm_community$list_extra$List$Extra$unique = function (list) {
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$viewQuiz = F3(
 	function (legendLabel, model, card) {
-		var isDisabled = $elm_community$maybe_extra$Maybe$Extra$isJust(model.bx);
+		var isDisabled = $elm_community$maybe_extra$Maybe$Extra$isJust(model.by);
 		var isCorrect = function (val) {
 			return _Utils_eq(
-				A2($author$project$Main$getAnswer, model.bi, card.bp),
+				A2($author$project$Main$getAnswer, model.bi, card.bq),
 				val);
 		};
 		var isChecked = function (val) {
 			return _Utils_eq(
-				model.bx,
+				model.by,
 				$elm$core$Maybe$Just(val));
 		};
 		var incorrectAttributes = _List_fromArray(
@@ -7268,7 +7275,7 @@ var $author$project$Main$viewQuiz = F3(
 			]);
 		var labelAttributes = function (val) {
 			return _Utils_ap(
-				(model.bi.bt === 3) ? _List_fromArray(
+				(model.bi.bu === 3) ? _List_fromArray(
 					[
 						$elm$html$Html$Attributes$class('italic')
 					]) : _List_Nil,
@@ -7339,7 +7346,7 @@ var $author$project$Main$viewQuiz = F3(
 					card.aQ)));
 		return A2(
 			$elm$html$Html$div,
-			(model.bi.bt === 3) ? _List_fromArray(
+			(model.bi.bu === 3) ? _List_fromArray(
 				[
 					$elm$html$Html$Attributes$class('descriptionQuiz')
 				]) : _List_Nil,
@@ -7396,12 +7403,12 @@ var $author$project$Main$viewScore = function (model) {
 		$elm$core$Basics$composeL,
 		$elm$core$String$fromInt,
 		$elm$core$Basics$round,
-		(!model.bs) ? 0.0 : ((100 * model.be) / model.bs));
+		(!model.bt) ? 0.0 : ((100 * model.be) / model.bt));
 	var percentString = ' ( ' + (percentValue + '%)');
-	var scoreView = (!model.bi.bt) ? _List_Nil : _List_fromArray(
+	var scoreView = (!model.bi.bu) ? _List_Nil : _List_fromArray(
 		[
 			$elm$html$Html$text(
-			'Score: ' + ($elm$core$String$fromInt(model.be) + ('/' + ($elm$core$String$fromInt(model.bs) + percentString)))),
+			'Score: ' + ($elm$core$String$fromInt(model.be) + ('/' + ($elm$core$String$fromInt(model.bt) + percentString)))),
 			A2($elm$html$Html$br, _List_Nil, _List_Nil)
 		]);
 	return A2(
@@ -7419,16 +7426,33 @@ var $author$project$Main$viewScore = function (model) {
 				]) : _List_Nil));
 };
 var $elm$html$Html$Attributes$title = $elm$html$Html$Attributes$stringProperty('title');
-var $author$project$Main$viewUrname = F2(
-	function (subject, settings) {
+var $author$project$Main$attrsForUrname = F3(
+	function (subject, settings, config) {
+		if (!config.bp) {
+			return _List_Nil;
+		} else {
+			var _v0 = settings.bf;
+			if (!_v0) {
+				return _List_fromArray(
+					[
+						$elm$html$Html$Attributes$title(subject.T)
+					]);
+			} else {
+				return _List_fromArray(
+					[
+						$elm$html$Html$Attributes$title(subject.M)
+					]);
+			}
+		}
+	});
+var $author$project$Main$viewUrname = F3(
+	function (subject, settings, config) {
+		var attrs = A3($author$project$Main$attrsForUrname, subject, settings, config);
 		var _v0 = settings.bf;
 		if (!_v0) {
 			return A2(
 				$elm$html$Html$p,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$title(subject.T)
-					]),
+				attrs,
 				_List_fromArray(
 					[
 						$elm$html$Html$text(subject.M)
@@ -7436,10 +7460,7 @@ var $author$project$Main$viewUrname = F2(
 		} else {
 			return A2(
 				$elm$html$Html$p,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$title(subject.M)
-					]),
+				attrs,
 				_List_fromArray(
 					[
 						$elm$html$Html$text(subject.T)
@@ -7452,7 +7473,7 @@ var $author$project$Main$viewCard = F2(
 			$elm$html$Html$div,
 			_List_Nil,
 			_Utils_ap(
-				$author$project$Main$viewImage(card.bp.a_),
+				$author$project$Main$viewImage(card.bq.a_),
 				_List_fromArray(
 					[
 						A2(
@@ -7486,7 +7507,7 @@ var $author$project$Main$viewCard = F2(
 												$elm$html$Html$text('Change Deck')
 											]))
 									]) : _List_Nil);
-							var prevEnabled = (!model.bi.bt) && (!$elm$core$List$isEmpty(model.bb));
+							var prevEnabled = (!model.bi.bu) && (!$elm$core$List$isEmpty(model.bb));
 							var mainPartAttributes = A2(
 								$elm$core$List$cons,
 								$elm$html$Html$Attributes$class('mainPart'),
@@ -7501,7 +7522,7 @@ var $author$project$Main$viewCard = F2(
 									},
 									model.aR.a4));
 							var contentViews = function () {
-								var _v1 = model.bi.bt;
+								var _v1 = model.bi.bu;
 								switch (_v1) {
 									case 0:
 										return _List_fromArray(
@@ -7520,7 +7541,7 @@ var $author$project$Main$viewCard = F2(
 															mainPartAttributes,
 															_List_fromArray(
 																[
-																	A2($author$project$Main$viewUrname, card.bp, model.bi)
+																	A3($author$project$Main$viewUrname, card.bq, model.bi, model.aR)
 																])),
 															A2(
 															$elm$html$Html$tr,
@@ -7530,17 +7551,17 @@ var $author$project$Main$viewCard = F2(
 																]),
 															_List_fromArray(
 																[
-																	$author$project$Main$viewLocalName(card.bp)
+																	$author$project$Main$viewLocalName(card.bq)
 																]))
 														]),
 													_Utils_ap(
 														A2($author$project$Main$showDescriptionInCard, model, card),
-														A2($author$project$Main$playAudio, model, card.bp.D)))),
+														A2($author$project$Main$playAudio, model, card.bq.D)))),
 												A2($elm$html$Html$hr, _List_Nil, _List_Nil)
 											]);
 									case 1:
 										var descriptionHtml = model.aR.bo ? A2($author$project$Main$showDescriptionInCard, model, card) : _List_Nil;
-										var audioHtml = model.aR.bl ? A2($author$project$Main$playAudio, model, card.bp.D) : _List_Nil;
+										var audioHtml = model.aR.bl ? A2($author$project$Main$playAudio, model, card.bq.D) : _List_Nil;
 										return _List_fromArray(
 											[
 												A2(
@@ -7556,7 +7577,7 @@ var $author$project$Main$viewCard = F2(
 														mainPartAttributes,
 														_List_fromArray(
 															[
-																$author$project$Main$viewLocalName(card.bp)
+																$author$project$Main$viewLocalName(card.bq)
 															])),
 													_Utils_ap(descriptionHtml, audioHtml))),
 												A3(
@@ -7567,7 +7588,7 @@ var $author$project$Main$viewCard = F2(
 											]);
 									case 2:
 										var descriptionHtml = model.aR.bn ? A2($author$project$Main$showDescriptionInCard, model, card) : _List_Nil;
-										var audioHtml = model.aR.bk ? A2($author$project$Main$playAudio, model, card.bp.D) : _List_Nil;
+										var audioHtml = model.aR.bk ? A2($author$project$Main$playAudio, model, card.bq.D) : _List_Nil;
 										return _List_fromArray(
 											[
 												A2(
@@ -7583,7 +7604,7 @@ var $author$project$Main$viewCard = F2(
 														mainPartAttributes,
 														_List_fromArray(
 															[
-																A2($author$project$Main$viewUrname, card.bp, model.bi)
+																A3($author$project$Main$viewUrname, card.bq, model.bi, model.aR)
 															])),
 													_Utils_ap(
 														descriptionHtml,
@@ -7615,7 +7636,7 @@ var $author$project$Main$viewCard = F2(
 															mainPartAttributes,
 															_List_fromArray(
 																[
-																	A2($author$project$Main$viewUrname, card.bp, model.bi)
+																	A3($author$project$Main$viewUrname, card.bq, model.bi, model.aR)
 																])),
 															A2(
 															$elm$html$Html$tr,
@@ -7625,10 +7646,10 @@ var $author$project$Main$viewCard = F2(
 																]),
 															_List_fromArray(
 																[
-																	$author$project$Main$viewLocalName(card.bp)
+																	$author$project$Main$viewLocalName(card.bq)
 																]))
 														]),
-													A2($author$project$Main$playAudio, model, card.bp.D))),
+													A2($author$project$Main$playAudio, model, card.bq.D))),
 												A3(
 												$author$project$Main$viewQuiz,
 												A2($author$project$Config$showTrainMode, model.aR, 3),
@@ -7701,7 +7722,7 @@ var $author$project$Main$viewCard = F2(
 									[
 										$elm$html$Html$Attributes$id('buttons')
 									]),
-								(!model.bi.bt) ? _Utils_ap(
+								(!model.bi.bu) ? _Utils_ap(
 									_List_fromArray(
 										[
 											prevButton,
@@ -7709,7 +7730,7 @@ var $author$project$Main$viewCard = F2(
 											A2($elm$html$Html$br, _List_Nil, _List_Nil),
 											A2($elm$html$Html$br, _List_Nil, _List_Nil)
 										]),
-									allFinished) : ($elm_community$maybe_extra$Maybe$Extra$isJust(model.bx) ? _Utils_ap(
+									allFinished) : ($elm_community$maybe_extra$Maybe$Extra$isJust(model.by) ? _Utils_ap(
 									_List_fromArray(
 										[
 											nextButton,
@@ -7733,7 +7754,7 @@ var $author$project$Main$viewCard = F2(
 									]),
 								startOver);
 							var midwayButtons = function () {
-								var _v0 = model.bi.bt;
+								var _v0 = model.bi.bu;
 								if (!_v0) {
 									return allButtons;
 								} else {
@@ -7839,43 +7860,6 @@ var $author$project$Main$scriptFieldSet = function (model) {
 										$elm$html$Html$input,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$id('latin'),
-												$elm$html$Html$Attributes$name('script'),
-												$elm$html$Html$Attributes$type_('radio'),
-												$elm$html$Html$Attributes$value('Latin'),
-												$elm$html$Html$Events$onInput($author$project$Types$SetScript),
-												$elm$html$Html$Attributes$checked(!model.bi.bf)
-											]),
-										_List_Nil)
-									])),
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$label,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$for('latin')
-											]),
-										$author$project$Main$radioScriptLabelHtml(0))
-									]))
-							])),
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$td,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$input,
-										_List_fromArray(
-											[
 												$elm$html$Html$Attributes$id('unicode'),
 												$elm$html$Html$Attributes$name('script'),
 												$elm$html$Html$Attributes$type_('radio'),
@@ -7898,6 +7882,43 @@ var $author$project$Main$scriptFieldSet = function (model) {
 											]),
 										$author$project$Main$radioScriptLabelHtml(1))
 									]))
+							])),
+						A2(
+						$elm$html$Html$tr,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$td,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('latin'),
+												$elm$html$Html$Attributes$name('script'),
+												$elm$html$Html$Attributes$type_('radio'),
+												$elm$html$Html$Attributes$value('Latin'),
+												$elm$html$Html$Events$onInput($author$project$Types$SetScript),
+												$elm$html$Html$Attributes$checked(!model.bi.bf)
+											]),
+										_List_Nil)
+									])),
+								A2(
+								$elm$html$Html$td,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$label,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$for('latin')
+											]),
+										$author$project$Main$radioScriptLabelHtml(0))
+									]))
 							]))
 					]))
 			]));
@@ -7917,7 +7938,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 					$elm$html$Html$Attributes$type_('radio'),
 					$elm$html$Html$Attributes$value('Urname'),
 					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(model.bi.bt === 1)
+					$elm$html$Html$Attributes$checked(model.bi.bu === 1)
 				]),
 			_List_Nil),
 			A2(
@@ -7944,7 +7965,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 					$elm$html$Html$Attributes$type_('radio'),
 					$elm$html$Html$Attributes$value('Review'),
 					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(!model.bi.bt)
+					$elm$html$Html$Attributes$checked(!model.bi.bu)
 				]),
 			_List_Nil),
 			A2(
@@ -7971,7 +7992,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 					$elm$html$Html$Attributes$type_('radio'),
 					$elm$html$Html$Attributes$value('LocalName'),
 					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(model.bi.bt === 2)
+					$elm$html$Html$Attributes$checked(model.bi.bu === 2)
 				]),
 			_List_Nil),
 			A2(
@@ -7989,7 +8010,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 		]);
 	var filterConfig = F2(
 		function (trainMode, htmlElements) {
-			return A2($elm$core$List$member, trainMode, model.aR.bv) ? htmlElements : _List_Nil;
+			return A2($elm$core$List$member, trainMode, model.aR.bw) ? htmlElements : _List_Nil;
 		});
 	var descriptionTrainModeInput = _List_fromArray(
 		[
@@ -8002,7 +8023,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 					$elm$html$Html$Attributes$type_('radio'),
 					$elm$html$Html$Attributes$value('Description'),
 					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(model.bi.bt === 3)
+					$elm$html$Html$Attributes$checked(model.bi.bu === 3)
 				]),
 			_List_Nil),
 			A2(
@@ -8147,5 +8168,5 @@ var $author$project$Main$view = function (model) {
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{a1: $author$project$Main$init, bq: $author$project$Main$subscriptions, bw: $author$project$Main$update, by: $author$project$Main$view});
+	{a1: $author$project$Main$init, br: $author$project$Main$subscriptions, bx: $author$project$Main$update, bz: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main($elm$json$Json$Decode$value)(0)}});}(this));

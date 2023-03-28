@@ -56,7 +56,8 @@ const menu = [
 		 },	 
                  {
                         id: 31, title: "Flash", category: "ET", dir: "031-flash",
-                        desc: `Flash cards for learning Sanskrit: alphabet, sentences, and more...</br>(Audio coming soon)`
+                        desc: `Flash cards for learning Sanskrit: alphabet, common phrases, sentences, and more...`
+
                  },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
