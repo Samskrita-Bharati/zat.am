@@ -61,14 +61,9 @@ transform: rotate(90deg);
 }
 </style>
 <script src="../cmpk-jul.json"></script>
-<script>
-var set=1;
-var tofind=parseInt((Math.random()*100)%wlist[set].length);
-var wt=1;
-</script>
 </head>
 <body>
-<center><h3>Find <span style="position:relative;color:tomato;z-index:99" id="tofind"></span> .. ❌ = <span id="wt">०</span></h3></center>
+<center><h3>Find <span style="position:relative;color:tomato;z-index:99" id="tofind"></span> ... ❌ = <span id="wt">०</span></h3></center>
 <div id="svgdiv">
 </div>
 <p></p>
@@ -81,10 +76,12 @@ if (!t)
 var set = urlParams.get('s');
 if (!set || isNaN(set) || (set>=wlist.length))
 	set=0;
+var tofind=parseInt((Math.random()*100)%wlist[set].length);
+var wt=1;
 $("#tofind").html(wlist[set][tofind]);
-if (t)
-  $("#tofind").append(" = " + Sanscript.t(wlist[set][tofind],'devanagari','itrans'))
- var chk = function(id)
+if (t>0)
+  $("#tofind").append(" = " + Sanscript.t(wlist[set][tofind],'devanagari','itrans'));
+var chk = function(id)
  {
     if (id==tofind)
 	{
