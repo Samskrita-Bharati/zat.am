@@ -20,11 +20,16 @@ if (!inum || inum<0 || inum>=12)
  inum=parseInt(Math.random()*100)%12;
 var pic = urlParams.get('pic');
 </script>
+<style>
+#hintword:hover {background-color:blue}
+</style>
 </head>
 <body>
+
     <img width="920" height="120" src="../img/logo.png" class="logo"/>
     <canvas id="canvas" class="canvas" resize></canvas>
     <div class="charms">
+		<p id="hintword" style="color:#ccc"></p>
         <img width="50" height="50" src="../img/zoomIn.png" class="zoomIn"/>
         <img width="50" height="50" src="../img/zoomOut.png" class="zoomOut"/>
         <img width="50" height="50" src="../img/help.png" class="help"/>
@@ -40,7 +45,7 @@ var pic = urlParams.get('pic');
         view.currentScroll = new Point(0, 0);
         var scrollVector = new Point(0,0);
         var scrollMargin = 32;
-
+$("#hintword").html(wlist[set][inum]);
   if (pic)
   $('#puzzle-image').attr('src',pic);
   else
