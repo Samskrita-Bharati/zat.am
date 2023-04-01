@@ -2,20 +2,25 @@
 शतम्
 
 Timeline:
-1. Groundbreaking "TA-RG-ET संस्कृतम्" hackathon (https://www.iitr.ac.in/sanskritclub/target.html) initiated on गीताजयन्ती २०२० #codeSanskrit gains momentum.
+1. Groundbreaking "TA-RG-ET संस्कृतम्" hackathon (https://www.iitr.ac.in/sanskritclub/target.html) initiated on गीताजयन्ती २०२० #codeSanskrit gains momentum. (December 24, 2020)
 
-2. Zat.am domain registered.
+2. Zat.am domain registered. (February 16, 2021)
 
-3. Repository on GitHub started.
+3. Repository on GitHub started. (February 16, 2021)
 
-4. Reached 100 stars for the repository.
+4. First batch of co-op students from Sheridan college contributed to the zat.am initiative. (Winter, 2021)
 
-5. First batch of co-op students from Sheridan college contributed to the zat.am initiative.
+5. Reached 100 stars for the repository. (Summer, 2021)
 
 6. Code for Sanskritam - Virtual workshop (December 10, 2022).
 
-7. Planned Sanskrit Hackathon - Virginia USA (December 28/29, 2022).
+7. TA-RG-ET संस्कृतम् 2023 Hackathon - ~~Virginia USA~~ Online (December 28/29, 2022).
 
+8. GitHub Sponsor - श्रीरामनवमी (March 30, 2023).
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=samskrita-bharati/zat.am&type=Date)](https://star-history.com/#samskrita-bharati/zat.am&Date)
 
 Yearly Progress:
 By End of 2020 - 
