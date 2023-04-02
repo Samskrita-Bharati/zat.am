@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 var set = urlParams.get('s');
-if (!set || isNaN(set))
+if (!set || isNaN(set) || set>=wlist.length)
 	set=0;
 var t = urlParams.get('t');
 if (!t || isNaN(t))
