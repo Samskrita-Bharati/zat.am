@@ -24,9 +24,9 @@ var संस्कृतठ्यवहारः = {
   "allSubjects": [
     {
       "subjectId": 0,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/hariḥ oṃ.mp3",
+      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/hariḥ-ōṁ.mp3",
       "unicode": "हरिः ॐ",
-      "latin": "hariḥ oṃ",
+      "latin": "hariḥ ōṁ",
       "localName": "Hello",
       "description": ""
     },
