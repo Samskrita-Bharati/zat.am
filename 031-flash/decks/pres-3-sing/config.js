@@ -72,7 +72,7 @@ var sentences = {
     },
     {
       "subjectId": 6,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/aśvaḥ_dhāvati.mp3",
       "unicode": "अश्वः धावति ।",
       "latin": "Aśvaḥ dhāvati.",
       "localName": "The horse runs.",
@@ -80,7 +80,7 @@ var sentences = {
     },
     {
       "subjectId": 7,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/vr̥kṣaḥ_phalati.mp3",
       "unicode": "वृक्षः फलति ।",
       "latin": "Vr̥kṣaḥ phalati.",
       "localName": "The tree bears fruit.",
@@ -88,7 +88,7 @@ var sentences = {
     },
     {
       "subjectId": 8,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/sevakaḥ_tiṣṭhati.mp3",
       "unicode": "सेवकः तिष्ठति ।",
       "latin": "Sevakaḥ tiṣṭhati.",
       "localName": "The servant stands.",
@@ -96,7 +96,7 @@ var sentences = {
     },
     {
       "subjectId": 9,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/bhikṣukaḥ_aṭati.mp3",
       "unicode": "भिक्षुकः अटति ।",
       "latin": "Bhikṣukaḥ aṭati.",
       "localName": "The beggar wanders.",
@@ -104,7 +104,7 @@ var sentences = {
     },
     {
       "subjectId": 10,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/saḥ_nindati.mp3",
       "unicode": "सः निन्दति ।",
       "latin": "Saḥ nindati.",
       "localName": "He censures.",
@@ -112,7 +112,7 @@ var sentences = {
     },
     {
       "subjectId": 11,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/ayaṁ_hasati.mp3",
       "unicode": "अयं हसति ।",
       "latin": "Ayaṁ hasati.",
       "localName": "This person (mas.) laughs.",
@@ -120,7 +120,7 @@ var sentences = {
     },
     {
       "subjectId": 12,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/sutaḥ_hasati.mp3",
       "unicode": "सुतः हसति ।",
       "latin": "Sutaḥ hasati.",
       "localName": "Son laughs.",
@@ -128,7 +128,7 @@ var sentences = {
     },
     {
       "subjectId": 13,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/anujā_krīḍati.mp3",
       "unicode": "अनुजा क्रीडति ।",
       "latin": "Anujā krīḍati.",
       "localName": "The younger sister plays.",
@@ -136,7 +136,7 @@ var sentences = {
     },
     {
       "subjectId": 14,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/agrajā_khādati.mp3",
       "unicode": "अग्रजा खादति ।",
       "latin": "Agrajā khādati.",
       "localName": "The elder sister eats.",
@@ -144,7 +144,7 @@ var sentences = {
     },
     {
       "subjectId": 15,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/ambā_pacati.mp3",
       "unicode": "अम्बा पचति ।",
       "latin": "Ambā pacati.",
       "localName": "Mother cooks.",
@@ -152,7 +152,7 @@ var sentences = {
     },
     {
       "subjectId": 16,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/ramā_gāyati.mp3",
       "unicode": "रमा गायति ।",
       "latin": "Ramā gāyati.",
       "localName": "Ramā sings.",
@@ -160,7 +160,7 @@ var sentences = {
     },
     {
       "subjectId": 17,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/bālā_likhati.mp3",
       "unicode": "बाला लिखति ।",
       "latin": "Bālā likhati.",
       "localName": "A girl writes.",
@@ -168,7 +168,7 @@ var sentences = {
     },
     {
       "subjectId": 18,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/gaṅgā_vahati.mp3",
       "unicode": "गङ्गा वहति ।",
       "latin": "Gaṅgā vahati.",
       "localName": "Ganges flows.",
@@ -176,7 +176,7 @@ var sentences = {
     },
     {
       "subjectId": 19,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/sītā_pibati.mp3",
       "unicode": "सीता पिबति ।",
       "latin": "Sītā pibati.",
       "localName": "Sītā drinks.",
@@ -184,7 +184,7 @@ var sentences = {
     },
     {
       "subjectId": 20,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/ajā_carati.mp3",
       "unicode": "अजा चरति ।",
       "latin": "Ajā carati.",
       "localName": "The she-goat grazes.",
@@ -192,7 +192,7 @@ var sentences = {
     },
     {
       "subjectId": 21,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/sandhyā_bhavati.mp3",
       "unicode": "सन्ध्या भवति ।",
       "latin": "Sandhyā bhavati.",
       "localName": "It is evening.",
@@ -200,7 +200,7 @@ var sentences = {
     },
     {
       "subjectId": 22,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/sā_nayati.mp3",
       "unicode": "सा नयति ।",
       "latin": "Sā nayati.",
       "localName": "She leads/takes along.",
@@ -208,7 +208,7 @@ var sentences = {
     },
     {
       "subjectId": 23,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/iyam_icchati.mp3",
       "unicode": "इयम् इच्छति ।",
       "latin": "Iyam icchati.",
       "localName": "This lady wants.",
@@ -216,7 +216,7 @@ var sentences = {
     },
     {
       "subjectId": 24,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/puṣpaṁ_vikasati.mp3",
       "unicode": "पुष्पं विकसति ।",
       "latin": "Puṣpaṁ vikasati.",
       "localName": "Flower blooms.",
@@ -224,7 +224,7 @@ var sentences = {
     },
     {
       "subjectId": 25,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/phalaṁ_patati.mp3",
       "unicode": "फलं पतति ।",
       "latin": "Phalaṁ patati.",
       "localName": "Fruit falls.",
@@ -232,7 +232,7 @@ var sentences = {
     },
     {
       "subjectId": 26,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/nayanaṁ_sphurati.mp3",
       "unicode": "नयनं स्फुरति ।",
       "latin": "Nayanaṁ sphurati.",
       "localName": "Eye throbs.",
@@ -240,7 +240,7 @@ var sentences = {
     },
     {
       "subjectId": 27,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/mitraṁ_yacchati.mp3",
       "unicode": "मित्रं यच्छति ।",
       "latin": "Mitraṁ yacchati.",
       "localName": "Friend gives.",
@@ -248,7 +248,7 @@ var sentences = {
     },
     {
       "subjectId": 28,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/jalaṁ_sravati.mp3",
       "unicode": "जलं स्रवति ।",
       "latin": "Jalaṁ sravati.",
       "localName": "Water oozes.",
@@ -256,10 +256,10 @@ var sentences = {
     },
     {
       "subjectId": 29,
-      "audioUrl": null,
+      "audioUrl": "decks/pres-3-sing/assets/audio/tat_patati.mp3",
       "unicode": "तत् पतति ।",
-      "latin": "It falls.",
-      "localName": "Tat patati.",
+      "latin": "Tat patati.",
+      "localName": "It falls.",
       "description": ""
     },
   ]
