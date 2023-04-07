@@ -88,7 +88,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 8,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/svāgatam.mp3",
+      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/svāga"tam.mp3,
       "unicode": "स्वागतम्",
       "latin": "svāgatam",
       "localName": "Welcome",
