@@ -1,5 +1,5 @@
 var संस्कृतठ्यवहारः = {
-  "deckId": "संस्कृतठ्यवहारः",
+  "deckId": "phrases",
   "deckTitle": "Sanskrit Common Phrases",
   "landingPage": "index.html",
   "initialScript": "Unicode",
@@ -24,7 +24,7 @@ var संस्कृतठ्यवहारः = {
   "allSubjects": [
     {
       "subjectId": 0,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/hariḥ-ōṁ.mp3",
+      "audioUrl": "decks/phrases/assets/audio/hariḥ-ōṁ.mp3",
       "unicode": "हरिः ॐ",
       "latin": "hariḥ ōṁ",
       "localName": "Hello",
@@ -32,7 +32,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 1,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/namastē.mp3",
+      "audioUrl": "decks/phrases/assets/audio/namastē.mp3",
       "unicode": "नमस्ते",
       "latin": "namastē",
       "localName": "I bow to you",
@@ -40,7 +40,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 2,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/namaskāraḥ.mp3",
+      "audioUrl": "decks/phrases/assets/audio/namaskāraḥ.mp3",
       "unicode": "नमस्कारः",
       "latin": "namaskāraḥ",
       "localName": "Salutations",
@@ -48,7 +48,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 3,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/suprabhātam.mp3",
+      "audioUrl": "decks/phrases/assets/audio/suprabhātam.mp3",
       "unicode": "सुप्रभातम्",
       "latin": "suprabhātam",
       "localName": "Good morning",
@@ -56,7 +56,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 4,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/śubhamadhyāhnaḥ.mp3",
+      "audioUrl": "decks/phrases/assets/audio/śubhamadhyāhnaḥ.mp3",
       "unicode": "शुभमध्याह्नः",
       "latin": "śubhamadhyāhnaḥ",
       "localName": "Good afternoon",
@@ -64,7 +64,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 5,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/śubhasandhyā.mp3",
+      "audioUrl": "decks/phrases/assets/audio/śubhasandhyā.mp3",
       "unicode": "शुभसन्ध्या",
       "latin": "śubhasandhyā",
       "localName": "Good evening",
@@ -72,7 +72,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 6,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/śubharātriḥ.mp3",
+      "audioUrl": "decks/phrases/assets/audio/śubharātriḥ.mp3",
       "unicode": "शुभरात्रिः",
       "latin": "śubharātriḥ",
       "localName": "Good night",
@@ -80,7 +80,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 7,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/dhanyavādaḥ.mp3",
+      "audioUrl": "decks/phrases/assets/audio/dhanyavādaḥ.mp3",
       "unicode": "धन्यवादः",
       "latin": "dhanyavādaḥ",
       "localName": "Thank you",
@@ -88,7 +88,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 8,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/svāga"tam.mp3,
+      "audioUrl": "decks/phrases/assets/audio/svāgatam.mp3",
       "unicode": "स्वागतम्",
       "latin": "svāgatam",
       "localName": "Welcome",
@@ -96,7 +96,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 9,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/mānyē.mp3",
+      "audioUrl": "decks/phrases/assets/audio/mānyē.mp3",
       "unicode": "मान्ये",
       "latin": "mānyē",
       "localName": "Madam",
@@ -104,7 +104,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 10,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/āryē.mp3",
+      "audioUrl": "decks/phrases/assets/audio/āryē.mp3",
       "unicode": "आर्ये",
       "latin": "āryē",
       "localName": "Madam!",
@@ -112,7 +112,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 11,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/śrīman.mp3",
+      "audioUrl": "decks/phrases/assets/audio/śrīman.mp3",
       "unicode": "श्रीमन्",
       "latin": "śrīman",
       "localName": "Sir",
@@ -120,7 +120,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 12,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/astu.mp3",
+      "audioUrl": "decks/phrases/assets/audio/astu.mp3",
       "unicode": "अस्तु",
       "latin": "astu",
       "localName": "All right/OK",
@@ -128,7 +128,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 13,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/kṛpayā.mp3",
+      "audioUrl": "decks/phrases/assets/audio/kṛpayā.mp3",
       "unicode": "कृपया",
       "latin": "kṛpayā",
       "localName": "Please",
@@ -136,7 +136,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 14,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/cintā-māstu.mp3",
+      "audioUrl": "decks/phrases/assets/audio/cintā-māstu.mp3",
       "unicode": "चिन्ता मास्तु",
       "latin": "cintā māstu",
       "localName": "Don't worry",
@@ -144,7 +144,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 15,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/kṣamyatām.mp3",
+      "audioUrl": "decks/phrases/assets/audio/kṣamyatām.mp3",
       "unicode": "क्षम्यताम्",
       "latin": "kṣamyatām",
       "localName": "Excuse me",
@@ -152,7 +152,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 16,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/punaḥ-milāmaḥ.mp3",
+      "audioUrl": "decks/phrases/assets/audio/punaḥ-milāmaḥ.mp3",
       "unicode": "पुनः मिलामः",
       "latin": "punaḥ milāmaḥ",
       "localName": "See you again",
@@ -160,7 +160,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 17,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/sādhu-sādhu.mp3",
+      "audioUrl": "decks/phrases/assets/audio/sādhu-sādhu.mp3",
       "unicode": "साधु साधु",
       "latin": "sādhu sādhu",
       "localName": "Very good",
@@ -168,7 +168,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 18,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/uttamam.mp3",
+      "audioUrl": "decks/phrases/assets/audio/uttamam.mp3",
       "unicode": "उत्तमम्",
       "latin": "uttamam",
       "localName": "Good",
@@ -176,7 +176,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 19,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/bahu-samīcīnam.mp3",
+      "audioUrl": "decks/phrases/assets/audio/bahu-samīcīnam.mp3",
       "unicode": "बहु समीचीनम्",
       "latin": "bahu samīcīnam",
       "localName": "Very fine",
@@ -184,7 +184,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 20,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/śubhāśayāḥ.mp3",
+      "audioUrl": "decks/phrases/assets/audio/śubhāśayāḥ.mp3",
       "unicode": "शुभाशयाः",
       "latin": "śubhāśayāḥ",
       "localName": "Best wishes",
@@ -192,7 +192,7 @@ var संस्कृतठ्यवहारः = {
     },
     {
       "subjectId": 21,
-      "audioUrl": "decks/संस्कृतठ्यवहारः/assets/audio/abhinandanāni.mp3",
+      "audioUrl": "decks/phrases/assets/audio/abhinandanāni.mp3",
       "unicode": "अभिनन्दनानि",
       "latin": "abhinandanāni",
       "localName": "Congratulations",
