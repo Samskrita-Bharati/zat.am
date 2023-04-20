@@ -330,7 +330,6 @@ trainModeFieldSet model =
     fieldset []
         [ legend [] [ strong [] [ text "Training Mode" ] ]
         , table [] <|
-            -- todo simplify with a fold
             List.foldl
                 (\modeAndName acc ->
                     acc ++ filterConfig (first modeAndName) (trainModeInput modeAndName)
