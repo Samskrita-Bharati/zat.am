@@ -7853,7 +7853,10 @@ var $author$project$Main$scriptFieldSet = function (model) {
 							[
 								A2(
 								$elm$html$Html$td,
-								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('quiz')
+									]),
 								_List_fromArray(
 									[
 										A2(
@@ -7871,7 +7874,10 @@ var $author$project$Main$scriptFieldSet = function (model) {
 									])),
 								A2(
 								$elm$html$Html$td,
-								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('quiz')
+									]),
 								_List_fromArray(
 									[
 										A2(
@@ -7890,7 +7896,10 @@ var $author$project$Main$scriptFieldSet = function (model) {
 							[
 								A2(
 								$elm$html$Html$td,
-								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('quiz')
+									]),
 								_List_fromArray(
 									[
 										A2(
@@ -7908,7 +7917,10 @@ var $author$project$Main$scriptFieldSet = function (model) {
 									])),
 								A2(
 								$elm$html$Html$td,
-								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('quiz')
+									]),
 								_List_fromArray(
 									[
 										A2(
@@ -7927,123 +7939,71 @@ var $author$project$Types$SetTrainMode = function (a) {
 	return {$: 3, a: a};
 };
 var $author$project$Main$trainModeFieldSet = function (model) {
-	var urnameTrainModeInput = _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$input,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$id('urname'),
-					$elm$html$Html$Attributes$name('trainMode'),
-					$elm$html$Html$Attributes$type_('radio'),
-					$elm$html$Html$Attributes$value('Urname'),
-					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(model.bi.bu === 1)
-				]),
-			_List_Nil),
-			A2(
-			$elm$html$Html$label,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$for('urname')
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(
-					A2($author$project$Config$showTrainMode, model.aR, 1)),
-					A2($elm$html$Html$br, _List_Nil, _List_Nil)
-				]))
-		]);
-	var reviewTrainModeInput = _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$input,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$id('review'),
-					$elm$html$Html$Attributes$name('trainMode'),
-					$elm$html$Html$Attributes$type_('radio'),
-					$elm$html$Html$Attributes$value('Review'),
-					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(!model.bi.bu)
-				]),
-			_List_Nil),
-			A2(
-			$elm$html$Html$label,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$for('review')
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(
-					A2($author$project$Config$showTrainMode, model.aR, 0)),
-					A2($elm$html$Html$br, _List_Nil, _List_Nil)
-				]))
-		]);
-	var localNameTrainModeInput = _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$input,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$id('localName'),
-					$elm$html$Html$Attributes$name('trainMode'),
-					$elm$html$Html$Attributes$type_('radio'),
-					$elm$html$Html$Attributes$value('LocalName'),
-					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(model.bi.bu === 2)
-				]),
-			_List_Nil),
-			A2(
-			$elm$html$Html$label,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$for('localName')
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(
-					A2($author$project$Config$showTrainMode, model.aR, 2)),
-					A2($elm$html$Html$br, _List_Nil, _List_Nil)
-				]))
-		]);
+	var trainModeInput = function (_v0) {
+		var mode = _v0.a;
+		var modeString = _v0.b;
+		return _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$tr,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$td,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('quiz')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$id(modeString),
+										$elm$html$Html$Attributes$name('trainMode'),
+										$elm$html$Html$Attributes$type_('radio'),
+										$elm$html$Html$Attributes$value(modeString),
+										$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
+										$elm$html$Html$Attributes$checked(
+										_Utils_eq(model.bi.bu, mode))
+									]),
+								_List_Nil)
+							])),
+						A2(
+						$elm$html$Html$td,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('quiz')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$label,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$for(modeString)
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text(
+										A2($author$project$Config$showTrainMode, model.aR, mode))
+									]))
+							]))
+					]))
+			]);
+	};
 	var filterConfig = F2(
 		function (trainMode, htmlElements) {
 			return A2($elm$core$List$member, trainMode, model.aR.bw) ? htmlElements : _List_Nil;
 		});
-	var descriptionTrainModeInput = _List_fromArray(
-		[
-			A2(
-			$elm$html$Html$input,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$id('description'),
-					$elm$html$Html$Attributes$name('trainMode'),
-					$elm$html$Html$Attributes$type_('radio'),
-					$elm$html$Html$Attributes$value('Description'),
-					$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
-					$elm$html$Html$Attributes$checked(model.bi.bu === 3)
-				]),
-			_List_Nil),
-			A2(
-			$elm$html$Html$label,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$for('description')
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(
-					A2($author$project$Config$showTrainMode, model.aR, 3))
-				]))
-		]);
 	return A2(
 		$elm$html$Html$fieldset,
 		_List_Nil,
-		A2(
-			$elm$core$List$cons,
-			A2(
+		_List_fromArray(
+			[
+				A2(
 				$elm$html$Html$legend,
 				_List_Nil,
 				_List_fromArray(
@@ -8056,13 +8016,29 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 								$elm$html$Html$text('Training Mode')
 							]))
 					])),
-			_Utils_ap(
-				A2(filterConfig, 0, reviewTrainModeInput),
-				_Utils_ap(
-					A2(filterConfig, 1, urnameTrainModeInput),
-					_Utils_ap(
-						A2(filterConfig, 2, localNameTrainModeInput),
-						A2(filterConfig, 3, descriptionTrainModeInput))))));
+				A2(
+				$elm$html$Html$table,
+				_List_Nil,
+				A3(
+					$elm$core$List$foldl,
+					F2(
+						function (modeAndName, acc) {
+							return _Utils_ap(
+								acc,
+								A2(
+									filterConfig,
+									modeAndName.a,
+									trainModeInput(modeAndName)));
+						}),
+					_List_Nil,
+					_List_fromArray(
+						[
+							_Utils_Tuple2(0, 'Review'),
+							_Utils_Tuple2(1, 'Urname'),
+							_Utils_Tuple2(2, 'LocalName'),
+							_Utils_Tuple2(3, 'Description')
+						])))
+			]));
 };
 var $author$project$Main$viewSettings = function (model) {
 	return A2(

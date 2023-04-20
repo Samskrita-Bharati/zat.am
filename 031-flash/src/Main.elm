@@ -17,6 +17,7 @@ import Process
 import Random
 import String exposing (fromInt)
 import Task
+import Tuple exposing (..)
 import Types exposing (..)
 
 
@@ -306,67 +307,41 @@ trainModeFieldSet model =
             else
                 []
 
-        reviewTrainModeInput =
-            [ input
-                [ id "review"
-                , name "trainMode"
-                , type_ "radio"
-                , value "Review"
-                , HE.onInput SetTrainMode
-                , checked <| model.settings.trainMode == Review
+        trainModeInput ( mode, modeString ) =
+            [ tr []
+                [ td [ class "quiz" ]
+                    [ input
+                        [ id modeString
+                        , name "trainMode"
+                        , type_ "radio"
+                        , value modeString
+                        , HE.onInput SetTrainMode
+                        , checked <| model.settings.trainMode == mode
+                        ]
+                        []
+                    ]
+                , td [ class "quiz" ]
+                    [ label [ for modeString ]
+                        [ text (Config.showTrainMode model.config mode) ]
+                    ]
                 ]
-                []
-            , label [ for "review" ] [ text (Config.showTrainMode model.config Review), br [] [] ]
-            ]
-
-        urnameTrainModeInput =
-            [ input
-                [ id "urname"
-                , name "trainMode"
-                , type_ "radio"
-                , value "Urname"
-                , HE.onInput SetTrainMode
-                , checked <| model.settings.trainMode == Urname
-                ]
-                []
-            , label [ for "urname" ] [ text (Config.showTrainMode model.config Urname), br [] [] ]
-            ]
-
-        localNameTrainModeInput =
-            [ input
-                [ id "localName"
-                , name "trainMode"
-                , type_ "radio"
-                , value "LocalName"
-                , HE.onInput SetTrainMode
-                , checked <| model.settings.trainMode == LocalName
-                ]
-                []
-            , label [ for "localName" ] [ text (Config.showTrainMode model.config LocalName), br [] [] ]
-            ]
-
-        descriptionTrainModeInput =
-            [ input
-                [ id "description"
-                , name "trainMode"
-                , type_ "radio"
-                , value "Description"
-                , HE.onInput SetTrainMode
-                , checked <| model.settings.trainMode == Description
-                ]
-                []
-            , label [ for "description" ] [ text (Config.showTrainMode model.config Description) ]
             ]
     in
     fieldset []
-        (legend [] [ strong [] [ text "Training Mode" ] ]
+        [ legend [] [ strong [] [ text "Training Mode" ] ]
+        , table [] <|
             -- todo simplify with a fold
-            :: (filterConfig Review reviewTrainModeInput
-                    ++ filterConfig Urname urnameTrainModeInput
-                    ++ filterConfig LocalName localNameTrainModeInput
-                    ++ filterConfig Description descriptionTrainModeInput
-               )
-        )
+            List.foldl
+                (\modeAndName acc ->
+                    acc ++ filterConfig (first modeAndName) (trainModeInput modeAndName)
+                )
+                []
+                [ ( Review, "Review" )
+                , ( Urname, "Urname" )
+                , ( LocalName, "LocalName" )
+                , ( Description, "Description" )
+                ]
+        ]
 
 
 scriptFieldSet : Model -> Html Msg
@@ -375,7 +350,7 @@ scriptFieldSet model =
         [ legend [] [ strong [] [ text <| Config.scriptHeading ] ]
         , table []
             [ tr []
-                [ td []
+                [ td [ class "quiz" ]
                     [ input
                         [ id "unicode"
                         , name "script"
@@ -386,10 +361,11 @@ scriptFieldSet model =
                         ]
                         []
                     ]
-                , td [] [ label [ for "unicode" ] <| radioScriptLabelHtml Unicode ]
+                , td [ class "quiz" ]
+                    [ label [ for "unicode" ] <| radioScriptLabelHtml Unicode ]
                 ]
             , tr []
-                [ td []
+                [ td [ class "quiz" ]
                     [ input
                         [ id "latin"
                         , name "script"
@@ -400,7 +376,8 @@ scriptFieldSet model =
                         ]
                         []
                     ]
-                , td [] [ label [ for "latin" ] <| radioScriptLabelHtml Latin ]
+                , td [ class "quiz" ]
+                    [ label [ for "latin" ] <| radioScriptLabelHtml Latin ]
                 ]
             ]
         ]

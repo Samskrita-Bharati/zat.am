@@ -102,6 +102,10 @@ td.correct {
   text-align: left;
 }
 
+.quiz>label {
+  cursor: pointer;
+}
+
 .incorrect {
   color: red
 }
