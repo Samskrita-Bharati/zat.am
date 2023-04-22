@@ -6,21 +6,18 @@ module Types exposing
     , Script(..)
     , Settings
     , Subject
+    , SubjectField(..)
     , TrainMode(..)
     , defaultConfig
+    , defaultModel
     , emptyCard
     , invalidCards
     , invalidSubject
     , invalidSubjectList
-    , msgToString
-    , subjectToJson
     )
 
 import Dict exposing (Dict)
-import Json.Encode as Encode
-import Json.Encode.Extra as EncodeX
 import List.Nonempty exposing (Nonempty(..))
-import Maybe.Extra as MaybeX
 
 
 type alias Model =
@@ -36,12 +33,28 @@ type alias Model =
     }
 
 
+defaultModel : Model
+defaultModel =
+    { config = defaultConfig
+    , settings = { trainMode = Review, script = Latin, group = Nothing }
+    , remainingDeck = invalidCards
+    , previousDeck = []
+    , userAnswer = Nothing
+    , total = 0
+    , score = 0
+    , inSettingsScreen = True
+    , showAudio = True
+    }
+
+
 type alias Config =
     { deckId : String
     , deckTitle : String
     , landingPage : Maybe String
     , initialScript : Script
     , scriptCanBeSet : Bool
+    , groupCanBeSet : Bool
+    , groupDisplay : String
     , showTooltipsForOtherScript : Bool
     , showDescriptionWithUrNameQuiz : Bool
     , showAudioWithUrNameQuiz : Bool
@@ -50,6 +63,7 @@ type alias Config =
     , showDescription : Bool
     , showAudio : Bool
     , trainingModes : List TrainMode
+    , sortReviewBy : SubjectField
     , pluralSubjectName : String
     , copyrightNotice : String
     , numChoices : Int
@@ -68,6 +82,8 @@ defaultConfig =
         Nothing
         Latin
         True
+        False
+        ""
         True
         True
         True
@@ -76,6 +92,7 @@ defaultConfig =
         True
         True
         []
+        SubjectId
         ""
         ""
         0
@@ -88,6 +105,7 @@ defaultConfig =
 type alias Settings =
     { trainMode : TrainMode
     , script : Script
+    , group : Maybe String
     }
 
 
@@ -108,6 +126,7 @@ type Msg
     | Previous
     | ShowAudio
     | SetTrainMode String
+    | SetGroup String
     | SetScript String
     | Start
     | Reset
@@ -118,52 +137,6 @@ type Msg
     | MouseClick
     | CurrentDeckLoaded String
     | GoLanding
-
-
-msgToString : Msg -> String
-msgToString msg =
-    case msg of
-        Next ->
-            "Next"
-
-        Previous ->
-            "Previous"
-
-        ShowAudio ->
-            "ShowAudio"
-
-        SetTrainMode _ ->
-            "SetTrainMode"
-
-        SetScript _ ->
-            "SetScript"
-
-        Start ->
-            "Start"
-
-        Reset ->
-            "Reset"
-
-        Answer _ ->
-            "Answer"
-
-        Shuffle _ ->
-            "Shuffle"
-
-        CharacterKeyPressed _ ->
-            "CharacterKeyPressed"
-
-        ControlKeyPressed _ ->
-            "ControlKeyPressed"
-
-        MouseClick ->
-            "MouseClick"
-
-        CurrentDeckLoaded _ ->
-            "CurrentDeckLoaded"
-
-        GoLanding ->
-            "GoLanding"
 
 
 type alias Card =
@@ -190,12 +163,13 @@ type alias Subject =
     , latin : String
     , localName : String
     , description : String
+    , group : Maybe String
     }
 
 
 invalidSubject : Subject
 invalidSubject =
-    Subject -1 Nothing Nothing "invalid" "invalid" "invalid" "invalid"
+    Subject -1 Nothing Nothing "invalid" "invalid" "invalid" "invalid" Nothing
 
 
 invalidSubjectList : Nonempty Subject
@@ -203,23 +177,7 @@ invalidSubjectList =
     Nonempty invalidSubject []
 
 
-subjectToJson : Subject -> Encode.Value
-subjectToJson subj =
-    let
-        encodeOptional fieldName maybeS =
-            if MaybeX.isJust maybeS then
-                [ ( fieldName, EncodeX.maybe Encode.string maybeS ) ]
-
-            else
-                []
-    in
-    Encode.object <|
-        ( "subjectId", Encode.int subj.subjectId )
-            :: (encodeOptional "imageUrl" subj.imageUrl
-                    ++ encodeOptional "audioUrl" subj.audioUrl
-                    ++ [ ( "unicode", Encode.string subj.unicode )
-                       , ( "latin", Encode.string subj.latin )
-                       , ( "localName", Encode.string subj.localName )
-                       , ( "description", Encode.string subj.description )
-                       ]
-               )
+type SubjectField
+    = LatinName
+    | UnicodeName
+    | SubjectId

@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.R.E === region._.E)
+	if (region.V.G === region.ac.G)
 	{
-		return 'on line ' + region.R.E;
+		return 'on line ' + region.V.G;
 	}
-	return 'on lines ' + region.R.E + ' through ' + region._.E;
+	return 'on lines ' + region.V.G + ' through ' + region.ac.G;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a1,
+		impl.a9,
+		impl.bC,
 		impl.bx,
-		impl.br,
 		function() { return function() {} }
 	);
 });
@@ -2719,9 +2719,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		s: func(record.s),
-		S: record.S,
-		P: record.P
+		u: func(record.u),
+		W: record.W,
+		R: record.R
 	}
 });
 
@@ -2989,11 +2989,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.s;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.S;
+		var message = !tag ? value : tag < 3 ? value.a : value.u;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.W;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.P) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.R) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,11 +3943,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a1,
+		impl.a9,
+		impl.bC,
 		impl.bx,
-		impl.br,
 		function(sendToApp, initialModel) {
-			var view = impl.bz;
+			var view = impl.bD;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a1,
+		impl.a9,
+		impl.bC,
 		impl.bx,
-		impl.br,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.Q && impl.Q(sendToApp)
-			var view = impl.bz;
+			var divertHrefToApp = impl.T && impl.T(sendToApp)
+			var view = impl.bD;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,12 +3992,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aO);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aV);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.bs) && (_VirtualDom_doc.title = title = doc.bs);
+				(title !== doc.by) && (_VirtualDom_doc.title = title = doc.by);
 			});
 		}
 	);
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.a7;
-	var onUrlRequest = impl.a8;
+	var onUrlChange = impl.bi;
+	var onUrlRequest = impl.bj;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		Q: function(sendToApp)
+		T: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.au === next.au
-							&& curr.ag === next.ag
-							&& curr.aq.a === next.aq.a
+							&& curr.ax === next.ax
+							&& curr.aj === next.aj
+							&& curr.at.a === next.at.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		a1: function(flags)
+		a9: function(flags)
 		{
-			return A3(impl.a1, flags, _Browser_getUrl(), key);
+			return A3(impl.a9, flags, _Browser_getUrl(), key);
 		},
-		bz: impl.bz,
-		bx: impl.bx,
-		br: impl.br
+		bD: impl.bD,
+		bC: impl.bC,
+		bx: impl.bx
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aZ: 'hidden', aP: 'visibilitychange' }
+		? { a6: 'hidden', aW: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aZ: 'mozHidden', aP: 'mozvisibilitychange' }
+		? { a6: 'mozHidden', aW: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aZ: 'msHidden', aP: 'msvisibilitychange' }
+		? { a6: 'msHidden', aW: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aZ: 'webkitHidden', aP: 'webkitvisibilitychange' }
-		: { aZ: 'hidden', aP: 'visibilitychange' };
+		? { a6: 'webkitHidden', aW: 'webkitvisibilitychange' }
+		: { a6: 'hidden', aW: 'visibilitychange' };
 }
 
 
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aA: _Browser_getScene(),
-		aH: {
-			aJ: _Browser_window.pageXOffset,
-			aK: _Browser_window.pageYOffset,
-			aI: _Browser_doc.documentElement.clientWidth,
-			ae: _Browser_doc.documentElement.clientHeight
+		aD: _Browser_getScene(),
+		aN: {
+			aP: _Browser_window.pageXOffset,
+			aQ: _Browser_window.pageYOffset,
+			aO: _Browser_doc.documentElement.clientWidth,
+			ah: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4262,8 +4262,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aI: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ae: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aO: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		ah: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aA: {
-				aI: node.scrollWidth,
-				ae: node.scrollHeight
+			aD: {
+				aO: node.scrollWidth,
+				ah: node.scrollHeight
 			},
-			aH: {
-				aJ: node.scrollLeft,
-				aK: node.scrollTop,
-				aI: node.clientWidth,
-				ae: node.clientHeight
+			aN: {
+				aP: node.scrollLeft,
+				aQ: node.scrollTop,
+				aO: node.clientWidth,
+				ah: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aA: _Browser_getScene(),
-			aH: {
-				aJ: x,
-				aK: y,
-				aI: _Browser_doc.documentElement.clientWidth,
-				ae: _Browser_doc.documentElement.clientHeight
+			aD: _Browser_getScene(),
+			aN: {
+				aP: x,
+				aQ: y,
+				aO: _Browser_doc.documentElement.clientWidth,
+				ah: _Browser_doc.documentElement.clientHeight
 			},
-			aX: {
-				aJ: x + rect.left,
-				aK: y + rect.top,
-				aI: rect.width,
-				ae: rect.height
+			a2: {
+				aP: x + rect.left,
+				aQ: y + rect.top,
+				aO: rect.width,
+				ah: rect.height
 			}
 		};
 	});
@@ -4957,7 +4957,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {ad: fragment, ag: host, ao: path, aq: port_, au: protocol, av: query};
+		return {ag: fragment, aj: host, ar: path, at: port_, ax: protocol, ay: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5241,22 +5241,28 @@ var $author$project$Types$Config = function (deckId) {
 		return function (landingPage) {
 			return function (initialScript) {
 				return function (scriptCanBeSet) {
-					return function (showTooltipsForOtherScript) {
-						return function (showDescriptionWithUrNameQuiz) {
-							return function (showAudioWithUrNameQuiz) {
-								return function (showDescriptionWithLocalNameQuiz) {
-									return function (showAudioWithLocalNameQuiz) {
-										return function (showDescription) {
-											return function (showAudio) {
-												return function (trainingModes) {
-													return function (pluralSubjectName) {
-														return function (copyrightNotice) {
-															return function (numChoices) {
-																return function (trainModeDisplay) {
-																	return function (scriptHeading) {
-																		return function (mainPartFontSize) {
-																			return function (allSubjects) {
-																				return {aM: allSubjects, aT: copyrightNotice, aU: deckId, aV: deckTitle, a2: initialScript, J: landingPage, a4: mainPartFontSize, a6: numChoices, ba: pluralSubjectName, bg: scriptCanBeSet, bh: scriptHeading, bj: showAudio, bk: showAudioWithLocalNameQuiz, bl: showAudioWithUrNameQuiz, bm: showDescription, bn: showDescriptionWithLocalNameQuiz, bo: showDescriptionWithUrNameQuiz, bp: showTooltipsForOtherScript, bv: trainModeDisplay, bw: trainingModes};
+					return function (groupCanBeSet) {
+						return function (groupDisplay) {
+							return function (showTooltipsForOtherScript) {
+								return function (showDescriptionWithUrNameQuiz) {
+									return function (showAudioWithUrNameQuiz) {
+										return function (showDescriptionWithLocalNameQuiz) {
+											return function (showAudioWithLocalNameQuiz) {
+												return function (showDescription) {
+													return function (showAudio) {
+														return function (trainingModes) {
+															return function (sortReviewBy) {
+																return function (pluralSubjectName) {
+																	return function (copyrightNotice) {
+																		return function (numChoices) {
+																			return function (trainModeDisplay) {
+																				return function (scriptHeading) {
+																					return function (mainPartFontSize) {
+																						return function (allSubjects) {
+																							return {aS: allSubjects, aZ: copyrightNotice, a_: deckId, a$: deckTitle, a4: groupCanBeSet, a5: groupDisplay, ba: initialScript, bc: landingPage, bf: mainPartFontSize, bh: numChoices, bl: pluralSubjectName, bn: scriptCanBeSet, bo: scriptHeading, U: showAudio, bp: showAudioWithLocalNameQuiz, bq: showAudioWithUrNameQuiz, br: showDescription, bs: showDescriptionWithLocalNameQuiz, bt: showDescriptionWithUrNameQuiz, bu: showTooltipsForOtherScript, bv: sortReviewBy, bz: trainModeDisplay, bA: trainingModes};
+																						};
+																					};
+																				};
 																			};
 																		};
 																	};
@@ -5279,13 +5285,16 @@ var $author$project$Types$Config = function (deckId) {
 };
 var $author$project$Types$Description = 3;
 var $author$project$Types$Latin = 0;
+var $author$project$Types$LatinName = 0;
 var $author$project$Types$LocalName = 2;
 var $author$project$Types$Review = 0;
-var $author$project$Types$Subject = F7(
-	function (subjectId, imageUrl, audioUrl, unicode, latin, localName, description) {
-		return {D: audioUrl, K: description, a_: imageUrl, M: latin, al: localName, aD: subjectId, T: unicode};
+var $author$project$Types$Subject = F8(
+	function (subjectId, imageUrl, audioUrl, unicode, latin, localName, description, group) {
+		return {aU: audioUrl, a0: description, M: group, a7: imageUrl, bd: latin, be: localName, aH: subjectId, bB: unicode};
 	});
+var $author$project$Types$SubjectId = 2;
 var $author$project$Types$Unicode = 1;
+var $author$project$Types$UnicodeName = 1;
 var $author$project$Types$Urname = 1;
 var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $elm$core$Basics$composeL = F3(
@@ -5441,9 +5450,23 @@ var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $author$project$Types$invalidSubject = A7($author$project$Types$Subject, -1, $elm$core$Maybe$Nothing, $elm$core$Maybe$Nothing, 'invalid', 'invalid', 'invalid', 'invalid');
+var $author$project$Types$invalidSubject = A8($author$project$Types$Subject, -1, $elm$core$Maybe$Nothing, $elm$core$Maybe$Nothing, 'invalid', 'invalid', 'invalid', 'invalid', $elm$core$Maybe$Nothing);
 var $author$project$Types$invalidSubjectList = A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, $author$project$Types$invalidSubject, _List_Nil);
 var $elm$json$Json$Decode$list = _Json_decodeList;
+var $jjant$unwrap$Unwrap$boom1 = function (_v1) {
+	return $jjant$unwrap$Unwrap$boom2(0);
+};
+var $jjant$unwrap$Unwrap$boom2 = function (_v0) {
+	return $jjant$unwrap$Unwrap$boom1(0);
+};
+var $jjant$unwrap$Unwrap$maybe = function (ma) {
+	if (!ma.$) {
+		var a = ma.a;
+		return a;
+	} else {
+		return $jjant$unwrap$Unwrap$boom1(0);
+	}
+};
 var $elm$json$Json$Decode$null = _Json_decodeNull;
 var $elm$json$Json$Decode$oneOf = _Json_oneOf;
 var $elm$json$Json$Decode$nullable = function (decoder) {
@@ -5546,37 +5569,60 @@ var $author$project$Config$configDecoder = function () {
 			}
 		},
 		$elm$json$Json$Decode$string);
-	var subjectDecoder = A3(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'description',
-		$elm$json$Json$Decode$string,
+	var subjectFieldDecoder = A2(
+		$elm$json$Json$Decode$map,
+		function (s) {
+			return $jjant$unwrap$Unwrap$maybe(
+				function () {
+					switch (s) {
+						case 'LatinName':
+							return $elm$core$Maybe$Just(0);
+						case 'UnicodeName':
+							return $elm$core$Maybe$Just(1);
+						case 'SubjectId':
+							return $elm$core$Maybe$Just(2);
+						default:
+							return $elm$core$Maybe$Nothing;
+					}
+				}());
+		},
+		$elm$json$Json$Decode$string);
+	var subjectDecoder = A4(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+		'group',
+		$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
+		$elm$core$Maybe$Nothing,
 		A3(
 			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'localName',
+			'description',
 			$elm$json$Json$Decode$string,
 			A3(
 				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-				'latin',
+				'localName',
 				$elm$json$Json$Decode$string,
 				A3(
 					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-					'unicode',
+					'latin',
 					$elm$json$Json$Decode$string,
-					A4(
-						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-						'audioUrl',
-						$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
-						$elm$core$Maybe$Nothing,
+					A3(
+						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+						'unicode',
+						$elm$json$Json$Decode$string,
 						A4(
 							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-							'imageUrl',
+							'audioUrl',
 							$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
 							$elm$core$Maybe$Nothing,
-							A3(
-								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-								'subjectId',
-								$elm$json$Json$Decode$int,
-								$elm$json$Json$Decode$succeed($author$project$Types$Subject))))))));
+							A4(
+								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+								'imageUrl',
+								$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
+								$elm$core$Maybe$Nothing,
+								A3(
+									$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+									'subjectId',
+									$elm$json$Json$Decode$int,
+									$elm$json$Json$Decode$succeed($author$project$Types$Subject)))))))));
 	var scriptDecoder = A2(
 		$elm$json$Json$Decode$map,
 		function (s) {
@@ -5613,103 +5659,529 @@ var $author$project$Config$configDecoder = function () {
 					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
 					'trainModeDisplay',
 					$elm$json$Json$Decode$dict($elm$json$Json$Decode$string),
-					A3(
-						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					A4(
+						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
 						'numChoices',
 						$elm$json$Json$Decode$int,
-						A3(
-							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+						4,
+						A4(
+							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
 							'copyrightNotice',
 							$elm$json$Json$Decode$string,
+							'',
 							A3(
 								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
 								'pluralSubjectName',
 								$elm$json$Json$Decode$string,
-								A3(
-									$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-									'trainingModes',
-									$elm$json$Json$Decode$list(trainModeDecoder),
-									A4(
-										$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-										'showAudio',
-										$elm$json$Json$Decode$bool,
-										true,
+								A4(
+									$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+									'sortReviewBy',
+									subjectFieldDecoder,
+									2,
+									A3(
+										$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+										'trainingModes',
+										$elm$json$Json$Decode$list(trainModeDecoder),
 										A4(
 											$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-											'showDescription',
+											'showAudio',
 											$elm$json$Json$Decode$bool,
 											true,
 											A4(
 												$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-												'showAudioWithLocalNameQuiz',
+												'showDescription',
 												$elm$json$Json$Decode$bool,
 												true,
 												A4(
 													$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-													'showDescriptionWithLocalNameQuiz',
+													'showAudioWithLocalNameQuiz',
 													$elm$json$Json$Decode$bool,
 													true,
 													A4(
 														$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-														'showAudioWithUrNameQuiz',
+														'showDescriptionWithLocalNameQuiz',
 														$elm$json$Json$Decode$bool,
 														true,
 														A4(
 															$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-															'showDescriptionWithUrNameQuiz',
+															'showAudioWithUrNameQuiz',
 															$elm$json$Json$Decode$bool,
 															true,
 															A4(
 																$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-																'showTooltipsForOtherScript',
+																'showDescriptionWithUrNameQuiz',
 																$elm$json$Json$Decode$bool,
 																true,
-																A3(
-																	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																	'scriptCanBeSet',
+																A4(
+																	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+																	'showTooltipsForOtherScript',
 																	$elm$json$Json$Decode$bool,
-																	A3(
-																		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																		'initialScript',
-																		scriptDecoder,
+																	true,
+																	A4(
+																		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+																		'groupDisplay',
+																		$elm$json$Json$Decode$string,
+																		'',
 																		A4(
 																			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
-																			'landingPage',
-																			$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
-																			$elm$core$Maybe$Nothing,
-																			A3(
-																				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																				'deckTitle',
-																				$elm$json$Json$Decode$string,
-																				A3(
-																					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-																					'deckId',
-																					$elm$json$Json$Decode$string,
-																					$elm$json$Json$Decode$succeed($author$project$Types$Config)))))))))))))))))))));
+																			'groupCanBeSet',
+																			$elm$json$Json$Decode$bool,
+																			false,
+																			A4(
+																				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+																				'scriptCanBeSet',
+																				$elm$json$Json$Decode$bool,
+																				false,
+																				A4(
+																					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+																					'initialScript',
+																					scriptDecoder,
+																					0,
+																					A4(
+																						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+																						'landingPage',
+																						$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string),
+																						$elm$core$Maybe$Nothing,
+																						A3(
+																							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+																							'deckTitle',
+																							$elm$json$Json$Decode$string,
+																							A3(
+																								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+																								'deckId',
+																								$elm$json$Json$Decode$string,
+																								$elm$json$Json$Decode$succeed($author$project$Types$Config))))))))))))))))))))))));
 }();
-var $author$project$Types$defaultConfig = $author$project$Types$Config('invalid deck')('invalid deck')($elm$core$Maybe$Nothing)(0)(true)(true)(true)(true)(true)(true)(true)(true)(_List_Nil)('')('')(0)($elm$core$Dict$empty)('')($elm$core$Maybe$Nothing)($author$project$Types$invalidSubjectList);
-var $author$project$Types$emptyCard = {aQ: _List_Nil, bq: $author$project$Types$invalidSubject};
+var $author$project$Types$defaultConfig = $author$project$Types$Config('invalid deck')('invalid deck')($elm$core$Maybe$Nothing)(0)(true)(false)('')(true)(true)(true)(true)(true)(true)(true)(_List_Nil)(2)('')('')(0)($elm$core$Dict$empty)('')($elm$core$Maybe$Nothing)($author$project$Types$invalidSubjectList);
+var $author$project$Types$emptyCard = {aX: _List_Nil, bw: $author$project$Types$invalidSubject};
 var $author$project$Types$invalidCards = A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, $author$project$Types$emptyCard, _List_Nil);
-var $author$project$Config$defaultModel = {
-	aR: $author$project$Types$defaultConfig,
-	a0: true,
-	bb: _List_Nil,
-	bc: $author$project$Types$invalidCards,
-	be: 0,
-	bi: {bf: 0, bu: 0},
-	bj: true,
-	bt: 0,
-	by: $elm$core$Maybe$Nothing
+var $author$project$Types$defaultModel = {
+	B: $author$project$Types$defaultConfig,
+	ak: true,
+	H: _List_Nil,
+	q: $author$project$Types$invalidCards,
+	S: 0,
+	j: {M: $elm$core$Maybe$Nothing, aE: 0, N: 0},
+	U: true,
+	aK: 0,
+	aM: $elm$core$Maybe$Nothing
 };
-var $author$project$Main$initialModel = function (cfg) {
-	var mdl = $author$project$Config$defaultModel;
+var $author$project$Model$initialModel = function (cfg) {
+	var mdl = $author$project$Types$defaultModel;
 	return _Utils_update(
 		mdl,
-		{aR: cfg});
+		{B: cfg});
 };
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $author$project$Model$initWithModel = function (model) {
+	return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+};
+var $author$project$Model$processSelectedDeck = function (model) {
+	var sttgs = model.j;
+	var newModel = _Utils_update(
+		model,
+		{
+			j: _Utils_update(
+				sttgs,
+				{aE: model.B.ba})
+		});
+	return $author$project$Model$initWithModel(newModel);
+};
+var $author$project$Main$init = function (configValue) {
+	var mdl = $author$project$Model$initialModel(
+		function () {
+			var _v0 = A2($elm$json$Json$Decode$decodeValue, $author$project$Config$configDecoder, configValue);
+			if (!_v0.$) {
+				var cfg = _v0.a;
+				return cfg;
+			} else {
+				return $author$project$Types$defaultConfig;
+			}
+		}());
+	return $author$project$Model$processSelectedDeck(mdl);
+};
+var $author$project$Types$MouseClick = {$: 12};
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $author$project$Types$CharacterKeyPressed = function (a) {
+	return {$: 10, a: a};
+};
+var $author$project$Types$ControlKeyPressed = function (a) {
+	return {$: 11, a: a};
+};
+var $author$project$Main$toKey = function (keyValue) {
+	var _v0 = $elm$core$String$uncons(keyValue);
+	if ((!_v0.$) && (_v0.a.b === '')) {
+		var _v1 = _v0.a;
+		var _char = _v1.a;
+		return $author$project$Types$CharacterKeyPressed(_char);
+	} else {
+		return $author$project$Types$ControlKeyPressed(keyValue);
+	}
+};
+var $author$project$Main$keyDecoder = A2(
+	$elm$json$Json$Decode$map,
+	$author$project$Main$toKey,
+	A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
+var $elm$browser$Browser$Events$Document = 0;
+var $elm$browser$Browser$Events$MySub = F3(
+	function (a, b, c) {
+		return {$: 0, a: a, b: b, c: c};
+	});
+var $elm$browser$Browser$Events$State = F2(
+	function (subs, pids) {
+		return {as: pids, aI: subs};
+	});
+var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
+	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
+var $elm$browser$Browser$Events$nodeToKey = function (node) {
+	if (!node) {
+		return 'd_';
+	} else {
+		return 'w_';
+	}
+};
+var $elm$browser$Browser$Events$addKey = function (sub) {
+	var node = sub.a;
+	var name = sub.b;
+	return _Utils_Tuple2(
+		_Utils_ap(
+			$elm$browser$Browser$Events$nodeToKey(node),
+			name),
+		sub);
+};
+var $elm$core$Process$kill = _Scheduler_kill;
+var $elm$core$Dict$foldl = F3(
+	function (func, acc, dict) {
+		foldl:
+		while (true) {
+			if (dict.$ === -2) {
+				return acc;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3($elm$core$Dict$foldl, func, acc, left)),
+					$temp$dict = right;
+				func = $temp$func;
+				acc = $temp$acc;
+				dict = $temp$dict;
+				continue foldl;
+			}
+		}
+	});
+var $elm$core$Dict$merge = F6(
+	function (leftStep, bothStep, rightStep, leftDict, rightDict, initialResult) {
+		var stepState = F3(
+			function (rKey, rValue, _v0) {
+				stepState:
+				while (true) {
+					var list = _v0.a;
+					var result = _v0.b;
+					if (!list.b) {
+						return _Utils_Tuple2(
+							list,
+							A3(rightStep, rKey, rValue, result));
+					} else {
+						var _v2 = list.a;
+						var lKey = _v2.a;
+						var lValue = _v2.b;
+						var rest = list.b;
+						if (_Utils_cmp(lKey, rKey) < 0) {
+							var $temp$rKey = rKey,
+								$temp$rValue = rValue,
+								$temp$_v0 = _Utils_Tuple2(
+								rest,
+								A3(leftStep, lKey, lValue, result));
+							rKey = $temp$rKey;
+							rValue = $temp$rValue;
+							_v0 = $temp$_v0;
+							continue stepState;
+						} else {
+							if (_Utils_cmp(lKey, rKey) > 0) {
+								return _Utils_Tuple2(
+									list,
+									A3(rightStep, rKey, rValue, result));
+							} else {
+								return _Utils_Tuple2(
+									rest,
+									A4(bothStep, lKey, lValue, rValue, result));
+							}
+						}
+					}
+				}
+			});
+		var _v3 = A3(
+			$elm$core$Dict$foldl,
+			stepState,
+			_Utils_Tuple2(
+				$elm$core$Dict$toList(leftDict),
+				initialResult),
+			rightDict);
+		var leftovers = _v3.a;
+		var intermediateResult = _v3.b;
+		return A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v4, result) {
+					var k = _v4.a;
+					var v = _v4.b;
+					return A3(leftStep, k, v, result);
+				}),
+			intermediateResult,
+			leftovers);
+	});
+var $elm$browser$Browser$Events$Event = F2(
+	function (key, event) {
+		return {ad: event, ao: key};
+	});
+var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
+var $elm$browser$Browser$Events$spawn = F3(
+	function (router, key, _v0) {
+		var node = _v0.a;
+		var name = _v0.b;
+		var actualNode = function () {
+			if (!node) {
+				return _Browser_doc;
+			} else {
+				return _Browser_window;
+			}
+		}();
+		return A2(
+			$elm$core$Task$map,
+			function (value) {
+				return _Utils_Tuple2(key, value);
+			},
+			A3(
+				_Browser_on,
+				actualNode,
+				name,
+				function (event) {
+					return A2(
+						$elm$core$Platform$sendToSelf,
+						router,
+						A2($elm$browser$Browser$Events$Event, key, event));
+				}));
+	});
+var $elm$core$Dict$union = F2(
+	function (t1, t2) {
+		return A3($elm$core$Dict$foldl, $elm$core$Dict$insert, t2, t1);
+	});
+var $elm$browser$Browser$Events$onEffects = F3(
+	function (router, subs, state) {
+		var stepRight = F3(
+			function (key, sub, _v6) {
+				var deads = _v6.a;
+				var lives = _v6.b;
+				var news = _v6.c;
+				return _Utils_Tuple3(
+					deads,
+					lives,
+					A2(
+						$elm$core$List$cons,
+						A3($elm$browser$Browser$Events$spawn, router, key, sub),
+						news));
+			});
+		var stepLeft = F3(
+			function (_v4, pid, _v5) {
+				var deads = _v5.a;
+				var lives = _v5.b;
+				var news = _v5.c;
+				return _Utils_Tuple3(
+					A2($elm$core$List$cons, pid, deads),
+					lives,
+					news);
+			});
+		var stepBoth = F4(
+			function (key, pid, _v2, _v3) {
+				var deads = _v3.a;
+				var lives = _v3.b;
+				var news = _v3.c;
+				return _Utils_Tuple3(
+					deads,
+					A3($elm$core$Dict$insert, key, pid, lives),
+					news);
+			});
+		var newSubs = A2($elm$core$List$map, $elm$browser$Browser$Events$addKey, subs);
+		var _v0 = A6(
+			$elm$core$Dict$merge,
+			stepLeft,
+			stepBoth,
+			stepRight,
+			state.as,
+			$elm$core$Dict$fromList(newSubs),
+			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
+		var deadPids = _v0.a;
+		var livePids = _v0.b;
+		var makeNewPids = _v0.c;
+		return A2(
+			$elm$core$Task$andThen,
+			function (pids) {
+				return $elm$core$Task$succeed(
+					A2(
+						$elm$browser$Browser$Events$State,
+						newSubs,
+						A2(
+							$elm$core$Dict$union,
+							livePids,
+							$elm$core$Dict$fromList(pids))));
+			},
+			A2(
+				$elm$core$Task$andThen,
+				function (_v1) {
+					return $elm$core$Task$sequence(makeNewPids);
+				},
+				$elm$core$Task$sequence(
+					A2($elm$core$List$map, $elm$core$Process$kill, deadPids))));
+	});
+var $elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _v0 = f(mx);
+		if (!_v0.$) {
+			var x = _v0.a;
+			return A2($elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var $elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			$elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
+var $elm$browser$Browser$Events$onSelfMsg = F3(
+	function (router, _v0, state) {
+		var key = _v0.ao;
+		var event = _v0.ad;
+		var toMessage = function (_v2) {
+			var subKey = _v2.a;
+			var _v3 = _v2.b;
+			var node = _v3.a;
+			var name = _v3.b;
+			var decoder = _v3.c;
+			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
+		};
+		var messages = A2($elm$core$List$filterMap, toMessage, state.aI);
+		return A2(
+			$elm$core$Task$andThen,
+			function (_v1) {
+				return $elm$core$Task$succeed(state);
+			},
+			$elm$core$Task$sequence(
+				A2(
+					$elm$core$List$map,
+					$elm$core$Platform$sendToApp(router),
+					messages)));
+	});
+var $elm$browser$Browser$Events$subMap = F2(
+	function (func, _v0) {
+		var node = _v0.a;
+		var name = _v0.b;
+		var decoder = _v0.c;
+		return A3(
+			$elm$browser$Browser$Events$MySub,
+			node,
+			name,
+			A2($elm$json$Json$Decode$map, func, decoder));
+	});
+_Platform_effectManagers['Browser.Events'] = _Platform_createManager($elm$browser$Browser$Events$init, $elm$browser$Browser$Events$onEffects, $elm$browser$Browser$Events$onSelfMsg, 0, $elm$browser$Browser$Events$subMap);
+var $elm$browser$Browser$Events$subscription = _Platform_leaf('Browser.Events');
+var $elm$browser$Browser$Events$on = F3(
+	function (node, name, decoder) {
+		return $elm$browser$Browser$Events$subscription(
+			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
+	});
+var $elm$browser$Browser$Events$onClick = A2($elm$browser$Browser$Events$on, 0, 'click');
+var $elm$browser$Browser$Events$onKeyPress = A2($elm$browser$Browser$Events$on, 0, 'keypress');
+var $author$project$Main$subscriptions = function (_v0) {
+	return $elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				$elm$browser$Browser$Events$onKeyPress($author$project$Main$keyDecoder),
+				$elm$browser$Browser$Events$onClick(
+				$elm$json$Json$Decode$succeed($author$project$Types$MouseClick))
+			]));
+};
+var $author$project$Types$Next = {$: 0};
+var $author$project$Types$Settings = F3(
+	function (trainMode, script, group) {
+		return {M: group, aE: script, N: trainMode};
+	});
+var $author$project$Types$ShowAudio = {$: 2};
 var $author$project$Types$Shuffle = function (a) {
-	return {$: 8, a: a};
+	return {$: 9, a: a};
 };
+var $author$project$Types$Start = {$: 6};
+var $mgold$elm_nonempty_list$List$Nonempty$cons = F2(
+	function (y, _v0) {
+		var x = _v0.a;
+		var xs = _v0.b;
+		return A2(
+			$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
+			y,
+			A2($elm$core$List$cons, x, xs));
+	});
+var $elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $mgold$elm_nonempty_list$List$Nonempty$filter = F3(
+	function (p, d, _v0) {
+		var x = _v0.a;
+		var xs = _v0.b;
+		if (p(x)) {
+			return A2(
+				$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
+				x,
+				A2($elm$core$List$filter, p, xs));
+		} else {
+			var _v1 = A2($elm$core$List$filter, p, xs);
+			if (!_v1.b) {
+				return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, d, _List_Nil);
+			} else {
+				var y = _v1.a;
+				var ys = _v1.b;
+				return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, y, ys);
+			}
+		}
+	});
 var $elm$random$Random$Generate = $elm$core$Basics$identity;
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
@@ -5943,27 +6415,6 @@ var $elm$random$Random$constant = function (value) {
 		return _Utils_Tuple2(value, seed);
 	};
 };
-var $elm$core$List$drop = F2(
-	function (n, list) {
-		drop:
-		while (true) {
-			if (n <= 0) {
-				return list;
-			} else {
-				if (!list.b) {
-					return list;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs;
-					n = $temp$n;
-					list = $temp$list;
-					continue drop;
-				}
-			}
-		}
-	});
 var $elm$core$List$head = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -6177,37 +6628,6 @@ var $elm_community$random_extra$Random$List$choices = F2(
 			},
 			$elm_community$random_extra$Random$List$choose(list));
 	});
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
-var $mgold$elm_nonempty_list$List$Nonempty$filter = F3(
-	function (p, d, _v0) {
-		var x = _v0.a;
-		var xs = _v0.b;
-		if (p(x)) {
-			return A2(
-				$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
-				x,
-				A2($elm$core$List$filter, p, xs));
-		} else {
-			var _v1 = A2($elm$core$List$filter, p, xs);
-			if (!_v1.b) {
-				return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, d, _List_Nil);
-			} else {
-				var y = _v1.a;
-				var ys = _v1.b;
-				return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, y, ys);
-			}
-		}
-	});
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $mgold$elm_nonempty_list$List$Nonempty$toList = function (_v0) {
 	var x = _v0.a;
@@ -6219,7 +6639,7 @@ var $author$project$Card$generateChoices = F3(
 		var wrongSubjects = A3(
 			$mgold$elm_nonempty_list$List$Nonempty$filter,
 			function (a) {
-				return !_Utils_eq(a.aD, correctSubject.aD);
+				return !_Utils_eq(a.aH, correctSubject.aH);
 			},
 			$author$project$Types$invalidSubject,
 			allSubjects);
@@ -6280,7 +6700,7 @@ var $author$project$Card$subjects2CardsGenerator = F2(
 				return A2(
 					$elm$random$Random$map,
 					function (chs) {
-						return {aQ: chs, bq: subj};
+						return {aX: chs, bw: subj};
 					},
 					A3($author$project$Card$generateChoices, numChoices, allSubjects, subj));
 			});
@@ -6294,387 +6714,29 @@ var $author$project$Card$generateDeck = F2(
 			$elm_community$random_extra$Random$List$shuffle(
 				$mgold$elm_nonempty_list$List$Nonempty$toList(allSubjects)));
 	});
-var $author$project$Main$initWithModel = function (model) {
-	return _Utils_Tuple2(
-		model,
-		A2(
-			$elm$random$Random$generate,
-			$author$project$Types$Shuffle,
-			A2($author$project$Card$generateDeck, model.aR.a6, model.aR.aM)));
-};
-var $author$project$Main$processSelectedDeck = function (model) {
-	var sttgs = model.bi;
-	var newModel = _Utils_update(
-		model,
-		{
-			bi: _Utils_update(
-				sttgs,
-				{bf: model.aR.a2})
-		});
-	return $author$project$Main$initWithModel(newModel);
-};
-var $author$project$Main$init = function (configValue) {
-	var mdl = $author$project$Main$initialModel(
-		function () {
-			var _v0 = A2($elm$json$Json$Decode$decodeValue, $author$project$Config$configDecoder, configValue);
-			if (!_v0.$) {
-				var cfg = _v0.a;
-				return cfg;
-			} else {
-				return $author$project$Types$defaultConfig;
-			}
-		}());
-	return $author$project$Main$processSelectedDeck(mdl);
-};
-var $author$project$Types$MouseClick = {$: 11};
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $author$project$Types$CharacterKeyPressed = function (a) {
-	return {$: 9, a: a};
-};
-var $author$project$Types$ControlKeyPressed = function (a) {
-	return {$: 10, a: a};
-};
-var $author$project$Main$toKey = function (keyValue) {
-	var _v0 = $elm$core$String$uncons(keyValue);
-	if ((!_v0.$) && (_v0.a.b === '')) {
-		var _v1 = _v0.a;
-		var _char = _v1.a;
-		return $author$project$Types$CharacterKeyPressed(_char);
-	} else {
-		return $author$project$Types$ControlKeyPressed(keyValue);
-	}
-};
-var $author$project$Main$keyDecoder = A2(
-	$elm$json$Json$Decode$map,
-	$author$project$Main$toKey,
-	A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
-var $elm$browser$Browser$Events$Document = 0;
-var $elm$browser$Browser$Events$MySub = F3(
-	function (a, b, c) {
-		return {$: 0, a: a, b: b, c: c};
-	});
-var $elm$browser$Browser$Events$State = F2(
-	function (subs, pids) {
-		return {ap: pids, aE: subs};
-	});
-var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
-	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
-var $elm$browser$Browser$Events$nodeToKey = function (node) {
-	if (!node) {
-		return 'd_';
-	} else {
-		return 'w_';
-	}
-};
-var $elm$browser$Browser$Events$addKey = function (sub) {
-	var node = sub.a;
-	var name = sub.b;
-	return _Utils_Tuple2(
-		_Utils_ap(
-			$elm$browser$Browser$Events$nodeToKey(node),
-			name),
-		sub);
-};
-var $elm$core$Process$kill = _Scheduler_kill;
-var $elm$core$Dict$foldl = F3(
-	function (func, acc, dict) {
-		foldl:
-		while (true) {
-			if (dict.$ === -2) {
-				return acc;
-			} else {
-				var key = dict.b;
-				var value = dict.c;
-				var left = dict.d;
-				var right = dict.e;
-				var $temp$func = func,
-					$temp$acc = A3(
-					func,
-					key,
-					value,
-					A3($elm$core$Dict$foldl, func, acc, left)),
-					$temp$dict = right;
-				func = $temp$func;
-				acc = $temp$acc;
-				dict = $temp$dict;
-				continue foldl;
-			}
-		}
-	});
-var $elm$core$Dict$merge = F6(
-	function (leftStep, bothStep, rightStep, leftDict, rightDict, initialResult) {
-		var stepState = F3(
-			function (rKey, rValue, _v0) {
-				stepState:
-				while (true) {
-					var list = _v0.a;
-					var result = _v0.b;
-					if (!list.b) {
-						return _Utils_Tuple2(
-							list,
-							A3(rightStep, rKey, rValue, result));
-					} else {
-						var _v2 = list.a;
-						var lKey = _v2.a;
-						var lValue = _v2.b;
-						var rest = list.b;
-						if (_Utils_cmp(lKey, rKey) < 0) {
-							var $temp$rKey = rKey,
-								$temp$rValue = rValue,
-								$temp$_v0 = _Utils_Tuple2(
-								rest,
-								A3(leftStep, lKey, lValue, result));
-							rKey = $temp$rKey;
-							rValue = $temp$rValue;
-							_v0 = $temp$_v0;
-							continue stepState;
-						} else {
-							if (_Utils_cmp(lKey, rKey) > 0) {
-								return _Utils_Tuple2(
-									list,
-									A3(rightStep, rKey, rValue, result));
-							} else {
-								return _Utils_Tuple2(
-									rest,
-									A4(bothStep, lKey, lValue, rValue, result));
-							}
-						}
-					}
-				}
-			});
-		var _v3 = A3(
-			$elm$core$Dict$foldl,
-			stepState,
-			_Utils_Tuple2(
-				$elm$core$Dict$toList(leftDict),
-				initialResult),
-			rightDict);
-		var leftovers = _v3.a;
-		var intermediateResult = _v3.b;
-		return A3(
-			$elm$core$List$foldl,
-			F2(
-				function (_v4, result) {
-					var k = _v4.a;
-					var v = _v4.b;
-					return A3(leftStep, k, v, result);
-				}),
-			intermediateResult,
-			leftovers);
-	});
-var $elm$browser$Browser$Events$Event = F2(
-	function (key, event) {
-		return {aa: event, ak: key};
-	});
-var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
-var $elm$browser$Browser$Events$spawn = F3(
-	function (router, key, _v0) {
-		var node = _v0.a;
-		var name = _v0.b;
-		var actualNode = function () {
-			if (!node) {
-				return _Browser_doc;
-			} else {
-				return _Browser_window;
-			}
-		}();
-		return A2(
-			$elm$core$Task$map,
-			function (value) {
-				return _Utils_Tuple2(key, value);
-			},
-			A3(
-				_Browser_on,
-				actualNode,
-				name,
-				function (event) {
-					return A2(
-						$elm$core$Platform$sendToSelf,
-						router,
-						A2($elm$browser$Browser$Events$Event, key, event));
-				}));
-	});
-var $elm$core$Dict$union = F2(
-	function (t1, t2) {
-		return A3($elm$core$Dict$foldl, $elm$core$Dict$insert, t2, t1);
-	});
-var $elm$browser$Browser$Events$onEffects = F3(
-	function (router, subs, state) {
-		var stepRight = F3(
-			function (key, sub, _v6) {
-				var deads = _v6.a;
-				var lives = _v6.b;
-				var news = _v6.c;
-				return _Utils_Tuple3(
-					deads,
-					lives,
-					A2(
-						$elm$core$List$cons,
-						A3($elm$browser$Browser$Events$spawn, router, key, sub),
-						news));
-			});
-		var stepLeft = F3(
-			function (_v4, pid, _v5) {
-				var deads = _v5.a;
-				var lives = _v5.b;
-				var news = _v5.c;
-				return _Utils_Tuple3(
-					A2($elm$core$List$cons, pid, deads),
-					lives,
-					news);
-			});
-		var stepBoth = F4(
-			function (key, pid, _v2, _v3) {
-				var deads = _v3.a;
-				var lives = _v3.b;
-				var news = _v3.c;
-				return _Utils_Tuple3(
-					deads,
-					A3($elm$core$Dict$insert, key, pid, lives),
-					news);
-			});
-		var newSubs = A2($elm$core$List$map, $elm$browser$Browser$Events$addKey, subs);
-		var _v0 = A6(
-			$elm$core$Dict$merge,
-			stepLeft,
-			stepBoth,
-			stepRight,
-			state.ap,
-			$elm$core$Dict$fromList(newSubs),
-			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
-		var deadPids = _v0.a;
-		var livePids = _v0.b;
-		var makeNewPids = _v0.c;
-		return A2(
-			$elm$core$Task$andThen,
-			function (pids) {
-				return $elm$core$Task$succeed(
-					A2(
-						$elm$browser$Browser$Events$State,
-						newSubs,
-						A2(
-							$elm$core$Dict$union,
-							livePids,
-							$elm$core$Dict$fromList(pids))));
-			},
-			A2(
-				$elm$core$Task$andThen,
-				function (_v1) {
-					return $elm$core$Task$sequence(makeNewPids);
-				},
-				$elm$core$Task$sequence(
-					A2($elm$core$List$map, $elm$core$Process$kill, deadPids))));
-	});
-var $elm$core$List$maybeCons = F3(
-	function (f, mx, xs) {
-		var _v0 = f(mx);
-		if (!_v0.$) {
-			var x = _v0.a;
-			return A2($elm$core$List$cons, x, xs);
-		} else {
-			return xs;
-		}
-	});
-var $elm$core$List$filterMap = F2(
-	function (f, xs) {
-		return A3(
-			$elm$core$List$foldr,
-			$elm$core$List$maybeCons(f),
-			_List_Nil,
-			xs);
-	});
-var $elm$browser$Browser$Events$onSelfMsg = F3(
-	function (router, _v0, state) {
-		var key = _v0.ak;
-		var event = _v0.aa;
-		var toMessage = function (_v2) {
-			var subKey = _v2.a;
-			var _v3 = _v2.b;
-			var node = _v3.a;
-			var name = _v3.b;
-			var decoder = _v3.c;
-			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
-		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.aE);
-		return A2(
-			$elm$core$Task$andThen,
-			function (_v1) {
-				return $elm$core$Task$succeed(state);
-			},
-			$elm$core$Task$sequence(
-				A2(
-					$elm$core$List$map,
-					$elm$core$Platform$sendToApp(router),
-					messages)));
-	});
-var $elm$browser$Browser$Events$subMap = F2(
-	function (func, _v0) {
-		var node = _v0.a;
-		var name = _v0.b;
-		var decoder = _v0.c;
-		return A3(
-			$elm$browser$Browser$Events$MySub,
-			node,
-			name,
-			A2($elm$json$Json$Decode$map, func, decoder));
-	});
-_Platform_effectManagers['Browser.Events'] = _Platform_createManager($elm$browser$Browser$Events$init, $elm$browser$Browser$Events$onEffects, $elm$browser$Browser$Events$onSelfMsg, 0, $elm$browser$Browser$Events$subMap);
-var $elm$browser$Browser$Events$subscription = _Platform_leaf('Browser.Events');
-var $elm$browser$Browser$Events$on = F3(
-	function (node, name, decoder) {
-		return $elm$browser$Browser$Events$subscription(
-			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
-	});
-var $elm$browser$Browser$Events$onClick = A2($elm$browser$Browser$Events$on, 0, 'click');
-var $elm$browser$Browser$Events$onKeyPress = A2($elm$browser$Browser$Events$on, 0, 'keypress');
-var $author$project$Main$subscriptions = function (_v0) {
-	return $elm$core$Platform$Sub$batch(
-		_List_fromArray(
-			[
-				$elm$browser$Browser$Events$onKeyPress($author$project$Main$keyDecoder),
-				$elm$browser$Browser$Events$onClick(
-				$elm$json$Json$Decode$succeed($author$project$Types$MouseClick))
-			]));
-};
-var $author$project$Types$Next = {$: 0};
-var $author$project$Types$Settings = F2(
-	function (trainMode, script) {
-		return {bf: script, bu: trainMode};
-	});
-var $author$project$Types$ShowAudio = {$: 2};
-var $author$project$Types$Start = {$: 5};
-var $mgold$elm_nonempty_list$List$Nonempty$cons = F2(
-	function (y, _v0) {
-		var x = _v0.a;
-		var xs = _v0.b;
-		return A2(
-			$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
-			y,
-			A2($elm$core$List$cons, x, xs));
-	});
 var $elm$core$Basics$always = F2(
 	function (a, _v0) {
 		return a;
 	});
-var $author$project$Main$getAnswer = function (_v0) {
-	var trainMode = _v0.bu;
-	var script = _v0.bf;
+var $author$project$Model$getAnswer = function (_v0) {
+	var trainMode = _v0.N;
+	var script = _v0.aE;
 	switch (trainMode) {
 		case 0:
 			return $elm$core$Basics$always('N/A');
 		case 1:
 			return (!script) ? function ($) {
-				return $.M;
+				return $.bd;
 			} : function ($) {
-				return $.T;
+				return $.bB;
 			};
 		case 2:
 			return function ($) {
-				return $.al;
+				return $.be;
 			};
 		default:
 			return function ($) {
-				return $.K;
+				return $.a0;
 			};
 	}
 };
@@ -6691,20 +6753,27 @@ var $elm_community$maybe_extra$Maybe$Extra$isJust = function (m) {
 	}
 };
 var $elm$browser$Browser$Navigation$load = _Browser_load;
+var $mgold$elm_nonempty_list$List$Nonempty$map = F2(
+	function (f, _v0) {
+		var x = _v0.a;
+		var xs = _v0.b;
+		return A2(
+			$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
+			f(x),
+			A2($elm$core$List$map, f, xs));
+	});
 var $mgold$elm_nonempty_list$List$Nonempty$isSingleton = function (_v0) {
 	var x = _v0.a;
 	var xs = _v0.b;
 	return $elm$core$List$isEmpty(xs);
 };
 var $elm$core$Basics$not = _Basics_not;
-var $author$project$Main$nextEnabled = function (model) {
-	var notEnd = !$mgold$elm_nonempty_list$List$Nonempty$isSingleton(model.bc);
-	var inReview = !model.bi.bu;
-	var answered = $elm_community$maybe_extra$Maybe$Extra$isJust(model.by);
-	return (!model.a0) && (notEnd && (inReview || answered));
+var $author$project$Model$nextEnabled = function (model) {
+	var notEnd = !$mgold$elm_nonempty_list$List$Nonempty$isSingleton(model.q);
+	var inReview = !model.j.N;
+	var answered = $elm_community$maybe_extra$Maybe$Extra$isJust(model.aM);
+	return (!model.ak) && (notEnd && (inReview || answered));
 };
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $mgold$elm_nonempty_list$List$Nonempty$pop = function (_v0) {
 	var x = _v0.a;
 	var xs = _v0.b;
@@ -6741,6 +6810,39 @@ var $author$project$Config$readTrainMode = function (s) {
 	}
 };
 var $elm$core$Process$sleep = _Process_sleep;
+var $elm$core$List$sortWith = _List_sortWith;
+var $mgold$elm_nonempty_list$List$Nonempty$insertWith = F3(
+	function (cmp, hd, aList) {
+		if (aList.b) {
+			var x = aList.a;
+			var xs = aList.b;
+			return (!A2(cmp, x, hd)) ? A2(
+				$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
+				x,
+				A2(
+					$elm$core$List$sortWith,
+					cmp,
+					A2($elm$core$List$cons, hd, xs))) : A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, hd, aList);
+		} else {
+			return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, hd, _List_Nil);
+		}
+	});
+var $mgold$elm_nonempty_list$List$Nonempty$sortBy = F2(
+	function (f, _v0) {
+		var x = _v0.a;
+		var xs = _v0.b;
+		return A3(
+			$mgold$elm_nonempty_list$List$Nonempty$insertWith,
+			F2(
+				function (a, b) {
+					return A2(
+						$elm$core$Basics$compare,
+						f(a),
+						f(b));
+				}),
+			x,
+			A2($elm$core$List$sortBy, f, xs));
+	});
 var $elm_community$maybe_extra$Maybe$Extra$withDefaultLazy = F2(
 	function (_default, m) {
 		if (m.$ === 1) {
@@ -6755,21 +6857,74 @@ var $author$project$Main$update = F2(
 		var prevCard = A2(
 			$elm$core$Maybe$withDefault,
 			$author$project$Types$emptyCard,
-			$elm$core$List$head(model.bb));
-		var nextCard = $mgold$elm_nonempty_list$List$Nonempty$head(model.bc);
+			$elm$core$List$head(model.H));
+		var nextCard = $mgold$elm_nonempty_list$List$Nonempty$head(model.q);
 		var hasAudio = function (subj) {
-			return $elm_community$maybe_extra$Maybe$Extra$isJust(subj.D);
+			return $elm_community$maybe_extra$Maybe$Extra$isJust(subj.aU);
 		};
+		var sleepThenShowAudio = function (subj) {
+			return hasAudio(subj) ? A2(
+				$elm$core$Task$perform,
+				function (_v8) {
+					return $author$project$Types$ShowAudio;
+				},
+				$elm$core$Process$sleep(100)) : $elm$core$Platform$Cmd$none;
+		};
+		var filteredSubjects = function (mdl) {
+			var subjFilter = function (subj) {
+				var _v7 = mdl.j.M;
+				if (_v7.$ === 1) {
+					return true;
+				} else {
+					var maybeGrp = _v7;
+					return _Utils_eq(subj.M, maybeGrp);
+				}
+			};
+			return A3($mgold$elm_nonempty_list$List$Nonempty$filter, subjFilter, $author$project$Types$invalidSubject, mdl.B.aS);
+		};
+		var buildSortedDeckForReview = A2(
+			$mgold$elm_nonempty_list$List$Nonempty$map,
+			function (subj) {
+				return {aX: _List_Nil, bw: subj};
+			},
+			function () {
+				var _v6 = model.B.bv;
+				switch (_v6) {
+					case 0:
+						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
+							function ($) {
+								return $.bd;
+							});
+					case 1:
+						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
+							function ($) {
+								return $.bB;
+							});
+					default:
+						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
+							function ($) {
+								return $.aH;
+							});
+				}
+			}()(
+				filteredSubjects(model)));
 		var newModel = function () {
 			switch (msg.$) {
-				case 8:
+				case 6:
+					return _Utils_update(
+						model,
+						{
+							ak: false,
+							q: (!model.j.N) ? buildSortedDeckForReview : model.q
+						});
+				case 9:
 					var shuffledDeck = msg.a;
 					return _Utils_update(
 						model,
 						{
-							bc: A2(
+							q: A2(
 								$elm_community$maybe_extra$Maybe$Extra$withDefaultLazy,
-								function (_v5) {
+								function (_v4) {
 									return $author$project$Types$invalidCards;
 								},
 								$mgold$elm_nonempty_list$List$Nonempty$fromList(shuffledDeck))
@@ -6779,115 +6934,136 @@ var $author$project$Main$update = F2(
 					return _Utils_update(
 						model,
 						{
-							bi: A2(
+							j: A3(
 								$author$project$Types$Settings,
 								$author$project$Config$readTrainMode(trainMode),
-								model.bi.bf)
+								model.j.aE,
+								model.j.M)
 						});
 				case 4:
+					var groupLabel = msg.a;
+					return _Utils_update(
+						model,
+						{
+							j: A3(
+								$author$project$Types$Settings,
+								model.j.N,
+								model.j.aE,
+								function () {
+									if (groupLabel === 'All') {
+										return $elm$core$Maybe$Nothing;
+									} else {
+										var grpLbl = groupLabel;
+										return $elm$core$Maybe$Just(grpLbl);
+									}
+								}())
+						});
+				case 5:
 					var script = msg.a;
 					return _Utils_update(
 						model,
 						{
-							bi: A2(
+							j: A3(
 								$author$project$Types$Settings,
-								model.bi.bu,
-								$author$project$Config$readScript(script))
+								model.j.N,
+								$author$project$Config$readScript(script),
+								model.j.M)
 						});
-				case 6:
-					var mdl = $author$project$Config$defaultModel;
+				case 7:
+					var mdl = $author$project$Types$defaultModel;
 					return _Utils_update(
 						mdl,
-						{aR: model.aR, bi: model.bi});
-				case 7:
+						{B: model.B, j: model.j});
+				case 8:
 					var str = msg.a;
 					return _Utils_update(
 						model,
 						{
-							be: _Utils_eq(
+							S: _Utils_eq(
 								str,
 								A2(
-									$author$project$Main$getAnswer,
-									model.bi,
-									$mgold$elm_nonempty_list$List$Nonempty$head(model.bc).bq)) ? (model.be + 1) : model.be,
-							bt: model.bt + 1,
-							by: $elm$core$Maybe$Just(str)
+									$author$project$Model$getAnswer,
+									model.j,
+									$mgold$elm_nonempty_list$List$Nonempty$head(model.q).bw)) ? (model.S + 1) : model.S,
+							aK: model.aK + 1,
+							aM: $elm$core$Maybe$Just(str)
 						});
-				case 5:
-					return _Utils_update(
-						model,
-						{a0: false});
 				case 2:
 					return _Utils_update(
 						model,
-						{bj: true});
+						{U: true});
 				case 0:
 					return _Utils_update(
 						model,
 						{
-							bb: A2($elm$core$List$cons, nextCard, model.bb),
-							bc: $mgold$elm_nonempty_list$List$Nonempty$pop(model.bc),
-							bj: !hasAudio(
-								$mgold$elm_nonempty_list$List$Nonempty$head(model.bc).bq),
-							by: $elm$core$Maybe$Nothing
+							H: A2($elm$core$List$cons, nextCard, model.H),
+							q: $mgold$elm_nonempty_list$List$Nonempty$pop(model.q),
+							U: !hasAudio(
+								$mgold$elm_nonempty_list$List$Nonempty$head(model.q).bw),
+							aM: $elm$core$Maybe$Nothing
 						});
 				case 1:
-					var remaining = A2($mgold$elm_nonempty_list$List$Nonempty$cons, prevCard, model.bc);
-					var newPrevDeck = A2($elm$core$List$drop, 1, model.bb);
+					var remaining = A2($mgold$elm_nonempty_list$List$Nonempty$cons, prevCard, model.q);
+					var newPrevDeck = A2($elm$core$List$drop, 1, model.H);
 					return _Utils_update(
 						model,
 						{
-							bb: newPrevDeck,
-							bc: remaining,
-							bj: !hasAudio(prevCard.bq)
+							H: newPrevDeck,
+							q: remaining,
+							U: !hasAudio(prevCard.bw)
 						});
 				default:
 					return model;
 			}
 		}();
-		var nextKeyPressed = function (_v3) {
-			return newModel.a0 ? A2($author$project$Main$update, $author$project$Types$Start, newModel) : ($author$project$Main$nextEnabled(model) ? A2($author$project$Main$update, $author$project$Types$Next, newModel) : _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none));
+		var nextKeyPressed = function (_v2) {
+			return newModel.ak ? A2($author$project$Main$update, $author$project$Types$Start, newModel) : ($author$project$Model$nextEnabled(model) ? A2($author$project$Main$update, $author$project$Types$Next, newModel) : _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none));
 		};
-		var sleepThenShowAudio = function (subj) {
-			return hasAudio(subj) ? A2(
-				$elm$core$Task$perform,
-				function (_v2) {
-					return $author$project$Types$ShowAudio;
-				},
-				$elm$core$Process$sleep(100)) : $elm$core$Platform$Cmd$none;
+		var buildShuffledDeckCmdForQuiz = function (mdl) {
+			return A2(
+				$elm$random$Random$generate,
+				$author$project$Types$Shuffle,
+				A2(
+					$author$project$Card$generateDeck,
+					mdl.B.bh,
+					filteredSubjects(mdl)));
 		};
-		_v0$7:
+		_v0$8:
 		while (true) {
 			switch (msg.$) {
 				case 6:
-					return $author$project$Main$initWithModel(newModel);
-				case 10:
+					return _Utils_Tuple2(
+						newModel,
+						(!(!newModel.j.N)) ? buildShuffledDeckCmdForQuiz(newModel) : $elm$core$Platform$Cmd$none);
+				case 7:
+					return $author$project$Model$initWithModel(newModel);
+				case 11:
 					if (msg.a === 'Enter') {
 						return nextKeyPressed(0);
 					} else {
-						break _v0$7;
+						break _v0$8;
 					}
-				case 9:
+				case 10:
 					if (' ' === msg.a) {
 						return nextKeyPressed(0);
 					} else {
-						break _v0$7;
+						break _v0$8;
 					}
-				case 11:
+				case 12:
 					return _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none);
 				case 0:
 					return _Utils_Tuple2(
 						newModel,
-						sleepThenShowAudio(nextCard.bq));
+						sleepThenShowAudio(nextCard.bw));
 				case 1:
 					return _Utils_Tuple2(
 						newModel,
-						sleepThenShowAudio(prevCard.bq));
-				case 13:
+						sleepThenShowAudio(prevCard.bw));
+				case 14:
 					return _Utils_Tuple2(
 						newModel,
 						function () {
-							var _v1 = model.aR.J;
+							var _v1 = model.B.bc;
 							if (!_v1.$) {
 								var homePage = _v1.a;
 								return $elm$browser$Browser$Navigation$load(homePage);
@@ -6896,7 +7072,7 @@ var $author$project$Main$update = F2(
 							}
 						}());
 				default:
-					break _v0$7;
+					break _v0$8;
 			}
 		}
 		return _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none);
@@ -6914,9 +7090,9 @@ var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Types$GoLanding = {$: 13};
+var $author$project$Types$GoLanding = {$: 14};
 var $author$project$Types$Previous = {$: 1};
-var $author$project$Types$Reset = {$: 6};
+var $author$project$Types$Reset = {$: 7};
 var $elm$html$Html$br = _VirtualDom_node('br');
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$bool = _Json_wrap;
@@ -6959,10 +7135,10 @@ var $elm$html$Html$Attributes$src = function (url) {
 };
 var $elm$html$Html$tr = _VirtualDom_node('tr');
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $author$project$Main$playAudio = F2(
+var $author$project$View$playAudio = F2(
 	function (model, maybeUrl) {
-		if (model.aR.bj) {
-			if (model.bj) {
+		if (model.B.U) {
+			if (model.U) {
 				if (!maybeUrl.$) {
 					var url = maybeUrl.a;
 					return _List_fromArray(
@@ -7024,10 +7200,10 @@ var $author$project$Main$playAudio = F2(
 			return _List_Nil;
 		}
 	});
-var $author$project$Main$showDescriptionInCard = F2(
+var $author$project$View$showDescriptionInCard = F2(
 	function (model, card) {
 		var descriptionHtml = function (subject) {
-			return $elm$core$String$isEmpty(subject.K) ? _List_Nil : _List_fromArray(
+			return $elm$core$String$isEmpty(subject.a0) ? _List_Nil : _List_fromArray(
 				[
 					A2(
 					$elm$html$Html$p,
@@ -7037,11 +7213,11 @@ var $author$project$Main$showDescriptionInCard = F2(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text('\"' + (subject.K + '\"'))
+							$elm$html$Html$text('\"' + (subject.a0 + '\"'))
 						]))
 				]);
 		};
-		return model.aR.bm ? _List_fromArray(
+		return model.B.br ? _List_fromArray(
 			[
 				A2(
 				$elm$html$Html$tr,
@@ -7049,7 +7225,7 @@ var $author$project$Main$showDescriptionInCard = F2(
 					[
 						$elm$html$Html$Attributes$class('minorPart descriptionBlock')
 					]),
-				descriptionHtml(card.bq))
+				descriptionHtml(card.bw))
 			]) : _List_Nil;
 	});
 var $elm$core$Dict$get = F2(
@@ -7100,7 +7276,7 @@ var $author$project$Config$showTrainMode = F2(
 		return A2(
 			$elm$core$Maybe$withDefault,
 			'invalid',
-			A2($elm$core$Dict$get, modeAsString, cfg.bv));
+			A2($elm$core$Dict$get, modeAsString, cfg.bz));
 	});
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
@@ -7115,7 +7291,7 @@ var $elm_community$maybe_extra$Maybe$Extra$unwrap = F3(
 		}
 	});
 var $elm$html$Html$img = _VirtualDom_node('img');
-var $author$project$Main$viewImage = function (maybeUrl) {
+var $author$project$View$viewImage = function (maybeUrl) {
 	if (!maybeUrl.$) {
 		var url = maybeUrl.a;
 		return _List_fromArray(
@@ -7135,17 +7311,17 @@ var $author$project$Main$viewImage = function (maybeUrl) {
 			]);
 	}
 };
-var $author$project$Main$viewLocalName = function (subject) {
+var $author$project$View$viewLocalName = function (subject) {
 	return A2(
 		$elm$html$Html$p,
 		_List_Nil,
 		_List_fromArray(
 			[
-				$elm$html$Html$text(subject.al)
+				$elm$html$Html$text(subject.be)
 			]));
 };
 var $author$project$Types$Answer = function (a) {
-	return {$: 7, a: a};
+	return {$: 8, a: a};
 };
 var $elm$html$Html$Attributes$checked = $elm$html$Html$Attributes$boolProperty('checked');
 var $elm$html$Html$fieldset = _VirtualDom_node('fieldset');
@@ -7252,17 +7428,17 @@ var $elm_community$list_extra$List$Extra$unique = function (list) {
 	return A4($elm_community$list_extra$List$Extra$uniqueHelp, $elm$core$Basics$identity, _List_Nil, list, _List_Nil);
 };
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Main$viewQuiz = F3(
+var $author$project$View$viewQuiz = F3(
 	function (legendLabel, model, card) {
-		var isDisabled = $elm_community$maybe_extra$Maybe$Extra$isJust(model.by);
+		var isDisabled = $elm_community$maybe_extra$Maybe$Extra$isJust(model.aM);
 		var isCorrect = function (val) {
 			return _Utils_eq(
-				A2($author$project$Main$getAnswer, model.bi, card.bq),
+				A2($author$project$Model$getAnswer, model.j, card.bw),
 				val);
 		};
 		var isChecked = function (val) {
 			return _Utils_eq(
-				model.by,
+				model.aM,
 				$elm$core$Maybe$Just(val));
 		};
 		var incorrectAttributes = _List_fromArray(
@@ -7275,7 +7451,7 @@ var $author$project$Main$viewQuiz = F3(
 			]);
 		var labelAttributes = function (val) {
 			return _Utils_ap(
-				(model.bi.bu === 3) ? _List_fromArray(
+				(model.j.N === 3) ? _List_fromArray(
 					[
 						$elm$html$Html$Attributes$class('italic')
 					]) : _List_Nil,
@@ -7342,11 +7518,11 @@ var $author$project$Main$viewQuiz = F3(
 			$elm_community$list_extra$List$Extra$unique(
 				A2(
 					$elm$core$List$map,
-					$author$project$Main$getAnswer(model.bi),
-					card.aQ)));
+					$author$project$Model$getAnswer(model.j),
+					card.aX)));
 		return A2(
 			$elm$html$Html$div,
-			(model.bi.bu === 3) ? _List_fromArray(
+			(model.j.N === 3) ? _List_fromArray(
 				[
 					$elm$html$Html$Attributes$class('descriptionQuiz')
 				]) : _List_Nil,
@@ -7397,18 +7573,18 @@ var $mgold$elm_nonempty_list$List$Nonempty$length = function (_v0) {
 	return $elm$core$List$length(xs) + 1;
 };
 var $elm$core$Basics$round = _Basics_round;
-var $author$project$Main$viewScore = function (model) {
-	var remaining = $mgold$elm_nonempty_list$List$Nonempty$length(model.bc);
+var $author$project$View$viewScore = function (model) {
+	var remaining = $mgold$elm_nonempty_list$List$Nonempty$length(model.q);
 	var percentValue = A3(
 		$elm$core$Basics$composeL,
 		$elm$core$String$fromInt,
 		$elm$core$Basics$round,
-		(!model.bt) ? 0.0 : ((100 * model.be) / model.bt));
+		(!model.aK) ? 0.0 : ((100 * model.S) / model.aK));
 	var percentString = ' ( ' + (percentValue + '%)');
-	var scoreView = (!model.bi.bu) ? _List_Nil : _List_fromArray(
+	var scoreView = (!model.j.N) ? _List_Nil : _List_fromArray(
 		[
 			$elm$html$Html$text(
-			'Score: ' + ($elm$core$String$fromInt(model.be) + ('/' + ($elm$core$String$fromInt(model.bt) + percentString)))),
+			'Score: ' + ($elm$core$String$fromInt(model.S) + ('/' + ($elm$core$String$fromInt(model.aK) + percentString)))),
 			A2($elm$html$Html$br, _List_Nil, _List_Nil)
 		]);
 	return A2(
@@ -7422,40 +7598,40 @@ var $author$project$Main$viewScore = function (model) {
 			(remaining > 0) ? _List_fromArray(
 				[
 					$elm$html$Html$text(
-					'Number of ' + (model.aR.ba + (' Remaining: ' + $elm$core$String$fromInt(remaining - 1))))
+					'Number of ' + (model.B.bl + (' Remaining: ' + $elm$core$String$fromInt(remaining - 1))))
 				]) : _List_Nil));
 };
 var $elm$html$Html$Attributes$title = $elm$html$Html$Attributes$stringProperty('title');
-var $author$project$Main$attrsForUrname = F3(
+var $author$project$View$attrsForUrname = F3(
 	function (subject, settings, config) {
-		if (!config.bp) {
+		if (!config.bu) {
 			return _List_Nil;
 		} else {
-			var _v0 = settings.bf;
+			var _v0 = settings.aE;
 			if (!_v0) {
 				return _List_fromArray(
 					[
-						$elm$html$Html$Attributes$title(subject.T)
+						$elm$html$Html$Attributes$title(subject.bB)
 					]);
 			} else {
 				return _List_fromArray(
 					[
-						$elm$html$Html$Attributes$title(subject.M)
+						$elm$html$Html$Attributes$title(subject.bd)
 					]);
 			}
 		}
 	});
-var $author$project$Main$viewUrname = F3(
+var $author$project$View$viewUrname = F3(
 	function (subject, settings, config) {
-		var attrs = A3($author$project$Main$attrsForUrname, subject, settings, config);
-		var _v0 = settings.bf;
+		var attrs = A3($author$project$View$attrsForUrname, subject, settings, config);
+		var _v0 = settings.aE;
 		if (!_v0) {
 			return A2(
 				$elm$html$Html$p,
 				attrs,
 				_List_fromArray(
 					[
-						$elm$html$Html$text(subject.M)
+						$elm$html$Html$text(subject.bd)
 					]));
 		} else {
 			return A2(
@@ -7463,17 +7639,17 @@ var $author$project$Main$viewUrname = F3(
 				attrs,
 				_List_fromArray(
 					[
-						$elm$html$Html$text(subject.T)
+						$elm$html$Html$text(subject.bB)
 					]));
 		}
 	});
-var $author$project$Main$viewCard = F2(
+var $author$project$View$viewCard = F2(
 	function (model, card) {
 		return A2(
 			$elm$html$Html$div,
 			_List_Nil,
 			_Utils_ap(
-				$author$project$Main$viewImage(card.bq.a_),
+				$author$project$View$viewImage(card.bw.a7),
 				_List_fromArray(
 					[
 						A2(
@@ -7493,7 +7669,7 @@ var $author$project$Main$viewCard = F2(
 										[
 											$elm$html$Html$text('Start Over')
 										])),
-								$elm_community$maybe_extra$Maybe$Extra$isJust(model.aR.J) ? _List_fromArray(
+								$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.bc) ? _List_fromArray(
 									[
 										A2(
 										$elm$html$Html$button,
@@ -7507,7 +7683,7 @@ var $author$project$Main$viewCard = F2(
 												$elm$html$Html$text('Change Deck')
 											]))
 									]) : _List_Nil);
-							var prevEnabled = (!model.bi.bu) && (!$elm$core$List$isEmpty(model.bb));
+							var prevEnabled = (!model.j.N) && (!$elm$core$List$isEmpty(model.H));
 							var mainPartAttributes = A2(
 								$elm$core$List$cons,
 								$elm$html$Html$Attributes$class('mainPart'),
@@ -7520,9 +7696,9 @@ var $author$project$Main$viewCard = F2(
 												A2($elm$html$Html$Attributes$style, 'font-size', fs)
 											]);
 									},
-									model.aR.a4));
+									model.B.bf));
 							var contentViews = function () {
-								var _v1 = model.bi.bu;
+								var _v1 = model.j.N;
 								switch (_v1) {
 									case 0:
 										return _List_fromArray(
@@ -7541,7 +7717,7 @@ var $author$project$Main$viewCard = F2(
 															mainPartAttributes,
 															_List_fromArray(
 																[
-																	A3($author$project$Main$viewUrname, card.bq, model.bi, model.aR)
+																	A3($author$project$View$viewUrname, card.bw, model.j, model.B)
 																])),
 															A2(
 															$elm$html$Html$tr,
@@ -7551,17 +7727,17 @@ var $author$project$Main$viewCard = F2(
 																]),
 															_List_fromArray(
 																[
-																	$author$project$Main$viewLocalName(card.bq)
+																	$author$project$View$viewLocalName(card.bw)
 																]))
 														]),
 													_Utils_ap(
-														A2($author$project$Main$showDescriptionInCard, model, card),
-														A2($author$project$Main$playAudio, model, card.bq.D)))),
+														A2($author$project$View$showDescriptionInCard, model, card),
+														A2($author$project$View$playAudio, model, card.bw.aU)))),
 												A2($elm$html$Html$hr, _List_Nil, _List_Nil)
 											]);
 									case 1:
-										var descriptionHtml = model.aR.bo ? A2($author$project$Main$showDescriptionInCard, model, card) : _List_Nil;
-										var audioHtml = model.aR.bl ? A2($author$project$Main$playAudio, model, card.bq.D) : _List_Nil;
+										var descriptionHtml = model.B.bt ? A2($author$project$View$showDescriptionInCard, model, card) : _List_Nil;
+										var audioHtml = model.B.bq ? A2($author$project$View$playAudio, model, card.bw.aU) : _List_Nil;
 										return _List_fromArray(
 											[
 												A2(
@@ -7577,18 +7753,18 @@ var $author$project$Main$viewCard = F2(
 														mainPartAttributes,
 														_List_fromArray(
 															[
-																$author$project$Main$viewLocalName(card.bq)
+																$author$project$View$viewLocalName(card.bw)
 															])),
 													_Utils_ap(descriptionHtml, audioHtml))),
 												A3(
-												$author$project$Main$viewQuiz,
-												A2($author$project$Config$showTrainMode, model.aR, 1),
+												$author$project$View$viewQuiz,
+												A2($author$project$Config$showTrainMode, model.B, 1),
 												model,
 												card)
 											]);
 									case 2:
-										var descriptionHtml = model.aR.bn ? A2($author$project$Main$showDescriptionInCard, model, card) : _List_Nil;
-										var audioHtml = model.aR.bk ? A2($author$project$Main$playAudio, model, card.bq.D) : _List_Nil;
+										var descriptionHtml = model.B.bs ? A2($author$project$View$showDescriptionInCard, model, card) : _List_Nil;
+										var audioHtml = model.B.bp ? A2($author$project$View$playAudio, model, card.bw.aU) : _List_Nil;
 										return _List_fromArray(
 											[
 												A2(
@@ -7604,7 +7780,7 @@ var $author$project$Main$viewCard = F2(
 														mainPartAttributes,
 														_List_fromArray(
 															[
-																A3($author$project$Main$viewUrname, card.bq, model.bi, model.aR)
+																A3($author$project$View$viewUrname, card.bw, model.j, model.B)
 															])),
 													_Utils_ap(
 														descriptionHtml,
@@ -7613,8 +7789,8 @@ var $author$project$Main$viewCard = F2(
 															_List_fromArray(
 																[
 																	A3(
-																	$author$project$Main$viewQuiz,
-																	A2($author$project$Config$showTrainMode, model.aR, 2),
+																	$author$project$View$viewQuiz,
+																	A2($author$project$Config$showTrainMode, model.B, 2),
 																	model,
 																	card)
 																])))))
@@ -7636,7 +7812,7 @@ var $author$project$Main$viewCard = F2(
 															mainPartAttributes,
 															_List_fromArray(
 																[
-																	A3($author$project$Main$viewUrname, card.bq, model.bi, model.aR)
+																	A3($author$project$View$viewUrname, card.bw, model.j, model.B)
 																])),
 															A2(
 															$elm$html$Html$tr,
@@ -7646,13 +7822,13 @@ var $author$project$Main$viewCard = F2(
 																]),
 															_List_fromArray(
 																[
-																	$author$project$Main$viewLocalName(card.bq)
+																	$author$project$View$viewLocalName(card.bw)
 																]))
 														]),
-													A2($author$project$Main$playAudio, model, card.bq.D))),
+													A2($author$project$View$playAudio, model, card.bw.aU))),
 												A3(
-												$author$project$Main$viewQuiz,
-												A2($author$project$Config$showTrainMode, model.aR, 3),
+												$author$project$View$viewQuiz,
+												A2($author$project$Config$showTrainMode, model.B, 3),
 												model,
 												card)
 											]);
@@ -7667,9 +7843,9 @@ var $author$project$Main$viewCard = F2(
 									[
 										$elm$html$Html$Attributes$class(
 										buttonStyle(
-											$author$project$Main$nextEnabled(model))),
+											$author$project$Model$nextEnabled(model))),
 										$elm$html$Html$Attributes$disabled(
-										!$author$project$Main$nextEnabled(model)),
+										!$author$project$Model$nextEnabled(model)),
 										$elm$html$Html$Events$onClick($author$project$Types$Next)
 									]),
 								_List_fromArray(
@@ -7702,7 +7878,7 @@ var $author$project$Main$viewCard = F2(
 										[
 											$elm$html$Html$text('All Finished! Train Again?')
 										])),
-								$elm_community$maybe_extra$Maybe$Extra$isJust(model.aR.J) ? _List_fromArray(
+								$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.bc) ? _List_fromArray(
 									[
 										A2(
 										$elm$html$Html$button,
@@ -7722,7 +7898,7 @@ var $author$project$Main$viewCard = F2(
 									[
 										$elm$html$Html$Attributes$id('buttons')
 									]),
-								(!model.bi.bu) ? _Utils_ap(
+								(!model.j.N) ? _Utils_ap(
 									_List_fromArray(
 										[
 											prevButton,
@@ -7730,7 +7906,7 @@ var $author$project$Main$viewCard = F2(
 											A2($elm$html$Html$br, _List_Nil, _List_Nil),
 											A2($elm$html$Html$br, _List_Nil, _List_Nil)
 										]),
-									allFinished) : ($elm_community$maybe_extra$Maybe$Extra$isJust(model.by) ? _Utils_ap(
+									allFinished) : ($elm_community$maybe_extra$Maybe$Extra$isJust(model.aM) ? _Utils_ap(
 									_List_fromArray(
 										[
 											nextButton,
@@ -7754,7 +7930,7 @@ var $author$project$Main$viewCard = F2(
 									]),
 								startOver);
 							var midwayButtons = function () {
-								var _v0 = model.bi.bu;
+								var _v0 = model.j.N;
 								if (!_v0) {
 									return allButtons;
 								} else {
@@ -7773,27 +7949,267 @@ var $author$project$Main$viewCard = F2(
 											]),
 										_List_fromArray(
 											[
-												$mgold$elm_nonempty_list$List$Nonempty$isSingleton(model.bc) ? endButtons : A2(
+												$mgold$elm_nonempty_list$List$Nonempty$isSingleton(model.q) ? endButtons : A2(
 												$elm$html$Html$div,
 												_List_fromArray(
 													[
 														$elm$html$Html$Attributes$id('buttons')
 													]),
 												midwayButtons),
-												$author$project$Main$viewScore(model)
+												$author$project$View$viewScore(model)
 											]))
 									]));
 						}())
 					])));
 	});
+var $author$project$Types$SetGroup = function (a) {
+	return {$: 4, a: a};
+};
+var $mgold$elm_nonempty_list$List$Nonempty$append = F2(
+	function (_v0, _v1) {
+		var x = _v0.a;
+		var xs = _v0.b;
+		var y = _v1.a;
+		var ys = _v1.b;
+		return A2(
+			$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
+			x,
+			_Utils_ap(
+				xs,
+				A2($elm$core$List$cons, y, ys)));
+	});
+var $elm$core$String$filter = _String_filter;
+var $pilatch$flip$Flip$flip = F3(
+	function (_function, argB, argA) {
+		return A2(_function, argA, argB);
+	});
+var $mgold$elm_nonempty_list$List$Nonempty$foldl = F3(
+	function (f, b, _v0) {
+		var x = _v0.a;
+		var xs = _v0.b;
+		return A3(
+			$elm$core$List$foldl,
+			f,
+			b,
+			A2($elm$core$List$cons, x, xs));
+	});
+var $elm_community$maybe_extra$Maybe$Extra$isNothing = function (m) {
+	if (m.$ === 1) {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $elm$html$Html$legend = _VirtualDom_node('legend');
+var $mgold$elm_nonempty_list$List$Nonempty$singleton = function (x) {
+	return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, x, _List_Nil);
+};
+var $elm$core$List$sort = function (xs) {
+	return A2($elm$core$List$sortBy, $elm$core$Basics$identity, xs);
+};
+var $mgold$elm_nonempty_list$List$Nonempty$sort = function (_v0) {
+	var x = _v0.a;
+	var xs = _v0.b;
+	return A3(
+		$mgold$elm_nonempty_list$List$Nonempty$insertWith,
+		$elm$core$Basics$compare,
+		x,
+		$elm$core$List$sort(xs));
+};
+var $elm$html$Html$strong = _VirtualDom_node('strong');
+var $mgold$elm_nonempty_list$List$Nonempty$reverse = function (_v0) {
+	var x = _v0.a;
+	var xs = _v0.b;
+	var revapp = function (_v1) {
+		revapp:
+		while (true) {
+			var ls = _v1.a;
+			var c = _v1.b;
+			var rs = _v1.c;
+			if (!rs.b) {
+				return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, c, ls);
+			} else {
+				var r = rs.a;
+				var rss = rs.b;
+				var $temp$_v1 = _Utils_Tuple3(
+					A2($elm$core$List$cons, c, ls),
+					r,
+					rss);
+				_v1 = $temp$_v1;
+				continue revapp;
+			}
+		}
+	};
+	return revapp(
+		_Utils_Tuple3(_List_Nil, x, xs));
+};
+var $mgold$elm_nonempty_list$List$Nonempty$uniq = function (_v0) {
+	var x = _v0.a;
+	var xs = _v0.b;
+	var unique = F3(
+		function (seen, done, next) {
+			unique:
+			while (true) {
+				if (!next.b) {
+					return done;
+				} else {
+					var y = next.a;
+					var ys = next.b;
+					if (A2($elm$core$List$member, y, seen)) {
+						var $temp$seen = seen,
+							$temp$done = done,
+							$temp$next = ys;
+						seen = $temp$seen;
+						done = $temp$done;
+						next = $temp$next;
+						continue unique;
+					} else {
+						var $temp$seen = A2($elm$core$List$cons, y, seen),
+							$temp$done = A2($mgold$elm_nonempty_list$List$Nonempty$cons, y, done),
+							$temp$next = ys;
+						seen = $temp$seen;
+						done = $temp$done;
+						next = $temp$next;
+						continue unique;
+					}
+				}
+			}
+		});
+	return $mgold$elm_nonempty_list$List$Nonempty$reverse(
+		A3(
+			unique,
+			_List_fromArray(
+				[x]),
+			A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, x, _List_Nil),
+			xs));
+};
+var $author$project$View$groupFieldSet = function (model) {
+	var groupInput = function (group) {
+		var inputId = A2(
+			$elm$core$String$filter,
+			function (c) {
+				return c !== ' ';
+			},
+			group) + 'Input';
+		return _List_fromArray(
+			[
+				A2(
+				$elm$html$Html$tr,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$td,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('quiz')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$id(inputId),
+										$elm$html$Html$Attributes$name(inputId),
+										$elm$html$Html$Attributes$type_('radio'),
+										$elm$html$Html$Attributes$value(group),
+										$elm$html$Html$Events$onInput($author$project$Types$SetGroup),
+										$elm$html$Html$Attributes$checked(
+										function () {
+											if (group === 'All') {
+												return $elm_community$maybe_extra$Maybe$Extra$isNothing(model.j.M);
+											} else {
+												var grp = group;
+												return _Utils_eq(
+													model.j.M,
+													$elm$core$Maybe$Just(grp));
+											}
+										}())
+									]),
+								_List_Nil)
+							])),
+						A2(
+						$elm$html$Html$td,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('quiz')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$label,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$for(inputId)
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text(group)
+									]))
+							]))
+					]))
+			]);
+	};
+	var discoveredGroups = A3(
+		$pilatch$flip$Flip$flip,
+		$mgold$elm_nonempty_list$List$Nonempty$append,
+		$mgold$elm_nonempty_list$List$Nonempty$singleton('All'),
+		$mgold$elm_nonempty_list$List$Nonempty$sort(
+			$mgold$elm_nonempty_list$List$Nonempty$uniq(
+				A2(
+					$mgold$elm_nonempty_list$List$Nonempty$map,
+					$elm$core$Maybe$withDefault('err: unexpected Nothing'),
+					A3(
+						$mgold$elm_nonempty_list$List$Nonempty$filter,
+						$elm_community$maybe_extra$Maybe$Extra$isJust,
+						$elm$core$Maybe$Just('err: must have at least one subject with group'),
+						A2(
+							$mgold$elm_nonempty_list$List$Nonempty$map,
+							function ($) {
+								return $.M;
+							},
+							model.B.aS))))));
+	return A2(
+		$elm$html$Html$fieldset,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$legend,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$strong,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(model.B.a5)
+							]))
+					])),
+				A2(
+				$elm$html$Html$table,
+				_List_Nil,
+				A3(
+					$mgold$elm_nonempty_list$List$Nonempty$foldl,
+					F2(
+						function (grp, acc) {
+							return _Utils_ap(
+								acc,
+								groupInput(grp));
+						}),
+					_List_Nil,
+					discoveredGroups))
+			]));
+};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $author$project$Types$SetScript = function (a) {
-	return {$: 4, a: a};
+	return {$: 5, a: a};
 };
-var $elm$html$Html$legend = _VirtualDom_node('legend');
 var $elm$html$Html$b = _VirtualDom_node('b');
-var $author$project$Main$radioScriptLabelHtml = function (script) {
+var $author$project$View$radioScriptLabelHtml = function (script) {
 	if (script === 1) {
 		return _List_fromArray(
 			[
@@ -7821,8 +8237,7 @@ var $author$project$Main$radioScriptLabelHtml = function (script) {
 	}
 };
 var $author$project$Config$scriptHeading = 'Sanskrit Script';
-var $elm$html$Html$strong = _VirtualDom_node('strong');
-var $author$project$Main$scriptFieldSet = function (model) {
+var $author$project$View$scriptFieldSet = function (model) {
 	return A2(
 		$elm$html$Html$fieldset,
 		_List_Nil,
@@ -7868,7 +8283,7 @@ var $author$project$Main$scriptFieldSet = function (model) {
 												$elm$html$Html$Attributes$type_('radio'),
 												$elm$html$Html$Attributes$value('Unicode'),
 												$elm$html$Html$Events$onInput($author$project$Types$SetScript),
-												$elm$html$Html$Attributes$checked(model.bi.bf === 1)
+												$elm$html$Html$Attributes$checked(model.j.aE === 1)
 											]),
 										_List_Nil)
 									])),
@@ -7886,7 +8301,7 @@ var $author$project$Main$scriptFieldSet = function (model) {
 											[
 												$elm$html$Html$Attributes$for('unicode')
 											]),
-										$author$project$Main$radioScriptLabelHtml(1))
+										$author$project$View$radioScriptLabelHtml(1))
 									]))
 							])),
 						A2(
@@ -7911,7 +8326,7 @@ var $author$project$Main$scriptFieldSet = function (model) {
 												$elm$html$Html$Attributes$type_('radio'),
 												$elm$html$Html$Attributes$value('Latin'),
 												$elm$html$Html$Events$onInput($author$project$Types$SetScript),
-												$elm$html$Html$Attributes$checked(!model.bi.bf)
+												$elm$html$Html$Attributes$checked(!model.j.aE)
 											]),
 										_List_Nil)
 									])),
@@ -7929,7 +8344,7 @@ var $author$project$Main$scriptFieldSet = function (model) {
 											[
 												$elm$html$Html$Attributes$for('latin')
 											]),
-										$author$project$Main$radioScriptLabelHtml(0))
+										$author$project$View$radioScriptLabelHtml(0))
 									]))
 							]))
 					]))
@@ -7938,7 +8353,7 @@ var $author$project$Main$scriptFieldSet = function (model) {
 var $author$project$Types$SetTrainMode = function (a) {
 	return {$: 3, a: a};
 };
-var $author$project$Main$trainModeFieldSet = function (model) {
+var $author$project$View$trainModeFieldSet = function (model) {
 	var trainModeInput = function (_v0) {
 		var mode = _v0.a;
 		var modeString = _v0.b;
@@ -7967,7 +8382,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 										$elm$html$Html$Attributes$value(modeString),
 										$elm$html$Html$Events$onInput($author$project$Types$SetTrainMode),
 										$elm$html$Html$Attributes$checked(
-										_Utils_eq(model.bi.bu, mode))
+										_Utils_eq(model.j.N, mode))
 									]),
 								_List_Nil)
 							])),
@@ -7988,7 +8403,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 								_List_fromArray(
 									[
 										$elm$html$Html$text(
-										A2($author$project$Config$showTrainMode, model.aR, mode))
+										A2($author$project$Config$showTrainMode, model.B, mode))
 									]))
 							]))
 					]))
@@ -7996,7 +8411,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 	};
 	var filterConfig = F2(
 		function (trainMode, htmlElements) {
-			return A2($elm$core$List$member, trainMode, model.aR.bw) ? htmlElements : _List_Nil;
+			return A2($elm$core$List$member, trainMode, model.B.bA) ? htmlElements : _List_Nil;
 		});
 	return A2(
 		$elm$html$Html$fieldset,
@@ -8040,7 +8455,7 @@ var $author$project$Main$trainModeFieldSet = function (model) {
 						])))
 			]));
 };
-var $author$project$Main$viewSettings = function (model) {
+var $author$project$View$viewSettings = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -8054,7 +8469,7 @@ var $author$project$Main$viewSettings = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text(model.aR.aV)
+						$elm$html$Html$text(model.B.a$)
 					])),
 				A2(
 				$elm$html$Html$h2,
@@ -8076,14 +8491,19 @@ var $author$project$Main$viewSettings = function (model) {
 						_List_Nil,
 						A2(
 							$elm$core$List$cons,
-							$author$project$Main$trainModeFieldSet(model),
+							$author$project$View$trainModeFieldSet(model),
 							A2(
 								$elm$core$List$cons,
 								A2($elm$html$Html$br, _List_Nil, _List_Nil),
-								model.aR.bg ? _List_fromArray(
-									[
-										$author$project$Main$scriptFieldSet(model)
-									]) : _List_Nil))),
+								_Utils_ap(
+									model.B.bn ? _List_fromArray(
+										[
+											$author$project$View$scriptFieldSet(model)
+										]) : _List_Nil,
+									model.B.a4 ? _List_fromArray(
+										[
+											$author$project$View$groupFieldSet(model)
+										]) : _List_Nil)))),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2(
 						$elm$html$Html$div,
@@ -8104,7 +8524,7 @@ var $author$project$Main$viewSettings = function (model) {
 									[
 										$elm$html$Html$text('Start')
 									])),
-							$elm_community$maybe_extra$Maybe$Extra$isJust(model.aR.J) ? _List_fromArray(
+							$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.bc) ? _List_fromArray(
 								[
 									A2(
 									$elm$html$Html$button,
@@ -8121,16 +8541,16 @@ var $author$project$Main$viewSettings = function (model) {
 					]))
 			]));
 };
-var $author$project$Main$view = function (model) {
+var $author$project$View$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
-				model.a0 ? $author$project$Main$viewSettings(model) : A2(
-				$author$project$Main$viewCard,
+				model.ak ? $author$project$View$viewSettings(model) : A2(
+				$author$project$View$viewCard,
 				model,
-				$mgold$elm_nonempty_list$List$Nonempty$head(model.bc)),
+				$mgold$elm_nonempty_list$List$Nonempty$head(model.q)),
 				A2(
 				$elm$html$Html$p,
 				_List_fromArray(
@@ -8139,10 +8559,10 @@ var $author$project$Main$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text(model.aR.aT)
+						$elm$html$Html$text(model.B.aZ)
 					]))
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{a1: $author$project$Main$init, br: $author$project$Main$subscriptions, bx: $author$project$Main$update, bz: $author$project$Main$view});
+	{a9: $author$project$Main$init, bx: $author$project$Main$subscriptions, bC: $author$project$Main$update, bD: $author$project$View$view});
 _Platform_export({'Main':{'init':$author$project$Main$main($elm$json$Json$Decode$value)(0)}});}(this));

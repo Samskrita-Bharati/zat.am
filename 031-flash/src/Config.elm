@@ -1,33 +1,18 @@
 module Config exposing
     ( configDecoder
-    , defaultModel
     , readScript
     , readTrainMode
     , scriptHeading
     , showTrainMode
     )
 
-import Card exposing (..)
 import Dict
 import Html exposing (..)
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Pipeline exposing (optional, required)
 import List.Nonempty as NEL exposing (Nonempty(..))
 import Types exposing (..)
-
-
-defaultModel : Model
-defaultModel =
-    { config = defaultConfig
-    , settings = { trainMode = Review, script = Latin }
-    , remainingDeck = invalidCards
-    , previousDeck = []
-    , userAnswer = Nothing
-    , total = 0
-    , score = 0
-    , inSettingsScreen = True
-    , showAudio = True
-    }
+import Unwrap
 
 
 configDecoder : Decoder Config
@@ -71,6 +56,26 @@ configDecoder =
                 )
                 string
 
+        subjectFieldDecoder : Decoder SubjectField
+        subjectFieldDecoder =
+            Decode.map
+                (\s ->
+                    Unwrap.maybe <|
+                        case s of
+                            "LatinName" ->
+                                Just LatinName
+
+                            "UnicodeName" ->
+                                Just UnicodeName
+
+                            "SubjectId" ->
+                                Just SubjectId
+
+                            _ ->
+                                Nothing
+                )
+                string
+
         subjectDecoder : Decoder Subject
         subjectDecoder =
             Decode.succeed Subject
@@ -81,13 +86,16 @@ configDecoder =
                 |> required "latin" string
                 |> required "localName" string
                 |> required "description" string
+                |> optional "group" (nullable string) Nothing
     in
     Decode.succeed Config
         |> required "deckId" string
         |> required "deckTitle" string
         |> optional "landingPage" (nullable string) Nothing
-        |> required "initialScript" scriptDecoder
-        |> required "scriptCanBeSet" bool
+        |> optional "initialScript" scriptDecoder Latin
+        |> optional "scriptCanBeSet" bool False
+        |> optional "groupCanBeSet" bool False
+        |> optional "groupDisplay" string ""
         |> optional "showTooltipsForOtherScript" bool True
         |> optional "showDescriptionWithUrNameQuiz" bool True
         |> optional "showAudioWithUrNameQuiz" bool True
@@ -96,9 +104,10 @@ configDecoder =
         |> optional "showDescription" bool True
         |> optional "showAudio" bool True
         |> required "trainingModes" (list trainModeDecoder)
+        |> optional "sortReviewBy" subjectFieldDecoder SubjectId
         |> required "pluralSubjectName" string
-        |> required "copyrightNotice" string
-        |> required "numChoices" int
+        |> optional "copyrightNotice" string ""
+        |> optional "numChoices" int 4
         |> required "trainModeDisplay" (dict string)
         |> required "scriptHeading" string
         |> optional "mainPartFontSize" (nullable string) Nothing

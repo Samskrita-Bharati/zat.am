@@ -4,7 +4,6 @@ import List.Nonempty as NEL exposing (Nonempty(..))
 import Random exposing (Generator)
 import Random.Extra
 import Random.List as RL
-import Tuple exposing (first)
 import Types
 
 
@@ -36,7 +35,7 @@ generateChoices numChoices allSubjects correctSubject =
                 allSubjects
 
         choicesGenerator =
-            Random.map first <| RL.choices (numChoices - 1) (NEL.toList wrongSubjects)
+            Random.map Tuple.first <| RL.choices (numChoices - 1) (NEL.toList wrongSubjects)
     in
     -- correct position
     Random.int 0 (numChoices - 1)

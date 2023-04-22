@@ -17,7 +17,9 @@
             "elm-community/list-extra": "8.7.0",
             "elm-community/maybe-extra": "5.3.0",
             "elm-community/random-extra": "3.2.0",
-            "mgold/elm-nonempty-list": "4.2.0"
+            "jjant/unwrap": "1.0.1",
+            "mgold/elm-nonempty-list": "4.2.0",
+            "pilatch/flip": "1.0.0"
         },
         "indirect": {
             "elm/parser": "1.1.0",
