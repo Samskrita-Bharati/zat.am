@@ -1,5 +1,5 @@
 module Model exposing
-    ( getAnswer
+    ( getAnswerString
     , initWithModel
     , initialModel
     , nextEnabled
@@ -41,8 +41,8 @@ processSelectedDeck model =
     initWithModel newModel
 
 
-getAnswer : Settings -> Subject -> String
-getAnswer { trainMode, script } =
+getAnswerString : Settings -> Subject -> String
+getAnswerString { trainMode, script } =
     case trainMode of
         Review ->
             always "N/A"

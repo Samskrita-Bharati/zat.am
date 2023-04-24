@@ -40,7 +40,7 @@ init configValue =
                         cfg
 
                     Err _ ->
-                        -- Debug.log (Decode.errorToString err) defaultConfig
+                        --Debug.log (Decode.errorToString err) defaultConfig
                         defaultConfig
     in
     Model.processSelectedDeck mdl
@@ -49,17 +49,10 @@ init configValue =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        hasAudio subj =
-            MaybeX.isJust <| subj.audioUrl
-
         -- workaround for browsers not properly updating the audio tag
         sleepThenShowAudio : Subject -> Cmd Msg
-        sleepThenShowAudio subj =
-            if hasAudio subj then
-                Task.perform (\_ -> ShowAudio) <| Process.sleep 100
-
-            else
-                Cmd.none
+        sleepThenShowAudio _ =
+            Task.perform (\_ -> ShowAudio) <| Process.sleep 100
 
         prevCard =
             Maybe.withDefault emptyCard
@@ -175,7 +168,7 @@ update msg model =
                         , score =
                             if
                                 str
-                                    == Model.getAnswer
+                                    == Model.getAnswerString
                                         model.settings
                                         (NEL.head model.remainingDeck).subject
                             then
@@ -194,10 +187,7 @@ update msg model =
                         | previousDeck = nextCard :: model.previousDeck
                         , remainingDeck = NEL.pop model.remainingDeck
                         , userAnswer = Nothing
-                        , showAudio =
-                            not <|
-                                hasAudio <|
-                                    (NEL.head model.remainingDeck).subject
+                        , showAudio = False
                     }
 
                 Previous ->
@@ -211,7 +201,7 @@ update msg model =
                     { model
                         | previousDeck = newPrevDeck
                         , remainingDeck = remaining
-                        , showAudio = not <| hasAudio <| prevCard.subject
+                        , showAudio = False
                     }
 
                 _ ->

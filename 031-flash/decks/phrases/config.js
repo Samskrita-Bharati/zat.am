@@ -6,6 +6,7 @@ var संस्कृतठ्यवहारः = {
   "scriptCanBeSet": true,
   "mainPartFontSize": "32pt",
   "showAudioWithUrNameQuiz": false,
+  "showAudioWithLocalNameQuiz": true,
   "showDescription": false,
   "trainingModes": [
     "Review",
