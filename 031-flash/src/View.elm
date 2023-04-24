@@ -5,7 +5,6 @@ import Flip exposing (flip)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events as HE
-import List.Extra as ListX
 import List.Nonempty as NEL exposing (Nonempty(..))
 import Maybe.Extra as MaybeX
 import Model
@@ -548,7 +547,7 @@ viewQuiz legendLabel model card =
             model.userAnswer == Just val
 
         isCorrect val =
-            Model.getAnswer model.settings card.subject == val
+            Model.getAnswerString model.settings card.subject == val
 
         correctAttributes =
             [ class "correct" ]
@@ -575,40 +574,71 @@ viewQuiz legendLabel model card =
                    )
 
         getChoices =
-            List.map (Model.getAnswer model.settings) card.choices
-                -- if duplicates, number of choices will be less than numChoices
-                |> ListX.unique
+            card.choices
                 |> List.indexedMap toInputView
 
-        toInputView : Int -> String -> Html Msg
-        toInputView i val =
-            tr []
-                [ td [ class "quiz", style "width" "15px" ]
-                    [ input
-                        [ id ("choice" ++ String.fromInt i)
-                        , name "choice"
-                        , placeholder val
-                        , type_ "radio"
-                        , value val
-                        , HE.onInput Answer
-                        , checked <| isChecked val
-                        , disabled isDisabled
-                        ]
-                        []
-                    ]
-                , td
-                    (class "quiz"
-                        :: (if isDisabled && isCorrect val then
-                                correctAttributes
+        toInputView : Int -> Subject -> Html Msg
+        toInputView i subject =
+            let
+                answerString =
+                    Model.getAnswerString model.settings subject
 
-                            else
-                                []
-                           )
-                    )
-                    [ label (for ("choice" ++ String.fromInt i) :: labelAttributes val)
-                        [ text val ]
+                audioButton url =
+                    td [ class "quiz audio" ]
+                        [ audio [ controls True, autoplay False, style "width" "100" ]
+                            [ source [ src url, type_ "audio/mpeg" ] []
+                            , text "Your browser does not support the audio element"
+                            ]
+                        ]
+            in
+            tr [] <|
+                (if
+                    model.config.showAudio
+                        && model.config.showAudioWithUrnameQuizAnswers
+                 then
+                    [ td [ class "quiz audio" ]
+                        (if model.settings.trainMode == Urname && model.showAudio then
+                            case subject.audioUrl of
+                                Just url ->
+                                    [ audioButton url ]
+
+                                Nothing ->
+                                    []
+
+                         else
+                            []
+                        )
                     ]
-                ]
+
+                 else
+                    []
+                )
+                    ++ [ td [ class "quiz", style "width" "15px" ]
+                            [ input
+                                [ id ("choice" ++ String.fromInt i)
+                                , name "choice"
+                                , placeholder answerString
+                                , type_ "radio"
+                                , value answerString
+                                , HE.onInput Answer
+                                , checked <| isChecked answerString
+                                , disabled isDisabled
+                                ]
+                                []
+                            ]
+                       , td
+                            (class "quiz"
+                                :: (if isDisabled && isCorrect answerString then
+                                        correctAttributes
+
+                                    else
+                                        []
+                                   )
+                            )
+                            [ label (for ("choice" ++ String.fromInt i) :: labelAttributes answerString)
+                                [ text answerString ]
+                            ]
+                       ]
     in
     div
         (if model.settings.trainMode == Description then

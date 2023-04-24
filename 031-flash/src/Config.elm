@@ -99,6 +99,7 @@ configDecoder =
         |> optional "showTooltipsForOtherScript" bool True
         |> optional "showDescriptionWithUrNameQuiz" bool True
         |> optional "showAudioWithUrNameQuiz" bool True
+        |> optional "showAudioWithUrnameQuizAnswers" bool True
         |> optional "showDescriptionWithLocalNameQuiz" bool True
         |> optional "showAudioWithLocalNameQuiz" bool True
         |> optional "showDescription" bool True

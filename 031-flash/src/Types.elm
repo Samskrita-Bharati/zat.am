@@ -58,6 +58,7 @@ type alias Config =
     , showTooltipsForOtherScript : Bool
     , showDescriptionWithUrNameQuiz : Bool
     , showAudioWithUrNameQuiz : Bool
+    , showAudioWithUrnameQuizAnswers : Bool
     , showDescriptionWithLocalNameQuiz : Bool
     , showAudioWithLocalNameQuiz : Bool
     , showDescription : Bool
@@ -76,30 +77,31 @@ type alias Config =
 
 defaultConfig : Config
 defaultConfig =
-    Config
-        "invalid deck"
-        "invalid deck"
-        Nothing
-        Latin
-        True
-        False
-        ""
-        True
-        True
-        True
-        True
-        True
-        True
-        True
-        []
-        SubjectId
-        ""
-        ""
-        0
-        Dict.empty
-        ""
-        Nothing
-        invalidSubjectList
+    { deckId = "invalid deck"
+    , deckTitle = "invalid deck"
+    , landingPage = Nothing
+    , initialScript = Latin
+    , scriptCanBeSet = True
+    , groupCanBeSet = False
+    , groupDisplay = ""
+    , showTooltipsForOtherScript = True
+    , showDescriptionWithUrNameQuiz = True
+    , showAudioWithUrNameQuiz = True
+    , showAudioWithUrnameQuizAnswers = True
+    , showDescriptionWithLocalNameQuiz = True
+    , showAudioWithLocalNameQuiz = True
+    , showDescription = True
+    , showAudio = True
+    , trainingModes = []
+    , sortReviewBy = SubjectId
+    , pluralSubjectName = ""
+    , copyrightNotice = ""
+    , numChoices = 0
+    , trainModeDisplay = Dict.empty
+    , scriptHeading = ""
+    , mainPartFontSize = Nothing
+    , allSubjects = invalidSubjectList
+    }
 
 
 type alias Settings =

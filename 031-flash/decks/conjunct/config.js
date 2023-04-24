@@ -6,8 +6,9 @@ var conjuncts = {
   "scriptCanBeSet": false,
   "mainPartFontSize": "32pt",
   "showAudioWithLocalNameQuiz": false,
-  "showDescriptionWithLocalNameQuiz": false,
+  "showAudioInUrnameQuiz": false,
   "showDescriptionWithUrNameQuiz": false,
+  "showAudioWithUrnameQuizAnswers": false,
   "trainingModes": [
     "Review",
     "Urname",
