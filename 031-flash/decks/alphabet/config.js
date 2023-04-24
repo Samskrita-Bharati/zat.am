@@ -6,6 +6,8 @@ var alphabet = {
   "scriptCanBeSet": false,
   "mainPartFontSize": "32pt",
   "showAudioWithLocalNameQuiz": false,
+  "showAudioWithUrNameQuiz": true,
+  "showAudioWithUrnameQuizAnswers": false,
   "showDescriptionWithUrNameQuizAnswers": false,
   "showDescriptionWithLocalNameQuiz": false,
   "trainingModes": [

@@ -584,20 +584,20 @@ viewQuiz legendLabel model card =
                     Model.getAnswerString model.settings subject
 
                 audioButton url =
-                    td [ class "quiz audio" ]
-                        [ audio [ controls True, autoplay False, style "width" "100" ]
-                            [ source [ src url, type_ "audio/mpeg" ] []
-                            , text "Your browser does not support the audio element"
-                            ]
+                    audio [ controls True, autoplay False, style "width" "100" ]
+                        [ source [ src url, type_ "audio/mpeg" ] []
+                        , text "Your browser does not support the audio element"
                         ]
             in
             tr [] <|
                 (if
                     model.config.showAudio
+                        && model.settings.trainMode
+                        == Urname
                         && model.config.showAudioWithUrnameQuizAnswers
                  then
-                    [ td [ class "quiz audio" ]
-                        (if model.settings.trainMode == Urname && model.showAudio then
+                    [ td [ class "quiz audioInQuiz" ]
+                        (if model.showAudio then
                             case subject.audioUrl of
                                 Just url ->
                                     [ audioButton url ]
@@ -649,8 +649,8 @@ viewQuiz legendLabel model card =
         )
         [ Html.form []
             [ fieldset
-                []
-                [ table []
+                [ class "quiz" ]
+                [ table [ class "quiz" ]
                     (tr [] [ th [] [], th [ class "quizHeader" ] [ text legendLabel ] ]
                         :: getChoices
                     )

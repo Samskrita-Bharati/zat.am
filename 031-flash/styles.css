@@ -106,6 +106,20 @@ td.correct {
   cursor: pointer;
 }
 
+fieldset.quiz {
+  border: none;
+}
+
+table.quiz {
+  border: 1px solid black;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td.audioInQuiz {
+  border-right: 2px dotted darkgray;
+}
+
 .incorrect {
   color: red
 }

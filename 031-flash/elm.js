@@ -6752,13 +6752,6 @@ var $mgold$elm_nonempty_list$List$Nonempty$head = function (_v0) {
 	var xs = _v0.b;
 	return x;
 };
-var $elm_community$maybe_extra$Maybe$Extra$isJust = function (m) {
-	if (m.$ === 1) {
-		return false;
-	} else {
-		return true;
-	}
-};
 var $elm$browser$Browser$Navigation$load = _Browser_load;
 var $mgold$elm_nonempty_list$List$Nonempty$map = F2(
 	function (f, _v0) {
@@ -6769,6 +6762,13 @@ var $mgold$elm_nonempty_list$List$Nonempty$map = F2(
 			f(x),
 			A2($elm$core$List$map, f, xs));
 	});
+var $elm_community$maybe_extra$Maybe$Extra$isJust = function (m) {
+	if (m.$ === 1) {
+		return false;
+	} else {
+		return true;
+	}
+};
 var $mgold$elm_nonempty_list$List$Nonempty$isSingleton = function (_v0) {
 	var x = _v0.a;
 	var xs = _v0.b;
@@ -6874,9 +6874,6 @@ var $author$project$Main$update = F2(
 			$author$project$Types$emptyCard,
 			$elm$core$List$head(model.H));
 		var nextCard = $mgold$elm_nonempty_list$List$Nonempty$head(model.r);
-		var hasAudio = function (subj) {
-			return $elm_community$maybe_extra$Maybe$Extra$isJust(subj.a9);
-		};
 		var filteredSubjects = function (mdl) {
 			var subjFilter = function (subj) {
 				var _v7 = mdl.j.M;
@@ -7396,33 +7393,24 @@ var $author$project$View$viewQuiz = F3(
 			function (i, subject) {
 				var audioButton = function (url) {
 					return A2(
-						$elm$html$Html$td,
+						$elm$html$Html$audio,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('quiz audio')
+								$elm$html$Html$Attributes$controls(true),
+								$elm$html$Html$Attributes$autoplay(false),
+								A2($elm$html$Html$Attributes$style, 'width', '100')
 							]),
 						_List_fromArray(
 							[
 								A2(
-								$elm$html$Html$audio,
+								$elm$html$Html$source,
 								_List_fromArray(
 									[
-										$elm$html$Html$Attributes$controls(true),
-										$elm$html$Html$Attributes$autoplay(false),
-										A2($elm$html$Html$Attributes$style, 'width', '100')
+										$elm$html$Html$Attributes$src(url),
+										$elm$html$Html$Attributes$type_('audio/mpeg')
 									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$source,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$src(url),
-												$elm$html$Html$Attributes$type_('audio/mpeg')
-											]),
-										_List_Nil),
-										$elm$html$Html$text('Your browser does not support the audio element')
-									]))
+								_List_Nil),
+								$elm$html$Html$text('Your browser does not support the audio element')
 							]));
 				};
 				var answerString = A2($author$project$Model$getAnswerString, model.j, subject);
@@ -7430,16 +7418,16 @@ var $author$project$View$viewQuiz = F3(
 					$elm$html$Html$tr,
 					_List_Nil,
 					_Utils_ap(
-						(model.B.U && model.B.aR) ? _List_fromArray(
+						(model.B.U && ((model.j.N === 1) && model.B.aR)) ? _List_fromArray(
 							[
 								A2(
 								$elm$html$Html$td,
 								_List_fromArray(
 									[
-										$elm$html$Html$Attributes$class('quiz audio')
+										$elm$html$Html$Attributes$class('quiz audioInQuiz')
 									]),
 								function () {
-									if ((model.j.N === 1) && model.U) {
+									if (model.U) {
 										var _v0 = subject.a9;
 										if (!_v0.$) {
 											var url = _v0.a;
@@ -7521,12 +7509,18 @@ var $author$project$View$viewQuiz = F3(
 						[
 							A2(
 							$elm$html$Html$fieldset,
-							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('quiz')
+								]),
 							_List_fromArray(
 								[
 									A2(
 									$elm$html$Html$table,
-									_List_Nil,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('quiz')
+										]),
 									A2(
 										$elm$core$List$cons,
 										A2(
