@@ -44,6 +44,12 @@ viewSettings model =
                         else
                             []
                        )
+                    ++ (if model.config.autoPlayCanBeSet then
+                            [ autoPlayCheckBox model ]
+
+                        else
+                            []
+                       )
                 )
             , br [] []
             , div [ class "center" ]
@@ -166,6 +172,22 @@ trainModeFieldSet model =
                 , ( LocalName, "LocalName" )
                 , ( Description, "Description" )
                 ]
+        ]
+
+
+autoPlayCheckBox : Model -> Html Msg
+autoPlayCheckBox model =
+    div [ class "quiz" ]
+        [ br [] []
+        , input
+            [ id "autoplay"
+            , type_ "checkbox"
+            , value "True"
+            , checked <| model.settings.autoPlay
+            , HE.onClick ToggleAutoPlay
+            ]
+            []
+        , label [ for "autoplay" ] [ text "Autoplay Audio" ]
         ]
 
 
@@ -439,7 +461,11 @@ playAudio model maybeUrl =
             case maybeUrl of
                 Just url ->
                     [ tr [ class "audio" ]
-                        [ audio [ controls True, autoplay True ]
+                        [ audio
+                            [ controls True
+                            , autoplay <|
+                                model.settings.autoPlay
+                            ]
                             [ source [ src url, type_ "audio/mpeg" ] []
                             , text "Your browser does not support the audio element"
                             ]

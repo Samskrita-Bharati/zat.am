@@ -4,6 +4,7 @@ var sentences = {
   "landingPage": "index.html",
   "initialScript": "Unicode",
   "scriptCanBeSet": true,
+  "autoPlayCanBeSet": true,
   "mainPartFontSize": "32pt",
   "showAudioWithUrNameQuiz": false,
   "showDescription": false,

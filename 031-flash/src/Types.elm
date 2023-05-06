@@ -36,7 +36,12 @@ type alias Model =
 defaultModel : Model
 defaultModel =
     { config = defaultConfig
-    , settings = { trainMode = Review, script = Latin, group = Nothing }
+    , settings =
+        { trainMode = Review
+        , script = Latin
+        , group = Nothing
+        , autoPlay = True
+        }
     , remainingDeck = invalidCards
     , previousDeck = []
     , userAnswer = Nothing
@@ -55,6 +60,7 @@ type alias Config =
     , scriptCanBeSet : Bool
     , groupCanBeSet : Bool
     , groupDisplay : String
+    , autoPlayCanBeSet : Bool
     , showTooltipsForOtherScript : Bool
     , showDescriptionWithUrNameQuiz : Bool
     , showAudioWithUrNameQuiz : Bool
@@ -84,6 +90,7 @@ defaultConfig =
     , scriptCanBeSet = True
     , groupCanBeSet = False
     , groupDisplay = ""
+    , autoPlayCanBeSet = False
     , showTooltipsForOtherScript = True
     , showDescriptionWithUrNameQuiz = True
     , showAudioWithUrNameQuiz = True
@@ -108,6 +115,7 @@ type alias Settings =
     { trainMode : TrainMode
     , script : Script
     , group : Maybe String
+    , autoPlay : Bool
     }
 
 
@@ -139,6 +147,7 @@ type Msg
     | MouseClick
     | CurrentDeckLoaded String
     | GoLanding
+    | ToggleAutoPlay
 
 
 type alias Card =

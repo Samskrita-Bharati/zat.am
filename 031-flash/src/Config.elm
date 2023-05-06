@@ -96,6 +96,7 @@ configDecoder =
         |> optional "scriptCanBeSet" bool False
         |> optional "groupCanBeSet" bool False
         |> optional "groupDisplay" string ""
+        |> optional "autoPlayCanBeSet" bool False
         |> optional "showTooltipsForOtherScript" bool True
         |> optional "showDescriptionWithUrNameQuiz" bool True
         |> optional "showAudioWithUrNameQuiz" bool True

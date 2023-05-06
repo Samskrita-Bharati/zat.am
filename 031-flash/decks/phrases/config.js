@@ -4,6 +4,7 @@ var संस्कृतठ्यवहारः = {
   "landingPage": "index.html",
   "initialScript": "Unicode",
   "scriptCanBeSet": true,
+  "autoPlayCanBeSet": true,
   "mainPartFontSize": "32pt",
   "showAudioWithUrNameQuiz": false,
   "showAudioWithLocalNameQuiz": true,

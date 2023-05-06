@@ -126,6 +126,17 @@ update msg model =
                             Settings (Config.readTrainMode trainMode)
                                 model.settings.script
                                 model.settings.group
+                                model.settings.autoPlay
+                    }
+
+                ToggleAutoPlay ->
+                    { model
+                        | settings =
+                            Settings
+                                model.settings.trainMode
+                                model.settings.script
+                                model.settings.group
+                                (not model.settings.autoPlay)
                     }
 
                 SetGroup groupLabel ->
@@ -141,6 +152,7 @@ update msg model =
                                     grpLbl ->
                                         Just grpLbl
                                 )
+                                model.settings.autoPlay
                     }
 
                 SetScript script ->
@@ -149,6 +161,7 @@ update msg model =
                             Settings model.settings.trainMode
                                 (Config.readScript script)
                                 model.settings.group
+                                model.settings.autoPlay
                     }
 
                 Reset ->
