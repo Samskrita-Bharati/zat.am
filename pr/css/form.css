@@ -1,0 +1,46 @@
+/*Search styles*/
+.mainpage .searchForm {
+  font-family: 'Halant', sans-serif;
+}
+.mainpage .searchForm .row{
+  margin-bottom: 24px;
+}
+.mainpage .searchForm .form-control-label{
+  text-align: right;
+  vertical-align: bottom;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+.mainpage .searchForm input.form-control:focus{
+  box-shadow: none;
+}
+.mainpage .searchForm input.form-control[type="text"]{
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  border-radius: 0;
+  outline: none;
+  padding-top: 7px;
+  font-size: 18px;
+  font-weight: 300;
+  color: #555;
+}
+.mainpage .searchForm input.form-control[type="submit"], 
+.mainpage .searchForm input.form-control[type="reset"]{
+  border-radius: 5px;
+  cursor: pointer;
+  height: auto;
+  padding: 10px 0;
+  font-weight: 600;
+  box-shadow: 0 1px 15px rgba(0,0,0,.05);
+  margin-bottom: 20px;
+}
+.mainpage .searchForm input.form-control[type="submit"]:focus, 
+.mainpage .searchForm input.form-control[type="submit"]:hover {
+  border-color: #28a745;
+  box-shadow: 0 1px 15px rgba(0,0,0,0.15);
+}
+.mainpage .searchForm input.form-control[type="reset"]:focus, 
+.mainpage .searchForm input.form-control[type="reset"]:hover{
+  border-color: #dc3545;
+}

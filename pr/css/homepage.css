@@ -1,0 +1,109 @@
+.big-card{
+  box-shadow: 0 1px 15px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  padding: 30px;
+  background-color: #FFF;
+}
+.big-card .card-body{
+  padding: 30px 20px 0 20px;
+}
+.big-card .card-body .card-title{
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+}
+.big-card .card-body .card-author{
+  font-size: 18px;
+  font-weight: 500;
+  color: #ff5722;
+  text-align: center;
+}
+.big-card .card-body .card-author span:not(:last-of-type)::after{
+  content: ', ';
+}
+.big-card .card-body .card-text{
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 28px;
+}
+
+.small-card{
+  border: none;
+  box-shadow: 0 1px 15px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  padding: 20px 30px;
+  background-color: #FFF;
+  /*margin: 0 20px;*/
+}
+.small-card .card-body{
+  padding: 30px 0px 0 0px;
+}
+.small-card .card-body .card-title{
+  text-align: center;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 32px;
+}
+.small-card .card-body .card-author{
+  font-size: 16px;
+  font-weight: 500;
+  color: #ff5722;
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 28px;
+}
+.small-card .card-body .card-author span:not(:last-of-type)::after{
+  content: ', ';
+}
+.small-card .card-body .card-text{
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 28px;
+}
+
+
+.horizontal-card{
+  box-shadow: 0 1px 15px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #FFF;
+}
+.horizontal-card:last-of-type{
+  margin-bottom: 0px;
+}
+.horizontal-card figure{
+  padding: 0;
+  margin-bottom: 0;
+}
+.horizontal-card .card-body{
+  padding: 0 0 0 20px;
+}
+.horizontal-card .card-body .card-title{
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.horizontal-card .card-body .card-author{
+  font-size: 16px;
+  font-weight: 500;
+  color: #ff5722;
+  margin-bottom: 20px;
+}
+.horizontal-card .card-body .card-author span:not(:last-of-type)::after{
+  content: ', ';
+}
+.horizontal-card .card-body .card-text{
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 300;
+}
+
+/*Auxiliary styles*/
+.big-cover{
+ box-shadow: 0 1px 15px rgba(0,0,0,0.2);
+ border-radius: 5px; 
+}
+.big-cover img{
+ border-radius: 5px; 
+}

@@ -1,0 +1,61 @@
+.navbar-head {
+  font-family: 'Laila', serif;
+  text-align: center;
+  font-weight: 100;
+  padding: 1em 0 0.75em 0;
+}
+.navbar-head h1{
+  font-weight: 400;
+  margin-bottom: 0;
+}
+#mainNavbar.navbar{
+  font-family: 'Raleway', sans-serif !important;
+  padding: 0;
+}
+#mainNavbar.navbar-light .navbar-nav{
+  padding: 15px 0;
+}
+#mainNavbar.navbar-light .navbar-nav .nav-link{
+  color: rgba(0,0,0,0.75);
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 16px;
+}
+#mainNavbar.navbar-light .navbar-toggler{
+  border: none;
+}
+#mainNavbar .navbar-nav .nav-item{
+  text-align: center;
+  padding: 0.5em;
+}
+#mainNavbar .dropdown-menu{
+  right: 20px !important;
+  left: auto !important;
+  font-size: 0.9em;
+}
+
+/*Avatar*/
+#user .dropdown-toggle::after{
+  display: none;
+}
+#user-icon{
+  font-family: 'Raleway', sans-serif;
+  height: 36px;
+  width: 36px;
+  background-color: #123456;
+  border-radius: 18px;
+  text-align: center;
+  color: #FFF;
+  line-height: 36px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+#user .dropdown-menu{
+  font-size: 0.75em;
+}
+
+@media(min-width:960px) {
+  #mainNavbar .navbar-nav .nav-item{
+    padding: 0 0.5em;
+  }
+}
