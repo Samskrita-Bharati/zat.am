@@ -59,6 +59,10 @@ const menu = [
                         desc: `Flash cards for learning Sanskrit: alphabet, common phrases, sentences, and more...`
 
                  },
+				 {
+					 id:32, title: "पदरञ्जिनी - padara~njinii", category : "TA", dir:"pr",
+					 desc: `Crosswords (in संस्कृतम् )  from monthly magazine सम्भाषणसन्देशः`
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
