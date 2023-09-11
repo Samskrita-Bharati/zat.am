@@ -1,0 +1,96 @@
+.fellow-profile{
+	margin-top: 200px;
+}
+.fellow-profile .header{
+	font-family: "Lato", sans-serif;
+	margin-bottom: 30px;
+}
+.fellow-profile h4{
+	font-size: 20px;
+	font-weight: 300;
+	line-height: 40px;
+	/*border-bottom: 1px solid #1565C0;*/
+}
+.fellow-profile h4{
+	font-weight: 300;
+}
+ .fellow.card{
+	margin: 10px 20px;
+	padding: 0px;
+	font-family: "Lato", sans-serif;
+}
+.fellow.card .card-body{
+	padding: 15px 10px;
+}
+.fellow.card .card-text{
+	line-height: 32px;
+}
+.fellow.card .card-body .card-title{
+	font-size: 18px;
+	font-weight: 300;
+	margin-bottom: 5px;
+}
+.fellow.card .avatar-holder{
+	position: relative;
+}
+.fellow.card span.year,
+.fellow.card span.section,
+.fellow.card span.deceased,
+.fellow.card span.council-service{
+	padding: 3px 8px;
+	font-size: 14px;
+	color: #FFF;
+	font-weight: 400;
+}
+.fellow.card span.year{
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 2px 0 2px 0;
+	padding: 3px 8px;
+}
+.fellow.card span.deceased{
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	border-radius: 0 2px 0 2px;
+	padding: 3px 8px;
+}
+.fellow.card span.council-service{
+	display: block;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	border-radius: 0 2px 0 2px;
+	padding: 3px 8px;
+}
+.fellow.card span.blue{
+  background-color: #0277BD;
+}
+.fellow.card span.green{
+  background-color: #00897B;
+}
+.fellow.card span.red{
+  background-color: #FF7043;
+}
+.fellow.card span.gold{
+  background-color: #FF9800;
+}
+.fellow.card a{
+	color: inherit;
+}
+
+/*iframe*/
+.fellow iframe{
+	width: 100%;
+	height: 430px;
+	border: 1px solid #ccc;
+  	box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2)
+}
+/*sidebar*/
+.sidebar{
+  /*padding: 30px 0 0 30px;*/
+}
+

@@ -1,0 +1,77 @@
+/*Html Page css*/
+
+.article{
+  padding-bottom: 100px;
+}
+.article .titleblock{
+  font-family: 'Halant';
+}
+.article .titleblock h1.title {
+  font-weight: 600;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.article .titleblock h2.subtitle {
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+}
+.article .titleblock h3.author {
+  margin-top: 30px;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  color: #555;
+}
+.article .titleblock h3.author span:not(:last-of-type)::after{
+  content: ' | ';
+  color: #CCC;
+  margin: 0 0.5em;
+}
+.article .titleblock h4.feature {
+  color: #ff5722;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 0;
+}
+.article .titleblock h5.date {
+  color: #ff5722;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 0;
+}
+
+
+.article .articleblock{
+  font-family: 'Halant';
+  font-size: 18px;
+  line-height: 32px;
+  color: #333;
+}
+.article .articleblock blockquote{
+  margin: 50px 0;
+  padding: 40px;
+  background-color: rgba(255, 87, 34, 0.05);
+  border-radius: 5px;
+}
+.article .articleblock blockquote p:last-of-type{
+  margin-bottom: 0px;
+}
+.article .articleblock p{
+  text-align: justify;
+}
+.article .articleblock figure{
+  margin: 40px auto;
+  text-align: center;
+}
+.article .articleblock h1{
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.highlight{
+  background-color: #E0FF00;
+}

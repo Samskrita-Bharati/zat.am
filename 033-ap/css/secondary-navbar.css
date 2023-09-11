@@ -1,0 +1,41 @@
+/* -------------------------------- 
+Secondary Navigation
+-------------------------------- */
+#cd-sec-nav ul {
+  text-align: center;
+  padding: 20px 0 0px 0;
+  width: auto;
+}
+#cd-sec-nav li {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+#cd-sec-nav li a {
+  font-family: 'Halant', sans-serif;
+  /*margin-left: 1em;*/
+  padding: 0em 1em 0em 1em;
+  color: #444;
+  font-weight: 300;
+  font-size: 16px;
+}
+#cd-sec-nav li:last-child a {
+  border-bottom: none;
+}
+#cd-sec-nav i{
+  margin-right: 3px;
+  color: #CCC;
+}
+#cd-sec-nav li:hover i{
+  color: rgba(255, 87, 34, 0.7);
+}
+.offset-sec-nav{
+  margin-top: 40px; 
+}
+@media(min-width:768px) {
+  #cd-sec-nav li {
+    margin-bottom: 0px;
+  }
+  #cd-sec-nav ul {
+    padding: 20px 0 30px 0;
+  }
+}
