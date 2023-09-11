@@ -63,6 +63,10 @@ const menu = [
 					 id:32, title: "पदरञ्जिनी - padara~njinii", category : "TA", dir:"pr",
 					 desc: `Crosswords (in संस्कृतम् )  from monthly magazine सम्भाषणसन्देशः`
 				 },
+				 {
+					 id:33, title: "अन्विष्यन्तां पदानि anviShyantaaM padaani", category : "TA", dir:"033-ap",
+					 desc: `Word Search (in संस्कृतम् )  from monthly magazine सम्भाषणसन्देशः`
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
