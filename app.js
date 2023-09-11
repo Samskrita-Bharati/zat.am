@@ -60,12 +60,24 @@ const menu = [
 
                  },
 				 {
-					 id:32, title: "पदरञ्जिनी - padara~njinii", category : "TA", dir:"pr",
+					 id:32, title: "पदरञ्जिनी - padara~njinii", category : "सम्भाषणसन्देशः", dir:"pr",
 					 desc: `Crosswords (in संस्कृतम् )  from monthly magazine सम्भाषणसन्देशः`
 				 },
 				 {
-					 id:33, title: "अन्विष्यन्तां पदानि anviShyantaaM padaani", category : "TA", dir:"033-ap",
+					 id:33, title: "अन्विष्यन्तां पदानि anviShyantaaM padaani", category : "सम्भाषणसन्देशः", dir:"033-ap",
 					 desc: `Word Search (in संस्कृतम् )  from monthly magazine सम्भाषणसन्देशः`
+				 },
+				 				 {
+					 id:34, title: "श्री-विष्णुसहस्रनाम", category : "Telegram", dir:"https://t.me/visnu1k",
+					 desc: `search names of shrii Vishnu (in संस्कृतम् )  from 1000 in Telegram channel`
+				 },
+				 {
+					 id:35, title: "निकषोपलः ", category : "Telegram", dir:"https://t.me/nikaSopalaH",
+					 desc: `nikaSopalaH (quiz) from monthly magazine सम्भाषणसन्देशः on Telegram channel`
+				 },
+				 {
+				 id:36, title: "कथाः - प्रश्नावली ", category : "Telegram", dir:"https://t.me/kathaaH",
+					 desc: `Q and A quiz based on kathaaH from monthly magazine सम्भाषणसन्देशः on Telegram channel`
 				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
@@ -93,7 +105,7 @@ function diplayMenuItems(menuItems) {
           <img src=${item.dir}/cover.jpg alt="${item.title}" class="photo" />
           <div class="item-info">
             <header>
-              <a href=${item.dir}/>${item.title}</a>
+              <a href=${item.dir}/ target="zat.am">${item.title}</a>
               <h4 class="price">${item.category}</h4>
             </header>
             <p class="item-text">
