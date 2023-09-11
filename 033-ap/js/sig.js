@@ -37,7 +37,7 @@ function showit()
 }
 if (/year=(\w+)/.exec(window.location.href))
     yr = /year=(\w+)/.exec(window.location.href)[1];
-if (yr > 1993 && yr < 2023) {
+if (yr > 1995 && yr < 1999) {
     //domain=responsePayload.hd;
     //domain=userProfile.email.substring(userProfile.email.lastIndexOf('@')+1);
     if (openyrs.includes(yr)) {
