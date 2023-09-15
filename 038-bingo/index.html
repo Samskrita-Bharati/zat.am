@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<style>
+       div {
+            text-align: center;
+        }
+
+        .bigNumberDisplay {
+            font-size: 6em;
+        }
+
+        .numbersTable {
+            font-size: 1.6em;
+        }
+
+        table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table, tr, td {
+            border-collapse: collapse;
+            border: solid 1px #999;
+        }
+
+        td {
+            min-width: 100px;
+            color: #fff;
+        }
+
+        td.selected {
+            color: #f00;
+        }
+                </style>
+<script>
+       var musicOn = true;
+$(function() {
+    var bingo = {
+        selectedNumbers: [],
+        generateRandom: function() {
+            var min = 1;
+            var max = 25;
+            var random = Math.floor(Math.random() * (max - min + 1)) + min;
+            return random;
+        },
+        generateNextRandom: function() {
+            if (bingo.selectedNumbers.length > 24) {
+                alert("All numbers Exhausted");
+                return 0;
+            }
+            var random = bingo.generateRandom();
+            while ($.inArray(random, bingo.selectedNumbers) > -1) {
+                random = bingo.generateRandom();
+            }
+            bingo.selectedNumbers.push(random);
+            return random;
+        }
+    };
+    $('td').each(function() {
+        var concatClass = this.cellIndex + "" + this.parentNode.rowIndex;
+        var numberString = parseInt(concatClass, 10).toString();
+        $(this).addClass("cell" + numberString);
+                if (numberString == 21) numberString = 30;
+                if (numberString == 22) numberString = 40;
+                if (numberString == 23) numberString = 50;
+                if (numberString == 24) numberString = 100;
+                if (numberString == 25) numberString = 0;
+                $(this).text(numberString);
+    });
+    $('#btnGenerate').click(function() {
+        var random_num = bingo.generateNextRandom();
+                var random = random_num.toString();
+          if (true === musicOn)  musicelements[random-1].play();
+                var sans_array = ['ekam एकम्','dve द्वे','triiNi त्रीणि','chatvaari चत्वारि','pa~ncha पञ्च','ShaT षट्','sapta सप्त','aShTa अष्ट','nava नव','dasha दश','ekaadasha एकादश','dvaadasha द्वादश','trayodasha त्रयोदश','chaturdasha चतुर्दश','pa~nchadasha पञ्चदश','ShoDasha षोडश','saptadasha सप्तदश','aShTaadasha अष्टादश','navadasha नवदश','viMshatiH विंशतिः','triMshat त्रिंशत्','chatvaariMshat चत्वारिंशत्','pa~nchaashat पञ्चाशत्','shatam शतम्','om'];
+                $('td.cell' + random).addClass('selected');
+                if (random == 21) random = 30;
+                if (random == 22) random = 40;
+                if (random == 23) random = 50;
+                if (random == 24) random = 100;
+                if (random == 25) random = 0;
+        $('.bigNumberDisplay span').text(sans_array[random_num-1]);
+
+    });
+       musicNode = document.getElementById('music');
+            musicNode.onclick = function() {
+                var mStatus = 'Sound On';
+                if (false === musicOn) {
+                    musicOn = true;
+                    mStatus = 'Sound On';
+                } else {
+                    musicOn = false;
+                    mStatus = 'Sound Off';
+                }
+               musicNode.getElementsByTagName('button')[0].innerHTML = mStatus; 
+            };
+       $("td").click(function() { 
+              if (this.className.indexOf("selected") > 0) { 
+                     console.log(this.innerHTML);
+                     musicelements[this.innerHTML-1].play();
+              }
+       });
+       musicelements = document.getElementsByTagName("audio");
+    window.onbeforeunload = function(e) {
+        e = e || window.event;
+        var returnString = 'Are you sure?';
+        if (e) {
+            e.returnValue = returnString;
+        }
+        return returnString;
+    };
+});
+       
+</script>
+<body>
+<div class="container">
+    <div>
+        <span>Bingo/Housie Number Generator</span>
+    </div>
+    <div class="bigNumberDisplay">
+        <span>0</span>
+    </div>
+    <div>
+        <input id="btnGenerate" type="button" value="Generate"/>
+    </div>
+
+    <br/>
+
+    <div class="numbersTable">
+        <table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>        </table>
+    </div>
+
+    <br/>
+</div>
+       <div id="music"><button>Sound On</button></div>
+<audio autobuffer preload=auto>
+<source src="res/1.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/2.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/3.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/4.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/5.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/6.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/7.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/8.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/9.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/10.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/11.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/12.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/13.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/14.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/15.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/16.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/17.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/18.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/19.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/20.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/30.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/40.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/50.mp3" />
+</audio>
+<audio autobuffer preload=auto>
+<source src="res/100.mp3" />
+</audio>
+</body>
+</html>

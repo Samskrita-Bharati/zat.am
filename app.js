@@ -83,7 +83,10 @@ const menu = [
 				 id:37, title: "Simple संस्कृतम्  transliterator", category : "TA", dir:"037-sst",
 					 desc: `SST for quick and easy back and forth transliteration`
 				 },
-				 
+				 				 {
+				 id:38, title: "संस्कृतम्  Bingo", category : "TA", dir:"038-bingo",
+					 desc: `helper`
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
