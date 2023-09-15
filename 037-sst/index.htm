@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+
+<!-- Mirrored from shreevatsa.appspot.com/sanskrit/transliterate.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 22 Nov 2017 19:16:41 GMT -->
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+  <title>Sanskrit transliteration</title>
+<style type="text/css">
+div { width:49%; border: 0px solid green; }
+div.devanagaridiv, div.htmldiv { float:right; clear:right;}
+div.harvardkyotodiv,div.itransdiv { float:left; clear:left;}
+textarea {
+    width: 90%;
+ height: 14em;
+}
+#devanagari
+{
+height:32em}
+div.formatlist {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+<strong> CREDITS: This is 'tweaked' from http://shreevatsa.appspot.com/sanskrit/transliterate.html</strong>
+<p>Note: see <a href="http://en.wikipedia.org/wiki/Help:Multilingual_support_(Indic)">
+these instructions</a> for ways to input Sanskrit directly (without transliteration), see <a href="http://www.google.com/transliterate/indic">Google Indic transliteration</a> for another way, <a href="http://www.iit.edu/~laksvij/language/">this page</a> for some other languages, and <a href="http://people.w3.org/rishida/scripts/pickers/devanagari/">this "picker"</a> for characters not covered here.</p>
+
+  <div class="entryarea">
+    If you enable Javascript, you can convert between the following transliteration schemes:
+    <ul>
+      <li title="devanagari">Devanagari</li>
+      <li title="harvardkyoto"><a href="http://en.wikipedia.org/wiki/Devanagari_transliteration#Transliteration_Comparison">Harvard-Kyoto</a> (for <a href="http://www.sanskrit-lexicon.uni-koeln.de/monier/">Monier-Williams</a>, etc.)</li>
+      <li title="itrans"><a href="http://en.wikipedia.org/wiki/Devanagari_transliteration#Transliteration_Comparison">ITRANS</a></li>
+    </ul>
+  </div>
+
+<script type="text/javascript" charset=UTF-8 src="json2.js"></script>
+<script type="text/javascript" charset=UTF-8 src="convert-data-sa.js"></script>
+<script type="text/javascript" charset=UTF-8 src="convert-in.js"></script>
+<script>
+var ta = [];
+function makeentryarea() {
+  var myolddiv = document.getElementsByClassName("entryarea")[0];
+  var taposs = myolddiv.getElementsByTagName("ul")[0].getElementsByTagName("li");
+  for(var i=0; i<taposs.length; ++i) {
+    ta.push(taposs[i]);
+  }
+
+  /*This is part of the document; *really* ought to be done server-side*/
+  while(myolddiv.hasChildNodes()) myolddiv.removeChild(myolddiv.firstChild);
+  document.body.removeChild(myolddiv);
+  document.open();
+  for(var i=0; i<ta.length; ++i) {
+ 
+    var tareahtml = '<textarea spellcheck="false" id="' + ta[i].getAttribute("title") + '"';
+    tareahtml +=  '></textarea>';
+    document.writeln('<div class="'+ta[i].getAttribute("title")+'div"> <p>' + ta[i].innerHTML + '<br/>' + tareahtml + '</div>');
+  }
+  document.close();
+}
+makeentryarea();
+
+
+function fixall(tarea) {
+    var u = INtranslit[tarea.id+"2u"](tarea.value);
+    //document.writeln(tarea.value + "becomes " + u);
+    for(var i=0; i<ta.length; ++i) {
+      var t = ta[i].getAttribute("title");
+      if(t != tarea.id) {
+        document.getElementById(t).value = INtranslit["u2"+t](u);
+      }
+    }
+  }
+
+function prepareTareas() {
+    var areas = document.getElementsByTagName('textarea');
+    for(var i=0; i<areas.length; ++i) {
+        areas[i].onkeyup=function() { return fixall(this); }
+    }
+}
+
+function addLoadEvent(func) {
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') {
+        window.onload = func;
+    } else {
+        window.onload = function() {
+            if (oldonload) {
+                oldonload();
+            }
+            func();
+        }
+    }
+}
+
+//addLoadEvent(makeentryarea);
+addLoadEvent(prepareTareas);
+</script>
+</body>

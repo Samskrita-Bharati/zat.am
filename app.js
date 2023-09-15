@@ -79,6 +79,11 @@ const menu = [
 				 id:36, title: "कथाः - प्रश्नावली ", category : "Telegram", dir:"https://t.me/kathaaH",
 					 desc: `Q and A quiz based on kathaaH from monthly magazine सम्भाषणसन्देशः on Telegram channel`
 				 },
+				 {
+				 id:37, title: "Simple संस्कृतम्  transliterator", category : "TA", dir:"037-sst",
+					 desc: `SST for quick and easy back and forth transliteration`
+				 },
+				 
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
