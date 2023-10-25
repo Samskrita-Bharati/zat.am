@@ -19,6 +19,7 @@
             "elm-community/random-extra": "3.2.0",
             "jjant/unwrap": "1.0.1",
             "mgold/elm-nonempty-list": "4.2.0",
+            "miniBill/elm-unicode": "1.0.3",
             "pilatch/flip": "1.0.0"
         },
         "indirect": {

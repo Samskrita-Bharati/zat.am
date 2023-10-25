@@ -14,6 +14,7 @@ import List.Extra as ListX
 import List.Nonempty as NEL exposing (Nonempty(..))
 import Maybe.Extra as MaybeX
 import Types exposing (..)
+import Unicode
 
 
 initialModel : Config -> Model
@@ -73,7 +74,7 @@ sanitize =
         << String.words
         << String.foldr
             (\ch acc ->
-                if Char.isAlpha ch || Char.isDigit ch then
+                if Unicode.isAlpha ch || Unicode.isDigit ch || Unicode.getCategory ch == Just Unicode.MarkNonSpacing then
                     String.cons ch acc
 
                 else
