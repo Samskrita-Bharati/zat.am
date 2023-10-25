@@ -181,7 +181,7 @@ var संस्कृतठ्यवहारः = {
       "audioUrl": "decks/phrases/assets/audio/bahu-samīcīnam.mp3",
       "unicode": "बहु समीचीनम्",
       "latin": "bahu samīcīnam",
-      "localNames":0 ["Very fine"],
+      "localNames": ["Very fine"],
       "description": ""
     },
     {
