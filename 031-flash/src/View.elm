@@ -1,10 +1,10 @@
 module View exposing (view)
 
 import Config
-import Flip exposing (flip)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events as HE
+import List
 import List.Nonempty as NEL exposing (Nonempty(..))
 import Maybe.Extra as MaybeX
 import Model
@@ -25,108 +25,49 @@ view model =
 
 viewSettings : Model -> Html Msg
 viewSettings model =
-    div []
+    div [ class "w3-container w3-card-4 card" ]
         [ h1 [ class "center" ] [ text model.config.deckTitle ]
         , h2 [ class "center" ] [ text "Settings" ]
         , div []
-            [ Html.form []
-                (trainModeFieldSet model
-                    :: br [] []
-                    :: (if model.config.scriptCanBeSet then
-                            [ scriptFieldSet model ]
+            (trainModeSelect model
+                :: br [] []
+                :: quizTypeSelect model
+                :: br [] []
+                :: (if model.config.scriptCanBeSet then
+                        [ scriptFieldSet model ]
 
-                        else
-                            []
-                       )
-                    ++ (if model.config.groupCanBeSet then
-                            [ groupFieldSet model ]
-
-                        else
-                            []
-                       )
-                    ++ (if model.config.autoPlayCanBeSet then
-                            [ autoPlayCheckBox model ]
-
-                        else
-                            []
-                       )
-                )
-            , br [] []
-            , div [ class "center" ]
-                (button
-                    [ class "button startButton", HE.onClick Start ]
-                    [ text "Start" ]
-                    :: (if MaybeX.isJust model.config.landingPage then
-                            [ button
-                                [ class "button startButton end-button"
-                                , HE.onClick GoLanding
-                                ]
-                                [ text "Change Deck" ]
-                            ]
-
-                        else
-                            []
-                       )
-                )
-            ]
-        ]
-
-
-groupFieldSet : Model -> Html Msg
-groupFieldSet model =
-    let
-        discoveredGroups =
-            model.config.allSubjects
-                |> NEL.map .group
-                |> NEL.filter MaybeX.isJust
-                    (Just "err: must have at least one subject with group")
-                |> NEL.map (Maybe.withDefault "err: unexpected Nothing")
-                |> NEL.uniq
-                |> NEL.sort
-                |> flip NEL.append (NEL.singleton "All")
-
-        groupInput group =
-            let
-                inputId =
-                    String.filter (\c -> c /= ' ') group ++ "Input"
-            in
-            [ tr []
-                [ td [ class "quiz" ]
-                    [ input
-                        [ id <| inputId
-                        , name inputId
-                        , type_ "radio"
-                        , value group
-                        , HE.onInput SetGroup
-                        , checked <|
-                            case group of
-                                "All" ->
-                                    MaybeX.isNothing model.settings.group
-
-                                grp ->
-                                    model.settings.group == Just grp
-                        ]
+                    else
                         []
-                    ]
-                , td [ class "quiz" ]
-                    [ label [ for inputId ]
-                        [ text group ]
-                    ]
-                ]
-            ]
-    in
-    fieldset []
-        [ legend [] [ strong [] [ text model.config.groupDisplay ] ]
-        , table [] <|
-            NEL.foldl
-                (\grp acc -> acc ++ groupInput grp)
-                []
-                discoveredGroups
+                   )
+                ++ (if model.config.groupCanBeSet then
+                        [ groupSelect model ]
+
+                    else
+                        []
+                   )
+            )
+        , br [] []
+        , div [ class "center" ]
+            (button
+                [ class "w3-btn startButton", HE.onClick Start ]
+                [ text "Start" ]
+                :: (if MaybeX.isJust model.config.landingPage then
+                        [ button
+                            [ class "w3-btn end-button"
+                            , HE.onClick GoLanding
+                            ]
+                            [ text "Change Deck" ]
+                        ]
+
+                    else
+                        []
+                   )
+            )
         ]
 
 
-trainModeFieldSet : Model -> Html Msg
-trainModeFieldSet model =
+trainModeSelect : Model -> Html Msg
+trainModeSelect model =
     let
         filterConfig : TrainMode -> List (Html Msg) -> List (Html Msg)
         filterConfig trainMode htmlElements =
@@ -136,35 +77,27 @@ trainModeFieldSet model =
             else
                 []
 
-        trainModeInput ( mode, modeString ) =
-            [ tr []
-                [ td [ class "quiz" ]
-                    [ input
-                        [ id modeString
-                        , name "trainMode"
-                        , type_ "radio"
-                        , value modeString
-                        , HE.onInput SetTrainMode
-                        , checked <| model.settings.trainMode == mode
-                        ]
-                        []
-                    ]
-                , td [ class "quiz" ]
-                    [ label [ for modeString ]
-                        [ text (Config.showTrainMode model.config mode) ]
-                    ]
+        trainModeOption ( mode, modeString ) =
+            [ option
+                [ value modeString
+                , selected <| model.settings.trainMode == mode
                 ]
+                [ text <| Config.showTrainMode model.config mode ]
             ]
     in
-    fieldset []
-        [ legend [] [ strong [] [ text "Training Mode" ] ]
-        , table [] <|
-            List.foldl
+    div [ class "w3-container w3-card" ]
+        [ h3 [] [ text "Select Training Mode…" ]
+        , select
+            [ class "w3-select w3-border settings-select"
+            , name "trainMode"
+            , HE.onInput SetTrainMode
+            ]
+            (List.foldl
                 (\modeAndName acc ->
                     acc
                         ++ filterConfig
                             (Tuple.first modeAndName)
-                            (trainModeInput modeAndName)
+                            (trainModeOption modeAndName)
                 )
                 []
                 [ ( Review, "Review" )
@@ -172,22 +105,73 @@ trainModeFieldSet model =
                 , ( LocalName, "LocalName" )
                 , ( Description, "Description" )
                 ]
+            )
         ]
 
 
-autoPlayCheckBox : Model -> Html Msg
-autoPlayCheckBox model =
-    div [ class "quiz" ]
-        [ br [] []
-        , input
-            [ id "autoplay"
-            , type_ "checkbox"
-            , value "True"
-            , checked <| model.settings.autoPlay
-            , HE.onClick ToggleAutoPlay
+groupSelect : Model -> Html Msg
+groupSelect model =
+    let
+        discoveredGroups =
+            model.config.allSubjects
+                |> NEL.map .group
+                |> NEL.filter MaybeX.isJust
+                    (Just "err: must have at least one subject with group")
+                |> NEL.map (Maybe.withDefault "err: unexpected Nothing")
+                |> NEL.uniq
+                |> NEL.sort
+                |> NEL.cons "All"
+
+        groupOption : String -> Html Msg
+        groupOption group =
+            option
+                [ value group
+                , selected <|
+                    case group of
+                        "All" ->
+                            MaybeX.isNothing model.settings.group
+
+                        grp ->
+                            model.settings.group == Just grp
+                ]
+                [ text group ]
+    in
+    div [ class "w3-container w3-card" ]
+        [ h3 [] [ text <| "Select " ++ model.config.groupDisplay ++ "…" ]
+        , select
+            [ class "w3-select w3-border settings-select"
+            , name "group"
+            , HE.onInput SetGroup
             ]
-            []
-        , label [ for "autoplay" ] [ text "Autoplay Audio" ]
+          <|
+            NEL.foldl
+                (\grp acc -> acc ++ [ groupOption grp ])
+                []
+                discoveredGroups
+        ]
+
+
+quizTypeSelect : Model -> Html Msg
+quizTypeSelect model =
+    div [ class "w3-container w3-card" ]
+        [ h3 [] [ text <| "Select Quiz Type…" ]
+        , select
+            [ class "w3-select w3-border settings-select"
+            , name "quizType"
+            , HE.onInput SetQuizType
+            , disabled <| model.settings.trainMode == Review
+            ]
+            [ option
+                [ value "MultipleChoice"
+                , selected <| model.settings.quizType == MultipleChoice
+                ]
+                [ text "Multiple Choice" ]
+            , option
+                [ value "TextField"
+                , selected <| model.settings.quizType == TextField
+                ]
+                [ text "Text Field" ]
+            ]
         ]
 
 
@@ -199,7 +183,8 @@ scriptFieldSet model =
             [ tr []
                 [ td [ class "quiz" ]
                     [ input
-                        [ id "unicode"
+                        [ class "w3-radio radio"
+                        , id "unicode"
                         , name "script"
                         , type_ "radio"
                         , value "Unicode"
@@ -209,12 +194,17 @@ scriptFieldSet model =
                         []
                     ]
                 , td [ class "quiz" ]
-                    [ label [ for "unicode" ] <| radioScriptLabelHtml Unicode ]
+                    [ label
+                        [ for "unicode" ]
+                      <|
+                        radioScriptLabelHtml Unicode
+                    ]
                 ]
             , tr []
                 [ td [ class "quiz" ]
                     [ input
-                        [ id "latin"
+                        [ class "w3-radio radio"
+                        , id "latin"
                         , name "script"
                         , type_ "radio"
                         , value "Latin"
@@ -224,7 +214,11 @@ scriptFieldSet model =
                         []
                     ]
                 , td [ class "quiz" ]
-                    [ label [ for "latin" ] <| radioScriptLabelHtml Latin ]
+                    [ label
+                        [ for "latin" ]
+                      <|
+                        radioScriptLabelHtml Latin
+                    ]
                 ]
             ]
         ]
@@ -243,186 +237,174 @@ radioScriptLabelHtml script =
 viewCard : Model -> Card -> Html Msg
 viewCard model card =
     div [] <|
-        viewImage card.subject.imageUrl
-            ++ [ div [] <|
-                    let
-                        mainPartAttributes =
-                            class "mainPart"
-                                :: MaybeX.unwrap []
-                                    (\fs -> [ style "font-size" fs ])
-                                    model.config.mainPartFontSize
+        let
+            mainPartAttributes =
+                class "mainPart"
+                    :: MaybeX.unwrap []
+                        (\fs -> [ style "font-size" fs ])
+                        model.config.mainPartFontSize
 
-                        contentViews =
-                            case model.settings.trainMode of
-                                Review ->
-                                    [ table [ class "card" ]
-                                        ([ tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
-                                         , tr [ class "minorPart" ] [ viewLocalName card.subject ]
-                                         ]
-                                            ++ showDescriptionInCard model card
-                                            ++ playAudio model card.subject.audioUrl
-                                        )
-                                    , hr [] []
-                                    ]
-
-                                Urname ->
-                                    let
-                                        descriptionHtml =
-                                            if model.config.showDescriptionWithUrNameQuiz then
-                                                showDescriptionInCard model card
-
-                                            else
-                                                []
-
-                                        audioHtml =
-                                            if model.config.showAudioWithUrNameQuiz then
-                                                playAudio model card.subject.audioUrl
-
-                                            else
-                                                []
-                                    in
-                                    [ table [ class "card" ]
-                                        (tr mainPartAttributes [ viewLocalName card.subject ]
-                                            :: (descriptionHtml
-                                                    ++ audioHtml
-                                               )
-                                        )
-                                    , viewQuiz (Config.showTrainMode model.config Urname) model card
-                                    ]
-
-                                LocalName ->
-                                    let
-                                        descriptionHtml =
-                                            if model.config.showDescriptionWithLocalNameQuiz then
-                                                showDescriptionInCard model card
-
-                                            else
-                                                []
-
-                                        audioHtml =
-                                            if model.config.showAudioWithLocalNameQuiz then
-                                                playAudio model card.subject.audioUrl
-
-                                            else
-                                                []
-                                    in
-                                    [ table [ class "card" ] <|
-                                        tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
-                                            :: descriptionHtml
-                                            ++ audioHtml
-                                            ++ [ viewQuiz (Config.showTrainMode model.config LocalName) model card ]
-                                    ]
-
-                                Description ->
-                                    [ table [ class "card" ]
-                                        ([ tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
-                                         , tr [ class "minorPart" ] [ viewLocalName card.subject ]
-                                         ]
-                                            ++ playAudio model card.subject.audioUrl
-                                        )
-                                    , viewQuiz (Config.showTrainMode model.config Description) model card
-                                    ]
-
-                        prevEnabled =
-                            model.settings.trainMode == Review && not (List.isEmpty model.previousDeck)
-
-                        buttonStyle isEnabled =
-                            if isEnabled then
-                                "button"
-
-                            else
-                                "disabledButton"
-
-                        nextButton =
-                            button
-                                [ class (buttonStyle <| Model.nextEnabled model)
-                                , disabled <| not (Model.nextEnabled model)
-                                , HE.onClick <| Next
+            contentViews =
+                viewImage card.subject.imageUrl
+                    ++ (case model.settings.trainMode of
+                            Review ->
+                                [ table [ class "maxWidth" ]
+                                    ([ tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
+                                     , tr [ class "minorPart" ] [ viewLocalName card.subject ]
+                                     ]
+                                        ++ showDescriptionInCard model card
+                                        ++ playAudio model card.subject.audioUrl
+                                    )
                                 ]
-                                [ text "Next ⇨" ]
 
-                        prevButton =
-                            button [ class (buttonStyle prevEnabled), disabled (not prevEnabled), HE.onClick Previous ]
-                                [ text "⇦ Prev" ]
+                            Urname ->
+                                let
+                                    descriptionHtml =
+                                        if model.config.showDescriptionWithUrNameQuiz then
+                                            showDescriptionInCard model card
 
-                        startOver =
-                            button
-                                [ class "button", HE.onClick Reset ]
-                                [ text "Start Over" ]
-                                :: (if MaybeX.isJust model.config.landingPage then
-                                        [ button
-                                            [ class "button end-button", HE.onClick GoLanding ]
-                                            [ text "Change Deck" ]
-                                        ]
+                                        else
+                                            []
 
-                                    else
-                                        []
-                                   )
+                                    audioHtml =
+                                        if model.config.showAudioWithUrNameQuiz then
+                                            playAudio model card.subject.audioUrl
 
-                        allFinished =
-                            button [ class "end-button", HE.onClick Reset ] [ text "All Finished! Train Again?" ]
-                                :: (if MaybeX.isJust model.config.landingPage then
-                                        [ button
-                                            [ class "end-button", HE.onClick GoLanding ]
-                                            [ text "Change Deck" ]
-                                        ]
+                                        else
+                                            []
+                                in
+                                [ table [ class "maxWidth" ]
+                                    (tr mainPartAttributes [ viewLocalName card.subject ]
+                                        :: (descriptionHtml
+                                                ++ audioHtml
+                                           )
+                                    )
+                                , viewQuiz (Config.showTrainMode model.config Urname) model card
+                                ]
 
-                                    else
-                                        []
-                                   )
+                            LocalName ->
+                                let
+                                    descriptionHtml =
+                                        if model.config.showDescriptionWithLocalNameQuiz then
+                                            showDescriptionInCard model card
 
-                        allButtons =
-                            [ prevButton
-                            , nextButton
-                            , br [] []
+                                        else
+                                            []
+
+                                    audioHtml =
+                                        if model.config.showAudioWithLocalNameQuiz then
+                                            playAudio model card.subject.audioUrl
+
+                                        else
+                                            []
+                                in
+                                [ table [ class "maxWidth" ] <|
+                                    tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
+                                        :: descriptionHtml
+                                        ++ audioHtml
+                                        ++ [ viewQuiz (Config.showTrainMode model.config LocalName) model card ]
+                                ]
+
+                            Description ->
+                                [ table [ class "maxWidth" ]
+                                    ([ tr mainPartAttributes [ viewUrname card.subject model.settings model.config ]
+                                     , tr [ class "minorPart" ] [ viewLocalName card.subject ]
+                                     ]
+                                        ++ playAudio model card.subject.audioUrl
+                                    )
+                                , viewQuiz (Config.showTrainMode model.config Description) model card
+                                ]
+                       )
+
+            prevEnabled =
+                model.settings.trainMode == Review && not (List.isEmpty model.previousDeck)
+
+            nextButton =
+                button
+                    [ class "w3-btn"
+                    , disabled <| not (Model.nextEnabled model)
+                    , HE.onClick <| Next
+                    ]
+                    [ text "Next ⇨" ]
+
+            prevButton =
+                button [ class "w3-btn", disabled (not prevEnabled), HE.onClick Previous ]
+                    [ text "⇦ Prev" ]
+
+            startOver =
+                button
+                    [ class "w3-btn", HE.onClick Reset ]
+                    [ text "Start Over" ]
+                    :: (if MaybeX.isJust model.config.landingPage then
+                            [ button
+                                [ class "w3-btn end-button", HE.onClick GoLanding ]
+                                [ text "Change Deck" ]
                             ]
-                                ++ startOver
 
-                        midwayButtons =
-                            case model.settings.trainMode of
-                                Review ->
-                                    allButtons
+                        else
+                            []
+                       )
 
-                                _ ->
-                                    -- remove Prev button
-                                    List.drop 1 allButtons
+            allFinished =
+                button [ class "w3-btn end-button", HE.onClick Reset ] [ text "All Finished! Train Again?" ]
+                    :: (if MaybeX.isJust model.config.landingPage then
+                            [ button
+                                [ class "w3-btn end-button", HE.onClick GoLanding ]
+                                [ text "Change Deck" ]
+                            ]
 
-                        endButtons =
-                            div [ id "buttons" ] <|
-                                if model.settings.trainMode == Review then
-                                    [ prevButton
-                                    , nextButton
-                                    , br [] []
-                                    , br [] []
-                                    ]
-                                        ++ allFinished
+                        else
+                            []
+                       )
 
-                                else if MaybeX.isJust model.userAnswer then
-                                    [ nextButton
-                                    , br [] []
-                                    , br [] []
-                                    ]
-                                        ++ allFinished
+            allButtons =
+                [ prevButton
+                , nextButton
+                , br [] []
+                ]
+                    ++ startOver
 
-                                else
-                                    [ nextButton
-                                    , br [] []
-                                    , br [] []
-                                    ]
-                                        ++ startOver
-                    in
-                    contentViews
-                        ++ [ div [ class "center" ]
-                                [ if NEL.isSingleton model.remainingDeck then
-                                    endButtons
+            midwayButtons =
+                case model.settings.trainMode of
+                    Review ->
+                        allButtons
 
-                                  else
-                                    div [ id "buttons" ]
-                                        midwayButtons
-                                , viewScore model
-                                ]
-                           ]
-               ]
+                    _ ->
+                        -- remove Prev button
+                        List.drop 1 allButtons
+
+            endButtons =
+                div [ id "buttons" ] <|
+                    if model.settings.trainMode == Review then
+                        [ prevButton
+                        , nextButton
+                        , br [] []
+                        ]
+                            ++ allFinished
+
+                    else if MaybeX.isJust model.userAnswer then
+                        [ nextButton
+                        , br [] []
+                        ]
+                            ++ allFinished
+
+                    else
+                        [ nextButton
+                        , br [] []
+                        ]
+                            ++ startOver
+        in
+        [ div [ class "w3-card card" ] contentViews
+        , div [ class "center" ]
+            [ if NEL.isSingleton model.remainingDeck then
+                endButtons
+
+              else
+                div [ id "buttons" ]
+                    midwayButtons
+            , viewScore model
+            ]
+        ]
 
 
 viewImage : Maybe String -> List (Html Msg)
@@ -448,7 +430,7 @@ showDescriptionInCard model card =
                 ]
     in
     if model.config.showDescription then
-        [ tr [ class "minorPart descriptionBlock" ] (descriptionHtml card.subject) ]
+        [ tr [ class "minorPart" ] (descriptionHtml card.subject) ]
 
     else
         []
@@ -461,11 +443,7 @@ playAudio model maybeUrl =
             case maybeUrl of
                 Just url ->
                     [ tr [ class "audio" ]
-                        [ audio
-                            [ controls True
-                            , autoplay <|
-                                model.settings.autoPlay
-                            ]
+                        [ audio [ controls True, autoplay True ]
                             [ source [ src url, type_ "audio/mpeg" ] []
                             , text "Your browser does not support the audio element"
                             ]
@@ -485,49 +463,116 @@ playAudio model maybeUrl =
 viewScore : Model -> Html Msg
 viewScore model =
     let
-        percentValue =
-            String.fromInt
-                << round
-            <|
+        remaining =
+            NEL.length model.remainingDeck
+                - (if
+                    model.settings.trainMode
+                        == Review
+                        || Model.isAnswered model
+                   then
+                    1
+
+                   else
+                    0
+                  )
+
+        score =
+            round <|
                 if model.total == 0 then
                     0.0
 
                 else
                     100 * toFloat model.score / toFloat model.total
 
-        percentString =
-            " ( " ++ percentValue ++ "%)"
+        scorePercent =
+            String.fromInt score ++ "%"
 
-        scoreView =
-            if model.settings.trainMode == Review then
-                []
+        total =
+            List.length model.previousDeck
+                + NEL.length model.remainingDeck
 
-            else
-                [ text <|
-                    "Score: "
-                        ++ String.fromInt model.score
-                        ++ "/"
-                        ++ String.fromInt model.total
-                        ++ percentString
-                , br [] []
-                ]
+        soFar =
+            List.length model.previousDeck
+                + (if
+                    Model.isAnswered model
+                        || model.settings.trainMode
+                        == Review
+                   then
+                    1
 
-        remaining =
-            NEL.length model.remainingDeck
+                   else
+                    0
+                  )
+
+        progress =
+            round <|
+                100
+                    * toFloat soFar
+                    / toFloat total
+
+        progressPercent =
+            String.fromInt progress ++ "%"
+
+        progressFgClasses =
+            case model.settings.trainMode of
+                Review ->
+                    "progress-fg review"
+
+                _ ->
+                    "progress-fg"
     in
-    h3 [ class "score" ] <|
-        scoreView
-            ++ (if remaining > 0 then
-                    [ text <|
-                        "Number of "
-                            ++ model.config.pluralSubjectName
-                            ++ " Remaining: "
-                            ++ String.fromInt (remaining - 1)
-                    ]
+    div [ class "w3-container cardWidth" ]
+        [ div [ class "score" ]
+            [ div [ class "score-remaining-container" ]
+                [ div [ class "score-remaining-layer1" ]
+                    (case model.settings.trainMode of
+                        Review ->
+                            [ text "Progress:" ]
 
-                else
-                    []
-               )
+                        _ ->
+                            [ text <|
+                                "Score: "
+                            , span [ class "score-fg" ]
+                                [ text <|
+                                    String.fromInt model.score
+                                        ++ "/"
+                                        ++ String.fromInt model.total
+                                        ++ " ("
+                                        ++ scorePercent
+                                        ++ ")"
+                                ]
+                            ]
+                    )
+                , div [ class "score-remaining-layer2" ] [ text <| "Remaining: " ++ String.fromInt remaining ]
+                ]
+            , div [ class "progress-bg" ]
+                --w3-right-align
+                [ div
+                    [ class progressFgClasses
+                    , style "width" progressPercent
+                    ]
+                    (if model.settings.trainMode == Review then
+                        []
+
+                     else
+                        [ div
+                            [ class
+                                ("score-fg"
+                                    ++ (if progress == 0 then
+                                            " low-progress"
+
+                                        else
+                                            ""
+                                       )
+                                )
+                            , style "width" scorePercent
+                            ]
+                            [ text scorePercent ]
+                        ]
+                    )
+                ]
+            ]
+        ]
 
 
 attrsForUrname : Subject -> Settings -> Config -> List (Attribute msg)
@@ -560,20 +605,15 @@ viewUrname subject settings config =
 
 viewLocalName : Subject -> Html Msg
 viewLocalName subject =
-    p [] [ text subject.localName ]
+    p [ class "localNameText" ] [ text <| displayAnswer subject.localNames ]
 
 
 viewQuiz : String -> Model -> Card -> Html Msg
 viewQuiz legendLabel model card =
     let
-        isDisabled =
-            MaybeX.isJust model.userAnswer
-
-        isChecked val =
-            model.userAnswer == Just val
-
         isCorrect val =
-            Model.getAnswerString model.settings card.subject == val
+            NEL.member (Model.sanitize val) <|
+                Model.getScrubbedAnswers model.settings card.subject
 
         correctAttributes =
             [ class "correct" ]
@@ -588,26 +628,110 @@ viewQuiz legendLabel model card =
              else
                 []
             )
-                ++ (if isDisabled then
-                        if isCorrect val then
-                            correctAttributes
+                ++ correctnessAttributes val
+
+        correctnessAttributes : String -> List (Attribute Msg)
+        correctnessAttributes val =
+            if Model.isAnswered model then
+                if isCorrect val then
+                    correctAttributes
+
+                else
+                    incorrectAttributes
+
+            else
+                []
+
+        getChoices : List (Html Msg)
+        getChoices =
+            case model.settings.quizType of
+                MultipleChoice ->
+                    card.choices
+                        |> List.indexedMap toInputView
+
+                TextField ->
+                    let
+                        styleClasses =
+                            if model.settings.trainMode == Description then
+                                "textAnswer description"
+
+                            else
+                                "textAnswer"
+                    in
+                    [ tr []
+                        [ td (class styleClasses :: correctnessAttributes model.userAnswerPending)
+                            [ case model.settings.trainMode of
+                                Description ->
+                                    textarea
+                                        (class ("w3-input " ++ styleClasses)
+                                            :: correctnessAttributes model.userAnswerPending
+                                            ++ [ HE.onInput TypeAnswer
+                                               , disabled
+                                                    (Model.isAnswered model)
+                                               , id "answerTextField"
+                                               , value model.userAnswerPending
+                                               ]
+                                        )
+                                        []
+
+                                _ ->
+                                    input
+                                        (class ("w3-input " ++ styleClasses)
+                                            :: correctnessAttributes model.userAnswerPending
+                                            ++ [ type_ "text"
+                                               , value model.userAnswerPending
+                                               , HE.onInput TypeAnswer
+                                               , disabled (Model.isAnswered model)
+                                               , id "answerTextField"
+                                               ]
+                                        )
+                                        []
+                            ]
+                        ]
+                    , if Model.isAnswered model then
+                        if isCorrect model.userAnswerPending then
+                            div []
+                                [ text "Correct!"
+                                , br [] []
+                                , div [ class "correct localNameText" ]
+                                    [ text <|
+                                        displayAnswer <|
+                                            Model.getCorrectAnswers model.settings card.subject
+                                    ]
+                                ]
 
                         else
-                            incorrectAttributes
+                            div []
+                                [ text
+                                    "The correct answer is:"
+                                , div [ class "correct localNameText" ]
+                                    [ text <|
+                                        displayAnswer <|
+                                            Model.getCorrectAnswers model.settings card.subject
+                                    ]
+                                ]
 
-                    else
-                        []
-                   )
-
-        getChoices =
-            card.choices
-                |> List.indexedMap toInputView
+                      else
+                        tr []
+                            [ td [ class styleClasses ]
+                                [ button
+                                    [ class "w3-btn submit"
+                                    , class styleClasses
+                                    , HE.onClick SubmitAnswer
+                                    ]
+                                    [ text "Submit" ]
+                                ]
+                            ]
+                    ]
 
         toInputView : Int -> Subject -> Html Msg
         toInputView i subject =
             let
-                answerString =
-                    Model.getAnswerString model.settings subject
+                answerChoiceI =
+                    displayAnswer <| Model.getCorrectAnswers model.settings subject
+
+                isChecked val =
+                    model.userAnswer == Just (Model.sanitize val)
 
                 audioButton url =
                     audio [ controls True, autoplay False, style "width" "100" ]
@@ -641,46 +765,63 @@ viewQuiz legendLabel model card =
                 )
                     ++ [ td [ class "quiz", style "width" "15px" ]
                             [ input
-                                [ id ("choice" ++ String.fromInt i)
+                                [ class "w3-radio radio"
+                                , id ("choice" ++ String.fromInt i)
                                 , name "choice"
-                                , placeholder answerString
+                                , placeholder answerChoiceI
                                 , type_ "radio"
-                                , value answerString
+                                , value answerChoiceI
                                 , HE.onInput Answer
-                                , checked <| isChecked answerString
-                                , disabled isDisabled
+                                , checked <| isChecked answerChoiceI
+                                , disabled (Model.isAnswered model)
                                 ]
                                 []
                             ]
                        , td
                             (class "quiz"
-                                :: (if isDisabled && isCorrect answerString then
+                                :: (if Model.isAnswered model && isCorrect answerChoiceI then
                                         correctAttributes
 
                                     else
                                         []
                                    )
                             )
-                            [ label (for ("choice" ++ String.fromInt i) :: labelAttributes answerString)
-                                [ text answerString ]
+                            [ label (for ("choice" ++ String.fromInt i) :: labelAttributes answerChoiceI)
+                                [ text answerChoiceI ]
                             ]
                        ]
     in
     div
-        (if model.settings.trainMode == Description then
-            [ class "descriptionQuiz" ]
+        (case model.settings.trainMode of
+            Description ->
+                case model.settings.quizType of
+                    MultipleChoice ->
+                        [ class "descriptionQuiz multipleChoice" ]
 
-         else
-            []
+                    TextField ->
+                        [ class "descriptionQuiz textField" ]
+
+            _ ->
+                []
         )
-        [ Html.form []
-            [ fieldset
-                [ class "quiz" ]
-                [ table [ class "quiz" ]
-                    (tr [] [ th [] [], th [ class "quizHeader" ] [ text legendLabel ] ]
-                        :: getChoices
-                    )
-                ]
+        [ fieldset
+            [ class "quiz" ]
+            [ table [ class "quiz" ]
+                (th [ colspan 2, class "quizHeader" ] [ text legendLabel ]
+                    :: getChoices
+                )
             ]
         , br [] []
         ]
+
+
+displayAnswer : Nonempty String -> String
+displayAnswer localNames =
+    if NEL.length localNames == 1 then
+        NEL.head localNames
+
+    else
+        NEL.head localNames
+            ++ " (aka "
+            ++ String.concat (List.intersperse ", " (NEL.tail localNames))
+            ++ ")"

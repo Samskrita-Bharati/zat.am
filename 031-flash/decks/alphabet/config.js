@@ -30,7 +30,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/a.mp3",
       "unicode": "अ",
       "latin": "",
-      "localName": "a",
+      "localNames": ["a"],
       "description": "short velar vowel"
     },
     {
@@ -38,7 +38,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ā.mp3",
       "unicode": "आ",
       "latin": "",
-      "localName": "ā",
+      "localNames": ["ā"],
       "description": "long velar vowel"
     },
     {
@@ -46,7 +46,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/i.mp3",
       "unicode": "इ",
       "latin": "",
-      "localName": "i",
+      "localNames": ["i"],
       "description": "short palatal vowel"
     },
     {
@@ -54,7 +54,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ī.mp3",
       "unicode": "ई",
       "latin": "",
-      "localName": "ī",
+      "localNames": ["ī"],
       "description": "long palatal vowel"
     },
     {
@@ -62,7 +62,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/u.mp3",
       "unicode": "उ",
       "latin": "",
-      "localName": "u",
+      "localNames": ["u"],
       "description": "short labial vowel"
     },
     {
@@ -70,7 +70,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ū.mp3",
       "unicode": "ऊ",
       "latin": "",
-      "localName": "ū",
+      "localNames": ["ū"],
       "description": "long labial vowel"
     },
     {
@@ -78,7 +78,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/r̥.mp3",
       "unicode": "ऋ",
       "latin": "",
-      "localName": "r̥",
+      "localNames": ["r̥"],
       "description": "short retroflex vowel"
     },
     {
@@ -86,7 +86,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/r̥̄.mp3",
       "unicode": "ॠ",
       "latin": "",
-      "localName": "r̥̄",
+      "localNames": ["r̥̄"],
       "description": "long retroflex vowel"
     },
     {
@@ -94,7 +94,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/l̥.mp3",
       "unicode": "ऌ",
       "latin": "",
-      "localName": "l̥",
+      "localNames": ["l̥"],
       "description": "short dental vowel"
     },
     {
@@ -102,7 +102,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ē.mp3",
       "unicode": "ए",
       "latin": "",
-      "localName": "ē",
+      "localNames": ["ē"],
       "description": "a - i compound vowel"
     },
     {
@@ -110,7 +110,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ai.mp3",
       "unicode": "ऐ",
       "latin": "",
-      "localName": "ai",
+      "localNames": ["ai"],
       "description": "a - e compound vowel"
     },
     {
@@ -118,7 +118,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ō.mp3",
       "unicode": "ओ",
       "latin": "",
-      "localName": "ō",
+      "localNames": ["ō"],
       "description": "a - u compound vowel"
     },
     {
@@ -126,7 +126,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/au.mp3",
       "unicode": "औ",
       "latin": "",
-      "localName": "au",
+      "localNames": ["au"],
       "description": "a - o compound vowel"
     },
     {
@@ -134,7 +134,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/aṁ.mp3",
       "unicode": "अं",
       "latin": "",
-      "localName": "aṁ",
+      "localNames": ["aṁ"],
       "description": "anusvāra"
     },
     {
@@ -142,7 +142,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/aḥ.mp3",
       "unicode": "अः",
       "latin": "",
-      "localName": "aḥ",
+      "localNames": ["aḥ"],
       "description": "visarga"
     },
     {
@@ -150,7 +150,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ka.mp3",
       "unicode": "क",
       "latin": "",
-      "localName": "ka",
+      "localNames": ["ka"],
       "description": "unvoiced unaspirated velar stop"
     },
     {
@@ -158,7 +158,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kha.mp3",
       "unicode": "ख",
       "latin": "",
-      "localName": "kha",
+      "localNames": ["kha"],
       "description": "unvoiced aspirated velar stop"
     },
     {
@@ -166,7 +166,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ga.mp3",
       "unicode": "ग",
       "latin": "",
-      "localName": "ga",
+      "localNames": ["ga"],
       "description": "voiced unaspirated velar stop"
     },
     {
@@ -174,7 +174,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/gha.mp3",
       "unicode": "घ",
       "latin": "",
-      "localName": "gha",
+      "localNames": ["gha"],
       "description": "voiced aspirated velar stop"
     },
     {
@@ -182,7 +182,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ṅa.mp3",
       "unicode": "ङ",
       "latin": "",
-      "localName": "ṅa",
+      "localNames": ["ṅa"],
       "description": "resonant velar stop"
     },
     {
@@ -190,7 +190,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ca.mp3",
       "unicode": "च",
       "latin": "",
-      "localName": "ca",
+      "localNames": ["ca"],
       "description": "unvoiced unaspirated palatal stop"
     },
     {
@@ -198,7 +198,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/cha.mp3",
       "unicode": "छ",
       "latin": "",
-      "localName": "cha",
+      "localNames": ["cha"],
       "description": "unvoiced aspirated palatal stop"
     },
     {
@@ -206,7 +206,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ja.mp3",
       "unicode": "ज",
       "latin": "",
-      "localName": "ja",
+      "localNames": ["ja"],
       "description": "voiced unaspirated palatal stop"
     },
     {
@@ -214,7 +214,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/jha.mp3",
       "unicode": "झ",
       "latin": "",
-      "localName": "jha",
+      "localNames": ["jha"],
       "description": "voiced aspirated palatal stop"
     },
     {
@@ -222,7 +222,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ña.mp3",
       "unicode": "ञ",
       "latin": "",
-      "localName": "ña",
+      "localNames": ["ña"],
       "description": "resonant palatal stop"
     },
     {
@@ -230,7 +230,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ṭa.mp3",
       "unicode": "ट",
       "latin": "",
-      "localName": "ṭa",
+      "localNames": ["ṭa"],
       "description": "unvoiced unaspirated retroflex stop"
     },
     {
@@ -238,7 +238,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ṭha.mp3",
       "unicode": "ठ",
       "latin": "",
-      "localName": "ṭha",
+      "localNames": ["ṭha"],
       "description": "unvoiced aspirated retroflex stop"
     },
     {
@@ -246,7 +246,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ḍa.mp3",
       "unicode": "ड",
       "latin": "",
-      "localName": "ḍa",
+      "localNames": ["ḍa"],
       "description": "voiced unaspirated retroflex stop"
     },
     {
@@ -254,7 +254,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ḍha.mp3",
       "unicode": "ढ",
       "latin": "",
-      "localName": "ḍha",
+      "localNames": ["ḍha"],
       "description": "voiced aspirated retroflex stop"
     },
     {
@@ -262,7 +262,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ṇa.mp3",
       "unicode": "ण",
       "latin": "",
-      "localName": "ṇa",
+      "localNames": ["ṇa"],
       "description": "resonant retroflex stop"
     },
     {
@@ -270,7 +270,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ta.mp3",
       "unicode": "त",
       "latin": "",
-      "localName": "ta",
+      "localNames": ["ta"],
       "description": "unvoiced unaspirated dental stop"
     },
     {
@@ -278,7 +278,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/tha.mp3",
       "unicode": "थ",
       "latin": "",
-      "localName": "tha",
+      "localNames": ["tha"],
       "description": "unvoiced aspirated dental stop"
     },
     {
@@ -286,7 +286,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/da.mp3",
       "unicode": "द",
       "latin": "",
-      "localName": "da",
+      "localNames": ["da"],
       "description": "voiced unaspirated dental stop"
     },
     {
@@ -294,7 +294,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/dha.mp3",
       "unicode": "ध",
       "latin": "",
-      "localName": "dha",
+      "localNames": ["dha"],
       "description": "voiced aspirated dental stop"
     },
     {
@@ -302,7 +302,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/na.mp3",
       "unicode": "न",
       "latin": "",
-      "localName": "na",
+      "localNames": ["na"],
       "description": "resonant dental stop"
     },
     {
@@ -310,7 +310,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/pa.mp3",
       "unicode": "प",
       "latin": "",
-      "localName": "pa",
+      "localNames": ["pa"],
       "description": "unvoiced unaspirated labial stop"
     },
     {
@@ -318,7 +318,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/pha.mp3",
       "unicode": "फ",
       "latin": "",
-      "localName": "pha",
+      "localNames": ["pha"],
       "description": "unvoiced aspirated labial stop"
     },
     {
@@ -326,7 +326,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ba.mp3",
       "unicode": "ब",
       "latin": "",
-      "localName": "ba",
+      "localNames": ["ba"],
       "description": "voiced unaspirated labial stop"
     },
     {
@@ -334,7 +334,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/bha.mp3",
       "unicode": "भ",
       "latin": "",
-      "localName": "bha",
+      "localNames": ["bha"],
       "description": "voiced aspirated labial stop"
     },
     {
@@ -342,7 +342,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ma.mp3",
       "unicode": "म",
       "latin": "",
-      "localName": "ma",
+      "localNames": ["ma"],
       "description": "resonant labial stop"
     },
     {
@@ -350,7 +350,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ya.mp3",
       "unicode": "य",
       "latin": "",
-      "localName": "ya",
+      "localNames": ["ya"],
       "description": "palatal semivowel"
     },
     {
@@ -358,7 +358,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ra.mp3",
       "unicode": "र",
       "latin": "",
-      "localName": "ra",
+      "localNames": ["ra"],
       "description": "retroflex semivowel"
     },
     {
@@ -366,7 +366,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/la.mp3",
       "unicode": "ल",
       "latin": "",
-      "localName": "la",
+      "localNames": ["la"],
       "description": "dental semivowel"
     },
     {
@@ -374,7 +374,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/va.mp3",
       "unicode": "व",
       "latin": "",
-      "localName": "va",
+      "localNames": ["va"],
       "description": "labial semivowel"
     },
     {
@@ -382,7 +382,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/śa.mp3",
       "unicode": "श",
       "latin": "",
-      "localName": "śa",
+      "localNames": ["śa"],
       "description": "palatal sibilant"
     },
     {
@@ -390,7 +390,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ṣa.mp3",
       "unicode": "ष",
       "latin": "",
-      "localName": "ṣa",
+      "localNames": ["ṣa"],
       "description": "retroflex sibilant"
     },
     {
@@ -398,7 +398,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/sa.mp3",
       "unicode": "स",
       "latin": "",
-      "localName": "sa",
+      "localNames": ["sa"],
       "description": "dental sibilant"
     },
     {
@@ -406,21 +406,21 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ha.mp3",
       "unicode": "ह",
       "latin": "",
-      "localName": "ha",
+      "localNames": ["ha"],
       "description": "velar aspirate"
     },
     {
       "subjectId": 48,
       "unicode": "्",
       "latin": "",
-      "localName": "virāma",
+      "localNames": ["virāma"],
       "description": "elision of the inherent 'a' sound after a consonant"
     },
     {
       "subjectId": 49,
       "unicode": "ॐ",
       "latin": "",
-      "localName": "ōṁ",
+      "localNames": ["ōṁ"],
       "description": "AUM"
     },
     {
@@ -428,7 +428,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kā.mp3",
       "unicode": "का",
       "latin": "",
-      "localName": "kā",
+      "localNames": ["kā"],
       "description": "long velar vowel (guṇita)"
     },
     {
@@ -436,7 +436,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ki.mp3",
       "unicode": "कि",
       "latin": "",
-      "localName": "ki",
+      "localNames": ["ki"],
       "description": "short palatal vowel (guṇita)"
     },
     {
@@ -444,7 +444,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kī.mp3",
       "unicode": "की",
       "latin": "",
-      "localName": "kī",
+      "localNames": ["kī"],
       "description": "long palatal vowel (guṇita)"
     },
     {
@@ -452,7 +452,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/ku.mp3",
       "unicode": "कु",
       "latin": "",
-      "localName": "ku",
+      "localNames": ["ku"],
       "description": "short labial vowel (guṇita)"
     },
     {
@@ -460,7 +460,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kū.mp3",
       "unicode": "कू",
       "latin": "",
-      "localName": "kū",
+      "localNames": ["kū"],
       "description": "long labial vowel (guṇita)"
     },
     {
@@ -468,7 +468,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kr̥.mp3",
       "unicode": "कृ",
       "latin": "",
-      "localName": "kr̥",
+      "localNames": ["kr̥"],
       "description": "short retroflex vowel (guṇita)"
     },
     {
@@ -476,7 +476,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kr̥̄.mp3",
       "unicode": "कॄ",
       "latin": "",
-      "localName": "kr̥̄",
+      "localNames": ["kr̥̄"],
       "description": "long retroflex vowel (guṇita)"
     },
     {
@@ -484,7 +484,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kl̥.mp3",
       "unicode": "कॢ",
       "latin": "",
-      "localName": "kl̥",
+      "localNames": ["kl̥"],
       "description": "short dental vowel (guṇita)"
     },
     {
@@ -492,7 +492,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kē.mp3",
       "unicode": "के",
       "latin": "",
-      "localName": "kē",
+      "localNames": ["kē"],
       "description": "a - i compound vowel (guṇita)"
     },
     {
@@ -500,7 +500,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kai.mp3",
       "unicode": "कै",
       "latin": "",
-      "localName": "kai",
+      "localNames": ["kai"],
       "description": "a - e compound vowel (guṇita)"
     },
     {
@@ -508,7 +508,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kō.mp3",
       "unicode": "को",
       "latin": "",
-      "localName": "kō",
+      "localNames": ["kō"],
       "description": "a - u compound vowel (guṇita)"
     },
     {
@@ -516,7 +516,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kau.mp3",
       "unicode": "कौ",
       "latin": "",
-      "localName": "kau",
+      "localNames": ["kau"],
       "description": "a - o compound vowel (guṇita)"
     },
     {
@@ -524,7 +524,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kaṁ.mp3",
       "unicode": "कं",
       "latin": "",
-      "localName": "kaṁ",
+      "localNames": ["kaṁ"],
       "description": "anusvāra (guṇita)"
     },
     {
@@ -532,7 +532,7 @@ var alphabet = {
       "audioUrl": "decks/alphabet/assets/audio/kaḥ.mp3",
       "unicode": "कः",
       "latin": "",
-      "localName": "kaḥ",
+      "localNames": ["kaḥ"],
       "description": "visarga (guṇita)"
     },
   ]

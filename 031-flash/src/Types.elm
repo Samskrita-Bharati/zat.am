@@ -3,6 +3,7 @@ module Types exposing
     , Config
     , Model
     , Msg(..)
+    , QuizType(..)
     , Script(..)
     , Settings
     , Subject
@@ -17,7 +18,7 @@ module Types exposing
     )
 
 import Dict exposing (Dict)
-import List.Nonempty exposing (Nonempty(..))
+import List.Nonempty as NEL exposing (Nonempty(..))
 
 
 type alias Model =
@@ -26,6 +27,7 @@ type alias Model =
     , remainingDeck : Nonempty Card -- remaining cards in deck, head is current one
     , previousDeck : List Card -- previous cards, head is most recent
     , userAnswer : Maybe String -- user's answer among the choices
+    , userAnswerPending : String
     , total : Int -- total number of quiz questions answered so far
     , score : Int -- number of correct answers so far
     , inSettingsScreen : Bool -- true if in settings screen
@@ -40,11 +42,12 @@ defaultModel =
         { trainMode = Review
         , script = Latin
         , group = Nothing
-        , autoPlay = True
+        , quizType = MultipleChoice
         }
     , remainingDeck = invalidCards
     , previousDeck = []
     , userAnswer = Nothing
+    , userAnswerPending = ""
     , total = 0
     , score = 0
     , inSettingsScreen = True
@@ -60,7 +63,6 @@ type alias Config =
     , scriptCanBeSet : Bool
     , groupCanBeSet : Bool
     , groupDisplay : String
-    , autoPlayCanBeSet : Bool
     , showTooltipsForOtherScript : Bool
     , showDescriptionWithUrNameQuiz : Bool
     , showAudioWithUrNameQuiz : Bool
@@ -90,7 +92,6 @@ defaultConfig =
     , scriptCanBeSet = True
     , groupCanBeSet = False
     , groupDisplay = ""
-    , autoPlayCanBeSet = False
     , showTooltipsForOtherScript = True
     , showDescriptionWithUrNameQuiz = True
     , showAudioWithUrNameQuiz = True
@@ -115,7 +116,7 @@ type alias Settings =
     { trainMode : TrainMode
     , script : Script
     , group : Maybe String
-    , autoPlay : Bool
+    , quizType : QuizType
     }
 
 
@@ -131,6 +132,11 @@ type Script
     | Unicode
 
 
+type QuizType
+    = MultipleChoice
+    | TextField
+
+
 type Msg
     = Next
     | Previous
@@ -141,13 +147,17 @@ type Msg
     | Start
     | Reset
     | Answer String
+    | SubmitAnswer
+    | TypeAnswer String
     | Shuffle (List Card)
     | CharacterKeyPressed Char
     | ControlKeyPressed String
-    | MouseClick
+      -- | MouseClick
     | CurrentDeckLoaded String
     | GoLanding
-    | ToggleAutoPlay
+    | SetQuizType String
+    | SetFocus String
+    | NoOp
 
 
 type alias Card =
@@ -172,7 +182,7 @@ type alias Subject =
     , audioUrl : Maybe String
     , unicode : String
     , latin : String
-    , localName : String
+    , localNames : Nonempty String
     , description : String
     , group : Maybe String
     }
@@ -180,7 +190,7 @@ type alias Subject =
 
 invalidSubject : Subject
 invalidSubject =
-    Subject -1 Nothing Nothing "invalid" "invalid" "invalid" "invalid" Nothing
+    Subject -1 Nothing Nothing "invalid" "invalid" (NEL.singleton "invalid") "invalid" Nothing
 
 
 invalidSubjectList : Nonempty Subject

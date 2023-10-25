@@ -1,12 +1,17 @@
 module Model exposing
-    ( getAnswerString
+    ( getCorrectAnswers
+    , getScrubbedAnswers
     , initWithModel
     , initialModel
+    , isAnswered
     , nextEnabled
     , processSelectedDeck
+    , sanitize
     )
 
-import List.Nonempty as NEL
+import Dict exposing (Dict)
+import List.Extra as ListX
+import List.Nonempty as NEL exposing (Nonempty(..))
 import Maybe.Extra as MaybeX
 import Types exposing (..)
 
@@ -41,24 +46,131 @@ processSelectedDeck model =
     initWithModel newModel
 
 
-getAnswerString : Settings -> Subject -> String
-getAnswerString { trainMode, script } =
+stdReplacements : Dict String String
+stdReplacements =
+    Dict.fromList
+        [ ( "I", "1" )
+        , ( "II", "2" )
+        , ( "III", "3" )
+        , ( "IV", "4" )
+        ]
+
+
+sanitize : String -> String
+sanitize =
+    String.join " "
+        << List.map
+            (\wrd ->
+                case Dict.get wrd stdReplacements of
+                    Just w ->
+                        w
+
+                    Nothing ->
+                        wrd
+            )
+        << List.filter (\wrd -> wrd /= "POSE")
+        << ListX.takeWhile (\wrd -> wrd /= "AKA")
+        << String.words
+        << String.foldr
+            (\ch acc ->
+                if Char.isAlpha ch || Char.isDigit ch then
+                    String.cons ch acc
+
+                else
+                    case ch of
+                        '-' ->
+                            String.cons ' ' acc
+
+                        '—' ->
+                            String.cons ' ' acc
+
+                        ' ' ->
+                            String.cons ' ' acc
+
+                        '\n' ->
+                            String.cons ' ' acc
+
+                        _ ->
+                            -- remove other non-alpha
+                            acc
+            )
+            ""
+        << String.toUpper
+        << (\str ->
+                if String.startsWith "[" str && String.endsWith "]" str then
+                    ""
+
+                else
+                    str
+           )
+
+
+isAnswered : { a | userAnswer : Maybe b } -> Bool
+isAnswered model =
+    MaybeX.isJust model.userAnswer
+
+
+getScrubbedAnswers : Settings -> Subject -> Nonempty String
+getScrubbedAnswers settings subj =
+    let
+        -- ["(Standing) Mountain Pose", "Other Name"]
+        listOfNames : List String
+        listOfNames =
+            NEL.toList <| getCorrectAnswers settings subj
+
+        -- [["(Standing)", "Mountain", "Pose"], ["Other", "Name"]]
+        listsOfWords : List (List String)
+        listsOfWords =
+            List.map String.words listOfNames
+
+        -- after wordToList:
+        -- [[["(Standing)", ""], ["Mountain"], ["Pose"]], [["Other"], ["Name"]]]
+        -- after traversal:
+        -- [[["(Standing)", "Mountain", "Pose"], ["", "Mountain", "Pose"]], [["Other"], ["Name"]]]
+        traversedListsOfLists : List (List (List String))
+        traversedListsOfLists =
+            List.map (listTraverse wordToList) listsOfWords
+
+        -- [["(Standing) Mountain Pose", "Mountain Pose"], ["Other Name"]]
+        joinedStringLists : List (List String)
+        joinedStringLists =
+            (List.map << List.map) (String.join " ") traversedListsOfLists
+
+        -- Nonempty "(Standing) Mountain Pose" ["Mountain Pose", "Other Name"]
+        joinedLists : List String
+        joinedLists =
+            List.concat joinedStringLists
+
+        sanitizedList : List String
+        sanitizedList =
+            List.map sanitize joinedLists
+    in
+    case NEL.fromList sanitizedList of
+        Just nel ->
+            nel
+
+        Nothing ->
+            NEL.singleton "invalid"
+
+
+getCorrectAnswers : Settings -> Subject -> Nonempty String
+getCorrectAnswers { trainMode, script } subj =
     case trainMode of
         Review ->
-            always "N/A"
+            NEL.singleton "N/A"
 
         Urname ->
             if script == Latin then
-                .latin
+                NEL.singleton subj.latin
 
             else
-                .unicode
+                NEL.singleton subj.unicode
 
         LocalName ->
-            .localName
+            subj.localNames
 
         Description ->
-            .description
+            NEL.singleton subj.description
 
 
 nextEnabled : Model -> Bool
@@ -69,8 +181,44 @@ nextEnabled model =
 
         inReview =
             model.settings.trainMode == Review
-
-        answered =
-            MaybeX.isJust model.userAnswer
     in
-    not model.inSettingsScreen && notEnd && (inReview || answered)
+    not model.inSettingsScreen && notEnd && (inReview || isAnswered model)
+
+
+wordToList : String -> List String
+wordToList w =
+    if String.startsWith "(" w && String.endsWith ")" w then
+        [ String.slice 1 -1 w, "" ]
+
+    else
+        [ w ]
+
+
+
+{- listSequence : List (List a) -> List (List a)
+   listSequence =
+       listTraverse identity
+-}
+
+
+listTraverse : (a -> List b) -> List a -> List (List b)
+listTraverse f =
+    let
+        listLift2 g x =
+            listApply (List.map g x)
+
+        consF x ys =
+            listLift2 (::) (f x) ys
+
+        listApply gs xs =
+            gs
+                |> List.concatMap
+                    (\g ->
+                        xs
+                            |> List.concatMap
+                                (\x ->
+                                    [ g x ]
+                                )
+                    )
+    in
+    List.foldr consF [ [] ]

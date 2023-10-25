@@ -1,15 +1,50 @@
-html,
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
+  background-color: #fff6da;
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
-  background-color: azure;
+  color: #083763;
 }
 
 #container {
-  padding: 10px;
-  width: 70%;
+  padding: 0;
+  width: 95%;
   margin: auto;
+  font-size: 15px;
+}
+
+select,
+input {
+  background-color: #fff6da;
+}
+
+.card {
+  border: outset #083763;
+  max-width: 600px;
+  margin: 20px auto 20px auto;
+  background-color: #c6e4f7;
+  border-radius: 16px;
+}
+
+.cardWidth {
+  max-width: 600px;
+  margin: auto;
+}
+
+
+.settings-select {
+  margin-bottom: 20px;
+  padding-left: 10px;
 }
 
 .center {
@@ -17,10 +52,11 @@ body {
 }
 
 img {
-  margin: auto;
   display: block;
-  height: 306px;
-  width: 306px;
+  height: 250px;
+  width: 250px;
+  margin: auto auto -20px auto;
+
 }
 
 audio {
@@ -33,30 +69,37 @@ p {
   margin: 5px;
 }
 
-tr.mainPart {
-  font-size: 18pt;
+tr.textAnswer {
+  text-align: center;
+}
+
+.radio {
+  width: 20px;
+  height: 20px;
+}
+
+.mainPart {
   font-weight: bold;
   text-align: center;
 }
 
-tr.minorPart {
-  font-size: 16pt;
+.minorPart {
+  font-size: 90%;
   text-align: center;
 }
 
-.descriptionBlock {
-  height: 80px;
+.localNameText {
+  /* min-height: 50px; */
 }
 
 .descriptionText {
-  font-size: 20px;
-  text-align: center;
   font-style: italic;
   word-wrap: break-word;
+  min-height: 45pt;
 }
 
-.descriptionQuiz {
-  min-height: 260px;
+.descriptionQuiz.multipleChoice {
+  min-height: 300px;
 }
 
 tr.audio {
@@ -70,10 +113,18 @@ tr.audio {
 .correct {
   color: green;
   font-weight: bold;
+  text-align: center;
 }
 
-.card {
+
+.maxWidth {
   width: 100%
+}
+
+:disabled {
+  color: gray;
+  border: solid gray;
+  cursor: not-allowed;
 }
 
 td {
@@ -88,21 +139,24 @@ td.correct {
   padding-bottom: 2px;
 }
 
+td.textAnswer.correct {
+  padding-left: 2px;
+}
 
 .quiz {
   padding-left: 10px;
   padding-top: 4px;
   padding-right: 4px;
   padding-bottom: 4px;
-  font-size: 14pt;
 }
 
 .quizHeader {
   font-weight: bold;
-  text-align: left;
+  text-align: center;
 }
 
-.quiz>label {
+.quiz>label,
+.quiz>input {
   cursor: pointer;
 }
 
@@ -112,8 +166,11 @@ fieldset.quiz {
 
 table.quiz {
   border: 1px solid black;
+  border-radius: 16px;
   margin-left: auto;
   margin-right: auto;
+  width: 90%;
+  min-height: 200px;
 }
 
 td.audioInQuiz {
@@ -124,72 +181,117 @@ td.audioInQuiz {
   color: red
 }
 
-#buttons button,
-.startButton {
-  border: none;
+input.incorrect {
+  border-color: red;
+}
+
+button.w3-btn {
+  background-color: #0590df;
+  font-size: 90%;
   color: white;
-  padding: 15px 64px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 5px;
+  margin: 8px;
+  border: solid transparent;
 }
 
-.button {
-  background-color: darkcyan;
+button.textAnswer {
+  padding: 5px 20px;
+  font-size: 80%;
 }
 
-
-.disabledButton {
-  background-color: gray;
-}
-
-.end-button {
+button.end-button {
   background-color: darkred;
-}
-
-
-.score {
-  color: green;
 }
 
 .copyright {
   text-align: center;
-  font-size: 12pt;
+  font-size: 80%;
+  width: 600px;
+  margin: auto;
+  margin-top: 20px;
 }
 
+.progress-bg {
+  border: 1px solid black;
+  width: 100%;
+  background-color: lightgray;
+}
+
+span.score-fg {
+  color: darkgreen;
+}
+
+div.score-fg {
+  background-color: darkgreen;
+}
+
+.progress-fg {
+  background-color: crimson;
+}
+
+.progress-fg.review {
+  background-color: slategray;
+}
+
+.score-fg,
+.progress-fg {
+  height: 30px;
+}
+
+div.score {
+  width: 75%;
+  margin: auto;
+}
+
+.score-fg {
+  text-align: center;
+  color: white;
+}
+
+.score-fg.low-progress {
+  color: black;
+}
+
+.score-remaining-container {
+  margin-top: 10px;
+  display: grid;
+  font-size: 80%;
+}
+
+.score-remaining-layer1,
+.score-remaining-layer2 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.score-remaining-layer1 {
+  text-align: left;
+}
+
+.score-remaining-layer2 {
+  text-align: right;
+}
 
 @media (max-width: 618px) {
-  #container {
-    width: 95%;
-    margin-top: -20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: auto;
-    padding: 0px;
-    font-size: 14pt;
+
+  .card {
+    max-width: 500px;
+    margin: 10px auto 10px auto;
   }
 
-  tr.mainPart {
-    font-size: 16pt;
+  .cardWidth {
+    max-width: 500px;
   }
 
-  tr.minorPart {
-    font-size: 14pt;
-  }
-
-
-  .score {
-    font-size: 18px;
+  .copyright {
+    max-width: 400px;
+    font-size: 50%;
   }
 
   img {
-    margin: auto;
-    margin-bottom: -20px;
-    display: block;
-    height: 250px;
-    width: 250px;
+    margin: -10px auto -20px auto;
+  }
+
+  #container {
+    font-size: 13px;
   }
 }

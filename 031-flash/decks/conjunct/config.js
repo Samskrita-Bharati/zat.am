@@ -29,7 +29,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/tma.mp3",
       "unicode": "त्म",
       "latin": "",
-      "localName": "tma",
+      "localNames": ["tma"],
       "description": "त् + म = त्म"
     },
     {
@@ -37,7 +37,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ṣṇa.mp3",
       "unicode": "ष्ण",
       "latin": "",
-      "localName": "ṣṇa",
+      "localNames": ["ṣṇa"],
       "description": "ष् + ण = ष्ण"
     },
     {
@@ -45,7 +45,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/kka.mp3",
       "unicode": "क्क",
       "latin": "",
-      "localName": "kka",
+      "localNames": ["kka"],
       "description": "क् + क = क्क"
     },
     {
@@ -53,7 +53,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/grya.mp3",
       "unicode": "ग्र्य",
       "latin": "",
-      "localName": "grya",
+      "localNames": ["grya"],
       "description": "ग् + र् + य = ग्र्य"
     },
     {
@@ -61,7 +61,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/vya.mp3",
       "unicode": "व्य",
       "latin": "",
-      "localName": "vya",
+      "localNames": ["vya"],
       "description": "व् + य = व्य"
     },
     /*     {
@@ -69,7 +69,7 @@ var conjuncts = {
           "audioUrl": "decks/conjunct/assets/audio/ḍga.mp3",
           "unicode": "ड्ग",
           "latin": "",
-          "localName": "ḍga",
+          "localNames": ["ḍga"],
           "description": "ड् + ग = ड्ग"
         },
      */
@@ -78,7 +78,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/śya.mp3",
       "unicode": "श्य",
       "latin": "",
-      "localName": "śya",
+      "localNames": ["śya"],
       "description": "श् + य = श्य"
     },
     {
@@ -86,7 +86,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/tsa.mp3",
       "unicode": "त्स",
       "latin": "",
-      "localName": "tsa",
+      "localNames": ["tsa"],
       "description": "त् + स = त्स"
     },
     {
@@ -94,7 +94,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/kta.mp3",
       "unicode": "क्त",
       "latin": "",
-      "localName": "kta",
+      "localNames": ["kta"],
       "description": "क् + त = क्त"
     },
     {
@@ -102,7 +102,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/gla.mp3",
       "unicode": "ग्ल",
       "latin": "",
-      "localName": "gla",
+      "localNames": ["gla"],
       "description": "ग् + ल = ग्ल"
     },
     {
@@ -110,7 +110,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/vra.mp3",
       "unicode": "व्र",
       "latin": "",
-      "localName": "vra",
+      "localNames": ["vra"],
       "description": "व् + र = व्र"
     },
     /*     {
@@ -118,7 +118,7 @@ var conjuncts = {
           "audioUrl": "decks/conjunct/assets/audio/ḍma.mp3",
           "unicode": "ड्म",
           "latin": "",
-          "localName": "ḍma",
+          "localNames": ["ḍma"],
           "description": "ड् + म = ड्म"
         },
      */
@@ -127,7 +127,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/śra.mp3",
       "unicode": "श्र",
       "latin": "",
-      "localName": "śra",
+      "localNames": ["śra"],
       "description": "श् + र = श्र (irreg.)"
     },
     {
@@ -135,7 +135,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/tsna.mp3",
       "unicode": "त्स्न",
       "latin": "",
-      "localName": "tsna",
+      "localNames": ["tsna"],
       "description": "त् + स् + न = त्स्न"
     },
     {
@@ -143,7 +143,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ktva.mp3",
       "unicode": "क्त्व",
       "latin": "",
-      "localName": "ktva",
+      "localNames": ["ktva"],
       "description": "क् + त् + व = क्त्व"
     },
     {
@@ -151,7 +151,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/gva.mp3",
       "unicode": "ग्व",
       "latin": "",
-      "localName": "gva",
+      "localNames": ["gva"],
       "description": "ग् + व = ग्व"
     },
     {
@@ -159,7 +159,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/śca.mp3",
       "unicode": "श्च",
       "latin": "",
-      "localName": "śca",
+      "localNames": ["śca"],
       "description": "श् + च = श्च",
     },
     {
@@ -167,7 +167,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ḍya.mp3",
       "unicode": "ड्य",
       "latin": "",
-      "localName": "ḍya",
+      "localNames": ["ḍya"],
       "description": "ड् + य = ड्य"
     },
     {
@@ -175,7 +175,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/śla.mp3",
       "unicode": "श्ल",
       "latin": "",
-      "localName": "śla",
+      "localNames": ["śla"],
       "description": "श् + ल = श्ल"
     },
     {
@@ -183,7 +183,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/tsya.mp3",
       "unicode": "त्स्य",
       "latin": "",
-      "localName": "tsya",
+      "localNames": ["tsya"],
       "description": "त् + स् + य = त्स्य"
     },
     {
@@ -191,7 +191,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/kna.mp3",
       "unicode": "क्न",
       "latin": "",
-      "localName": "kna",
+      "localNames": ["kna"],
       "description": "क् + न = क्न"
     },
     {
@@ -199,7 +199,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ghna.mp3",
       "unicode": "घ्न",
       "latin": "",
-      "localName": "ghna",
+      "localNames": ["ghna"],
       "description": "घ् + न = घ्न"
     },
     {
@@ -207,7 +207,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/śna.mp3",
       "unicode": "श्न",
       "latin": "",
-      "localName": "śna",
+      "localNames": ["śna"],
       "description": "श् + न = श्न"
     },
     {
@@ -215,7 +215,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ḍva.mp3",
       "unicode": "ड्व",
       "latin": "",
-      "localName": "ḍva",
+      "localNames": ["ḍva"],
       "description": "ड् + व = ड्व"
     },
     {
@@ -223,7 +223,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/śva.mp3",
       "unicode": "श्व",
       "latin": "",
-      "localName": "śva",
+      "localNames": ["śva"],
       "description": "श् + व = श्व"
     },
     {
@@ -231,7 +231,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ṭva.mp3",
       "unicode": "ट्व",
       "latin": "",
-      "localName": "ṭva",
+      "localNames": ["ṭva"],
       "description": "ट् + व = ट्व"
     },
     {
@@ -239,7 +239,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/kma.mp3",
       "unicode": "क्म",
       "latin": "",
-      "localName": "kma",
+      "localNames": ["kma"],
       "description": "क् + म = क्म"
     },
     {
@@ -247,7 +247,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ghya.mp3",
       "unicode": "घ्य",
       "latin": "",
-      "localName": "ghya",
+      "localNames": ["ghya"],
       "description": "घ् + य = घ्य"
     },
     {
@@ -255,7 +255,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/cca.mp3",
       "unicode": "च्च",
       "latin": "",
-      "localName": "cca",
+      "localNames": ["cca"],
       "description": "च् + च = च्च"
     },
     {
@@ -263,7 +263,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ḍhya.mp3",
       "unicode": "ढ्य",
       "latin": "",
-      "localName": "ḍhya",
+      "localNames": ["ḍhya"],
       "description": "ढ् + य = ढ्य"
     },
     {
@@ -271,7 +271,7 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/ṣka.mp3",
       "unicode": "ष्क",
       "latin": "",
-      "localName": "ṣka",
+      "localNames": ["ṣka"],
       "description": "ष् + क = ष्क"
     },
     {
@@ -279,35 +279,35 @@ var conjuncts = {
       "audioUrl": "decks/conjunct/assets/audio/dda.mp3",
       "unicode": "द्द",
       "latin": "",
-      "localName": "dda",
+      "localNames": ["dda"],
       "description": "द् + द = द्द"
     },
     {
       "subjectId": 32,
       "unicode": "त्त",
       "latin": "",
-      "localName": "tta",
+      "localNames": ["tta"],
       "description": "त् + त = त्त (irreg.)"
     },
     {
       "subjectId": 33,
       "unicode": "त्र",
       "latin": "",
-      "localName": "tra",
+      "localNames": ["tra"],
       "description": "त् + र = त्र (irreg.)"
     },
     {
       "subjectId": 34,
       "unicode": "र्य",
       "latin": "",
-      "localName": "rya",
+      "localNames": ["rya"],
       "description": "र् + य = र्य"
     },
     {
       "subjectId": 35,
       "unicode": "क्ष",
       "latin": "",
-      "localName": "kṣa",
+      "localNames": ["kṣa"],
       "description": "क् + ष = क्ष (irreg.)"
     },
   ]
