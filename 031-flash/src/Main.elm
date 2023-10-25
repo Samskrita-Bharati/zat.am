@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Browser.Dom as Dom
 import Browser.Events as BE
 import Browser.Navigation as BN
 import Card
@@ -49,6 +50,9 @@ init configValue =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
+        {- dummy =
+           Debug.log (Debug.toString msg) (Debug.toString model.userAnswer)
+        -}
         -- workaround for browsers not properly updating the audio tag
         sleepThenShowAudio : Subject -> Cmd Msg
         sleepThenShowAudio _ =
@@ -98,6 +102,29 @@ update msg model =
                 <|
                     filteredSubjects mdl
 
+        answerNewModel : String -> Model
+        answerNewModel str =
+            let
+                sanitizedAnswer =
+                    Model.sanitize str
+            in
+            { model
+                | total = model.total + 1
+                , score =
+                    if
+                        NEL.member sanitizedAnswer <|
+                            Model.getScrubbedAnswers
+                                model.settings
+                                (NEL.head model.remainingDeck).subject
+                    then
+                        model.score + 1
+
+                    else
+                        model.score
+                , userAnswer = Just sanitizedAnswer
+            }
+
+        newModel : Model
         newModel =
             case msg of
                 Start ->
@@ -126,17 +153,7 @@ update msg model =
                             Settings (Config.readTrainMode trainMode)
                                 model.settings.script
                                 model.settings.group
-                                model.settings.autoPlay
-                    }
-
-                ToggleAutoPlay ->
-                    { model
-                        | settings =
-                            Settings
-                                model.settings.trainMode
-                                model.settings.script
-                                model.settings.group
-                                (not model.settings.autoPlay)
+                                model.settings.quizType
                     }
 
                 SetGroup groupLabel ->
@@ -152,7 +169,7 @@ update msg model =
                                     grpLbl ->
                                         Just grpLbl
                                 )
-                                model.settings.autoPlay
+                                model.settings.quizType
                     }
 
                 SetScript script ->
@@ -161,7 +178,28 @@ update msg model =
                             Settings model.settings.trainMode
                                 (Config.readScript script)
                                 model.settings.group
-                                model.settings.autoPlay
+                                model.settings.quizType
+                    }
+
+                SetQuizType quizTypeString ->
+                    let
+                        newQuizType =
+                            case quizTypeString of
+                                "MultipleChoice" ->
+                                    MultipleChoice
+
+                                "TextField" ->
+                                    TextField
+
+                                _ ->
+                                    MultipleChoice
+                    in
+                    { model
+                        | settings =
+                            Settings model.settings.trainMode
+                                model.settings.script
+                                model.settings.group
+                                newQuizType
                     }
 
                 Reset ->
@@ -175,21 +213,15 @@ update msg model =
                         , settings = model.settings
                     }
 
-                Answer str ->
-                    { model
-                        | total = model.total + 1
-                        , score =
-                            if
-                                str
-                                    == Model.getAnswerString
-                                        model.settings
-                                        (NEL.head model.remainingDeck).subject
-                            then
-                                model.score + 1
+                Answer s ->
+                    answerNewModel s
 
-                            else
-                                model.score
-                        , userAnswer = Just str
+                SubmitAnswer ->
+                    answerNewModel model.userAnswerPending
+
+                TypeAnswer str ->
+                    { model
+                        | userAnswerPending = str
                     }
 
                 ShowAudio ->
@@ -201,6 +233,7 @@ update msg model =
                         , remainingDeck = NEL.pop model.remainingDeck
                         , userAnswer = Nothing
                         , showAudio = False
+                        , userAnswerPending = ""
                     }
 
                 Previous ->
@@ -220,16 +253,23 @@ update msg model =
                 _ ->
                     model
 
-        nextKeyPressed =
+        nextKeyPressed s =
             \_ ->
-                if newModel.inSettingsScreen then
-                    update Start newModel
+                if model.inSettingsScreen then
+                    update Start model
 
                 else if Model.nextEnabled model then
-                    update Next newModel
+                    update Next model
+
+                else if
+                    not (Model.isAnswered model)
+                        && (model.settings.quizType == TextField)
+                        && (s == "Enter" && model.settings.trainMode /= Description)
+                then
+                    update SubmitAnswer model
 
                 else
-                    ( newModel, Cmd.none )
+                    ( model, Cmd.none )
     in
     case msg of
         Start ->
@@ -244,17 +284,22 @@ update msg model =
         Reset ->
             Model.initWithModel newModel
 
+        SetFocus htmlId ->
+            ( newModel, focusElement htmlId )
+
         ControlKeyPressed "Enter" ->
-            nextKeyPressed ()
+            nextKeyPressed "Enter" ()
 
         CharacterKeyPressed ' ' ->
-            nextKeyPressed ()
-
-        MouseClick ->
-            ( newModel, Cmd.none )
+            nextKeyPressed " " ()
 
         Next ->
-            ( newModel, sleepThenShowAudio nextCard.subject )
+            ( newModel
+            , Cmd.batch
+                [ focusElement "answerTextField"
+                , sleepThenShowAudio nextCard.subject
+                ]
+            )
 
         Previous ->
             ( newModel, sleepThenShowAudio prevCard.subject )
@@ -269,15 +314,24 @@ update msg model =
                     Cmd.none
             )
 
+        Shuffle _ ->
+            ( newModel, focusElement "answerTextField" )
+
         _ ->
             ( newModel, Cmd.none )
+
+
+focusElement : String -> Cmd Msg
+focusElement htmlId =
+    Task.attempt (\_ -> NoOp) (Dom.focus htmlId)
 
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
         [ BE.onKeyPress keyDecoder
-        , BE.onClick (Decode.succeed MouseClick)
+
+        -- , BE.onClick (Decode.succeed MouseClick)
         ]
 
 

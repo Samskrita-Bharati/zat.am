@@ -84,7 +84,18 @@ configDecoder =
                 |> optional "audioUrl" (nullable string) Nothing
                 |> required "unicode" string
                 |> required "latin" string
-                |> required "localName" string
+                |> required "localNames"
+                    (Decode.andThen
+                        (\lst ->
+                            case NEL.fromList lst of
+                                Just ne ->
+                                    Decode.succeed ne
+
+                                Nothing ->
+                                    Decode.fail "Requires at least one localName"
+                        )
+                        (list string)
+                    )
                 |> required "description" string
                 |> optional "group" (nullable string) Nothing
     in
@@ -96,7 +107,6 @@ configDecoder =
         |> optional "scriptCanBeSet" bool False
         |> optional "groupCanBeSet" bool False
         |> optional "groupDisplay" string ""
-        |> optional "autoPlayCanBeSet" bool False
         |> optional "showTooltipsForOtherScript" bool True
         |> optional "showDescriptionWithUrNameQuiz" bool True
         |> optional "showAudioWithUrNameQuiz" bool True
