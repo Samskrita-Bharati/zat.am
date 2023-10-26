@@ -144,6 +144,11 @@ td.textAnswer.correct {
   padding-left: 2px;
 }
 
+.landing {
+  font-size: 24px;
+  line-height: 2em;
+}
+
 .quiz {
   padding-left: 10px;
   padding-top: 4px;
