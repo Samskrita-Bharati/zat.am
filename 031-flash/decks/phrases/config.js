@@ -125,7 +125,7 @@ var संस्कृतठ्यवहारः = {
       "audioUrl": "decks/phrases/assets/audio/astu.mp3",
       "unicode": "अस्तु",
       "latin": "astu",
-      "localNames": ["All right/OK"],
+      "localNames": ["All right", "OK", "Okay"],
       "description": ""
     },
     {

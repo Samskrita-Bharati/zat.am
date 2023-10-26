@@ -7004,7 +7004,7 @@ var $author$project$Model$sanitize = A2(
 							})),
 					$elm_community$list_extra$List$Extra$takeWhile(
 						function (wrd) {
-							return wrd !== 'AKA';
+							return wrd !== '/';
 						})),
 				$elm$core$String$words),
 			A2(
@@ -7025,6 +7025,8 @@ var $author$project$Model$sanitize = A2(
 									return A2($elm$core$String$cons, ' ', acc);
 								case '\n':
 									return A2($elm$core$String$cons, ' ', acc);
+								case '/':
+									return ' / ' + acc;
 								default:
 									return acc;
 							}
@@ -7703,22 +7705,12 @@ var $elm$core$List$intersperse = F2(
 			return A2($elm$core$List$cons, hd, spersed);
 		}
 	});
-var $mgold$elm_nonempty_list$List$Nonempty$length = function (_v0) {
-	var x = _v0.a;
-	var xs = _v0.b;
-	return $elm$core$List$length(xs) + 1;
-};
-var $mgold$elm_nonempty_list$List$Nonempty$tail = function (_v0) {
-	var x = _v0.a;
-	var xs = _v0.b;
-	return xs;
-};
 var $author$project$View$displayAnswer = function (localNames) {
-	return ($mgold$elm_nonempty_list$List$Nonempty$length(localNames) === 1) ? $mgold$elm_nonempty_list$List$Nonempty$head(localNames) : ($mgold$elm_nonempty_list$List$Nonempty$head(localNames) + (' (aka ' + ($elm$core$String$concat(
+	return $elm$core$String$concat(
 		A2(
 			$elm$core$List$intersperse,
-			', ',
-			$mgold$elm_nonempty_list$List$Nonempty$tail(localNames))) + ')')));
+			' / ',
+			$mgold$elm_nonempty_list$List$Nonempty$toList(localNames)));
 };
 var $author$project$View$viewLocalName = function (subject) {
 	return A2(
@@ -8107,6 +8099,11 @@ var $author$project$View$viewQuiz = F3(
 					A2($elm$html$Html$br, _List_Nil, _List_Nil)
 				]));
 	});
+var $mgold$elm_nonempty_list$List$Nonempty$length = function (_v0) {
+	var x = _v0.a;
+	var xs = _v0.b;
+	return $elm$core$List$length(xs) + 1;
+};
 var $elm$core$Basics$round = _Basics_round;
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $author$project$View$viewScore = function (model) {

@@ -50,9 +50,6 @@ init configValue =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        {- dummy =
-           Debug.log (Debug.toString msg) (Debug.toString model.userAnswer)
-        -}
         -- workaround for browsers not properly updating the audio tag
         sleepThenShowAudio : Subject -> Cmd Msg
         sleepThenShowAudio _ =

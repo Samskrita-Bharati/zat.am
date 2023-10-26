@@ -70,7 +70,7 @@ sanitize =
                         wrd
             )
         << List.filter (\wrd -> wrd /= "POSE")
-        << ListX.takeWhile (\wrd -> wrd /= "AKA")
+        << ListX.takeWhile (\wrd -> wrd /= "/")
         << String.words
         << String.foldr
             (\ch acc ->
@@ -90,6 +90,9 @@ sanitize =
 
                         '\n' ->
                             String.cons ' ' acc
+
+                        '/' ->
+                            " / " ++ acc
 
                         _ ->
                             -- remove other non-alpha

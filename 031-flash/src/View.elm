@@ -611,6 +611,13 @@ viewLocalName subject =
 viewQuiz : String -> Model -> Card -> Html Msg
 viewQuiz legendLabel model card =
     let
+        {-
+           isCorrect val =
+                       NEL.member (Debug.log ("sanitized " ++ val) (Model.sanitize val)) <|
+                           (Debug.log "scrubbed" <|
+                               Model.getScrubbedAnswers model.settings card.subject
+                           )
+        -}
         isCorrect val =
             NEL.member (Model.sanitize val) <|
                 Model.getScrubbedAnswers model.settings card.subject
@@ -817,11 +824,4 @@ viewQuiz legendLabel model card =
 
 displayAnswer : Nonempty String -> String
 displayAnswer localNames =
-    if NEL.length localNames == 1 then
-        NEL.head localNames
-
-    else
-        NEL.head localNames
-            ++ " (aka "
-            ++ String.concat (List.intersperse ", " (NEL.tail localNames))
-            ++ ")"
+    String.concat <| List.intersperse " / " <| NEL.toList localNames
