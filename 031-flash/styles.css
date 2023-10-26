@@ -274,8 +274,8 @@ div.score {
 
 @media (max-width: 618px) {
 
-  audio {
-    width: 150px;
+  .audioInQuiz>audio {
+    width: 20%;
   }
 
   .quiz {
