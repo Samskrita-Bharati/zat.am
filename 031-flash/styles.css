@@ -275,7 +275,11 @@ div.score {
 @media (max-width: 618px) {
 
   audio {
-    width: 250px;
+    width: 200px;
+  }
+
+  .quiz {
+    padding-left: 4px;
   }
 
   .card {
