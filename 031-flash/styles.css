@@ -63,6 +63,7 @@ audio {
   width: 350px;
   margin: 0 auto;
   display: table;
+  height: 40px;
 }
 
 p {
@@ -272,6 +273,10 @@ div.score {
 }
 
 @media (max-width: 618px) {
+
+  audio {
+    width: 250px;
+  }
 
   .card {
     max-width: 500px;

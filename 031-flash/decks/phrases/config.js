@@ -101,7 +101,7 @@ var संस्कृतठ्यवहारः = {
       "audioUrl": "decks/phrases/assets/audio/mānyē.mp3",
       "unicode": "मान्ये",
       "latin": "mānyē",
-      "localNames": ["Madam"],
+      "localNames": ["Madam!"],
       "description": ""
     },
     {
@@ -117,7 +117,7 @@ var संस्कृतठ्यवहारः = {
       "audioUrl": "decks/phrases/assets/audio/sriman.mp3",
       "unicode": "श्रीमन्",
       "latin": "śrīman",
-      "localNames": ["Sir"],
+      "localNames": ["Sir!"],
       "description": "invocative use"
     },
     {

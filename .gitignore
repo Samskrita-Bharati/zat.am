@@ -2,3 +2,6 @@
 elm-stuff
 # elm-repl generated files
 repl-temp-*
+
+# macOS desktop store files
+.DS_Store
