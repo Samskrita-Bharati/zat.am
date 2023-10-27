@@ -74,7 +74,17 @@ sanitize =
         << String.words
         << String.foldr
             (\ch acc ->
-                if Unicode.isAlpha ch || Unicode.isDigit ch || Unicode.getCategory ch == Just Unicode.MarkNonSpacing then
+                if
+                    {- Debug.log ("isAlpha " ++ Debug.toString ch) (Unicode.isAlpha ch)
+                       || Debug.log ("isDigit " ++ Debug.toString ch) (Unicode.isDigit ch)
+                       || Unicode.getCategory ch
+                       == Just Unicode.MarkNonSpacing
+                    -}
+                    Unicode.isAlpha ch
+                        || Unicode.isDigit ch
+                        || Unicode.getCategory ch
+                        == Just Unicode.MarkNonSpacing
+                then
                     String.cons ch acc
 
                 else

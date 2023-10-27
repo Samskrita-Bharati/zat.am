@@ -611,12 +611,11 @@ viewLocalName subject =
 viewQuiz : String -> Model -> Card -> Html Msg
 viewQuiz legendLabel model card =
     let
-        {-
-           isCorrect val =
-                       NEL.member (Debug.log ("sanitized " ++ val) (Model.sanitize val)) <|
-                           (Debug.log "scrubbed" <|
-                               Model.getScrubbedAnswers model.settings card.subject
-                           )
+        {- isCorrect val =
+           NEL.member (Debug.log ("sanitized " ++ val) (Model.sanitize val)) <|
+               (Debug.log "scrubbed" <|
+                   Model.getScrubbedAnswers model.settings card.subject
+               )
         -}
         isCorrect val =
             NEL.member (Model.sanitize val) <|
