@@ -77,13 +77,13 @@ sanitize =
                 if
                     {- Debug.log ("isAlpha " ++ Debug.toString ch) (Unicode.isAlpha ch)
                        || Debug.log ("isDigit " ++ Debug.toString ch) (Unicode.isDigit ch)
-                       || Unicode.getCategory ch
-                       == Just Unicode.MarkNonSpacing
+                       || List.member (Debug.log ("category=" ++ Debug.toString ch) (Unicode.getCategory ch))
+                           [ Just Unicode.MarkNonSpacing, Just Unicode.MarkSpacingCombining ]
                     -}
                     Unicode.isAlpha ch
                         || Unicode.isDigit ch
-                        || Unicode.getCategory ch
-                        == Just Unicode.MarkNonSpacing
+                        || List.member (Unicode.getCategory ch)
+                            [ Just Unicode.MarkNonSpacing, Just Unicode.MarkSpacingCombining ]
                 then
                     String.cons ch acc
 

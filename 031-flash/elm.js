@@ -6834,6 +6834,7 @@ var $author$project$Model$listTraverse = function (f) {
 			[_List_Nil]));
 };
 var $miniBill$elm_unicode$Unicode$MarkNonSpacing = 3;
+var $miniBill$elm_unicode$Unicode$MarkSpacingCombining = 4;
 var $elm$core$String$cons = _String_cons;
 var $elm$core$String$endsWith = _String_endsWith;
 var $elm$core$String$foldr = _String_foldr;
@@ -6874,7 +6875,6 @@ var $miniBill$elm_unicode$Unicode$LetterOther = 18;
 var $miniBill$elm_unicode$Unicode$LetterTitlecase = 2;
 var $miniBill$elm_unicode$Unicode$LetterUppercase = 0;
 var $miniBill$elm_unicode$Unicode$MarkEnclosing = 5;
-var $miniBill$elm_unicode$Unicode$MarkSpacingCombining = 4;
 var $miniBill$elm_unicode$Unicode$NumberDecimalDigit = 6;
 var $miniBill$elm_unicode$Unicode$NumberLetter = 7;
 var $miniBill$elm_unicode$Unicode$NumberOther = 8;
@@ -6939,6 +6939,36 @@ var $miniBill$elm_unicode$Unicode$isDigit = function (c) {
 		});
 	return l(256) ? (((A2(r, 48, 57) || A2(r, 178, 179)) || e(185)) || A2(r, 188, 190)) : (l(66272) ? (l(7231) ? (l(3557) ? (l(2917) ? (((((((A2(r, 1632, 1641) || A2(r, 1776, 1785)) || A2(r, 1984, 1993)) || A2(r, 2406, 2415)) || A2(r, 2534, 2543)) || A2(r, 2548, 2553)) || A2(r, 2662, 2671)) || A2(r, 2790, 2799)) : (((((((A2(r, 2918, 2927) || A2(r, 2930, 2935)) || A2(r, 3046, 3058)) || A2(r, 3174, 3183)) || A2(r, 3192, 3198)) || A2(r, 3302, 3311)) || A2(r, 3416, 3422)) || A2(r, 3430, 3448))) : (l(6111) ? (((((((A2(r, 3558, 3567) || A2(r, 3664, 3673)) || A2(r, 3792, 3801)) || A2(r, 3872, 3891)) || A2(r, 4160, 4169)) || A2(r, 4240, 4249)) || A2(r, 4969, 4988)) || A2(r, 5870, 5872)) : ((((((((A2(r, 6112, 6121) || A2(r, 6128, 6137)) || A2(r, 6160, 6169)) || A2(r, 6470, 6479)) || A2(r, 6608, 6618)) || A2(r, 6784, 6793)) || A2(r, 6800, 6809)) || A2(r, 6992, 7001)) || A2(r, 7088, 7097)))) : (l(12871) ? (l(9449) ? (((((((A2(r, 7232, 7241) || A2(r, 7248, 7257)) || e(8304)) || A2(r, 8308, 8313)) || A2(r, 8320, 8329)) || A2(r, 8528, 8578)) || A2(r, 8581, 8585)) || A2(r, 9312, 9371)) : (((((((A2(r, 9450, 9471) || A2(r, 10102, 10131)) || e(11517)) || e(12295)) || A2(r, 12321, 12329)) || A2(r, 12344, 12346)) || A2(r, 12690, 12693)) || A2(r, 12832, 12841))) : (l(43263) ? (((((((A2(r, 12872, 12879) || A2(r, 12881, 12895)) || A2(r, 12928, 12937)) || A2(r, 12977, 12991)) || A2(r, 42528, 42537)) || A2(r, 42726, 42735)) || A2(r, 43056, 43061)) || A2(r, 43216, 43225)) : ((((((((A2(r, 43264, 43273) || A2(r, 43472, 43481)) || A2(r, 43504, 43513)) || A2(r, 43600, 43609)) || A2(r, 44016, 44025)) || A2(r, 65296, 65305)) || A2(r, 65799, 65843)) || A2(r, 65856, 65912)) || A2(r, 65930, 65931))))) : (l(70735) ? (l(68252) ? (l(67750) ? (((((((A2(r, 66273, 66299) || A2(r, 66336, 66339)) || e(66369)) || e(66378)) || A2(r, 66513, 66517)) || A2(r, 66720, 66729)) || A2(r, 67672, 67679)) || A2(r, 67705, 67711)) : (((((((A2(r, 67751, 67759) || A2(r, 67835, 67839)) || A2(r, 67862, 67867)) || A2(r, 68028, 68029)) || A2(r, 68032, 68047)) || A2(r, 68050, 68095)) || A2(r, 68160, 68168)) || A2(r, 68221, 68222))) : (l(69404) ? (((((((A2(r, 68253, 68255) || A2(r, 68331, 68335)) || A2(r, 68440, 68447)) || A2(r, 68472, 68479)) || A2(r, 68521, 68527)) || A2(r, 68858, 68863)) || A2(r, 68912, 68921)) || A2(r, 69216, 69246)) : ((((((((A2(r, 69405, 69414) || A2(r, 69457, 69460)) || A2(r, 69573, 69579)) || A2(r, 69714, 69743)) || A2(r, 69872, 69881)) || A2(r, 69942, 69951)) || A2(r, 70096, 70105)) || A2(r, 70113, 70132)) || A2(r, 70384, 70393)))) : (l(93823) ? (l(73039) ? (((((((A2(r, 70736, 70745) || A2(r, 70864, 70873)) || A2(r, 71248, 71257)) || A2(r, 71360, 71369)) || A2(r, 71472, 71483)) || A2(r, 71904, 71922)) || A2(r, 72016, 72025)) || A2(r, 72784, 72812)) : ((((((((A2(r, 73040, 73049) || A2(r, 73120, 73129)) || A2(r, 73552, 73561)) || A2(r, 73664, 73684)) || A2(r, 74752, 74862)) || A2(r, 92768, 92777)) || A2(r, 92864, 92873)) || A2(r, 93008, 93017)) || A2(r, 93019, 93025))) : (l(125126) ? (((((((A2(r, 93824, 93846) || A2(r, 119488, 119507)) || A2(r, 119520, 119539)) || A2(r, 119648, 119672)) || A2(r, 120782, 120831)) || A2(r, 123200, 123209)) || A2(r, 123632, 123641)) || A2(r, 124144, 124153)) : ((((((((A2(r, 125127, 125135) || A2(r, 125264, 125273)) || A2(r, 126065, 126123)) || A2(r, 126125, 126127)) || A2(r, 126129, 126132)) || A2(r, 126209, 126253)) || A2(r, 126255, 126269)) || A2(r, 127232, 127244)) || A2(r, 130032, 130041))))));
 };
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
 var $author$project$Model$stdReplacements = $elm$core$Dict$fromList(
 	_List_fromArray(
 		[
@@ -7011,9 +7041,14 @@ var $author$project$Model$sanitize = A2(
 				$elm$core$String$foldr,
 				F2(
 					function (ch, acc) {
-						if ($miniBill$elm_unicode$Unicode$isAlpha(ch) || ($miniBill$elm_unicode$Unicode$isDigit(ch) || _Utils_eq(
+						if ($miniBill$elm_unicode$Unicode$isAlpha(ch) || ($miniBill$elm_unicode$Unicode$isDigit(ch) || A2(
+							$elm$core$List$member,
 							$miniBill$elm_unicode$Unicode$getCategory(ch),
-							$elm$core$Maybe$Just(3)))) {
+							_List_fromArray(
+								[
+									$elm$core$Maybe$Just(3),
+									$elm$core$Maybe$Just(4)
+								])))) {
 							return A2($elm$core$String$cons, ch, acc);
 						} else {
 							switch (ch) {
@@ -7092,36 +7127,6 @@ var $mgold$elm_nonempty_list$List$Nonempty$map = F2(
 			$mgold$elm_nonempty_list$List$Nonempty$Nonempty,
 			f(x),
 			A2($elm$core$List$map, f, xs));
-	});
-var $elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
-var $elm$core$List$member = F2(
-	function (x, xs) {
-		return A2(
-			$elm$core$List$any,
-			function (a) {
-				return _Utils_eq(a, x);
-			},
-			xs);
 	});
 var $mgold$elm_nonempty_list$List$Nonempty$member = F2(
 	function (y, _v0) {
