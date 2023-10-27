@@ -9,6 +9,8 @@ var digits = {
   "showAudioWithUrNameQuiz": false,
   "showAudioWithUrnameQuizAnswers": true,
   "showDescription": false,
+  "groupCanBeSet": true,
+  "groupDisplay": "Group",
   "trainingModes": [
     "Review",
     "Urname",
@@ -30,7 +32,8 @@ var digits = {
       "unicode": "१",
       "latin": "",
       "localNames": ["1"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 2,
@@ -38,7 +41,8 @@ var digits = {
       "unicode": "२",
       "latin": "",
       "localNames": ["2"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 3,
@@ -46,7 +50,8 @@ var digits = {
       "unicode": "३",
       "latin": "",
       "localNames": ["3"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 4,
@@ -54,7 +59,8 @@ var digits = {
       "unicode": "४",
       "latin": "",
       "localNames": ["4"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 5,
@@ -62,7 +68,8 @@ var digits = {
       "unicode": "५",
       "latin": "",
       "localNames": ["5"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 6,
@@ -70,7 +77,8 @@ var digits = {
       "unicode": "६",
       "latin": "",
       "localNames": ["6"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 7,
@@ -78,7 +86,8 @@ var digits = {
       "unicode": "७",
       "latin": "",
       "localNames": ["7"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 8,
@@ -86,7 +95,8 @@ var digits = {
       "unicode": "८",
       "latin": "",
       "localNames": ["8"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 9,
@@ -94,7 +104,8 @@ var digits = {
       "unicode": "९",
       "latin": "",
       "localNames": ["9"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 10,
@@ -102,7 +113,8 @@ var digits = {
       "unicode": "१०",
       "latin": "",
       "localNames": ["10"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 20,

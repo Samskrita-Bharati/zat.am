@@ -9,6 +9,8 @@ var numbers = {
   "showAudioWithUrNameQuiz": false,
   "showAudioWithLocalNameQuiz": true,
   "showDescription": false,
+  "groupCanBeSet": true,
+  "groupDisplay": "Group",
   "trainingModes": [
     "Review",
     "Urname",
@@ -30,7 +32,8 @@ var numbers = {
       "unicode": "एकम्",
       "latin": "ēkam",
       "localNames": ["one", "1"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 2,
@@ -38,7 +41,8 @@ var numbers = {
       "unicode": "द्वे",
       "latin": "dvē",
       "localNames": ["two", "2"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 3,
@@ -46,7 +50,8 @@ var numbers = {
       "unicode": "त्रीणि",
       "latin": "trīṇi",
       "localNames": ["three", "3"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 4,
@@ -54,7 +59,8 @@ var numbers = {
       "unicode": "चत्वारि",
       "latin": "catvāri",
       "localNames": ["four", "4"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 5,
@@ -62,7 +68,8 @@ var numbers = {
       "unicode": "पञ्च",
       "latin": "pañca",
       "localNames": ["five", "5"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 6,
@@ -70,7 +77,8 @@ var numbers = {
       "unicode": "षट्",
       "latin": "ṣaṭ",
       "localNames": ["six", "6"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 7,
@@ -86,7 +94,8 @@ var numbers = {
       "unicode": "अष्ट",
       "latin": "aṣṭa",
       "localNames": ["eight", "8"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 9,
@@ -94,7 +103,8 @@ var numbers = {
       "unicode": "नव",
       "latin": "nava",
       "localNames": ["nine", "9"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 10,
@@ -102,7 +112,8 @@ var numbers = {
       "unicode": "दश",
       "latin": "daśa",
       "localNames": ["ten", "10"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 20,
