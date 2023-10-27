@@ -33,7 +33,7 @@ var digits = {
       "latin": "",
       "localNames": ["1"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 2,
@@ -42,7 +42,7 @@ var digits = {
       "latin": "",
       "localNames": ["2"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 3,
@@ -51,7 +51,7 @@ var digits = {
       "latin": "",
       "localNames": ["3"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 4,
@@ -60,7 +60,7 @@ var digits = {
       "latin": "",
       "localNames": ["4"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 5,
@@ -69,7 +69,7 @@ var digits = {
       "latin": "",
       "localNames": ["5"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 6,
@@ -78,7 +78,7 @@ var digits = {
       "latin": "",
       "localNames": ["6"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 7,
@@ -87,7 +87,7 @@ var digits = {
       "latin": "",
       "localNames": ["7"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 8,
@@ -96,7 +96,7 @@ var digits = {
       "latin": "",
       "localNames": ["8"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 9,
@@ -105,7 +105,7 @@ var digits = {
       "latin": "",
       "localNames": ["9"],
       "description": "",
-      "group": "1-10",
+      "group": "1-9",
     },
     {
       "subjectId": 10,
@@ -114,7 +114,6 @@ var digits = {
       "latin": "",
       "localNames": ["10"],
       "description": "",
-      "group": "1-10",
     },
     {
       "subjectId": 20,

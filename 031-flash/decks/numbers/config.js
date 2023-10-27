@@ -86,7 +86,8 @@ var numbers = {
       "unicode": "सप्त",
       "latin": "sapta",
       "localNames": ["seven", "7"],
-      "description": ""
+      "description": "",
+      "group": "1-10",
     },
     {
       "subjectId": 8,
