@@ -1857,7 +1857,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.bn,
+		impl.bo,
 		impl.bF,
 		impl.bB,
 		function() { return function() {} }
@@ -3943,7 +3943,7 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.bn,
+		impl.bo,
 		impl.bF,
 		impl.bB,
 		function(sendToApp, initialModel) {
@@ -3979,7 +3979,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.bn,
+		impl.bo,
 		impl.bF,
 		impl.bB,
 		function(sendToApp, initialModel) {
@@ -3992,7 +3992,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bc);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bd);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aH === next.aH
+							&& curr.aI === next.aI
 							&& curr.ar === next.ar
-							&& curr.aD.a === next.aD.a
+							&& curr.aE.a === next.aE.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,9 +4084,9 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		bn: function(flags)
+		bo: function(flags)
 		{
-			return A3(impl.bn, flags, _Browser_getUrl(), key);
+			return A3(impl.bo, flags, _Browser_getUrl(), key);
 		},
 		bG: impl.bG,
 		bF: impl.bF,
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { bk: 'hidden', bd: 'visibilitychange' }
+		? { bl: 'hidden', be: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { bk: 'mozHidden', bd: 'mozvisibilitychange' }
+		? { bl: 'mozHidden', be: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { bk: 'msHidden', bd: 'msvisibilitychange' }
+		? { bl: 'msHidden', be: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { bk: 'webkitHidden', bd: 'webkitvisibilitychange' }
-		: { bk: 'hidden', bd: 'visibilitychange' };
+		? { bl: 'webkitHidden', be: 'webkitvisibilitychange' }
+		: { bl: 'hidden', be: 'visibilitychange' };
 }
 
 
@@ -4247,11 +4247,11 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aN: _Browser_getScene(),
-		a4: {
-			a6: _Browser_window.pageXOffset,
-			a7: _Browser_window.pageYOffset,
-			a5: _Browser_doc.documentElement.clientWidth,
+		aO: _Browser_getScene(),
+		a5: {
+			a7: _Browser_window.pageXOffset,
+			a8: _Browser_window.pageYOffset,
+			a6: _Browser_doc.documentElement.clientWidth,
 			ap: _Browser_doc.documentElement.clientHeight
 		}
 	};
@@ -4262,7 +4262,7 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		a5: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		a6: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
 		ap: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
@@ -4286,14 +4286,14 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aN: {
-				a5: node.scrollWidth,
+			aO: {
+				a6: node.scrollWidth,
 				ap: node.scrollHeight
 			},
-			a4: {
-				a6: node.scrollLeft,
-				a7: node.scrollTop,
-				a5: node.clientWidth,
+			a5: {
+				a7: node.scrollLeft,
+				a8: node.scrollTop,
+				a6: node.clientWidth,
 				ap: node.clientHeight
 			}
 		};
@@ -4324,17 +4324,17 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aN: _Browser_getScene(),
-			a4: {
-				a6: x,
-				a7: y,
-				a5: _Browser_doc.documentElement.clientWidth,
+			aO: _Browser_getScene(),
+			a5: {
+				a7: x,
+				a8: y,
+				a6: _Browser_doc.documentElement.clientWidth,
 				ap: _Browser_doc.documentElement.clientHeight
 			},
-			bi: {
-				a6: x + rect.left,
-				a7: y + rect.top,
-				a5: rect.width,
+			bj: {
+				a7: x + rect.left,
+				a8: y + rect.top,
+				a6: rect.width,
 				ap: rect.height
 			}
 		};
@@ -4957,7 +4957,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {am: fragment, ar: host, aA: path, aD: port_, aH: protocol, aI: query};
+		return {am: fragment, ar: host, aB: path, aE: port_, aI: protocol, aJ: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5260,7 +5260,7 @@ var $author$project$Types$Config = function (deckId) {
 																					return function (scriptHeading) {
 																						return function (mainPartFontSize) {
 																							return function (allSubjects) {
-																								return {a9: allSubjects, ae: copyrightNotice, ag: deckId, ah: deckTitle, an: groupCanBeSet, ao: groupDisplay, bo: initialScript, bq: landingPage, ax: mainPartFontSize, bu: numChoices, aC: pluralSubjectName, aO: scriptCanBeSet, aP: scriptHeading, W: showAudio, aR: showAudioWithLocalNameQuiz, aS: showAudioWithUrNameQuiz, aT: showAudioWithUrnameQuizAnswers, aU: showDescription, aV: showDescriptionWithLocalNameQuiz, aW: showDescriptionWithUrNameQuiz, aX: showTooltipsForOtherScript, bz: sortReviewBy, bD: trainModeDisplay, a2: trainingModes};
+																								return {ba: allSubjects, ae: copyrightNotice, ag: deckId, ah: deckTitle, an: groupCanBeSet, ao: groupDisplay, bp: initialScript, br: landingPage, ay: mainPartFontSize, bu: numChoices, aD: pluralSubjectName, aP: scriptCanBeSet, aQ: scriptHeading, W: showAudio, aS: showAudioWithLocalNameQuiz, aT: showAudioWithUrNameQuiz, aU: showAudioWithUrnameQuizAnswers, aV: showDescription, aW: showDescriptionWithLocalNameQuiz, aX: showDescriptionWithUrNameQuiz, aY: showTooltipsForOtherScript, bz: sortReviewBy, bD: trainModeDisplay, a3: trainingModes};
 																							};
 																						};
 																					};
@@ -5292,7 +5292,7 @@ var $author$project$Types$LocalName = 2;
 var $author$project$Types$Review = 0;
 var $author$project$Types$Subject = F8(
 	function (subjectId, imageUrl, audioUrl, unicode, latin, localNames, description, group) {
-		return {bb: audioUrl, bg: description, H: group, bl: imageUrl, br: latin, bs: localNames, aZ: subjectId, bE: unicode};
+		return {bc: audioUrl, bh: description, H: group, bm: imageUrl, bs: latin, ax: localNames, a_: subjectId, bE: unicode};
 	});
 var $author$project$Types$SubjectId = 2;
 var $author$project$Types$Unicode = 1;
@@ -5783,9 +5783,9 @@ var $author$project$Config$configDecoder = function () {
 																									$elm$json$Json$Decode$string,
 																									$elm$json$Json$Decode$succeed($author$project$Types$Config)))))))))))))))))))))))));
 }();
-var $author$project$Types$defaultConfig = {a9: $author$project$Types$invalidSubjectList, ae: '', ag: 'invalid deck', ah: 'invalid deck', an: false, ao: '', bo: 0, bq: $elm$core$Maybe$Nothing, ax: $elm$core$Maybe$Nothing, bu: 0, aC: '', aO: true, aP: '', W: true, aR: true, aS: true, aT: true, aU: true, aV: true, aW: true, aX: true, bz: 2, bD: $elm$core$Dict$empty, a2: _List_Nil};
+var $author$project$Types$defaultConfig = {ba: $author$project$Types$invalidSubjectList, ae: '', ag: 'invalid deck', ah: 'invalid deck', an: false, ao: '', bp: 0, br: $elm$core$Maybe$Nothing, ay: $elm$core$Maybe$Nothing, bu: 0, aD: '', aP: true, aQ: '', W: true, aS: true, aT: true, aU: true, aV: true, aW: true, aX: true, aY: true, bz: 2, bD: $elm$core$Dict$empty, a3: _List_Nil};
 var $author$project$Types$MultipleChoice = 0;
-var $author$project$Types$emptyCard = {be: _List_Nil, bA: $author$project$Types$invalidSubject};
+var $author$project$Types$emptyCard = {bf: _List_Nil, bA: $author$project$Types$invalidSubject};
 var $author$project$Types$invalidCards = A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, $author$project$Types$emptyCard, _List_Nil);
 var $author$project$Types$defaultModel = {
 	B: $author$project$Types$defaultConfig,
@@ -5795,8 +5795,8 @@ var $author$project$Types$defaultModel = {
 	T: 0,
 	e: {H: $elm$core$Maybe$Nothing, O: 0, U: 0, E: 0},
 	W: true,
-	a0: 0,
-	a3: $elm$core$Maybe$Nothing,
+	a1: 0,
+	a4: $elm$core$Maybe$Nothing,
 	Z: ''
 };
 var $author$project$Model$initialModel = function (cfg) {
@@ -5817,7 +5817,7 @@ var $author$project$Model$processSelectedDeck = function (model) {
 		{
 			e: _Utils_update(
 				sttgs,
-				{U: model.B.bo})
+				{U: model.B.bp})
 		});
 	return $author$project$Model$initWithModel(newModel);
 };
@@ -5862,7 +5862,7 @@ var $elm$browser$Browser$Events$MySub = F3(
 	});
 var $elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {aB: pids, a_: subs};
+		return {aC: pids, a$: subs};
 	});
 var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
 	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
@@ -6046,7 +6046,7 @@ var $elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.aB,
+			state.aC,
 			$elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
 		var deadPids = _v0.a;
@@ -6102,7 +6102,7 @@ var $elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _v3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
 		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.a_);
+		var messages = A2($elm$core$List$filterMap, toMessage, state.a$);
 		return A2(
 			$elm$core$Task$andThen,
 			function (_v1) {
@@ -6698,7 +6698,7 @@ var $author$project$Card$generateChoices = F3(
 		var wrongSubjects = A3(
 			$mgold$elm_nonempty_list$List$Nonempty$filter,
 			function (a) {
-				return !_Utils_eq(a.aZ, correctSubject.aZ);
+				return (!_Utils_eq(a.a_, correctSubject.a_)) && (!_Utils_eq(a.ax, correctSubject.ax));
 			},
 			$author$project$Types$invalidSubject,
 			allSubjects);
@@ -6759,7 +6759,7 @@ var $author$project$Card$subjects2CardsGenerator = F2(
 				return A2(
 					$elm$random$Random$map,
 					function (chs) {
-						return {be: chs, bA: subj};
+						return {bf: chs, bA: subj};
 					},
 					A3($author$project$Card$generateChoices, numChoices, allSubjects, subj));
 			});
@@ -6784,11 +6784,11 @@ var $author$project$Model$getCorrectAnswers = F2(
 			case 0:
 				return $mgold$elm_nonempty_list$List$Nonempty$singleton('N/A');
 			case 1:
-				return (!script) ? $mgold$elm_nonempty_list$List$Nonempty$singleton(subj.br) : $mgold$elm_nonempty_list$List$Nonempty$singleton(subj.bE);
+				return (!script) ? $mgold$elm_nonempty_list$List$Nonempty$singleton(subj.bs) : $mgold$elm_nonempty_list$List$Nonempty$singleton(subj.bE);
 			case 2:
-				return subj.bs;
+				return subj.ax;
 			default:
-				return $mgold$elm_nonempty_list$List$Nonempty$singleton(subj.bg);
+				return $mgold$elm_nonempty_list$List$Nonempty$singleton(subj.bh);
 		}
 	});
 var $elm$core$List$concatMap = F2(
@@ -7081,7 +7081,7 @@ var $elm_community$maybe_extra$Maybe$Extra$isJust = function (m) {
 	}
 };
 var $author$project$Model$isAnswered = function (model) {
-	return $elm_community$maybe_extra$Maybe$Extra$isJust(model.a3);
+	return $elm_community$maybe_extra$Maybe$Extra$isJust(model.a4);
 };
 var $elm$browser$Browser$Navigation$load = _Browser_load;
 var $mgold$elm_nonempty_list$List$Nonempty$map = F2(
@@ -7248,12 +7248,12 @@ var $author$project$Main$update = F2(
 					return _Utils_eq(subj.H, maybeGrp);
 				}
 			};
-			return A3($mgold$elm_nonempty_list$List$Nonempty$filter, subjFilter, $author$project$Types$invalidSubject, mdl.B.a9);
+			return A3($mgold$elm_nonempty_list$List$Nonempty$filter, subjFilter, $author$project$Types$invalidSubject, mdl.B.ba);
 		};
 		var buildSortedDeckForReview = A2(
 			$mgold$elm_nonempty_list$List$Nonempty$map,
 			function (subj) {
-				return {be: _List_Nil, bA: subj};
+				return {bf: _List_Nil, bA: subj};
 			},
 			function () {
 				var _v6 = model.B.bz;
@@ -7261,7 +7261,7 @@ var $author$project$Main$update = F2(
 					case 0:
 						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
 							function ($) {
-								return $.br;
+								return $.bs;
 							});
 					case 1:
 						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
@@ -7271,7 +7271,7 @@ var $author$project$Main$update = F2(
 					default:
 						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
 							function ($) {
-								return $.aZ;
+								return $.a_;
 							});
 				}
 			}()(
@@ -7297,8 +7297,8 @@ var $author$project$Main$update = F2(
 							$author$project$Model$getScrubbedAnswers,
 							model.e,
 							$mgold$elm_nonempty_list$List$Nonempty$head(model.r).bA)) ? (model.T + 1) : model.T,
-					a0: model.a0 + 1,
-					a3: $elm$core$Maybe$Just(sanitizedAnswer)
+					a1: model.a1 + 1,
+					a4: $elm$core$Maybe$Just(sanitizedAnswer)
 				});
 		};
 		var newModel = function () {
@@ -7408,7 +7408,7 @@ var $author$project$Main$update = F2(
 							J: A2($elm$core$List$cons, nextCard, model.J),
 							r: $mgold$elm_nonempty_list$List$Nonempty$pop(model.r),
 							W: false,
-							a3: $elm$core$Maybe$Nothing,
+							a4: $elm$core$Maybe$Nothing,
 							Z: ''
 						});
 				case 1:
@@ -7464,7 +7464,7 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						newModel,
 						function () {
-							var _v1 = model.B.bq;
+							var _v1 = model.B.br;
 							if (!_v1.$) {
 								var homePage = _v1.a;
 								return $elm$browser$Browser$Navigation$load(homePage);
@@ -7607,7 +7607,7 @@ var $author$project$View$playAudio = F2(
 var $author$project$View$showDescriptionInCard = F2(
 	function (model, card) {
 		var descriptionHtml = function (subject) {
-			return $elm$core$String$isEmpty(subject.bg) ? _List_Nil : _List_fromArray(
+			return $elm$core$String$isEmpty(subject.bh) ? _List_Nil : _List_fromArray(
 				[
 					A2(
 					$elm$html$Html$p,
@@ -7617,11 +7617,11 @@ var $author$project$View$showDescriptionInCard = F2(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text('\"' + (subject.bg + '\"'))
+							$elm$html$Html$text('\"' + (subject.bh + '\"'))
 						]))
 				]);
 		};
-		return model.B.aU ? _List_fromArray(
+		return model.B.aV ? _List_fromArray(
 			[
 				A2(
 				$elm$html$Html$tr,
@@ -7722,7 +7722,7 @@ var $author$project$View$viewLocalName = function (subject) {
 		_List_fromArray(
 			[
 				$elm$html$Html$text(
-				$author$project$View$displayAnswer(subject.bs))
+				$author$project$View$displayAnswer(subject.ax))
 			]));
 };
 var $author$project$Types$Answer = function (a) {
@@ -7806,7 +7806,7 @@ var $author$project$View$viewQuiz = F3(
 			function (i, subject) {
 				var isChecked = function (val) {
 					return _Utils_eq(
-						model.a3,
+						model.a4,
 						$elm$core$Maybe$Just(
 							$author$project$Model$sanitize(val)));
 				};
@@ -7838,7 +7838,7 @@ var $author$project$View$viewQuiz = F3(
 					$elm$html$Html$tr,
 					_List_Nil,
 					_Utils_ap(
-						(model.B.W && ((model.e.E === 1) && model.B.aT)) ? _List_fromArray(
+						(model.B.W && ((model.e.E === 1) && model.B.aU)) ? _List_fromArray(
 							[
 								A2(
 								$elm$html$Html$td,
@@ -7848,7 +7848,7 @@ var $author$project$View$viewQuiz = F3(
 									]),
 								function () {
 									if (model.W) {
-										var _v4 = subject.bb;
+										var _v4 = subject.bc;
 										if (!_v4.$) {
 											var url = _v4.a;
 											return _List_fromArray(
@@ -7918,7 +7918,7 @@ var $author$project$View$viewQuiz = F3(
 		var getChoices = function () {
 			var _v2 = model.e.O;
 			if (!_v2) {
-				return A2($elm$core$List$indexedMap, toInputView, card.be);
+				return A2($elm$core$List$indexedMap, toInputView, card.bf);
 			} else {
 				var styleClasses = (model.e.E === 3) ? 'textAnswer description' : 'textAnswer';
 				return _List_fromArray(
@@ -8110,7 +8110,7 @@ var $author$project$View$viewScore = function (model) {
 	var total = $elm$core$List$length(model.J) + $mgold$elm_nonempty_list$List$Nonempty$length(model.r);
 	var soFar = $elm$core$List$length(model.J) + (($author$project$Model$isAnswered(model) || (!model.e.E)) ? 1 : 0);
 	var score = $elm$core$Basics$round(
-		(!model.a0) ? 0.0 : ((100 * model.T) / model.a0));
+		(!model.a1) ? 0.0 : ((100 * model.T) / model.a1));
 	var scorePercent = $elm$core$String$fromInt(score) + '%';
 	var remaining = $mgold$elm_nonempty_list$List$Nonempty$length(model.r) - (((!model.e.E) || $author$project$Model$isAnswered(model)) ? 1 : 0);
 	var progressFgClasses = function () {
@@ -8173,7 +8173,7 @@ var $author$project$View$viewScore = function (model) {
 												_List_fromArray(
 													[
 														$elm$html$Html$text(
-														$elm$core$String$fromInt(model.T) + ('/' + ($elm$core$String$fromInt(model.a0) + (' (' + (scorePercent + ')')))))
+														$elm$core$String$fromInt(model.T) + ('/' + ($elm$core$String$fromInt(model.a1) + (' (' + (scorePercent + ')')))))
 													]))
 											]);
 									}
@@ -8227,7 +8227,7 @@ var $author$project$View$viewScore = function (model) {
 var $elm$html$Html$Attributes$title = $elm$html$Html$Attributes$stringProperty('title');
 var $author$project$View$attrsForUrname = F3(
 	function (subject, settings, config) {
-		if (!config.aX) {
+		if (!config.aY) {
 			return _List_Nil;
 		} else {
 			var _v0 = settings.U;
@@ -8239,7 +8239,7 @@ var $author$project$View$attrsForUrname = F3(
 			} else {
 				return _List_fromArray(
 					[
-						$elm$html$Html$Attributes$title(subject.br)
+						$elm$html$Html$Attributes$title(subject.bs)
 					]);
 			}
 		}
@@ -8254,7 +8254,7 @@ var $author$project$View$viewUrname = F3(
 				attrs,
 				_List_fromArray(
 					[
-						$elm$html$Html$text(subject.br)
+						$elm$html$Html$text(subject.bs)
 					]));
 		} else {
 			return A2(
@@ -8285,7 +8285,7 @@ var $author$project$View$viewCard = F2(
 							[
 								$elm$html$Html$text('Start Over')
 							])),
-					$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.bq) ? _List_fromArray(
+					$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.br) ? _List_fromArray(
 						[
 							A2(
 							$elm$html$Html$button,
@@ -8337,9 +8337,9 @@ var $author$project$View$viewCard = F2(
 									A2($elm$html$Html$Attributes$style, 'font-size', fs)
 								]);
 						},
-						model.B.ax));
+						model.B.ay));
 				var contentViews = _Utils_ap(
-					$author$project$View$viewImage(card.bA.bl),
+					$author$project$View$viewImage(card.bA.bm),
 					function () {
 						var _v1 = model.e.E;
 						switch (_v1) {
@@ -8375,11 +8375,11 @@ var $author$project$View$viewCard = F2(
 												]),
 											_Utils_ap(
 												A2($author$project$View$showDescriptionInCard, model, card),
-												A2($author$project$View$playAudio, model, card.bA.bb))))
+												A2($author$project$View$playAudio, model, card.bA.bc))))
 									]);
 							case 1:
-								var descriptionHtml = model.B.aW ? A2($author$project$View$showDescriptionInCard, model, card) : _List_Nil;
-								var audioHtml = model.B.aS ? A2($author$project$View$playAudio, model, card.bA.bb) : _List_Nil;
+								var descriptionHtml = model.B.aX ? A2($author$project$View$showDescriptionInCard, model, card) : _List_Nil;
+								var audioHtml = model.B.aT ? A2($author$project$View$playAudio, model, card.bA.bc) : _List_Nil;
 								return _List_fromArray(
 									[
 										A2(
@@ -8405,8 +8405,8 @@ var $author$project$View$viewCard = F2(
 										card)
 									]);
 							case 2:
-								var descriptionHtml = model.B.aV ? A2($author$project$View$showDescriptionInCard, model, card) : _List_Nil;
-								var audioHtml = model.B.aR ? A2($author$project$View$playAudio, model, card.bA.bb) : _List_Nil;
+								var descriptionHtml = model.B.aW ? A2($author$project$View$showDescriptionInCard, model, card) : _List_Nil;
+								var audioHtml = model.B.aS ? A2($author$project$View$playAudio, model, card.bA.bc) : _List_Nil;
 								return _List_fromArray(
 									[
 										A2(
@@ -8467,7 +8467,7 @@ var $author$project$View$viewCard = F2(
 															$author$project$View$viewLocalName(card.bA)
 														]))
 												]),
-											A2($author$project$View$playAudio, model, card.bA.bb))),
+											A2($author$project$View$playAudio, model, card.bA.bc))),
 										A3(
 										$author$project$View$viewQuiz,
 										A2($author$project$Config$showTrainMode, model.B, 3),
@@ -8489,7 +8489,7 @@ var $author$project$View$viewCard = F2(
 							[
 								$elm$html$Html$text('All Finished! Train Again?')
 							])),
-					$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.bq) ? _List_fromArray(
+					$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.br) ? _List_fromArray(
 						[
 							A2(
 							$elm$html$Html$button,
@@ -8516,7 +8516,7 @@ var $author$project$View$viewCard = F2(
 								nextButton,
 								A2($elm$html$Html$br, _List_Nil, _List_Nil)
 							]),
-						allFinished) : ($elm_community$maybe_extra$Maybe$Extra$isJust(model.a3) ? _Utils_ap(
+						allFinished) : ($elm_community$maybe_extra$Maybe$Extra$isJust(model.a4) ? _Utils_ap(
 						_List_fromArray(
 							[
 								nextButton,
@@ -8717,7 +8717,7 @@ var $author$project$View$groupSelect = function (model) {
 							function ($) {
 								return $.H;
 							},
-							model.B.a9))))));
+							model.B.ba))))));
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -8988,7 +8988,7 @@ var $author$project$View$trainModeSelect = function (model) {
 	};
 	var filterConfig = F2(
 		function (trainMode, htmlElements) {
-			return A2($elm$core$List$member, trainMode, model.B.a2) ? htmlElements : _List_Nil;
+			return A2($elm$core$List$member, trainMode, model.B.a3) ? htmlElements : _List_Nil;
 		});
 	return A2(
 		$elm$html$Html$div,
@@ -9079,7 +9079,7 @@ var $author$project$View$viewSettings = function (model) {
 								$elm$core$List$cons,
 								A2($elm$html$Html$br, _List_Nil, _List_Nil),
 								_Utils_ap(
-									model.B.aO ? _List_fromArray(
+									model.B.aP ? _List_fromArray(
 										[
 											$author$project$View$scriptFieldSet(model)
 										]) : _List_Nil,
@@ -9107,7 +9107,7 @@ var $author$project$View$viewSettings = function (model) {
 							[
 								$elm$html$Html$text('Start')
 							])),
-					$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.bq) ? _List_fromArray(
+					$elm_community$maybe_extra$Maybe$Extra$isJust(model.B.br) ? _List_fromArray(
 						[
 							A2(
 							$elm$html$Html$button,
@@ -9146,5 +9146,5 @@ var $author$project$View$view = function (model) {
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{bn: $author$project$Main$init, bB: $author$project$Main$subscriptions, bF: $author$project$Main$update, bG: $author$project$View$view});
+	{bo: $author$project$Main$init, bB: $author$project$Main$subscriptions, bF: $author$project$Main$update, bG: $author$project$View$view});
 _Platform_export({'Main':{'init':$author$project$Main$main($elm$json$Json$Decode$value)(0)}});}(this));

@@ -16,7 +16,11 @@ generateDeck numChoices allSubjects =
            )
 
 
-subjects2CardsGenerator : Int -> Nonempty Types.Subject -> List Types.Subject -> Generator (List Types.Card)
+subjects2CardsGenerator :
+    Int
+    -> Nonempty Types.Subject
+    -> List Types.Subject
+    -> Generator (List Types.Card)
 subjects2CardsGenerator numChoices allSubjects =
     Random.Extra.traverse
         (\subj ->
@@ -25,12 +29,29 @@ subjects2CardsGenerator numChoices allSubjects =
         )
 
 
-generateChoices : Int -> Nonempty Types.Subject -> Types.Subject -> Generator (List Types.Subject)
+generateChoices :
+    Int
+    -> Nonempty Types.Subject
+    -> Types.Subject
+    -> Generator (List Types.Subject)
 generateChoices numChoices allSubjects correctSubject =
     let
         -- the "wrong" subjects from the list of all subjects
         wrongSubjects =
-            NEL.filter (\a -> a.subjectId /= correctSubject.subjectId)
+            -- filter out the correct subject and any subject
+            -- that has the same localNames as the correct subject.
+            -- This is to avoid prompting for Madam! with both मान्ये and आर्ये as
+            -- choices, both of which should be correct; or prompting for
+            -- मान्ये with both Madam! and Madam! as choices, which would appear
+            -- the same as each other
+            NEL.filter
+                (\a ->
+                    a.subjectId
+                        /= correctSubject.subjectId
+                        && (a.localNames
+                                /= correctSubject.localNames
+                           )
+                )
                 Types.invalidSubject
                 allSubjects
 
