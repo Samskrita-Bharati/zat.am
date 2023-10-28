@@ -8,7 +8,8 @@ var संस्कृतठ्यवहारः = {
   "mainPartFontSize": "32pt",
   "showAudioWithUrNameQuiz": false,
   "showAudioWithLocalNameQuiz": true,
-  "showDescription": false,
+  "showDescription": true,
+  "showDescriptionWithLocalNameQuiz": false,
   "trainingModes": [
     "Review",
     "Urname",
@@ -102,7 +103,7 @@ var संस्कृतठ्यवहारः = {
       "unicode": "मान्ये",
       "latin": "mānyē",
       "localNames": ["Madam!"],
-      "description": ""
+      "description": "Honorable, f., voc."
     },
     {
       "subjectId": 10,
@@ -110,7 +111,7 @@ var संस्कृतठ्यवहारः = {
       "unicode": "आर्ये",
       "latin": "āryē",
       "localNames": ["Madam!"],
-      "description": ""
+      "description": "Noble, f., voc."
     },
     {
       "subjectId": 11,
@@ -118,7 +119,7 @@ var संस्कृतठ्यवहारः = {
       "unicode": "श्रीमन्",
       "latin": "śrīman",
       "localNames": ["Sir!"],
-      "description": "invocative use"
+      "description": "voc."
     },
     {
       "subjectId": 12,

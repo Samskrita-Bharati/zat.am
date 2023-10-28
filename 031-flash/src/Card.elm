@@ -1,5 +1,6 @@
 module Card exposing (generateChoices, generateDeck)
 
+import List.Extra as ListX
 import List.Nonempty as NEL exposing (Nonempty(..))
 import Random exposing (Generator)
 import Random.Extra
@@ -38,13 +39,9 @@ generateChoices numChoices allSubjects correctSubject =
     let
         -- the "wrong" subjects from the list of all subjects
         wrongSubjects =
-            -- filter out the correct subject and any subject
-            -- that has the same localNames as the correct subject.
-            -- This is to avoid prompting for Madam! with both मान्ये and आर्ये as
-            -- choices, both of which should be correct; or prompting for
-            -- मान्ये with both Madam! and Madam! as choices, which would appear
-            -- the same as each other
-            NEL.filter
+            -- filter out the correct subject and make sure that
+            -- there is no duplication with localNames
+            List.filter
                 (\a ->
                     a.subjectId
                         /= correctSubject.subjectId
@@ -52,11 +49,11 @@ generateChoices numChoices allSubjects correctSubject =
                                 /= correctSubject.localNames
                            )
                 )
-                Types.invalidSubject
-                allSubjects
+                (NEL.toList allSubjects)
+                |> ListX.uniqueBy (\subj -> subj.localNames)
 
         choicesGenerator =
-            Random.map Tuple.first <| RL.choices (numChoices - 1) (NEL.toList wrongSubjects)
+            Random.map Tuple.first <| RL.choices (numChoices - 1) wrongSubjects
     in
     -- correct position
     Random.int 0 (numChoices - 1)
