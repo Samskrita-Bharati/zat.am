@@ -418,6 +418,7 @@ var alphabet = {
     },
     {
       "subjectId": 49,
+      "audioUrl": "decks/alphabet/assets/audio/ōm.mp3",
       "unicode": "ॐ",
       "latin": "",
       "localNames": ["ōṁ"],
