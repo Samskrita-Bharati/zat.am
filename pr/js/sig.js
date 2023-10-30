@@ -24,7 +24,8 @@ var emls = ["toronto@samskritabharatiusa.org",
     "vi.raama@gmail.com",
     "amrutputra@gmail.com",
     "samskritam@gmail.com",
-	"nalinyvasan@gmail.com"
+	"nalinyvasan@gmail.com",
+	"subramaniann@samskritabharatiusa.org"
 ];
 function handleCredentialResponse(response) {
     sessionStorage.setItem("pml", response.credential);
