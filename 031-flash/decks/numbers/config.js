@@ -122,7 +122,7 @@ var numbers = {
       "unicode": "विंशतिः",
       "latin": "viṁśatiḥ",
       "localNames": ["twenty", "20"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 30,
@@ -130,7 +130,7 @@ var numbers = {
       "unicode": "त्रिंशत्",
       "latin": "triṁśat",
       "localNames": ["thirty", "30"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 40,
@@ -138,7 +138,7 @@ var numbers = {
       "unicode": "चत्वारिंशत्",
       "latin": "catvāriṁśat",
       "localNames": ["forty", "40"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 50,
@@ -146,7 +146,7 @@ var numbers = {
       "unicode": "पञ्चाशत्",
       "latin": "pañcāśat",
       "localNames": ["fifty", "50"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 60,
@@ -154,7 +154,7 @@ var numbers = {
       "unicode": "षष्टिः",
       "latin": "ṣaṣṭiḥ",
       "localNames": ["sixty", "60"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 70,
@@ -162,7 +162,7 @@ var numbers = {
       "unicode": "सप्ततिः",
       "latin": "saptatiḥ",
       "localNames": ["seventy", "70"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 80,
@@ -170,7 +170,7 @@ var numbers = {
       "unicode": "अशीतिः",
       "latin": "aśītiḥ",
       "localNames": ["eighty", "80"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 90,
@@ -178,7 +178,7 @@ var numbers = {
       "unicode": "नवतिः",
       "latin": "navatiḥ",
       "localNames": ["ninety", "90"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 100,
@@ -186,7 +186,7 @@ var numbers = {
       "unicode": "शतम्",
       "latin": "śatam",
       "localNames": ["one hundred", "100"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 1000,
@@ -194,7 +194,7 @@ var numbers = {
       "unicode": "सहस्रम्",
       "latin": "sahasram",
       "localNames": ["one thousand", "1000"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 100000,
@@ -202,7 +202,7 @@ var numbers = {
       "unicode": "लक्षम्",
       "latin": "lakṣam",
       "localNames": ["one hundred thousand", "1,00,000"],
-      "description": ""
+      "description": "round"
     },
     {
       "subjectId": 10000000,
@@ -210,7 +210,7 @@ var numbers = {
       "unicode": "कोटिः",
       "latin": "koṭiḥ",
       "localNames": ["ten million", "1,00,00,000"],
-      "description": ""
+      "description": "round"
     },
   ]
 }
