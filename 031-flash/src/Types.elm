@@ -150,8 +150,7 @@ type Msg
     | SubmitAnswer
     | TypeAnswer String
     | Shuffle (List Card)
-    | CharacterKeyPressed Char
-    | ControlKeyPressed String
+    | ControlKeyDown String
       -- | MouseClick
     | CurrentDeckLoaded String
     | GoLanding

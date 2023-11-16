@@ -255,13 +255,14 @@ update msg model =
                 if model.inSettingsScreen then
                     update Start model
 
-                else if Model.nextEnabled model then
+                else if s == "ArrowRight" && Model.nextEnabled model then
                     update Next model
 
                 else if
-                    not (Model.isAnswered model)
+                    (s == "Enter")
+                        && not (Model.isAnswered model)
                         && (model.settings.quizType == TextField)
-                        && (s == "Enter" && model.settings.trainMode /= Description)
+                        && (model.settings.trainMode /= Description)
                 then
                     update SubmitAnswer model
 
@@ -284,11 +285,18 @@ update msg model =
         SetFocus htmlId ->
             ( newModel, focusElement htmlId )
 
-        ControlKeyPressed "Enter" ->
-            nextKeyPressed "Enter" ()
+        ControlKeyDown "ArrowRight" ->
+            nextKeyPressed "ArrowRight" ()
 
-        CharacterKeyPressed ' ' ->
-            nextKeyPressed " " ()
+        ControlKeyDown "ArrowLeft" ->
+            if Model.prevEnabled model then
+                update Previous model
+
+            else
+                ( newModel, Cmd.none )
+
+        ControlKeyDown "Enter" ->
+            nextKeyPressed "Enter" ()
 
         Next ->
             ( newModel
@@ -326,22 +334,9 @@ focusElement htmlId =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ BE.onKeyPress keyDecoder
-
-        -- , BE.onClick (Decode.succeed MouseClick)
-        ]
+        [ BE.onKeyDown keyDecoder ]
 
 
 keyDecoder : Decode.Decoder Msg
 keyDecoder =
-    Decode.map toKey (Decode.field "key" Decode.string)
-
-
-toKey : String -> Msg
-toKey keyValue =
-    case String.uncons keyValue of
-        Just ( char, "" ) ->
-            CharacterKeyPressed char
-
-        _ ->
-            ControlKeyPressed keyValue
+    Decode.map ControlKeyDown (Decode.field "key" Decode.string)

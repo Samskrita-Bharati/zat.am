@@ -5,6 +5,7 @@ module Model exposing
     , initialModel
     , isAnswered
     , nextEnabled
+    , prevEnabled
     , processSelectedDeck
     , sanitize
     )
@@ -197,6 +198,11 @@ nextEnabled model =
             model.settings.trainMode == Review
     in
     not model.inSettingsScreen && notEnd && (inReview || isAnswered model)
+
+
+prevEnabled : Model -> Bool
+prevEnabled model =
+    model.settings.trainMode == Review && not (List.isEmpty model.previousDeck)
 
 
 wordToList : String -> List String

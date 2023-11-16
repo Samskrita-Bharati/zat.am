@@ -5835,25 +5835,12 @@ var $author$project$Main$init = function (configValue) {
 	return $author$project$Model$processSelectedDeck(mdl);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $author$project$Types$CharacterKeyPressed = function (a) {
+var $author$project$Types$ControlKeyDown = function (a) {
 	return {$: 12, a: a};
-};
-var $author$project$Types$ControlKeyPressed = function (a) {
-	return {$: 13, a: a};
-};
-var $author$project$Main$toKey = function (keyValue) {
-	var _v0 = $elm$core$String$uncons(keyValue);
-	if ((!_v0.$) && (_v0.a.b === '')) {
-		var _v1 = _v0.a;
-		var _char = _v1.a;
-		return $author$project$Types$CharacterKeyPressed(_char);
-	} else {
-		return $author$project$Types$ControlKeyPressed(keyValue);
-	}
 };
 var $author$project$Main$keyDecoder = A2(
 	$elm$json$Json$Decode$map,
-	$author$project$Main$toKey,
+	$author$project$Types$ControlKeyDown,
 	A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
 var $elm$browser$Browser$Events$Document = 0;
 var $elm$browser$Browser$Events$MySub = F3(
@@ -6132,15 +6119,16 @@ var $elm$browser$Browser$Events$on = F3(
 		return $elm$browser$Browser$Events$subscription(
 			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
 	});
-var $elm$browser$Browser$Events$onKeyPress = A2($elm$browser$Browser$Events$on, 0, 'keypress');
+var $elm$browser$Browser$Events$onKeyDown = A2($elm$browser$Browser$Events$on, 0, 'keydown');
 var $author$project$Main$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
-				$elm$browser$Browser$Events$onKeyPress($author$project$Main$keyDecoder)
+				$elm$browser$Browser$Events$onKeyDown($author$project$Main$keyDecoder)
 			]));
 };
 var $author$project$Types$Next = {$: 0};
+var $author$project$Types$Previous = {$: 1};
 var $author$project$Types$Settings = F4(
 	function (trainMode, script, group, quizType) {
 		return {H: group, O: quizType, V: script, E: trainMode};
@@ -6213,7 +6201,7 @@ var $mgold$elm_nonempty_list$List$Nonempty$filter = F3(
 			}
 		}
 	});
-var $author$project$Types$NoOp = {$: 18};
+var $author$project$Types$NoOp = {$: 17};
 var $elm$core$Task$onError = _Scheduler_onError;
 var $elm$core$Task$attempt = F2(
 	function (resultToMessage, task) {
@@ -7195,6 +7183,9 @@ var $mgold$elm_nonempty_list$List$Nonempty$pop = function (_v0) {
 		return A2($mgold$elm_nonempty_list$List$Nonempty$Nonempty, y, ys);
 	}
 };
+var $author$project$Model$prevEnabled = function (model) {
+	return (!model.e.E) && (!$elm$core$List$isEmpty(model.J));
+};
 var $author$project$Config$readScript = function (s) {
 	switch (s) {
 		case 'Latin':
@@ -7264,267 +7255,277 @@ var $elm_community$maybe_extra$Maybe$Extra$withDefaultLazy = F2(
 	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		var sleepThenShowAudio = function (_v10) {
-			return A2(
-				$elm$core$Task$perform,
-				function (_v9) {
-					return $author$project$Types$ShowAudio;
+		update:
+		while (true) {
+			var sleepThenShowAudio = function (_v10) {
+				return A2(
+					$elm$core$Task$perform,
+					function (_v9) {
+						return $author$project$Types$ShowAudio;
+					},
+					$elm$core$Process$sleep(100));
+			};
+			var prevCard = A2(
+				$elm$core$Maybe$withDefault,
+				$author$project$Types$emptyCard,
+				$elm$core$List$head(model.J));
+			var nextKeyPressed = function (s) {
+				return function (_v8) {
+					return model.at ? A2($author$project$Main$update, $author$project$Types$Start, model) : (((s === 'ArrowRight') && $author$project$Model$nextEnabled(model)) ? A2($author$project$Main$update, $author$project$Types$Next, model) : (((s === 'Enter') && ((!$author$project$Model$isAnswered(model)) && ((model.e.O === 1) && (model.e.E !== 3)))) ? A2($author$project$Main$update, $author$project$Types$SubmitAnswer, model) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none)));
+				};
+			};
+			var nextCard = $mgold$elm_nonempty_list$List$Nonempty$head(model.r);
+			var filteredSubjects = function (mdl) {
+				var subjFilter = function (subj) {
+					var _v7 = mdl.e.H;
+					if (_v7.$ === 1) {
+						return true;
+					} else {
+						var maybeGrp = _v7;
+						return _Utils_eq(subj.H, maybeGrp);
+					}
+				};
+				return A3($mgold$elm_nonempty_list$List$Nonempty$filter, subjFilter, $author$project$Types$invalidSubject, mdl.B.ba);
+			};
+			var buildSortedDeckForReview = A2(
+				$mgold$elm_nonempty_list$List$Nonempty$map,
+				function (subj) {
+					return {bf: _List_Nil, bA: subj};
 				},
-				$elm$core$Process$sleep(100));
-		};
-		var prevCard = A2(
-			$elm$core$Maybe$withDefault,
-			$author$project$Types$emptyCard,
-			$elm$core$List$head(model.J));
-		var nextKeyPressed = function (s) {
-			return function (_v8) {
-				return model.at ? A2($author$project$Main$update, $author$project$Types$Start, model) : ($author$project$Model$nextEnabled(model) ? A2($author$project$Main$update, $author$project$Types$Next, model) : (((!$author$project$Model$isAnswered(model)) && ((model.e.O === 1) && ((s === 'Enter') && (model.e.E !== 3)))) ? A2($author$project$Main$update, $author$project$Types$SubmitAnswer, model) : _Utils_Tuple2(model, $elm$core$Platform$Cmd$none)));
+				function () {
+					var _v6 = model.B.bz;
+					switch (_v6) {
+						case 0:
+							return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
+								function ($) {
+									return $.bs;
+								});
+						case 1:
+							return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
+								function ($) {
+									return $.bE;
+								});
+						default:
+							return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
+								function ($) {
+									return $.a_;
+								});
+					}
+				}()(
+					filteredSubjects(model)));
+			var buildShuffledDeckCmdForQuiz = function (mdl) {
+				return A2(
+					$elm$random$Random$generate,
+					$author$project$Types$Shuffle,
+					A2(
+						$author$project$Card$generateDeck,
+						mdl.B.bu,
+						filteredSubjects(mdl)));
 			};
-		};
-		var nextCard = $mgold$elm_nonempty_list$List$Nonempty$head(model.r);
-		var filteredSubjects = function (mdl) {
-			var subjFilter = function (subj) {
-				var _v7 = mdl.e.H;
-				if (_v7.$ === 1) {
-					return true;
-				} else {
-					var maybeGrp = _v7;
-					return _Utils_eq(subj.H, maybeGrp);
-				}
+			var answerNewModel = function (str) {
+				var sanitizedAnswer = $author$project$Model$sanitize(str);
+				return _Utils_update(
+					model,
+					{
+						U: A2(
+							$mgold$elm_nonempty_list$List$Nonempty$member,
+							sanitizedAnswer,
+							A2(
+								$author$project$Model$getScrubbedAnswers,
+								model.e,
+								$mgold$elm_nonempty_list$List$Nonempty$head(model.r).bA)) ? (model.U + 1) : model.U,
+						a1: model.a1 + 1,
+						a4: $elm$core$Maybe$Just(sanitizedAnswer)
+					});
 			};
-			return A3($mgold$elm_nonempty_list$List$Nonempty$filter, subjFilter, $author$project$Types$invalidSubject, mdl.B.ba);
-		};
-		var buildSortedDeckForReview = A2(
-			$mgold$elm_nonempty_list$List$Nonempty$map,
-			function (subj) {
-				return {bf: _List_Nil, bA: subj};
-			},
-			function () {
-				var _v6 = model.B.bz;
-				switch (_v6) {
+			var newModel = function () {
+				switch (msg.$) {
+					case 6:
+						return _Utils_update(
+							model,
+							{
+								at: false,
+								r: (!model.e.E) ? buildSortedDeckForReview : model.r
+							});
+					case 11:
+						var shuffledDeck = msg.a;
+						return _Utils_update(
+							model,
+							{
+								r: A2(
+									$elm_community$maybe_extra$Maybe$Extra$withDefaultLazy,
+									function (_v3) {
+										return $author$project$Types$invalidCards;
+									},
+									$mgold$elm_nonempty_list$List$Nonempty$fromList(shuffledDeck))
+							});
+					case 3:
+						var trainMode = msg.a;
+						return _Utils_update(
+							model,
+							{
+								e: A4(
+									$author$project$Types$Settings,
+									$author$project$Config$readTrainMode(trainMode),
+									model.e.V,
+									model.e.H,
+									model.e.O)
+							});
+					case 4:
+						var groupLabel = msg.a;
+						return _Utils_update(
+							model,
+							{
+								e: A4(
+									$author$project$Types$Settings,
+									model.e.E,
+									model.e.V,
+									function () {
+										if (groupLabel === 'All') {
+											return $elm$core$Maybe$Nothing;
+										} else {
+											var grpLbl = groupLabel;
+											return $elm$core$Maybe$Just(grpLbl);
+										}
+									}(),
+									model.e.O)
+							});
+					case 5:
+						var script = msg.a;
+						return _Utils_update(
+							model,
+							{
+								e: A4(
+									$author$project$Types$Settings,
+									model.e.E,
+									$author$project$Config$readScript(script),
+									model.e.H,
+									model.e.O)
+							});
+					case 15:
+						var quizTypeString = msg.a;
+						var newQuizType = function () {
+							switch (quizTypeString) {
+								case 'MultipleChoice':
+									return 0;
+								case 'TextField':
+									return 1;
+								default:
+									return 0;
+							}
+						}();
+						return _Utils_update(
+							model,
+							{
+								e: A4($author$project$Types$Settings, model.e.E, model.e.V, model.e.H, newQuizType)
+							});
+					case 7:
+						var mdl = $author$project$Types$defaultModel;
+						return _Utils_update(
+							mdl,
+							{B: model.B, e: model.e});
+					case 8:
+						var s = msg.a;
+						return answerNewModel(s);
+					case 9:
+						return answerNewModel(model._);
+					case 10:
+						var str = msg.a;
+						return _Utils_update(
+							model,
+							{_: str});
+					case 2:
+						return _Utils_update(
+							model,
+							{X: true});
 					case 0:
-						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
-							function ($) {
-								return $.bs;
+						return _Utils_update(
+							model,
+							{
+								J: A2($elm$core$List$cons, nextCard, model.J),
+								r: $mgold$elm_nonempty_list$List$Nonempty$pop(model.r),
+								X: false,
+								a4: $elm$core$Maybe$Nothing,
+								_: ''
 							});
 					case 1:
-						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
-							function ($) {
-								return $.bE;
-							});
+						var remaining = A2($mgold$elm_nonempty_list$List$Nonempty$cons, prevCard, model.r);
+						var newPrevDeck = A2($elm$core$List$drop, 1, model.J);
+						return _Utils_update(
+							model,
+							{J: newPrevDeck, r: remaining, X: false});
 					default:
-						return $mgold$elm_nonempty_list$List$Nonempty$sortBy(
-							function ($) {
-								return $.a_;
-							});
+						return model;
 				}
-			}()(
-				filteredSubjects(model)));
-		var buildShuffledDeckCmdForQuiz = function (mdl) {
-			return A2(
-				$elm$random$Random$generate,
-				$author$project$Types$Shuffle,
-				A2(
-					$author$project$Card$generateDeck,
-					mdl.B.bu,
-					filteredSubjects(mdl)));
-		};
-		var answerNewModel = function (str) {
-			var sanitizedAnswer = $author$project$Model$sanitize(str);
-			return _Utils_update(
-				model,
-				{
-					U: A2(
-						$mgold$elm_nonempty_list$List$Nonempty$member,
-						sanitizedAnswer,
-						A2(
-							$author$project$Model$getScrubbedAnswers,
-							model.e,
-							$mgold$elm_nonempty_list$List$Nonempty$head(model.r).bA)) ? (model.U + 1) : model.U,
-					a1: model.a1 + 1,
-					a4: $elm$core$Maybe$Just(sanitizedAnswer)
-				});
-		};
-		var newModel = function () {
-			switch (msg.$) {
-				case 6:
-					return _Utils_update(
-						model,
-						{
-							at: false,
-							r: (!model.e.E) ? buildSortedDeckForReview : model.r
-						});
-				case 11:
-					var shuffledDeck = msg.a;
-					return _Utils_update(
-						model,
-						{
-							r: A2(
-								$elm_community$maybe_extra$Maybe$Extra$withDefaultLazy,
-								function (_v3) {
-									return $author$project$Types$invalidCards;
-								},
-								$mgold$elm_nonempty_list$List$Nonempty$fromList(shuffledDeck))
-						});
-				case 3:
-					var trainMode = msg.a;
-					return _Utils_update(
-						model,
-						{
-							e: A4(
-								$author$project$Types$Settings,
-								$author$project$Config$readTrainMode(trainMode),
-								model.e.V,
-								model.e.H,
-								model.e.O)
-						});
-				case 4:
-					var groupLabel = msg.a;
-					return _Utils_update(
-						model,
-						{
-							e: A4(
-								$author$project$Types$Settings,
-								model.e.E,
-								model.e.V,
-								function () {
-									if (groupLabel === 'All') {
-										return $elm$core$Maybe$Nothing;
-									} else {
-										var grpLbl = groupLabel;
-										return $elm$core$Maybe$Just(grpLbl);
-									}
-								}(),
-								model.e.O)
-						});
-				case 5:
-					var script = msg.a;
-					return _Utils_update(
-						model,
-						{
-							e: A4(
-								$author$project$Types$Settings,
-								model.e.E,
-								$author$project$Config$readScript(script),
-								model.e.H,
-								model.e.O)
-						});
-				case 16:
-					var quizTypeString = msg.a;
-					var newQuizType = function () {
-						switch (quizTypeString) {
-							case 'MultipleChoice':
-								return 0;
-							case 'TextField':
-								return 1;
+			}();
+			_v0$10:
+			while (true) {
+				switch (msg.$) {
+					case 6:
+						return _Utils_Tuple2(
+							newModel,
+							(!(!newModel.e.E)) ? buildShuffledDeckCmdForQuiz(newModel) : $elm$core$Platform$Cmd$none);
+					case 7:
+						return $author$project$Model$initWithModel(newModel);
+					case 16:
+						var htmlId = msg.a;
+						return _Utils_Tuple2(
+							newModel,
+							$author$project$Main$focusElement(htmlId));
+					case 12:
+						switch (msg.a) {
+							case 'ArrowRight':
+								return A2(nextKeyPressed, 'ArrowRight', 0);
+							case 'ArrowLeft':
+								if ($author$project$Model$prevEnabled(model)) {
+									var $temp$msg = $author$project$Types$Previous,
+										$temp$model = model;
+									msg = $temp$msg;
+									model = $temp$model;
+									continue update;
+								} else {
+									return _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none);
+								}
+							case 'Enter':
+								return A2(nextKeyPressed, 'Enter', 0);
 							default:
-								return 0;
+								break _v0$10;
 						}
-					}();
-					return _Utils_update(
-						model,
-						{
-							e: A4($author$project$Types$Settings, model.e.E, model.e.V, model.e.H, newQuizType)
-						});
-				case 7:
-					var mdl = $author$project$Types$defaultModel;
-					return _Utils_update(
-						mdl,
-						{B: model.B, e: model.e});
-				case 8:
-					var s = msg.a;
-					return answerNewModel(s);
-				case 9:
-					return answerNewModel(model._);
-				case 10:
-					var str = msg.a;
-					return _Utils_update(
-						model,
-						{_: str});
-				case 2:
-					return _Utils_update(
-						model,
-						{X: true});
-				case 0:
-					return _Utils_update(
-						model,
-						{
-							J: A2($elm$core$List$cons, nextCard, model.J),
-							r: $mgold$elm_nonempty_list$List$Nonempty$pop(model.r),
-							X: false,
-							a4: $elm$core$Maybe$Nothing,
-							_: ''
-						});
-				case 1:
-					var remaining = A2($mgold$elm_nonempty_list$List$Nonempty$cons, prevCard, model.r);
-					var newPrevDeck = A2($elm$core$List$drop, 1, model.J);
-					return _Utils_update(
-						model,
-						{J: newPrevDeck, r: remaining, X: false});
-				default:
-					return model;
+					case 0:
+						return _Utils_Tuple2(
+							newModel,
+							$elm$core$Platform$Cmd$batch(
+								_List_fromArray(
+									[
+										$author$project$Main$focusElement('answerTextField'),
+										sleepThenShowAudio(nextCard.bA)
+									])));
+					case 1:
+						return _Utils_Tuple2(
+							newModel,
+							sleepThenShowAudio(prevCard.bA));
+					case 14:
+						return _Utils_Tuple2(
+							newModel,
+							function () {
+								var _v1 = model.B.br;
+								if (!_v1.$) {
+									var homePage = _v1.a;
+									return $elm$browser$Browser$Navigation$load(homePage);
+								} else {
+									return $elm$core$Platform$Cmd$none;
+								}
+							}());
+					case 11:
+						return _Utils_Tuple2(
+							newModel,
+							$author$project$Main$focusElement('answerTextField'));
+					default:
+						break _v0$10;
+				}
 			}
-		}();
-		_v0$9:
-		while (true) {
-			switch (msg.$) {
-				case 6:
-					return _Utils_Tuple2(
-						newModel,
-						(!(!newModel.e.E)) ? buildShuffledDeckCmdForQuiz(newModel) : $elm$core$Platform$Cmd$none);
-				case 7:
-					return $author$project$Model$initWithModel(newModel);
-				case 17:
-					var htmlId = msg.a;
-					return _Utils_Tuple2(
-						newModel,
-						$author$project$Main$focusElement(htmlId));
-				case 13:
-					if (msg.a === 'Enter') {
-						return A2(nextKeyPressed, 'Enter', 0);
-					} else {
-						break _v0$9;
-					}
-				case 12:
-					if (' ' === msg.a) {
-						return A2(nextKeyPressed, ' ', 0);
-					} else {
-						break _v0$9;
-					}
-				case 0:
-					return _Utils_Tuple2(
-						newModel,
-						$elm$core$Platform$Cmd$batch(
-							_List_fromArray(
-								[
-									$author$project$Main$focusElement('answerTextField'),
-									sleepThenShowAudio(nextCard.bA)
-								])));
-				case 1:
-					return _Utils_Tuple2(
-						newModel,
-						sleepThenShowAudio(prevCard.bA));
-				case 15:
-					return _Utils_Tuple2(
-						newModel,
-						function () {
-							var _v1 = model.B.br;
-							if (!_v1.$) {
-								var homePage = _v1.a;
-								return $elm$browser$Browser$Navigation$load(homePage);
-							} else {
-								return $elm$core$Platform$Cmd$none;
-							}
-						}());
-				case 11:
-					return _Utils_Tuple2(
-						newModel,
-						$author$project$Main$focusElement('answerTextField'));
-				default:
-					break _v0$9;
-			}
+			return _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none);
 		}
-		return _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none);
 	});
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
@@ -7539,8 +7540,7 @@ var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Types$GoLanding = {$: 15};
-var $author$project$Types$Previous = {$: 1};
+var $author$project$Types$GoLanding = {$: 14};
 var $author$project$Types$Reset = {$: 7};
 var $elm$html$Html$br = _VirtualDom_node('br');
 var $elm$html$Html$button = _VirtualDom_node('button');
@@ -8343,13 +8343,13 @@ var $author$project$View$viewCard = F2(
 									$elm$html$Html$text('Change Deck')
 								]))
 						]) : _List_Nil);
-				var prevEnabled = (!model.e.E) && (!$elm$core$List$isEmpty(model.J));
 				var prevButton = A2(
 					$elm$html$Html$button,
 					_List_fromArray(
 						[
 							$elm$html$Html$Attributes$class('w3-btn'),
-							$elm$html$Html$Attributes$disabled(!prevEnabled),
+							$elm$html$Html$Attributes$disabled(
+							!$author$project$Model$prevEnabled(model)),
 							$elm$html$Html$Events$onClick($author$project$Types$Previous)
 						]),
 					_List_fromArray(
@@ -8803,7 +8803,7 @@ var $author$project$View$groupSelect = function (model) {
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $author$project$Types$SetQuizType = function (a) {
-	return {$: 16, a: a};
+	return {$: 15, a: a};
 };
 var $author$project$View$quizTypeSelect = function (model) {
 	return A2(

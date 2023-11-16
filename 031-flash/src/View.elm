@@ -316,9 +316,6 @@ viewCard model card =
                                 ]
                        )
 
-            prevEnabled =
-                model.settings.trainMode == Review && not (List.isEmpty model.previousDeck)
-
             nextButton =
                 button
                     [ class "w3-btn"
@@ -328,7 +325,11 @@ viewCard model card =
                     [ text "Next ⇨" ]
 
             prevButton =
-                button [ class "w3-btn", disabled (not prevEnabled), HE.onClick Previous ]
+                button
+                    [ class "w3-btn"
+                    , disabled (not (Model.prevEnabled model))
+                    , HE.onClick Previous
+                    ]
                     [ text "⇦ Prev" ]
 
             startOver =
