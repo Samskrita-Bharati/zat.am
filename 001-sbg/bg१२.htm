@@ -72,7 +72,7 @@ var bg12=[{"t":"arjunaḥ uvāca evam satata yuktāḥ ye bhaktāḥ tvām paryu
 for (i=1;i<21;i++) 
 {
 str="";
-str=Sanscript.t(bg12[i-1].t, 'iast','devanagari')+" <a href='https://www.gitasupersite.iitk.ac.in/srimad?language=dv&field_chapter_value=12&field_nsutra_value="+i+"' target='gss'>॥ १२."+Sanscript.t(String(i),'iast','devanagari')+"॥</a><br>"+bg12[i-1].t+" ॥ 12."+i+"॥ ";
+str=Sanscript.t(bg12[i-1].t, 'iast','devanagari')+" <a href='https://www.gitasupersite.iitk.ac.in/srimad?language=dv&field_chapter_value=12&field_nsutra_value="+i+"' target='gss'>॥ १२."+Sanscript.t(String(i),'iast','devanagari')+"॥</a><br>"+bg12[i-1].t+" <a href='https://zat.am/001-sbg/index.html?size=7&ch=12&v="+i+"' target='zat'>"+ "॥ 12."+i+"॥ </a>";
 document.getElementById("step-"+i).innerHTML+=str;
 }
 </script>
