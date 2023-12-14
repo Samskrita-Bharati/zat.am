@@ -87,6 +87,11 @@ const menu = [
 				 id:38, title: "संस्कृतम्  Bingo", category : "TA", dir:"038-bingo",
 					 desc: `helper`
 				 },
+
+				 {
+				 id:40, title: "संस्कृतम्  analog clock", category : "TA", dir:"040-ks",
+					 desc: `कः समयः ? kaH samayaH`
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
@@ -168,17 +173,4 @@ function displayMenuButtons() {
     });
   });
 }
-/*
-var lnk = 'https://api.github.com/repos/thakkaha/baalamodinii/contents';
-      (async () => {
-        const response = await fetch(lnk);
-        const data = await response.json();
-        let htmlString = '';
-        for (let file of data) {
-          if(!hiddenfiles.includes(file.name)){
-            htmlString += `<a href="${file.name}" class="col-6 col-md-2 archive-structure-pictorial" title="${file.html_url}"><div class="card sanskrit-english"><img class="img-fluid" src="${file.name}.png" alt="${file.name}" /><p>${file.name}</p></div></a>`;
-          }
-        }
-        document.getElementById('stories').innerHTML += htmlString;
-      })()
-*/
+

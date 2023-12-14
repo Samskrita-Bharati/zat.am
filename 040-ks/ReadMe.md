@@ -1,0 +1,1 @@
+inspired from https://www.w3schools.com/graphics/canvas_clock_start.asp
