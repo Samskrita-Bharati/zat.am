@@ -35,6 +35,9 @@ function showit()
 	$("#list").hide();
 	$("#if").show();
 	$("h1.title")[0].innerHTML = Sanscript.t(yr, 'itrans', 'devanagari');
+	if (yr == 1998)
+		$("#if iframe")[0].src = "https://amuselabs.com/pmm/date-picker?set=" + "sanskritbharatiusa-pa%20199&embed=1";
+		else
 	$("#if iframe")[0].src = "https://amuselabs.com/pmm/date-picker?set=" + "sanskritbharatiusa-pa" + yr + "&embed=1";
 }
 if (/year=(\w+)/.exec(window.location.href))
