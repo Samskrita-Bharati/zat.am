@@ -3,12 +3,14 @@ var N_COLS = 10;
 var N_WORDS_TO_FIND = 5;
 var data = getQueryStringValue("d");
 if (!data)
-	data="धर्म क्षेत्रे कुरु क्षेत्रे";
+	data="अक्षरसमूहे अद्यतन-कथा पदानि सन्ति करोतु अन्वेषणम्";
+var wordList = Sanscript.t(data,'iast', 'devanagari').split(" ");
+N_WORDS_TO_FIND = Math.min(N_WORDS_TO_FIND,wordList.length);
 var size = parseInt(getQueryStringValue("size"));
 if (size && size >= 4 && size <= 15) {
   N_ROWS = size;
   N_COLS = size;
-  N_WORDS_TO_FIND = Math.floor(size / 2);
+  N_WORDS_TO_FIND = Math.min(Math.floor(size / 2),wordList.length);
 }
 var MAX_MARKER_IDX = 6;
 var main = function () {
@@ -82,7 +84,7 @@ var cellClick = function (e) {
 };
 var processCell = function (cell, doNotMark) {
   if ($(cell).hasClass("found")) {
-    showDetails(cell.id);
+    //showDetails(cell.id);
     return [];
   }
   var cellRowIdx = parseInt(cell.id.split("_")[1]);
@@ -218,7 +220,7 @@ var isProperMatch = function (candidate) {
 };
 
 var showDetails = function (cellId) {
-  console.log("show details for " + cellId);
+  //console.log("show details for " + cellId);
 };
 
 var showHint = function () {
@@ -515,8 +517,6 @@ obj.href+="&d="+getQueryStringValue("d");
 }
 
 //var t = (Math.random()*100) % data.length;
-var wordList = Sanscript.t(data,'iast', 'devanagari').split(" ");
-N_WORDS_TO_FIND = Math.max(N_WORDS_TO_FIND,wordList.length);
 
 function showHint2()
 {
