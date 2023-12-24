@@ -1,0 +1,114 @@
+<html>
+<head>
+    <title>अन्वेषणम्</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="find.css" />
+	<style>
+	/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+	</style>
+	<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+</head>
+<body>
+    <div id="lead">अस्मिन् अक्षरसमूहे अद्यतन-कथा-तः <span style="font-weight:bold" id="nPresent">५</span> पदानि सन्ति । करोतु अन्वेषणम् । <br><span id="lead2"></span> </div>
+    <div id="statusMessage"><span id="nFound"></span> पदानि अन्वेषितानि</div>
+    <div id="finishMessage">।। शुभमस्तु ।। </div>
+    <div id="gridParent">
+        <div id="grid"></div> 
+    </div>
+    <div id="level">
+        <div class="leveltext">
+        <p>कठिनता</p> 
+        <ul>
+            <li><a href="fw.htm?size=5" onclick="sV(this)">सरलम् </a></li>
+            <li><a href="fw.htm?size=7" onclick="sV(this)">मध्यमम् </a></li>
+            <li><a href="fw.htm?size=10" onclick="sV(this)">कठिनम् </a></li>
+        </ul>
+    </div>
+    </div>
+    </div>
+    <div id="hintLink">
+        <div><a onclick="showHint2()" href="#"><img src="hint.png" alt="help"><div> नामपदानि  कानि?</div></a></div>
+
+    <div id="hintPopup" onclick="hideHint()">
+        <div class="content" onclick="hideHint()">
+            <ul id="answers">
+            </ul>
+        </div>
+    </div>
+   
+    </div>
+	
+    <div id="refreshLink">
+    <div ><a href="#" onclick="window.location.reload(); return false;"><img src="refresh.png" alt="re-do"><div>पुनः</div></a>
+    </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="find.js" type="text/javascript"></script>
+</body>
+</html>
