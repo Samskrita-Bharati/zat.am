@@ -92,6 +92,9 @@ const menu = [
 				 id:40, title: "संस्कृतम्  analog clock", category : "TA", dir:"040-ks",
 					 desc: `कः समयः ? kaH samayaH`
 				 },
+				 {
+					id:42, title: "संस्कृतम् Rocks!", category : "TA", dir:"042-sr", desc : `<pre>संस्कृतम्  (saMskRRitam)</pre> Rocks!` 
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
