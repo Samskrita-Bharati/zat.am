@@ -93,6 +93,10 @@ const menu = [
 					 desc: `कः समयः ? kaH samayaH`
 				 },
 				 {
+					id:41, title:"श्रीमद्भगवद्गीता  in a year!", category: "TA", dir:"041-giy",
+desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-giitaa</pre> in 2024!`					
+				 },
+				 {
 					id:42, title: "संस्कृतम् Rocks!", category : "TA", dir:"042-sr", desc : `<pre>संस्कृतम्  (saMskRRitam)</pre> Rocks! <br>Simple sentences you can use for self-introduction` 
 				 },
 		   
