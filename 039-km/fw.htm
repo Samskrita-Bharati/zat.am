@@ -73,14 +73,17 @@ input:checked + .slider:before {
 </head>
 <body>
     <div id="lead">अस्मिन् अक्षरसमूहे अद्यतन-कथा-तः पदानि सन्ति । कति ? <span style="font-weight:bold" id="nPresent">५</span> । करोतु अन्वेषणम् । <br><span id="lead2"></span> </div>
-    <div id="statusMessage"><span id="nFound"></span> पदानि अन्वेषितानि</div>
+    <div id="statusMessage"> पदानि अन्वेषितानि</div>
     <div id="finishMessage">।। शुभमस्तु ।। </div>
     <div id="gridParent">
         <div id="grid"></div> 
     </div>
     <div id="level">
         <div class="leveltext">
-        <p>कठिनता</p> 
+		✔️ = <span id="nFound"></span>
+		<br>
+		<br>
+        <strong>कठिनता</strong> 
         <ul>
             <li><a href="fw.htm?size=5" onclick="sV(this)">सरलम् </a></li>
             <li><a href="fw.htm?size=7" onclick="sV(this)">मध्यमम् </a></li>
