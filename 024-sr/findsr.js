@@ -2,6 +2,7 @@ var N_ROWS = 10;
 var N_COLS = 10;
 var N_WORDS_TO_FIND = 5;
 var sr=getQueryStringValue("s");
+var wclk=0;
 if (!sr || isNaN(sr) || sr<1 || sr>100)
 	sr=1;
 
@@ -65,7 +66,7 @@ var countAnswers = function () {
   }
   $("#finishMessage").hide();
   $("#nPresent").text(String.fromCharCode(0x0966 + nAnswersPresent));
-  $("#nFound").text(0);
+  $("#nFound").text("०");
   var answerIdx = 0;
   for (answerIdx = 0; answerIdx < answers.length; answerIdx++) {
     $("#answers").append("<li>" + answers[answerIdx] + "</li>");
@@ -76,7 +77,12 @@ var cellClick = function (e) {
   nm=processCell(cell).length;
     if (nm==0)
   {
-	  console.log("falseclicks++");
+	  //console.log("falseclicks++");
+	  wclk++;
+	   if (wclk>9)
+		   $("#wclk").text(">९");
+		   else
+	  $("#wclk").text(String.fromCharCode(0x0966 + wclk));
   }
   nAnswersDiscovered += nm;
   $("#nFound").text(String.fromCharCode(0x0966 + nAnswersDiscovered));
@@ -225,7 +231,7 @@ var isProperMatch = function (candidate) {
 };
 
 var showDetails = function (cellId) {
-  console.log("show details for " + cellId);
+  //console.log("show details for " + cellId);
 };
 
 var showHint = function () {
