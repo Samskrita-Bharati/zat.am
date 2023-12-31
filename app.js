@@ -99,6 +99,10 @@ desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-
 				 {
 					id:42, title: "संस्कृतम् Rocks!", category : "TA", dir:"042-sr", desc : `<pre>संस्कृतम्  (saMskRRitam)</pre> Rocks! <br>Simple sentences you can use for self-introduction` 
 				 },
+				 {
+					id:43,title : " T-rex in संस्कृतम् ", category : "RG", dir:"043-trs",desc:
+`Chrome Easter Egg - T-rex runner with संस्कृतम्  scores :) `
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
