@@ -2134,16 +2134,7 @@ var playerid = url.searchParams.get("id");
 
             this.highScore = ['10', '11', ''].concat(highScoreStr.split(''));
 
-        // Submit highscore to Telegram
-             var xmlhttp = new XMLHttpRequest();
-             var url = "https://trex.code4samskritam.workers.dev/highscore/?d=" + distance + 
-                 "&id=" + playerid;
-             var sendingText = document.getElementById("sendingText");
-           sendingText.style.display = "block";
-window.location.href=url;
-          //xmlhttp.onreadystatechange = function() { sendingText.style.display = "none";           };
-            // xmlhttp.open("GET", url, true);
-             //xmlhttp.send();
+localStorage["trexsamszatamhs"]=distance;
 
         },
 

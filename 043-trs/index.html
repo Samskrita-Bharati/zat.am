@@ -7,10 +7,11 @@
     <title >t-rex runner in संस्कृतम् </title>
     <link rel="stylesheet" href="index.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
+<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
     <script src="index.js"></script>
 </head>
 
-<body id="t" class="offline">
+<body id="t" class="offline" onload="zatamhs=(localStorage['trexsamszatamhs'])?localStorage['trexsamszatamhs']:0;alert('Your HighScore is : ' + Sanscript.t(String(zatamhs),'iast','devanagari'));">
     <div id="messageBox" class="sendmessage">
          <h1 style="text-align: center;font-family: 'Open Sans', sans-serif;">कृपया Space नोदयतु</h1>
          <div class="niokbutton" onclick="okbuttonsend()"></div>
