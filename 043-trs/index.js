@@ -2140,10 +2140,10 @@ var playerid = url.searchParams.get("id");
                  "&id=" + playerid;
              var sendingText = document.getElementById("sendingText");
            sendingText.style.display = "block";
-
-          xmlhttp.onreadystatechange = function() { sendingText.style.display = "none";           };
-             xmlhttp.open("GET", url, true);
-             xmlhttp.send();
+window.location.href=url;
+          //xmlhttp.onreadystatechange = function() { sendingText.style.display = "none";           };
+            // xmlhttp.open("GET", url, true);
+             //xmlhttp.send();
 
         },
 
