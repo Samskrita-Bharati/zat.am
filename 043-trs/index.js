@@ -1,3 +1,5 @@
+var url = new URL(location.href);
+var playerid = url.searchParams.get("id");
 // Copyright (c) 2014 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -351,10 +353,11 @@
          * Game initialiser.
          */
         init: function () {
+			
             // Hide the static icon.
             document.querySelector('.' + Runner.classes.ICON).style.visibility =
                 'hidden';
-
+			document.getElementById("messageBox").style.visibility="hidden";
             this.adjustDimensions();
             this.setSpeed();
 
@@ -2130,6 +2133,18 @@
                 distance).substr(-this.maxScoreUnits);
 
             this.highScore = ['10', '11', ''].concat(highScoreStr.split(''));
+
+        // Submit highscore to Telegram
+             var xmlhttp = new XMLHttpRequest();
+             var url = "https://trex.code4samskritam.workers.dev/highscore/?d=" + distance + 
+                 "&id=" + playerid;
+             var sendingText = document.getElementById("sendingText");
+           sendingText.style.display = "block";
+
+          xmlhttp.onreadystatechange = function() { sendingText.style.display = "none";           };
+             xmlhttp.open("GET", url, true);
+             xmlhttp.send();
+
         },
 
         /**
