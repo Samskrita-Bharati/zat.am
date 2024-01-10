@@ -33,7 +33,7 @@ var registerEventListeners = function () {
   $("#grid td").bind("click", cellClick);
 };
 var drawGrid = function () {
-  var table = $("<table></table>");
+  var table = $("<table><caption style='color:red'> <span style='display:inline;border:none;font-weight:bold;'>जानाति वा?</span>  IF host has 'Enabled attendee annotations' then you can interact with क्रीडा  using 'Drawing' tool from your FCC app. On phone/tablet/desktop, click on the 3 dots (for more), choose 'Drawing' and pencil color to try 😊</caption></table>");
   var rowIdx = 0;
   var colIdx = 0;
   for (rowIdx = 0; rowIdx < N_ROWS; rowIdx++) {
