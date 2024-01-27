@@ -1,5 +1,5 @@
 /**
- * 15-puzzle.js
+ * 8-puzzle.js
  *
  * Copyright (c) 2015 Arnis Ritins
  * Released under the MIT license
@@ -8,15 +8,18 @@
 	var moves=0;
 	var state = 1;
 	var puzzle = document.getElementById('puzzle');
+
 document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast', 'devanagari');
+
 	// Creates solved puzzle
 	solve();
 	
 	// Listens for click on puzzle cells
 	puzzle.addEventListener('click', function(e){
 		if(state == 1){
-			moves++;
-			document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast', 'devanagari');
+moves++;
+document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast', 'devanagari');
+
 			// Enables sliding animation
 			puzzle.className = 'animate';
 			shiftCell(e.target);
@@ -40,14 +43,14 @@ document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast'
 		puzzle.innerHTML = '';
 		
 		var n = 1;
-		for(var i = 0; i <= 3; i++){
-			for(var j = 0; j <= 3; j++){
+		for(var i = 0; i < 3; i++){
+			for(var j = 0; j < 3; j++){
 				var cell = document.createElement('span');
 				cell.id = 'cell-'+i+'-'+j;
 				cell.style.left = (j*80+1*j+1)+'px';
 				cell.style.top = (i*80+1*i+1)+'px';
 				
-				if(n <= 15){
+				if(n <= 8){
 					cell.classList.add('number');
 					cell.classList.add((i%2==0 && j%2>0 || i%2>0 && j%2==0) ? 'dark' : 'light');
 					cellnum=n++;
@@ -152,9 +155,9 @@ document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast'
 		var adjacent = [];
 		
 		// Gets all possible adjacent cells
-		if(row < 3){adjacent.push(getCell(row+1, col));}			
+		if(row < 2){adjacent.push(getCell(row+1, col));}			
 		if(row > 0){adjacent.push(getCell(row-1, col));}
-		if(col < 3){adjacent.push(getCell(row, col+1));}
+		if(col < 2){adjacent.push(getCell(row, col+1));}
 		if(col > 0){adjacent.push(getCell(row, col-1));}
 		
 		return adjacent;
@@ -168,15 +171,15 @@ document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast'
 	function checkOrder(){
 		
 		// Checks if the empty cell is in correct position
-		if(getCell(3, 3).className != 'empty'){
+		if(getCell(2, 2).className != 'empty'){
 			return;
 		}
 	
 		var n = 1;
 		// Goes through all cells and checks numbers
-		for(var i = 0; i <= 3; i++){
-			for(var j = 0; j <= 3; j++){
-				if(n <= 15 && getCell(i, j).innerHTML != Sanscript.t(n.toString(),'iast', 'devanagari')){
+		for ( var i = 0; i < 3; i++){
+			for ( var j = 0; j < 3; j++){
+				if ( n <= 8 && getCell(i, j).innerHTML != Sanscript.t(n.toString(),'iast', 'devanagari') ){
 					// Order is not correct
 					return;
 				}
@@ -194,8 +197,8 @@ document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast'
 	 *
 	 */
 	function scramble(){
-	moves=0;
-	document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast', 'devanagari');
+	 moves = 0;
+document.getElementById('moves').innerHTML=Sanscript.t((moves).toString(),'iast', 'devanagari');
 		if(state == 0){
 			return;
 		}

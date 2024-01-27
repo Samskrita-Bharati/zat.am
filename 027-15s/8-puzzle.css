@@ -10,22 +10,22 @@ p a{color: #888;}
 	margin: 25px 2px;
 	border: 0;
 	border-radius: 4px;
-	background: orange;
+	background: tomato;
 	font: bold 14px Arial;
 	text-align: center;
 	text-transform: uppercase;
 	text-shadow: -1px -1px 0 rgba(0,0,0, 0.5);
 	color: #fff;
 }
-#controls button:hover{background: tomato;}
+#controls button:hover{background: orange;}
 
 #puzzle{
 	position: relative;
-	width: 325px;
-	height: 325px;
+	width: 245px;
+	height: 245px;
 	margin: 0 auto;
 	margin-top: 80px;
-	border: 8px solid #001F1F;
+	border: 8px solid yellow;
 	border-radius: 4px;
 }
 #puzzle span{
