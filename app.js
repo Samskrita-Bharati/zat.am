@@ -103,6 +103,10 @@ desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-
 					id:43,title : " T-rex in संस्कृतम् ", category : "RG", dir:"043-trs",desc:
 `Chrome Easter Egg - T-rex runner with संस्कृतम्  scores :) `
 				 },
+				 {
+					id:44,title : " गणितपरीक्षा ", category : "RG", dir:"044-gp",desc:
+`MathBattle in संस्कृतम्  :) `
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
