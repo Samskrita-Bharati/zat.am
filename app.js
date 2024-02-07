@@ -107,6 +107,10 @@ desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-
 					id:44,title : " गणितपरीक्षा ", category : "RG", dir:"044-gp",desc:
 `MathBattle in संस्कृतम्  :) `
 				 },
+{
+					id:45,title : " A game ", category : "RG", dir:"045-nss",desc:
+`in संस्कृतम्  :) `
+				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
