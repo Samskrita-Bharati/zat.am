@@ -110,6 +110,9 @@ desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-
 {
 					id:45,title : " A game ", category : "RG", dir:"045-nss",desc:
 `in संस्कृतम्  :) `
+				 },{
+					id:46,title : "गगननौका game ", category : "RG", dir:"046-ds",desc:
+`in संस्कृतम्  :) `
 				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",

@@ -1,0 +1,53 @@
+body
+{
+background-image: url('bp.png');
+margin: 0px;
+}
+
+.info
+{
+    height: 8vh;
+}
+
+.info>p
+{
+    position: absolute;
+    margin: 0px;
+    top: -0.5%;
+    color: red;
+    font-size:3vw;
+    font-family: Fantasy;
+
+}
+
+.info>p>span
+{
+    color: LightGreen;
+}
+
+.game-window
+{
+    border: 10px Solid Red;
+    height: 89vh
+}
+
+#player
+{
+    position: absolute;
+    top: 60vh;
+    left: 50vw;
+    height: 37px;
+    width: 5vw;
+}
+
+.robo>div
+{
+    position: absolute;
+    background-color: Yellow;
+    height: 37px;
+    width: 5vw;
+    top: 9vh;
+    border: 2px Solid Red;
+    margin: 0px;
+    z-index: -1;
+}
