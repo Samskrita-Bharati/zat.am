@@ -50,3 +50,5 @@ PS: more details/updates will be added as we proceed further - a movement is imp
 Home page currently inspired from https://github.com/john-smilga/javascript-basic-projects/tree/master/08-menu
 
 ideas/comments/questions? - email to code@SamskritaBharati.ca
+-------
+Issue-34 is a branch for git training. Do not use for your PRs
