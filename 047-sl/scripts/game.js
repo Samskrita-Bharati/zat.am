@@ -17,7 +17,7 @@ function main(currentTime) {
   if (gameOver) {
     const displayedHighscore = highscore === 0 ? 0 : highscore;
     if (confirm(`पराजयः 🙁 | पुनः प्रयत्नार्थं ok नुदन्तु | Highscore: ${toSanskritNumber(displayedHighscore)}`)) {
-      window.location = '/content/game.html';
+      window.location = '/047-sl/content/game.html';
     }
     return;
   }
