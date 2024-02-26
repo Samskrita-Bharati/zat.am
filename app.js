@@ -113,6 +113,9 @@ desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-
 				 },{
 					id:46,title : "गगननौका game ", category : "RG", dir:"046-ds",desc:
 `in संस्कृतम्  :) `
+				 },{
+				 id:47,title : "सर्पलीला game ", category : "RG", dir:"047-sl",desc:
+`Classic Snake Game in संस्कृतम्  :) `
 				 },
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
