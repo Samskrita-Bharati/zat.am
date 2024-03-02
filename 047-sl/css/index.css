@@ -9,24 +9,24 @@ body {
 header {
     background-color: #333;
     color: #fff;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
 }
 
 h1 {
     font-size: 3rem;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 p {
     font-size: 1.2rem;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 main {
     max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+    margin: 10px auto;
+    padding: 10px;
     background-color: #444;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -35,22 +35,18 @@ main {
 
 .game-preview {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 .game-preview img {
-    max-width: 50%;
+    max-width: 40%;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.features, .instructions {
-    margin-bottom: 40px;
-}
-
 h2 {
     font-size: 2rem;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 ul, ol {
@@ -63,7 +59,7 @@ li {
 }
 
 button {
-    padding: 15px 30px;
+    padding: 5px 10px;
     font-size: 1.2rem;
     background-color: #4CAF50;
     color: white;
@@ -83,7 +79,7 @@ button:focus {
 
 footer {
     text-align: center;
-    padding: 20px;
+    padding: 10px;
     background-color: #333;
     color: #fff;
     position: fixed;
