@@ -11,34 +11,26 @@
 </head>
 <body>
     <header>
-        <h1>सर्पक्रीडायां स्वागतम् 🐍</h1>
-        <p>किं त्वं स्खलितुं विजयं च कर्तुं सज्जः असि?</p>
+        <h2>सर्पक्रीडायां स्वागतम् 🐍</h2>
+        <p>किं त्वं सज्जः असि?</p>
     </header>
     <main>
         <section class="game-preview">
-            <h2>पूर्वावलोकन</h2>
+            <h3>पूर्वावलोकनम्</h3>
             <img src="images/preview.png" alt="Game Preview">
         </section>
-        <section class="features">
-            <h2>गुणाः</h2>
-            <ul>
-                <li>सरलं व्यसनं च क्रीडा</li>
-                <li>उच्चाङ्कस्य अनुसरणं</li>
-                <li>सुन्दराणि चित्राणि एनिमेशनं च</li>
-            </ul>
-        </section>
-        <section class="instructions">
-            <h2>कथं क्रीडितव्यम्</h2>
+        <section id="instructions" style="visibility: hidden;">
+            <h3>How to Play</h3>
             <ol>
-                <li>सर्पस्य नियन्त्रणार्थं बाणकुंजीनां उपयोगं कुर्वन्तु</li>
-                <li>दीर्घकालं वर्धयितुं भोजनं खादन्तु तथा च भित्तिषु वा स्वयमेव वा प्रहारं परिहरन्तु</li>
-                <li>यथासम्भवं दीर्घकालं जीवन्तु, स्वस्य उच्चं स्कोरं च ताडयन्तु</li><li><br></li>
+                <li>Use arrow keys to control the snake</li>
+                <li>Eat the food to grow longer and Avoid hitting the walls or yourself</li>
+                <li>Survive as long as possible and beat your high score</li>
             </ol>
         </section>
     </main>
     <footer>
-        <button onclick="window.location.href='content/game.html'">अधुना क्रीडतु!</button>
-        <button onclick="window.location.href='content/index-eng.html'">Translate Page to English</button>
+        <button onclick="window.location.href='content/game.html'">अधुना क्रीडतु! Play Now</button>
+        <button onclick="document.getElementById('instructions').style.visibility='visible'">HOWTO</button>
     </footer>
 </body>
 </html>
