@@ -1,0 +1,21 @@
+/* Add styles for the timer */
+*{
+    padding: 0;margin: 0;box-sizing: border-box;
+}
+#timer {
+    font-size: 40px;
+    font-weight: bold;
+    color: red;
+    background: #000000bd;
+    padding:20px;margin: 20px;
+    position: absolute;
+    right: 0px;
+    width: 10%;
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
+    
+}
