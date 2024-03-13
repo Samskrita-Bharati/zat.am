@@ -1193,11 +1193,16 @@ function renderScoreHud() {
 		scoreNode.style.display = 'none';
 		cubeCountNode.style.opacity = 1;
 	} else {
-		scoreNode.innerText = `अंक: ${state.game.score}`;
+		scoreNode.innerText=`अंक: ${toSanskritNumerals(state.game.score)}`;
 		scoreNode.style.display = 'block';
 		cubeCountNode.style.opacity = 0.65 ;
 	}
-	cubeCountNode.innerText = `घन भग्न: ${state.game.cubeCount}`;
+	cubeCountNode.innerText = `घन भग्न: ${toSanskritNumerals(state.game.cubeCount)}`;
+}
+// Function to convert numbers to Sanskrit numerals
+function toSanskritNumerals(number) {
+	const sanskritNumerals = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+    return number.toString().split('').map(digit => sanskritNumerals[digit]).join('');
 }
 
 renderScoreHud();
@@ -1259,11 +1264,11 @@ function renderMenus() {
 			showMenu(menuPauseNode);
 			break;
 		case MENU_SCORE:
-			finalScoreLblNode.textContent = formatNumber(state.game.score);
+			finalScoreLblNode.textContent = toSanskritNumerals(state.game.score);
 			if (isNewHighScore()) {
-				highScoreLblNode.textContent = 'उच्च अंक / New High Score!';
+				highScoreLblNode.textContent = `उच्च अंक`;
 			} else {
-				highScoreLblNode.textContent = `उच्च अंक / High Score: ${formatNumber(getHighScore())}`;
+				highScoreLblNode.textContent = `उच्च अंक: ${toSanskritNumerals(getHighScore())}`;
 			}
 			showMenu(menuScoreNode);
 			break;
