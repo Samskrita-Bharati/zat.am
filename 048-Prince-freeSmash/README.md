@@ -4,6 +4,6 @@
 
 <p align="center">
   <a href="https://chprince11.github.io/zat.am/048-Prince-freeSmash/">
-    <img src="https://img.icons8.com/color/96/000000/play--v1.png" alt="Play the Game">
+    <img src="https://img.icons8.com/color/96/000000/play--v1.png" alt="Play Game">
   </a>
 </p>
