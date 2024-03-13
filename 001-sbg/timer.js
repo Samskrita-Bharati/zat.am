@@ -12,7 +12,7 @@ function startTimer() {
         timeLeft--;
         const timerNode = document.getElementById('timer');
         timerNode.innerText = toSanskritNumerals(timeLeft); // Update the timer display with Sanskrit numerals
-        if (timeLeft === 0) {
+        if (timeLeft === -1) {
             clearInterval(timerInterval); // timer will stop when it will reach to zero
             alert('समयः समाप्तः अस्ति !');
         }
