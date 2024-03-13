@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <a href="https://chprince11.github.io/zat.am/048-Prince-freeSmash/">
   <h1>Play Game </h1>
+  <a href="https://chprince11.github.io/zat.am/048-Prince-freeSmash/">
    <img src="https://img.icons8.com/color/96/000000/play--v1.png" alt="Play Game">
   </a>
 </p>
