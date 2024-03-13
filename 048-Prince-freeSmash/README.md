@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="index.html">
+  <a href="https://chprince11.github.io/zat.am/048-Prince-freeSmash/">
     <img src="https://img.icons8.com/color/96/000000/play--v1.png" alt="Play Game">
   </a>
 </p>
