@@ -118,8 +118,7 @@ desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-
 `Classic Snake Game in संस्कृतम्  :) `
 				 },{
 					id:48,title : "Free Smash game ", category : "RG", dir:"048-fs",desc:
-   `Free Smash game in संस्कृतम्  :
-   Prince Chauhan) `
+   `Free Smash game in संस्कृतम्:\nPrince Chauhan) `
 					},
 		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
