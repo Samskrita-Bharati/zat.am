@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="file:///C:/Users/Prince%20Chauhan/OneDrive/Desktop/OneDrive/Desktop/new-pic-pr-2.png" width="800" height="500">
+  <img src="./img.png" width="800" height="500">
 </p>
 
 <div style="text-align: center;">
