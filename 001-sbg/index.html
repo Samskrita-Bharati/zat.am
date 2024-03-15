@@ -5,12 +5,15 @@
     <meta name="viewport" content="initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="find.css" />
+    <link rel="stylesheet" href="./timer.css">
 	<script src="bhagavad-gita-t.json"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 </head>
 <body>
     <div class="mangalam">&#x0965 श्रीः &#x0965</div>
-    <div id="lead">अस्मिन् अक्षरसमूहे श्रीमद् भगवद्गीता-तः <span style="font-weight:bold" id="nPresent"></span> पदानि सन्ति । करोतु अन्वेषणम् । <br><span id="lead2"></span> </div>
+    <!-- timer div added  -->
+    <div id="timer">३०</div>
+    <div style="clear: left;" id="lead">अस्मिन् अक्षरसमूहे श्रीमद् भगवद्गीता-तः <span style="font-weight:bold" id="nPresent"></span> पदानि सन्ति । करोतु अन्वेषणम् । <br><span id="lead2"></span> </div>
     <div id="statusMessage"><span id="nFound"></span> पदानि अन्वेषितानि</div>
     <div id="finishMessage">।। शुभमस्तु ।। </div>
     <div id="gridParent">
@@ -67,5 +70,6 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="find.js" type="text/javascript"></script>
+<script src="./timer.js"></script>
 </body>
 </html>
