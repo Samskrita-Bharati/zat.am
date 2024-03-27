@@ -8,9 +8,9 @@
 	height: 100vh;
 	width: 100vw;
 	background: url('images/background-img.png') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
+    -webkit-baround-size: cover;
+    -o-backgrouckground-size: cover;
+    -moz-backgnd-size: cover;
     background-size: cover;
 }
 .bird {
