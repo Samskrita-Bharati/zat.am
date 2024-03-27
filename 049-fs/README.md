@@ -5,7 +5,7 @@
 <div style="text-align: center;">
   <h1> Flappy Bird Game</h1> <br>
   <h1>Play Game</h1>
-  <a href="https://chprince11.github.io/zat.am/049-prince/">
+  <a href="https://chprince11.github.io/zat.am/049-fs/">
     <img src="https://img.icons8.com/color/96/000000/play--v1.png" alt="Play Game">
   </a>
 </div>
