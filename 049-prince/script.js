@@ -29,13 +29,20 @@ document.addEventListener('keydown', (e) => {
         game_state = 'Play';
         message.innerHTML = '';
         score_title.innerHTML = 'प्राप्ताङ्का : ';
-        score_val.innerHTML = '0';
+        score_val.innerHTML = '०';
         message.classList.remove('messageStyle');
         play();
     }
 });
 
+
 function play(){
+
+    // Function to convert numbers to Sanskrit numerals
+    function toSanskritNumerals(number) {
+	  const sanskritNumerals = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९']; 
+       return number.toString().split('').map(digit => sanskritNumerals[digit]).join('');
+}
     function move(){
         if(game_state != 'Play') return;
 
@@ -55,18 +62,18 @@ function play(){
                     sound_die.play();
                     return;
                 }else{
-                    if(pipe_sprite_props.right < bird_props.left && pipe_sprite_props.right + move_speed >= bird_props.left && element.increase_score == '1'){
-                        score_val.innerHTML =+ score_val.innerHTML + 1;
+                    if(pipe_sprite_props.right < bird_props.left && pipe_sprite_props.right + move_speed >= bird_props.left && element.increase_score == 1){
+                        score_val.innerHTML = toSanskritNumerals(Number(score_val.innerHTML)) + toSanskritNumerals(Number(1)); // Convert the score to Sanskrit numerals
                         sound_point.play();
                     }
                     element.style.left = pipe_sprite_props.left - move_speed + 'px';
-                }
+                }   
             }
         });
         requestAnimationFrame(move);
     }
     requestAnimationFrame(move);
-
+  
     let bird_dy = 0;
     function apply_gravity(){
         if(game_state != 'Play') return;
