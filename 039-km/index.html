@@ -237,10 +237,10 @@ hht end-of-ad-slide -->
 		{
 		document.getElementById("bgpb").value=(snum%100);
 	    snum = snum % 101;
-		document.getElementById("bg1").innerHTML = s[snum-1].s + " १.१."+ Sanscript.t(String(parseInt(snum)),'itrans', 'devanagari')+"<br>" ;
+		document.getElementById("bg1").innerHTML = s[snum].s + " १.१."+ Sanscript.t(String(parseInt(snum)),'itrans', 'devanagari')+"<br>" ;
 		document.getElementById("bg1a").innerHTML = "<a target=sr100 href='"+"https://www.valmiki.iitk.ac.in/sites/default/files/audio/1-1-"+parseInt(snum)+".mp3'>link</a>";
-		//document.getElementById("bg2").innerHTML = Sanscript.t(s[snum-1], 'devanagari','itrans') + " 1.1."+parseInt(snum);
-		document.getElementById("bg2").innerHTML = s[snum-1].a;
+		//document.getElementById("bg2").innerHTML = Sanscript.t(s[snum], 'devanagari','itrans') + " 1.1."+parseInt(snum);
+		document.getElementById("bg2").innerHTML = s[snum].a;
 		document.getElementById("bg2t").innerHTML = "<a target=sr100 href='"+"https://zat.am/025-sr/?s=" +parseInt(snum)+ "'>link</a>";
 		document.getElementById("bg2a").innerHTML = "<a target=sr100 href='"+"https://zat.am/024-sr/index.html?size=7&s=" +parseInt(snum)+ "'>link</a>";
 		document.getElementById("sr100").innerHTML = snum + " / 100";
