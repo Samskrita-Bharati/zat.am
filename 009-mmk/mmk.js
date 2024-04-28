@@ -159,14 +159,18 @@ genTable(rowLength, colLength, D2Data); // generate table..
             //console.log('comparing to one in the lisst')
             if(D2Data[row][column].src === clickedCards[0].src){    // if it matches..
 			d=document.getElementsByTagName("tr")[clickedCards[0].x];
-			r=d.getElementsByTagName("td")[clickedCards[0].y].style.border="2px solid #" + String(matchesdone) + String(matchesdone) + String(matchesdone);
-			r=d.getElementsByTagName("td")[clickedCards[0].y].style.cursor="none";
+			r=d.getElementsByTagName("td")[clickedCards[0].y];
+			r.style.border="3px solid blue";
+			r.style.cursor="no-drop";
+			r.style.color="blue";
+			r.innerHTML+="✔️";
 			matchesdone++;
 			document.getElementById("pr").value=matchesdone;
             //console.log('match')
-			this.parentElement.style.border="2px solid grey";
-			this.parentElement.style.cursor="none";
+			this.parentElement.style.border="3px solid blue";
+			this.parentElement.style.cursor="no-drop";
 			this.style.color="blue";
+			this.innerHTML+="✔️";
             this.src = D2Data[row][column].src
             D2Data[row][column].clicked = true;
             clickedCards = [];  // empty the matrix.
