@@ -154,6 +154,9 @@ genTable(rowLength, colLength, D2Data); // generate table..
               this.width=width;
             D2Data[row][column].clicked = true;
             clickedCards.push(D2Data[row][column]);
+			d=document.getElementsByTagName("tr")[clickedCards[0].x];
+			r=d.getElementsByTagName("td")[clickedCards[0].y];
+			r.style.border="2px dashed red";
           }
           else{        // compare card to one in the list..
             //console.log('comparing to one in the lisst')
@@ -193,6 +196,9 @@ genTable(rowLength, colLength, D2Data); // generate table..
             this.src = D2Data[row][column].src; // show picture of card u just clicked
             D2Data[row][column].clicked = true; // new
             waiting.value = true; //
+			d=document.getElementsByTagName("tr")[clickedCards[0].x];
+			r=d.getElementsByTagName("td")[clickedCards[0].y];
+			r.style.border="1px solid blue";
             setTimeout(flipback , 700, row, column, this, clickedCards,waiting, D2Data)
             }
           }
