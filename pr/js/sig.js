@@ -1,7 +1,7 @@
 let domain = "";
 let yr = 00;
 $("#if").hide();
-var openyrs = ["1994","1995","1996","1997"];
+var openyrs = ["1994","1995","1996","1997","1998"];
 function parseJwt(token) {
     try {
         var base64Url = token.split('.')[1];
@@ -25,7 +25,7 @@ var emls = ["toronto@samskritabharatiusa.org",
     "amrutputra@gmail.com",
     "samskritam@gmail.com",
 	"nalinyvasan@gmail.com",
-	"subramaniann@samskritabharatiusa.org"
+	"subramaniann@samskritabharatiusa.org","radhiradhi@gmail.com"
 ];
 function handleCredentialResponse(response) {
     sessionStorage.setItem("pml", response.credential);
