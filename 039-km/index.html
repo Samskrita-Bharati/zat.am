@@ -10,6 +10,11 @@
 		<script>var pd = ["2024"];</script>
 		<script src="sr100-sa.json"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+		<style>
+			#futureuse{
+				background: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100% 100%"><text fill="%23FF0000" x="50%" y="50%" font-family="\'Lucida Grande\', sans-serif" font-size="24" text-anchor="middle">आगमिष्यति ... loading</text></svg>') 0px 0px no-repeat;
+			}
+		</style>
 	</head>
 	<body class="reveal-viewport theme-font-montserrat theme-color-white-blue">
 		<div class="reveal">
@@ -55,8 +60,14 @@
 
 <img xdata-natural-width="783" xdata-natural-height="612" style="" data-lazy-loaded="" data-src="ss24.jpg">  </div></div></section>
  hht end-of-ad-slide -->
-<!--
+
 				<section data-id="caa878efb2dc4c40341dc29d59a7e132" data-state="su">
+					<div class="sl-block" data-block-type="text" style="width: 807px; left: 76.5px; top: 22.8778px; height: auto;" data-block-id="59698c140c7079b80572724d8e915f57"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;">
+<h3><span><a  style="color:tomato" id="sua" target="_blank">सुभाषितम्</a></span> + <a id="suk" target="_blank">क्रीडा</a> च</h3>
+</div></div>
+<div class="sl-block" data-block-type="iframe" data-name="iframe-12d909" data-block-id="12fba82d8524b85bf1ab2e2601980d00" style="width: 779.875px; height: 597.031px; left: 90.0625px; top: 88.3506px;"><div class="sl-block-content" style="z-index: 12;"><iframe webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" sandbox="allow-forms allow-scripts allow-popups allow-pointer-lock allow-presentation" id="su"></iframe></div></div>
+<!--typo/error? - email (with num) - <strong>pratidinam@sbusa.org</strong>
+
 					<div class="sl-block" data-block-type="text" style="width: 807px; left: 76.5px; top: 22.8778px; height: auto;" data-block-id="59698c140c7079b80572724d8e915f57">
 						<div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;">
 							<h4><span><a id="sua" target="sr100" href="https://www.valmiki.iitk.ac.in/sloka?field_kanda_tid=1&language=dv&field_sarga_value=1">सङ्क्षेपरामायणम् ( वाल्मीकि-रामायणम् )</a> </span>
@@ -74,9 +85,9 @@
 							<br><p id="sr100"></p>
 							<sub style="font-size:10px">Reference - www.valmiki.iitk.ac.in & sanskrit.uohyd.ac.in/scl/e-readers/sankshepa_ramayanam/</sub>
 						</div>
-					</div>
+					</div>-->
 				</section>
-				-->
+				
 				<section data-state="ka" data-id="ab0d3aee9d395d0abae4a92964bc0c43">
 					<div data-block-type="image" style="width: 711.612px; height: 920.91px; left: 124.194px; top: -110.455px; min-width: 1px; min-height: 1px;" data-block-id="6c0977e7d7ece6e7f8edf239d483154c">
 						<div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;">
@@ -103,13 +114,14 @@
 				</div>
 				</section>
 				
+				<!--
 				<section data-id="44395f2d43259fd360dc61f91e2120af" class="present" style="display: block;">
 				<div id="dtext" style="color:tomato"></div>				
 				<div class="sl-block" data-block-type="iframe" data-name="iframe-b8b83c" data-block-id="7bbd12757c3f7f6f0ebb8fedf9f5b9ed" style="width: 800px; height: 560px; left: 80px; top: 70px;"><div class="sl-block-content" style="z-index: 11;">
 <iframe src="" id="if" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" sandbox="allow-forms allow-scripts allow-popups allow-same-origin allow-pointer-lock allow-presentation" frameborder="1" style="border: solid 4px #37474F"></iframe>
 </div></div>
 </section>
-				
+-->
 				<section data-id="8c0029c2411d12e910460d3d64911c4a">
 					<div class="sl-block" data-block-type="image" style="width: 948.726px; height: 429.186px; left: 5.637px; top: 140px; min-width: 1px; min-height: 1px;" data-block-id="002cfe6e9f67d6fb9b2c87ce7d3c0a04">
 						<div class="sl-block-content" style="z-index: 10;">
@@ -175,8 +187,8 @@
 		    prevtod = new Date(tod + ", " + new Date().getFullYear());
 		    prevtod = new Date(prevtod.getFullYear(), prevtod.getMonth(), prevtod.getDate() - 1);
 		    tod = prevtod.toString().substr(4, 3) + prevtod.toString().substr(7, 3);
-		    sunum = prevtod.getDOY();
-			sunum = sunum % 101;
+		    sunum = prevtod.getDOY()-242;
+			sunum = sunum % 121;
 		    pop_bg(sunum);
 		    n = prevtod.getDay();
 		    document.getElementById("v").innerHTML = va[n];
@@ -190,8 +202,8 @@
 		    newtod = new Date(newtod.getFullYear(), newtod.getMonth(), newtod.getDate() + 1);
 		    tod = newtod.toString().substr(4, 3) + newtod.toString().substr(7, 3);
 
-		    sunum = newtod.getDOY();
-	        sunum = sunum % 101;
+		    sunum = newtod.getDOY()-242;
+	        sunum = sunum % 121;
 			pop_bg(sunum);
 		    n = newtod.getDay();
 		    document.getElementById("v").innerHTML = va[n];
@@ -207,7 +219,7 @@
 		var tod = d.toDateString().substr(4, 6);
 		var da = tod.substr(4, 2);
 		//sunum=(d.getMonth()*30+parseInt(da))%61;
-		sunum = d.getDOY();
+		sunum = d.getDOY()-242;
 		pop_bg(sunum);
 		var va = ["रवि", "सोम", "मङ्गल", "बुध", "गुरु", "शुक्र", "शनि"];
 		var n = d.getDay();
@@ -219,9 +231,6 @@
 		function transferComplete(evt) {
 		    for (i = 0; i < JSON.parse(this.responseText).values.length; i++)
 		        if (JSON.parse(this.responseText).values[i][0] == tod) {
-				console.log(JSON.parse(this.responseText).values[i][2]);
-				document.getElementById("dtext").innerHTML = JSON.parse(this.responseText).values[i][2].split(";")[0];
-				document.getElementById("if").src=JSON.parse(this.responseText).values[i][2].split(";")[1];
 		            kasrc = JSON.parse(this.responseText).values[i][3];
 					kaacaps = JSON.parse(this.responseText).values[i][1];
 					fwd = JSON.parse(this.responseText).values[i][4]+" "+JSON.parse(this.responseText).values[i][5]+" "+JSON.parse(this.responseText).values[i][6]+" "+JSON.parse(this.responseText).values[i][7]+" " +JSON.parse(this.responseText).values[i][8];
@@ -235,7 +244,10 @@
 		xhr.addEventListener("error", transferFailed);
 		xhr.open('GET', 'https://sheets.googleapis.com/v4/spreadsheets/1rEH5doqvHzRsVxHrxXLIKy7BmWQOjUx61VGvUhsXXbM/values/2024!A2:I101?key=AIzaSyAhoNyaVgizrYo7fOfSNh8a7nj0DyJtg9M');
 		xhr.send();
-		Reveal.on(' su', () => {
+		Reveal.on('su', () => {
+			document.getElementById("su").src="https://thakkaha.github.io/gq120.gq/kms.htm?pn=0&s="+sunum;
+			document.getElementById("sua").href="https://thakkaha.github.io/gq120.gq/kms.htm?s="+sunum;
+document.getElementById("suk").href="fwfs.html?snum="+parseInt(sunum-1);
 		});
 		Reveal.on('ka', () => {
 		    document.getElementById("kaa").href = kasrc;
