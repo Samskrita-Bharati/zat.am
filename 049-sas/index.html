@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>श्लोकार्थ संग्रह</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'Georgia', serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-family: 'Georgia', serif;
+            margin-bottom: 20px;
+        }
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+            flex: 1;
+            padding: 20px;
+        }
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .grid-item {
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+            border: 2px solid #2c3e50;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .grid-item a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        .grid-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .language-toggle:hover {
+            background-color: #b2c2d2;
+            color: #0d2f34;
+        }
+        .sloka-container {
+            padding: 20px;
+            background-color: #ffffff;
+            border: 2px solid #2c3e50;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <button class="language-toggle" onclick="toggleLanguage()">Switch to Sanskrit</button>
+    <div class="content">
+        <div class="left-column">
+            <div class="sloka-container" id="sloka-container"></div>
+        </div>
+        <div>
+            <h1 id="title">श्लोकार्थ संग्रह</h1>
+            <div class="grid-container" id="grid-container"></div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Samskrita Bharati. All rights reserved. Crafted with <3 by Karanveer Masoun</p>
+    </footer>
+    <script>
+        const chapters = {
+            en: "Chapter",
+            sa: "अध्याय"
+        };
+        const footerText = {
+            en: "&copy; 2024 Samskrita Bharati. Crafted with <3 by Karanveer Masoun",
+            sa: "&copy; २०२४ संस्कृतभारती। करणवीर मासौण द्वारा <3 के साथ निर्मित"
+        };
+        const sanskritNumerals = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+        let currentLanguage = 'sa';
+
+        function renderChapters() {
+            const container = document.getElementById('grid-container');
+            container.innerHTML = '';
+            for (let i = 1; i <= 18; i++) {
+                const chapterNumber = currentLanguage === 'sa' ? convertToSanskritNumerals(i) : i;
+                container.innerHTML += `<div class="grid-item"><a href="bg${i}.html">${chapters[currentLanguage]} ${chapterNumber}</a></div>`;
+            }
+        }
+
+        function convertToSanskritNumerals(number) {
+            return number.toString().split('').map(digit => sanskritNumerals[parseInt(digit)]).join('');
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'sa' : 'en';
+            document.getElementById('title').textContent = currentLanguage === 'en' ? 'Shlokarth Collection' : 'श्लोकार्थ संग्रह';
+            document.querySelector('.language-toggle').textContent = currentLanguage === 'en' ? 'Switch to Sanskrit' : 'Switch to English';
+            document.querySelector('footer p').innerHTML = footerText[currentLanguage];
+            renderChapters();
+        }
+
+        async function fetchRandomSloka() {
+            try {
+                const response = await fetch('./verse.json');
+                const verses = await response.json();
+                const randomIndex = Math.floor(Math.random() * verses.length);
+                const sloka = verses[randomIndex];
+                const slokaContainer = document.getElementById('sloka-container');
+                slokaContainer.innerHTML = `
+                    <h2>${sloka.title}</h2>
+                    <p>${sloka.text}</p>
+                    <p><strong>Transliteration:</strong> ${sloka.transliteration}</p>
+                    <p><strong>Word Meanings:</strong> ${sloka.word_meanings}</p>
+                `;
+            } catch (error) {
+                console.error('Error fetching sloka:', error);
+            }
+        }
+
+        renderChapters();
+        fetchRandomSloka();
+    </script>
+</body>
+</html>
