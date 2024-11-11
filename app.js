@@ -119,8 +119,10 @@ desc: `श्रीमद्भगवद्गीता  <pre>shriimad-bhagavad-
 				 },{
 					id:48,title : "Free Smash game ", category : "RG", dir:"048-fs",desc:
    `Free Smash game in संस्कृतम्: <pre>Prince Chauhan</pre> `
+					},{
+					id:49, title : "श्लोकार्थ संग्रह", category : "TA", dir:"049-sas",desc:
+	`श्लोकार्थ संग्रह: Collection of Shlokas with their Meanings `
 					},
-		   
   { id: 28, title: "शीघ्रम् आगमिष्यति ...", category: "TA", dir: "999-cs",
     desc: `Many more fun stuff coming soon - <pre>shiighram aagamiShyati... </pre> `,
   },
