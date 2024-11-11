@@ -145,7 +145,7 @@ impress().init();
 fetch('./verse.json')
   .then(response => response.json())
   .then(data => {
-  const chapter1Slokas = data.filter(sloka => sloka.chapter_number === 1);
+  const chapter1Slokas = data.filter(sloka => sloka.chapter_number === 15);
   chapter1Slokas.forEach((sloka, index) => {
     const i = index + 1;
     const devanagariText = Sanscript.t(sloka.text, 'iast', 'devanagari');
