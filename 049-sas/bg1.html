@@ -172,7 +172,7 @@ fetch('./verse.json')
     const i = index + 1;
     const devanagariText = Sanscript.t(sloka.text, 'iast', 'devanagari');
     const transliteration = sloka.transliteration;
-    const str = devanagariText + "<br>" + transliteration;
+    const str = devanagariText ;//+ "<br>" + transliteration;
     const slokaNumber = " <a href='https://www.gitasupersite.iitk.ac.in/srimad?language=dv&field_chapter_value=" + 
         sloka.chapter_number + "&field_nsutra_value=" + sloka.verse_number + 
         "' target='gss'>॥ " + String(sloka.chapter_number) + String('.') + String(sloka.verse_number) + 
