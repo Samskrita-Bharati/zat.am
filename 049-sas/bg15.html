@@ -145,19 +145,22 @@ impress().init();
 fetch('./verse.json')
   .then(response => response.json())
   .then(data => {
-    const chapter15Slokas = data.filter(sloka => sloka.chapter_number === 15);
-    chapter15Slokas.forEach((sloka, index) => {
-      const i = index + 1;
-      const str = Sanscript.t(sloka.text, 'iast', 'devanagari') + 
-                  " <a href='https://www.gitasupersite.iitk.ac.in/srimad?language=dv&field_chapter_value=" + 
-                  sloka.chapter_number + "&field_nsutra_value=" + sloka.verse_number + 
-                  "' target='gss'>॥ " + Sanscript.t(String(sloka.verse_number), 'iast', 'devanagari') + 
-                  "॥</a><br>" + sloka.text + " ॥ " + sloka.chapter_number + "." + sloka.verse_number + "॥ ";
-      document.getElementById("step-" + i).innerHTML += str;
+  const chapter1Slokas = data.filter(sloka => sloka.chapter_number === 1);
+  chapter1Slokas.forEach((sloka, index) => {
+    const i = index + 1;
+    const devanagariText = Sanscript.t(sloka.text, 'iast', 'devanagari');
+    const transliteration = sloka.transliteration;
+    const str = devanagariText + "<br>" + transliteration;
+    const slokaNumber = " <a href='https://www.gitasupersite.iitk.ac.in/srimad?language=dv&field_chapter_value=" + 
+        sloka.chapter_number + "&field_nsutra_value=" + sloka.verse_number + 
+        "' target='gss'>॥ " + String(sloka.chapter_number) + String('.') + String(sloka.verse_number) + 
+        "॥</a><br>";
+    document.getElementById("step-" + i).innerHTML += str + slokaNumber;
     });
-  })
+    })
   .catch(error => console.error('Error fetching slokas:', error));
-  function navigateSlides(direction) {
+
+function navigateSlides(direction) {
   const steps = document.querySelectorAll('.step');
   let currentIndex = Array.from(steps).findIndex(step => step.classList.contains('active'));
   if (currentIndex === -1) currentIndex = 0;
