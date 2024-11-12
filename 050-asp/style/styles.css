@@ -17,8 +17,7 @@ h1 {
 }
 
 .container {
-    width: 80%;
-    max-width: 500px;
+    width: 100%;
     background-color: #ffe9c5;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -38,7 +37,7 @@ h1 {
     overflow-y: auto;
     overflow-x: hidden;
     background-color: #a0e4a6;
-    max-height: 150px;
+    height: 80vh;
     padding: 10px;
     font-size: 1rem;
     line-height: 1.5;
@@ -79,6 +78,7 @@ h1 {
 .buttons button:hover {
     filter: brightness(0.9);
 }
+p{font-size:350%}
 
 footer {
     margin-top: 20px;
