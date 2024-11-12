@@ -310,10 +310,10 @@ const menu = [
   },
   {
     id: 50,
-    title: "Auto श्लोक पाठक",
+    title: "Auto श्लोकपाठक:",
     category: "TA",
     dir: "050-asp",
-    desc: `Auto श्लोक पाठक: Auto Reader for Shloka from श्रीमद् भगवद्गीता `,
+    desc: `Auto Reader for Shloka from श्रीमद् भगवद्गीता `,
   },
   {
     id: 28,
