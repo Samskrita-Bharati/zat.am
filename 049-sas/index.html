@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>श्लोकार्थ संग्रह</title>
+    <title>श्रीमद्-भगवद्गीता-श्लोकसंग्रह</title>
     <style>
         body {
             display: flex;
@@ -29,7 +29,7 @@
             padding: 20px;
         }
         .left-column {
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 20px;
         }
@@ -90,13 +90,13 @@
     </style>
 </head>
 <body>
-    <button class="language-toggle" onclick="toggleLanguage()">Switch to Sanskrit</button>
+    <button class="language-toggle" onclick="toggleLanguage()">Switch to English</button>
     <div class="content">
         <div class="left-column">
             <div class="sloka-container" id="sloka-container"></div>
         </div>
         <div>
-            <h1 id="title">श्लोकार्थ संग्रह</h1>
+            <h1 id="title">श्रीमद्-भगवद्गीता-श्लोकसंग्रह</h1>
             <div class="grid-container" id="grid-container"></div>
         </div>
     </div>
@@ -106,11 +106,11 @@
     <script>
         const chapters = {
             en: "Chapter",
-            sa: "अध्याय"
+            sa: "अध्यायः"
         };
         const footerText = {
             en: "&copy; 2024 Samskrita Bharati. Crafted with <3 by Karanveer Masoun",
-            sa: "&copy; २०२४ संस्कृतभारती। करणवीर मासौण द्वारा <3 के साथ निर्मित"
+            sa: "&copy; २०२४ संस्कृतभारती । करणवीर मासौण द्वारा "
         };
         const sanskritNumerals = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
         let currentLanguage = 'sa';
@@ -130,7 +130,7 @@
 
         function toggleLanguage() {
             currentLanguage = currentLanguage === 'en' ? 'sa' : 'en';
-            document.getElementById('title').textContent = currentLanguage === 'en' ? 'Shlokarth Collection' : 'श्लोकार्थ संग्रह';
+            document.getElementById('title').textContent = currentLanguage === 'en' ? 'Shloka Collection' : 'श्लोक- संग्रह';
             document.querySelector('.language-toggle').textContent = currentLanguage === 'en' ? 'Switch to Sanskrit' : 'Switch to English';
             document.querySelector('footer p').innerHTML = footerText[currentLanguage];
             renderChapters();
