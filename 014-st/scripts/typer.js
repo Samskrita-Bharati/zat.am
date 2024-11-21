@@ -7,12 +7,12 @@ const center = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   radius: 20,
-  color: "#FF6347",
+  color: "#ffdb4d",
 };
 
 const letter = {
   font: "35px Monospace",
-  color: "#0095DD",
+  color: "#666",
   width: 15,
   height: 20,
   highestSpeed: 1.6,
