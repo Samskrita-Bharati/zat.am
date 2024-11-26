@@ -6,7 +6,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #ff66cc;
+  background-color: rgba(255,102,204,.5);
   color: #fff;
   display: flex;
   justify-content: center;

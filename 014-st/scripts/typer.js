@@ -7,7 +7,7 @@ const center = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   radius: 20,
-  color: "#ffdb4d",
+  color: "rgb(253, 135, 12)",
 };
 
 const letter = {
@@ -93,7 +93,7 @@ function removeLetters(frames) {
         window.alert("GAME OVER!");
         window.location.reload(false);
       } else if (lives > 0) {
-        window.alert("START AGAIN!");
+        // window.alert("START AGAIN!");
         letters = [];
       }
       break;

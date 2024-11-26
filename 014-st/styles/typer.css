@@ -3,7 +3,7 @@
 }
 
 canvas {
-  background: #ff66cc;
+  background: rgba(255,102,204,.5);
   ;
   display: block;
 }
