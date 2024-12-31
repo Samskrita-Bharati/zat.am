@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>सङ्क्षेपरामायणम् in 2025!</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	 <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    <script type="text/javascript" src="js/tabletop1.3.4.js"></script>
+    <script type="text/javascript" src='js/sheetsee.js'></script>
+    <script type="text/javascript" src='js/table.js'></script>
+    <script type="text/javascript" src='js/leaflet.markercluster.js'></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	
+  </head>
+  <body>
+    <h1><span style="color:Tomato">सङ्क्षेपरामायणम् </span><a href="">in 100 days of 2025</a></h1><h3> email - prachaara@sbusa.org</h3>
+	<!--
+<a class="mantra" href="gd.png" style="float:left" target="mantra">गीताध्यानम्</a> गीता सुगीता कर्तव्या ... <a class="mantra" style="float:right" href="gm.png" target="mantra">गीतामाहात्म्यम्</a>
+-->
+  <div id="calendar-goes-here"></div>
+    <script type="text/javascript">
+	    document.addEventListener('DOMContentLoaded', function() {
+    var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFdcb_rsolCbnNGG4Mw_VVr2p_19lxZF3DnoqK3zi-OW4euYNeFYeXENg_v1hjU12Lz65uO7_pdW3d/pub?gid=731608163&single=true&output=csv";
+	  Papa.parse(lnk, {
+          download: true,
+          header: true,
+          complete: generateCalendar
+		  })
+    })
+  </script>
+<script>
+$(document).ready(function() {
+$("h2").css("display","block");
+$("table").css("display","table");
+$("#cal-controls").css("display","none");
+});
+</script>
+</body>
+</html>

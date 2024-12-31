@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>सङ्क्षेपरामायणम् - श्लोकः / अन्वयः / तात्पर्यम् / Audio/ क्रीडा </title>
+</head>
+<script src="sr100-sa.json"></script>
+<body>
+<section data-id="caa878efb2dc4c40341dc29d59a7e132" data-state="su" style="visibility: visible; display: block;" class="present">
+					<div class="sl-block" data-block-type="text" style="width: 807px; left: 76.5px; top: 22.8778px; height: auto;" data-block-id="59698c140c7079b80572724d8e915f57">
+						<div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;">
+							<h4><span><a id="sua" target="_blank" href="https://www.valmiki.iitk.ac.in/">वाल्मीकि-रामायणम्</a>  </span>
+							</h4>
+							<strong>श्लोकः </strong><p id="sr1"><br></p>
+							<span style="color:orange;text-decoration:underline">अन्वयः</span> <span id="sr1a"><br></span><br>
+							<span style="color:tomato;text-decoration:underline">for तात्पर्यम्   and more visit</span> <span id="sr1t">https://sanskrit.uohyd.ac.in/scl/e-readers/sankshepa_ramayanam/<br></span><br>
+
+							<span style="color:orange">पदान्वेषणम् </span> <span id="sr1k1"><br></span><br>
+							<span style="color:tomato">Arrange श्लोकः </span> <span id="sr1k2"><br></span><br>
+							<audio controls controlsList="nodownload" id="sr1aud">
+							</audio>
+							<span id="srpbt"></span>
+							<br>
+							<input type="range" id="srpb" min="0" max="100" disabled="">
+							
+							<button onclick="savpr()">Save my Progress </button>
+							<button onclick="shwpr()">Show my progress</button>
+						</div>
+					</div>
+				</section>
+				<script>
+				function savpr()
+				{
+				 if (confirm("This will update (overwrite) progress locally on this device (till this श्लोकः ) Are you sure?")){
+					localStorage['mysrpr2025']=t+1;
+				
+					localStorage['mysrpr2025v']=v;
+					}
+				}
+				function shwpr()
+				{
+					alert(localStorage['mysrpr2025'] + " out of 100 \n Completed till - श्लोकः १.१."+localStorage['mysrpr2025v']);
+				}
+				function pop_sr(snum)
+		{
+debugger;
+		document.getElementById("srpb").value=snum;
+		document.getElementById("sr1").innerHTML = s[snum].s + " ।  १.१."+v+"<br>" ;
+		document.getElementById("sr1a").innerHTML = s[snum].a + "<br>" ;
+		
+		document.getElementById("sr1aud").src= "https://www.valmiki.iitk.ac.in/sites/default/files/audio/1-1-"+parseInt(v)+".mp3";
+		document.getElementById("sr1k1").innerHTML = " <a href='fwsr.html?" + urlParams + "' target ='sr100k'>"+" क्रीडा १ </a><br>";
+		document.getElementById("sr1k2").innerHTML = " <a href='asrcv.htm?" + urlParams + "' target ='sr100k'>"+" क्रीडा २ </a><br>";
+		document.getElementById("srpbt").innerHTML +="<br>" + parseInt(parseInt(snum)+1) + " / 100";
+		}
+				const urlParams = new URLSearchParams(window.location.search);
+				
+var v = urlParams.get("v");
+if ( (!v) || isNaN(v))
+	v=1;
+var t = parseInt(v)-1;
+			
+		pop_sr(t);
+		</script>
+		</body>
+		</html>
