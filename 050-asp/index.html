@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeetaShlokUseCase</title>
+    <link rel="stylesheet" href="style/styles.css" />
+    <script src="script/logic.js"></script>
+  </head>
+  <body>
+    <h1>Auto श्लोकपाठक: Auto Reader for Shloka from श्रीमद् भगवद्गीता</h1>
+    <div class="container">
+      <div id="vScroll" class="scroll-section" onmouseover="pauseScrolling()" onmouseout="resumeScrolling()">
+        <h1>श्रीमद् भगवद्गीता</h1>
+        <p id="verse" >
+           
+        </p>
+      </div>
+      <br>
+      <div class="buttons">
+        <button class="increase" onclick="changeSpeed(+0.1)">Increase Speed</button>
+        <button class="restart" onclick="verseRestart()">Restart</button>
+        <button class="decrease" onclick="changeSpeed(-0.1)">Decrease Speed</button>
+      </div>
+    </div>
+  </body>
+  <footer>Developed by Hussain</footer>
+</html>

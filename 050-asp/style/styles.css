@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    color: #444;
+}
+
+.container {
+    width: 100%;
+    background-color: #ffe9c5;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.scroll-section {
+    background-color: #ffcb7d;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 15px;
+}
+
+#vScroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #a0e4a6;
+    height: 80vh;
+    padding: 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.buttons button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    color: #fff;
+    background-color: #444;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buttons button.increase {
+    background-color: #28a745;
+}
+
+.buttons button.restart {
+    background-color: #ffc107;
+}
+
+.buttons button.decrease {
+    background-color: #dc3545;
+}
+
+.buttons button:hover {
+    filter: brightness(0.9);
+}
+p{font-size:350%}
+
+footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #777;
+}
