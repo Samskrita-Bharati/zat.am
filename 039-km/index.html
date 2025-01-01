@@ -187,7 +187,7 @@
 		    prevtod = new Date(tod + ", " + new Date().getFullYear());
 		    prevtod = new Date(prevtod.getFullYear(), prevtod.getMonth(), prevtod.getDate() - 1);
 		    tod = prevtod.toString().substr(4, 3) + prevtod.toString().substr(7, 3);
-		    sunum = prevtod.getDOY()-242;
+		    sunum = prevtod.getDOY()+3;
 			sunum = sunum % 121;
 		    pop_bg(sunum);
 		    n = prevtod.getDay();
@@ -202,7 +202,7 @@
 		    newtod = new Date(newtod.getFullYear(), newtod.getMonth(), newtod.getDate() + 1);
 		    tod = newtod.toString().substr(4, 3) + newtod.toString().substr(7, 3);
 
-		    sunum = newtod.getDOY()-242;
+		    sunum = newtod.getDOY()+3;
 	        sunum = sunum % 121;
 			pop_bg(sunum);
 		    n = newtod.getDay();
@@ -219,7 +219,7 @@
 		var tod = d.toDateString().substr(4, 6);
 		var da = tod.substr(4, 2);
 		//sunum=(d.getMonth()*30+parseInt(da))%61;
-		sunum = d.getDOY()-242;
+		sunum = d.getDOY()+3;
 		pop_bg(sunum);
 		var va = ["रवि", "सोम", "मङ्गल", "बुध", "गुरु", "शुक्र", "शनि"];
 		var n = d.getDay();
