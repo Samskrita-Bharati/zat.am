@@ -14,9 +14,13 @@
 							<span x-style="color:tomato;text-decoration:underline">for तात्पर्यम्   and more visit</span> <span id="sr1t"><a target="uohyd" href="https://sanskrit.uohyd.ac.in/scl/e-readers/sankshepa_ramayanam/">UoHyd website</a><br></span><br>
 
 							<span style="color:orange">पदान्वेषणम् </span> <span id="sr1k1"><br></span><br>
-							<span style="color:tomato">Arrange श्लोकः </span> <span id="sr1k2"><br></span><br>
+							<span style="color:tomato">Arrange श्लोकः </span> <span id="sr1k2"><br></span><br>Audio from पारायणम्<br>
+							<audio controls controlsList="nodownload" id="sr2aud">
+							</audio><br>
+Audio from UoHyd<br>
 							<audio controls controlsList="nodownload" id="sr1aud">
 							</audio>
+
 							<span id="srpbt"></span>
 							<br>
 							<input type="range" id="srpb" min="0" max="100" disabled="">
@@ -47,6 +51,7 @@ debugger;
 		document.getElementById("sr1a").innerHTML = s[snum].a + "<br>" ;
 		
 		document.getElementById("sr1aud").src= "https://www.valmiki.iitk.ac.in/sites/default/files/audio/1-1-"+parseInt(v)+".mp3";
+		document.getElementById("sr2aud").src= "https://zat.am/100-sr/audio/"+v+".mp3";
 		document.getElementById("sr1k1").innerHTML = " <a href='fwsr.html?" + urlParams + "' target ='sr100k'>"+" क्रीडा १ </a><br>";
 		document.getElementById("sr1k2").innerHTML = " <a href='asrcv.htm?" + urlParams + "' target ='sr100k'>"+" क्रीडा २ </a><br>";
 		document.getElementById("srpbt").innerHTML +="<br>" + parseInt(parseInt(snum)+1) + " / 100";
