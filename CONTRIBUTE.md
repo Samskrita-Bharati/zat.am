@@ -39,6 +39,6 @@ Before submitting a PR, please ensure that:
 
 ## 📞 Need Help?
 
-If you have any questions, feel free to open a discussion or reach out via [GitHub Issues/WhatsApp/[Email](mailto:code@samskritabharati.ca).  
+If you have any questions, feel free to open a discussion or reach out via GitHub Issues/WhatsApp/[Email](mailto:code@samskritabharati.ca).  
 
 Thank you for contributing! 🎉  
