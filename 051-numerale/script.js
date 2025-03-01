@@ -1,4 +1,3 @@
-const dd_menu = document.getElementById("script");
 const table = document.getElementById("numbers");
 const numpad = document.getElementById("numpad");
 const message = document.getElementById("message");
@@ -168,7 +167,7 @@ function setRow(){
   }
 }
 
-let script_type, script_text, script_num, script_rnd_no=-1;
+let script_type, script_num, script_rnd_no=-1;
 
 function populate_Numerale(){
   gameover = false;
@@ -177,8 +176,7 @@ function populate_Numerale(){
   numpad.innerHTML="";
   minimap="";
   
-  script_num = dd_menu.value;
-  script_text = dd_menu.options[dd_menu.selectedIndex].text;
+  script_num = 1;
   
   if (script_num=="-1") {
     script_rnd_no += 1;
