@@ -1,0 +1,16 @@
+{
+  "name": "Sanskrit Numerals",
+  "short_name": "Numerals",
+  "start_url": "https://zat.am/051-numerale/",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.global/b5d7bcbc-5e84-45bd-9acf-1e8d4104d12d/kan_5_icon.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#f2e6ff",
+  "background_color": "#f2e6ff",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
