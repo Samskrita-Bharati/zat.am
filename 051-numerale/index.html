@@ -26,7 +26,7 @@
     -->
     <title>Indic Numerale</title>
     
-    <link rel="manifest" href="/manifest.json" >
+    <link rel="manifest" href="/051-numerale/manifest.json" >
 
     <!-- The website stylesheet -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
@@ -113,7 +113,7 @@
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function() {
           navigator.serviceWorker
-            .register("/serviceWorker.js")
+            .register("/051-numerale/serviceWorker.js")
             .then(res => console.log("service worker registered"))
             .catch(err => console.log("service worker not registered", err))
         })
