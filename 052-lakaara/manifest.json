@@ -1,0 +1,16 @@
+{
+  "name": "Lakaraa puzzle",
+  "short_name": "Lakaara",
+  "start_url": "https://zat.am/052-lakaara/",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.global/9e6f1010-acab-45ea-a0e4-88c381f9f343/lakaara_icon.jpg",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ccffff",
+  "background_color": "#ccffff",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
