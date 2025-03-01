@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <title>Lakaara Puzzle</title>
+    <link rel="icon" href="https://cdn.glitch.global/9e6f1010-acab-45ea-a0e4-88c381f9f343/lakaara_icon.jpg"  type="image/x-icon">
+    <link rel="manifest" href="/052-lakaara/manifest.json" >
+    <link rel="stylesheet" href="/052-lakaara/style.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <script src="DragDropTouch.js" defer></script>
+    <script src="/052-lakaara/script.js" defer></script>
+  </head>
+  <body>
+    <h1>
+      Lakaara Puzzle
+    </h1>
+    <p id="info">
+      Reorder this jumbled up verb conjugations. Check for each person or check all 
+      <br>
+      <br> Click the start game button to begin
+    </p>
+    <button type="button" class="button" id="start">
+      Start Game <i class="rocket"></i>
+    </button>
+    <p id="Title"></p>
+    <p id="description"></p>
+    <p id="message"></p>
+    
+    <div class="tooltip">
+      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
+      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+      Share</button>
+    </div>
+  
+    <p id="details"></p>
+    
+    <div class="drag-list" id="grid" oncontextmenu="return false;">
+      <template id="tile"> <div class="drag-item" draggable="true"> </div> </template>
+      <div class="legend-item" id="Hd" > Check for: </div>
+      <div class="legend-item" id="Role" > Purusha </div>
+      <div class="legend-item" id="Sn" > Singular </div>
+      <div class="legend-item" id="Du" > Dual </div>
+      <div class="legend-item" id="Pl" > Plural </div>
+      <div class="legend-item" id="3rd" > <button class="smallBtn" onclick="checkMatrix(1)"> Third person </button> </div>
+      <div class="legend-item" > Prathama </div>
+      <div class="drag-item" id="A" draggable="true"> </div>
+      <div class="drag-item" id="B" draggable="true"> </div>
+      <div class="drag-item" id="C" draggable="true"> </div>
+      <div class="legend-item" id="2nd" > <button class="smallBtn" onclick="checkMatrix(2)"> Second person </button> </div>
+      <div class="legend-item" > Madhyama </div>
+      <div class="drag-item" id="D" draggable="true"> </div>
+      <div class="drag-item" id="E" draggable="true"> </div>
+      <div class="drag-item" id="F" draggable="true"> </div>
+      <div class="legend-item" id="1st" > <button class="smallBtn" onclick="checkMatrix(3)"> First person </button> </div>
+      <div class="legend-item" > Utthama </div>
+      <div class="drag-item" id="G" draggable="true"> </div>
+      <div class="drag-item" id="H" draggable="true"> </div>
+      <div class="drag-item" id="I" draggable="true"> </div>
+    </div>
+    
+    <button type="button" class="button" id="check" onclick="checkMatrix(0)"> Check All</button>
+    
+  <main>
+    <p></p>
+    <span>
+  <label for="lakara">Choose a lakaara:</label>
+  <select name="lakara" id="settings" onchange="startGame()">
+    <option value="-1">All</option>
+    <option value="0" >लट् - Present tense</option>
+    <option value="1" >लङ् - Imperfect Past tense</option>
+    <option value="2" >लुङ् - General Past tense</option>
+    <option value="3" >लिट् - Perfect Past tense</option>
+    <option value="4" >लृट् - Simple Future tense</option>
+    <option value="5" >लुट् - Distant Future tense</option>
+    <option value="6" >लोट् - Imperative mood</option>
+    <option value="7" >विधिलिङ् - Potential mood</option>
+    <option value="8" >आशिर्लिङ् - Benedictive mood</option>
+    <option value="9" >लृङ् - Conditional mood</option>
+  </select>
+    </span>
+  </main>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker
+            .register("/052-lakaara/serviceWorker.js")
+            .then(res => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+        })
+      }
+    </script>
+  <footer>
+    <span style="white-space: nowrap"> &copy; 2024 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Courtesy: Green Message, greenmesg.org </span>
+  </footer>
+  </body>
+ 
+</html>
