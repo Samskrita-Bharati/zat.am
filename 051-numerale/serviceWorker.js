@@ -1,10 +1,10 @@
-const staticDev = "numerals"
-const service_worker_version = "v1.0"
+const staticDev = "numerale"
+const service_worker_version = "v1.01"
 const assets = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/script.js"
+  "/051-numerale/",
+  "/051-numerale/index.html",
+  "/051-numerale/style.css",
+  "/051-numerale/script.js"
 ]
 
 self.addEventListener("install", installEvent => {
