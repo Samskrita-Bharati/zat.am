@@ -1,0 +1,289 @@
+*{
+  font-family:arial;
+  text-align:center;
+  color:#000;
+  margin:0;
+}
+
+body{
+  background:#f2e6ff;
+}
+
+hr{
+  border:1px solid #555;
+}
+
+h1{
+  margin:10px;
+  text-transform: uppercase;
+}
+
+table{
+  width:60%;
+}
+td{
+/*   width:16%; */
+  border:2px solid #555;
+  position: relative;
+  transition: transform  1s;
+  animation: newgame 0.5s forwards;
+  animation-delay: calc(var(--animation-order) * 100ms);
+}
+
+td.void {
+  background:#aaa;
+}
+
+td:after {
+  content: '';
+  display: block;
+  margin-top: 100%;
+}
+td.left:before, td.right:before, td.both:before{
+  position:absolute;
+  left:0;
+  right:0;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  content:'';
+}
+td.left:before{
+  content:'west';
+}
+
+td.right:before{
+  content:'east';
+}
+td.both:before{
+  content:'west east';
+}
+
+.hardmode td.left:before{
+  content:'';
+}
+
+.hardmode  td.right:before{
+  content:'';
+}
+.hardmode td.both:before{
+  content:'';
+}
+
+td.left, td.right, td.both{
+  background:gold;
+}
+td.left, td.right, td.both, td.left p, td.right p, td.both p{
+  color:#555;
+}
+
+td.green.left, td.green.right, td.green.both,  td.green.left p, td.green.right p, td.green.both p{
+  color:#fff;
+}
+td .content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: gold;
+}
+
+ul{
+ 
+  list-style:none;
+  padding:0;
+  margin-top:10px;
+  line-height:0;
+}
+button{
+  cursor:pointer;
+  border: none;
+  position:relative;
+  display:inline-block;
+}
+form{
+  display:inline;
+}
+.smallbutton{
+  width:35px;
+  height:35px;
+  background:transparent;
+}
+.smallbutton:hover, .smallbutton:hover p{
+  color:#aaa;
+}
+
+#newgamebutton{
+/*   position:absolute;
+  left:0;
+  top:0; */
+}
+
+#numpad {
+/*  max-width: 400px;*/
+}
+
+#numpad button{
+  max-width: 100px;
+  width:15%;
+  background:#999;
+  border-radius:6px;
+  margin:2px;
+}
+
+#numpad button:hover, #numpad button:hover p{  
+  color:#ccc;
+  font-size: 150%;
+  background:#333;
+  border-radius:6px;
+}
+
+
+#numpad button:after {
+  content: '';
+  display: block;
+  margin-top: 100%;
+}
+
+#numpad button p, .material-icons, td p{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin:0;
+  font-size:30px;
+  font-weight:600;
+}
+
+ #sharebutton{
+  width:100px;
+   height:40px;
+  background:#aaa;
+  border-radius:6px;
+  margin:2px;
+}
+.absleft{
+  position:absolute;
+  top:0;
+  left:0;
+}
+.absright{
+  position:absolute;
+  top:0;
+  right:0;
+}
+
+.center{
+  position:relative;
+  margin:0 auto;
+  left:0;
+  right:0;
+}
+
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  background:rgba(0.0,0.0,0.0,0.6);
+/*   pointer-events: none; */
+}
+.abscenter{
+  position: absolute;
+  inset: 0; 
+  margin:auto auto;
+}
+#numbers{
+  margin-top:10px;
+}
+#winner, #about{
+  background:#fff;
+  border-radius:6px;
+  padding:40px;
+  position:relative;
+  transform-style: flat;
+  perspective:1000;
+}
+#winner{
+  display:none;
+}
+#about table{
+  width:auto;
+  display:inline-block;
+}
+#about td{
+  width:40px;
+  height:40px;
+}
+
+#about td p{
+  font-size:15px;
+}
+#about {
+  font-size:12px;
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+}
+.green{
+   animation: green 1.0s forwards;
+}
+@keyframes green {
+  0% { 
+    transform: rotateX(0deg);
+    background-color:transparent;
+  }
+  49% {
+    background-color:transparent; 
+  }
+  50% { 
+    background-color:#32a852;
+  }
+  
+  100% { 
+    transform: rotateX(360deg);
+    background-color:#32a852;
+  }
+}
+
+.newgame{
+   animation: newgame 0.5s forwards;
+}
+@keyframes newgame {
+  0% { 
+    transform: rotateX(180deg);
+  }
+  100% { 
+    transform: rotateX(0deg);
+  }
+}
+
+#hardmodenotification{
+  position:absolute;
+  font-size:50px;
+  font-weight:600;
+  display:none;
+}
+
+#wrapper{
+  width:600px;
+  transform-style: flat;
+  perspective:1000;
+}
+
+@media only screen and (max-width:600px){
+  #wrapper{
+    width:100%;
+  }
+}
