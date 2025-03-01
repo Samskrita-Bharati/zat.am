@@ -176,7 +176,7 @@ function populate_Numerale(){
   numpad.innerHTML="";
   minimap="";
   
-  script_num = 1;
+  script_num = 0;
   
   if (script_num=="-1") {
     script_rnd_no += 1;
