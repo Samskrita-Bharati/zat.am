@@ -1,0 +1,260 @@
+/* Basic page style resets */
+* {
+  box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  background-color: #ccffcc;
+  color: black;
+}
+
+main {
+  display: grid;
+  place-items: center;
+  max-width: 840px;
+  margin: 0 auto;
+  line-height: 2rem;
+
+}
+
+[draggable] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.drag-list {
+  overflow: hidden;
+  margin: 1px auto;
+  width: 800px;
+  border: 1px solid #cccccc;
+}
+.drag-item {
+  float: left;
+  padding: 10px 10px;
+  width: 20%;
+  text-align: center;
+  color: #555555; 
+  background: #eeeeee;
+  border: 1px solid #cccccc;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: 0.25s;
+  -moz-transition: 0.25s;
+  -o-transition: 0.25s;
+  -ms-transition: 0.25s;
+  transition: 0.25s;
+  cursor: grab;
+}
+.legend-item {
+  float: left;
+  padding: 10px 10px;
+  width: 20%;
+  text-align: center;
+  color: #555555; 
+  background: #dddddd;
+  border: 1px solid #cccccc;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.solved{
+  background: #ffffff;
+  cursor: auto;
+}
+.drag-start {
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.drag-enter {
+  opacity: 0.5;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+  -webkit-transform: scale(0.9);
+  -moz-transform: scale(0.9);
+  -o-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);
+}
+
+h1 {
+  text-align: center;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 2.5em;
+  line-height: 105%;
+  color: black;
+}
+
+p {
+  text-align: center;
+  font-size: 1.1em;
+
+}
+
+#share #settings {
+  text-align: center;
+  display: flex;
+  place-items: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+span:after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+}
+
+button {
+  display: flex;
+  margin: 0 auto;
+  padding: 10px;
+  border: 0;
+  border-radius: 50px;
+  font-size: 1.3em;
+  background-color: white;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.smallBtn {
+  font-size: 1em;
+  padding: 0px;
+}
+
+.rocket {
+  display: block;
+  width: 60px;
+  height: 34px;
+  margin-left: 20px;
+  background: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/rocket.png?v=1695663248265) right center no-repeat;
+  background-size: 60px;
+}
+
+.started .rocket {
+  animation: zoomOutRight 1s;
+  animation-iteration-count: 1;
+  transform-origin: right center;
+}
+
+.started button:before {
+  content: "re";
+}
+
+.button:hover .rocket {
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
+}
+
+.congrats {
+  text-transform: uppercase;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #5595DD;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes zoomOutRight {
+  100% {
+    opacity: 0;
+    transform: scale(0.1) translate(500px, 0);
+  }
+}
+
+
+
+/*  Glitch remix button styles*/
+/* Navigation grid */
+.footer {
+  position: absolute;
+  bottom: 30px;
+}
+
+.winner {
+  background-image: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/confetti.gif?v=1695663103834);
+}
+
+.reveal {
+  display: grid;
+  align-items: center;
+  place-items: center; 
+  margin: 0 auto;
+  padding: 20px; 
+  filter: grayscale(100%);
+}
+
+.reveal:hover {
+    filter: grayscale(0%);
+}
+
+footer {
+  padding: 4rem;
+  display: grid;
+  place-items: center;
+  align-items: center;
+}
+
+
+.tooltip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555555;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
