@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- 
+      This is an HTML comment
+      You can write text in a comment and the content won't be visible in the page
+    -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0N2P7357T1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0N2P7357T1');
+    </script>
+    
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <link rel="icon" href="https://cdn.glitch.global/b5d7bcbc-5e84-45bd-9acf-1e8d4104d12d/kan_5_icon.png?v=1704570885074" >
+
+    <!--
+      This is the page head - it contains info the browser uses
+      Like the title, which appears on the browser tab but not inside the page
+      Further down you'll see the content that displays in the page
+    -->
+    <title>Indic Numerale</title>
+    
+    <link rel="manifest" href="/manifest.json" >
+
+    <!-- The website stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" >
+    <link rel="stylesheet" href="/style.css" >
+
+    <!-- The website JavaScript file -->
+    <script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+<div id="wrapper" class="center">
+  <div id="header">
+    
+     <div class="absleft">
+       <button class="smallbutton" onclick="populate_Numerale()" alt="New game" title="New game"><p class="material-icons">refresh</p></button>
+       <button id="hardmodebutton" class="smallbutton" onclick="toggleHardmode()" alt="Hard mode is off" title="Hard mode is off"><p class="material-icons">sentiment_satisfied_alt</p></button>
+       </div>
+    
+    <div class="absright">
+      <form action="https://www.buymeacoffee.com/pradeepde/" target="_blank" alt="Buy me a coffee" title="Buy me a coffee"><button class="smallbutton"><p class="material-icons"><span class="material-symbols-outlined">emoji_food_beverage</span></p></button></form>
+      <button class="smallbutton" onclick="togglePanel('about','block')" alt="About Numerale" title="About Numerale"><p class="material-icons">question_mark</p></button>
+    </div>
+    
+    <h1>Numerale</h1>
+  </div>
+  <div id="message"> </div>
+  <hr>
+  <table id="numbers" class="center">
+  </table>
+  <div id="numpad"></div>
+<br>  
+  <label for="script">Choose a script:</label>
+
+<select name="script" id="script" onchange="populate_Numerale()">
+  <option value="-1">Random</option>
+  <option value="0">Devanagari</option>
+</select>
+</div>
+<div id="messages" class="flex">
+
+  <div id="about" class=""><div class="absright"><button class="smallbutton" onclick="togglePanel('about', 'none')"><p class="material-icons">close</p></button>
+  </div>
+    Inspired by Wordle but with numerals from Devanagari language.
+    <br><br>
+    Answer is between 10000 - 99999.
+    Key in a number and press Enter to take a guess.<br><br>
+    <table class="hardmode"><tr>
+      <td class="green"><p>6</p></td>
+      <td class="green"><p>0</p></td>
+      <td class="void"><p>9</p></td>
+      <td class="left"><p>5</p></td>
+      <td class="left"><p>8</p></td>
+      </tr>
+    </table><br><br>
+    Green identifies a numeral in the correct position.
+    Grey identifies a numeral not present in the answer.
+    Yellow identifies a correct numeral but in the wrong position.<br><br>
+    <table><tr>
+      <td class="right"><p>९</p></td>
+      <td class="green"><p>३</p></td>
+      <td class="both"><p>२</p></td>
+      <td class="green"><p>७</p></td>
+      <td class="void"><p>८</p></td>
+      </tr>
+    </table><br><br>
+    Only in the Easy mode, arrows point towards the correct location.
+    In the Hard mode, smybols are revealed only after you submit.<br><br>
+  </div>
+  
+  
+  <div id="winner" class="abscenter"><div class="absright"><button class="smallbutton" onclick="togglePanel('winner', 'none')"><p class="material-icons">close</p></button></div>
+    <h1>Numerale!</h1>
+    <p id="sharedata">&#x2B1B;&#x2B1B;&#x1F7E9;&#x1F7E9;&#x2B1B;<br>&#x2B1B;&#x2B1B;&#x2B1B;&#x2B1B;&#x2B1B;<br>&#x1F7E9;&#x1F7E9;&#x1F7E9;&#x1F7E9;&#x1F7E9;<br></p><br>
+    <button id="sharebutton">Share<span class="material-symbols-outlined">share</span></button>
+  </div>
+  
+
+  <span id="hardmodenotification">Hardmode ON!</span>
+  </div>
+    
+    <br>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker
+            .register("/serviceWorker.js")
+            .then(res => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+        })
+      }
+    </script>
+    <br>
+    <footer class="footer">
+    <span style="white-space: nowrap"> &copy; 2024 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Courtesy: Graeme Sutherland </span>
+      <br><br>
+    </footer>
+  </body>
+</html>
