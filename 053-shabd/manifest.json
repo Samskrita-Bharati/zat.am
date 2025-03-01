@@ -1,0 +1,16 @@
+{
+  "name": "Shabd puzzle",
+  "short_name": "Shabd",
+  "start_url": "https://zat.am/053-shabd/",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.global/3644c0b7-df5f-41dd-9e70-b6fbebb5f5c1/icon.jpg",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ccffcc",
+  "background_color": "#ccffcc",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
