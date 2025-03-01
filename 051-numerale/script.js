@@ -285,7 +285,7 @@ document.getElementById("sharebutton").addEventListener("click", async () => {
     
     let shareText = document.getElementById("sharedata").innerHTML.replace(regex, "\n");
     
-    let linkURL = `https://numerale.glitch.me`;
+    let linkURL = window.location.href;
     
     // shareText = `Numble #${answer} ${row}/6\n\n${shareText}`
     
