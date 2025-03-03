@@ -41,6 +41,7 @@ function CreateGame() {
   
   script_id = 1;
   sutra = sutra_devanagiri;
+  alphabets = alphabets_devanagiri;
   
   challenge_id = document.querySelector('input[name="challenge"]:checked').value;
   
