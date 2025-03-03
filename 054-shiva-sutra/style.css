@@ -1,0 +1,147 @@
+:root {
+  --c-text-primary: #191919;
+  --c-text-secondary: #737374;
+  --c-border-primary: #cccccc;
+  --c-bg-body: #cccccc;
+  --c-bg-primary: #ffffff;
+  --c-bg-secondary: #d4d8dd;
+  --c-bg-button: #ffffff;
+}
+
+/* Basic page style resets */
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+h1 {
+  text-align: center;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 2em;
+  line-height: 100%;
+  color: black;
+}
+
+p {
+  text-align: center;
+  font-size: 1em;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #faf6da;
+}
+
+
+#board {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  border: solid 1px black;
+  background: hsl(39, 100%, 50%);
+}
+
+.tile {
+  float:left;
+  width: 99px;
+  height: 99px;
+  border: 1px solid black;
+  background: white;
+  text-align: center;
+  line-height: 100px;;
+}
+
+.space {
+  background: red;
+}
+
+#randomize {
+  margin: 5px;
+}
+
+footer {
+  padding: 1rem;
+  display: grid;
+  place-items: center;
+  align-items: center;
+}
+
+.winner {
+  background-image: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/confetti.gif?v=1695663103834);
+}
+
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555555;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.img {
+  display: grid;
+  align-items: center;
+  place-items: center; 
+  margin: 0 auto;
+  padding: 20px; 
+  max-width: 350px;
+}
+
+@media (max-width: 420px) {
+
+   body, p {
+    font-size: 0.8em;
+  }
+  
+   #board {
+    width: 300px;
+    height: 300px;
+  }
+  .tile {
+    float:left;
+    width: 74px;
+    height: 74px;
+  }
+}

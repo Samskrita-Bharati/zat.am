@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- 
+      This is an HTML comment
+      You can write text in a comment and the content won't be visible in the page
+    -->
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <link rel="icon" href="https://cdn.glitch.global/e1967c5a-fcd6-4474-8afe-2e299ddc3530/damaru.png" >
+    <link rel="manifest" href="/054-shiva-sutra/manifest.json" >
+    
+    <title>Shiva Sutra!</title>
+
+    <!-- The website stylesheet -->
+    <link rel="stylesheet" href="/054-shiva-sutra/style.css" >
+
+    <!-- The website JavaScript file -->
+    <script src="/054-shiva-sutra/script.js" defer></script>
+  </head>
+  <body>
+    <h1>
+      Shiva Sutra
+    </h1>
+    <p id="info">
+      Also known as Akṣara samāmnāya, it refers to a set of 14 aphorisms devised as 
+      an arrangement of the sounds of Sanskrit for grammatical exposition by Pāṇini.
+      <br><br>
+      Your challenge is to arrange the tiles (with aksharas) of this sliding puzzle in the correct order.
+      <br>
+      <br> Click the New Game button to begin. Click Listen button to play the Shiva sutra.
+    </p>
+    <audio id="SS_Audio">
+      <source src="https://cdn.glitch.global/e1967c5a-fcd6-4474-8afe-2e299ddc3530/shivasutra-damaru.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <span>
+    <button id="check">Submit</button>
+    <button id="play_pause" type="button">Listen</button>
+    <button id="randomize">New Game</button>
+    </span>
+    <span id="status"></span>
+    <br>
+    <div id="board">
+      <div class="tile" data-tile-number="1" data-row="0" data-col="0" id="1" >1</div>
+      <div class="tile" data-tile-number="2" data-row="0" data-col="1" id="2" >2</div>
+      <div class="tile" data-tile-number="3" data-row="0" data-col="2" id="3" >3</div>
+      <div class="tile" data-tile-number="4" data-row="0" data-col="3" id="4" >4</div>
+      <div class="tile" data-tile-number="5" data-row="1" data-col="0" id="5" >5</div>
+      <div class="tile" data-tile-number="6" data-row="1" data-col="1" id="6" >6</div>
+      <div class="tile" data-tile-number="7" data-row="1" data-col="2" id="7" >7</div>
+      <div class="tile" data-tile-number="8" data-row="1" data-col="3" id="8" >8</div>
+      <div class="tile" data-tile-number="9" data-row="2" data-col="0" id="9" >9</div>
+      <div class="tile" data-tile-number="10" data-row="2" data-col="1" id="10" >10</div>
+      <div class="tile" data-tile-number="11" data-row="2" data-col="2" id="11" >11</div>
+      <div class="tile" data-tile-number="12" data-row="2" data-col="3" id="12" >12</div>
+      <div class="tile" data-tile-number="13" data-row="3" data-col="0" id="13" >13</div>
+      <div class="tile" data-tile-number="14" data-row="3" data-col="1" id="14" >14</div>
+      <div class="tile" data-tile-number="15" data-row="3" data-col="2" id="15" >15</div>
+      <div class="tile" data-tile-number="space" data-row="3" data-col="3" id="space" ></div>
+    </div>
+    
+  <main>
+    <br>
+    <div class="tooltip">
+      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
+      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+      Share</button>
+    </div>
+    <br>
+    <br>
+    <span id="settings_2" onchange="CreateGame()">
+      Challenge:
+    <input type="radio" id="shiva" name="challenge" value="1" checked="checked"><label for="shiva"> Shiva sutra </label>
+    <input type="radio" id="alpha"  name="challenge" value="2"><label for="alpha"> Alphabets </label>
+    </span>
+  </main>
+    
+    <p id="image">
+      <img alt="An idol of dancing nataraja with list of panini's shiva sutras or maheshwarani sutrani" src="https://cdn.glitch.global/e1967c5a-fcd6-4474-8afe-2e299ddc3530/Maheshwarani_Sutras.jpg">
+    </p>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker
+            .register("/054-shiva-sutra/serviceWorker.js")
+            .then(res => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+        })
+      }
+    </script>
+    
+    <footer class="footer">
+    <span style="white-space: nowrap"> &copy; 2023 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Audio Courtesy: themathesontrust.org </span>
+    </footer>
+  </body>
+</html>
