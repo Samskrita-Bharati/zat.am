@@ -1,0 +1,16 @@
+{
+  "name": "Shiva sutra sliding puzzle",
+  "short_name": "ShivaSutra",
+  "start_url": "https://zat.am/054-shiva-sutra/",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.global/e1967c5a-fcd6-4474-8afe-2e299ddc3530/damaru_1.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#faf6da",
+  "background_color": "#faf6da",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
