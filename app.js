@@ -323,6 +323,13 @@ const menu = [
     desc: `Wordle game with devanagari numerals `,
   },
   {
+    id: 53,
+    title: "Noun declensions",
+    category: "ET",
+    dir: "053-shabd",
+    desc: `Sorting puzzle on sanskrit noun declensions `,
+  },
+  {
     id: 28,
     title: "शीघ्रम् आगमिष्यति ...",
     category: "TA",
