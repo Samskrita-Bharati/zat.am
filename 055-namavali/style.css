@@ -1,0 +1,166 @@
+/* Our default values set as CSS variables */
+:root {
+  --color-bg: #69F7BE;
+  --color-text-main: #000000;
+  --color-primary: #FFFF00;
+  --wrapper-height: 87vh;
+  --image-max-width: 300px;
+  --image-margin: 3rem;
+  --font-family: "HK Grotesk";
+  --font-family-header: "HK Grotesk";
+}
+
+/* Basic page style resets */
+* {
+  box-sizing: border-box;
+}
+[hidden] {
+  display: none !important;
+}
+
+
+h1 {
+  text-align: center;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 2em;
+  line-height: 100%;
+  color: black;
+}
+
+p {
+  text-align: center;
+  font-size: 1em;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 90%;
+    height: 80%;
+}
+
+.grid-item {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    font-size: 100%; /* 30% larger */
+}
+
+
+.selected {
+    background-color: lightgray;
+}
+
+.group1 {
+    background-color: hsl(0, 100%, 80%);
+/*  pointer-events: none; */
+}
+.group2 {
+    background-color: hsl(120, 100%, 80%);
+/*  pointer-events: none; */
+}
+.group3 {
+    background-color: hsl(240, 100%, 80%);
+/*  pointer-events: none; */
+}
+.group4 {
+    background-color: hsl(60, 100%, 80%);
+/*  pointer-events: none; */
+}
+
+.locked {
+/*    background-color: gray; */
+    pointer-events: none; 
+}
+
+.hint_group1 {
+    color: hsl(0, 100%, 40%);
+}
+.hint_group2 {
+    color: hsl(120, 100%, 40%);
+}
+.hint_group3 {
+    color: hsl(240, 100%, 40%);
+}
+.hint_group4 {
+    color: hsl(40, 100%, 40%);
+}
+
+
+footer {
+  padding: 1rem;
+  display: grid;
+  place-items: center;
+  align-items: center;
+}
+
+.winner {
+  background-image: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/confetti.gif?v=1695663103834);
+}
+
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555555;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.img {
+  display: grid;
+  align-items: center;
+  place-items: center; 
+  margin: 0 auto;
+  padding: 20px; 
+  max-width: 350px;
+}
