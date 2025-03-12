@@ -323,11 +323,25 @@ const menu = [
     desc: `Wordle game with devanagari numerals `,
   },
   {
+    id: 52,
+    title: "Verb Conjugations",
+    category: "ET",
+    dir: "052-lakaara",
+    desc: `Sorting puzzle on sanskrit verb conjugations `,
+  },
+  {
     id: 53,
     title: "Noun declensions",
     category: "ET",
     dir: "053-shabd",
     desc: `Sorting puzzle on sanskrit noun declensions `,
+  },
+  {
+    id: 54,
+    title: "Maheshwarani sutrani",
+    category: "ET",
+    dir: "054-shiva-sutra",
+    desc: `Sliding puzzle on Shiva sutras or Maheshwarani sutrani `,
   },
   {
     id: 28,
