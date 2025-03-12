@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <title>Namavali Game</title>
+    <link rel="icon" href="https://cdn.glitch.global/39d11baf-ed36-4e7a-b05a-22fe0ef30bd3/Namavali_game_icon.png" type="image/x-icon">
+    <link rel="manifest" href="/055-namavali/manifest.json" >
+    <!-- The website stylesheet -->
+    <link rel="stylesheet" href="/055-namavali/style.css" >
+    
+    <!-- The website JavaScript file -->
+    <script src="/055-namavali/script.js" defer></script>
+  </head>
+  <body>
+    <h1>
+      Namavali game
+    </h1>
+    <p id="info">
+      You are presented with a grid of 9 jumbled up names of 3 Hindu gods (given as clues). 
+      Your task is to identify the 3 groups of 3 names in utmost 4 wrong attempts with the help of up to 3 hints.
+      <br><br>
+      Select 3 names  from the grid that you think belongs to the same god and click Submit to check if your guess is correct.
+      Find all the 3 groups without making 4 mistakes. You can get upto 3 hints revealed as coloured text.
+      <br>
+      <br> Click the New Game button to begin
+    </p>
+    <span>
+    <button id="submitButton">Submit</button>
+    <button id="GetaHintButton">Get a Hint</button>
+    <button id="shuffleButton">Shuffle</button>
+    <button id="newGameButton">New Game</button>
+    </span>
+    <p id="clues"></p>
+    <p id="status"></p>
+    
+    <p class="tooltip">
+      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
+      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+      Share</button>
+    </p>
+    
+    <div id="grid-container" oncontextmenu="return false;"></div>
+    <div id="image"><img alt="Eight grayscale icons of hindu gods viz. Vishnu, Shiva, Ganesha, Lakshmi, Hanuman, Krishna, Rama, Saraswati" class="img" src="https://cdn.glitch.global/39d11baf-ed36-4e7a-b05a-22fe0ef30bd3/Namavali_small.png?v=1699892787915"></div>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker
+            .register("/055-namavali/serviceWorker.js")
+            .then(res => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+        })
+      }
+    </script>
+    
+    <!-- The footer holds our remix button — you can keep or delete it ✂ -->
+    <footer class="footer">
+      <span style="white-space: nowrap"> &copy; 2023 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Ref: DrikPanchang </span>
+    </footer>
+  </body>
+</html>
