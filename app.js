@@ -316,6 +316,13 @@ const menu = [
     desc: `Auto Reader for Shloka from श्रीमद् भगवद्गीता `,
   },
   {
+    id: 51,
+    title: "Wordle with numbers",
+    category: "ET",
+    dir: "051-numerale",
+    desc: `Wordle game with devanagari numerals `,
+  },
+  {
     id: 28,
     title: "शीघ्रम् आगमिष्यति ...",
     category: "TA",
