@@ -1,0 +1,278 @@
+/* Basic page style resets */
+* {
+  box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  background-color: #FBB917;
+  color: black;
+}
+
+main {
+  display: grid;
+  place-items: center;
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 2rem;
+
+}
+
+
+h1 {
+  text-align: center;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 4em;
+  line-height: 105%;
+  color: black;
+}
+
+p {
+  text-align: center;
+  font-size: 1.6em;
+
+}
+
+.boldit {
+  font-weight: bold;
+}
+
+#share #settings {
+  text-align: center;
+  display: flex;
+  place-items: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+span:after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+}
+
+button {
+  display: flex;
+  margin: 0 auto;
+  padding: 20px;
+  border: 0;
+  border-radius: 50px;
+  font-size: 1.6em;
+  background-color: white;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.rocket {
+  display: block;
+  width: 60px;
+  height: 34px;
+  margin-left: 20px;
+  background: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/rocket.png?v=1695663248265) right center no-repeat;
+  background-size: 60px;
+}
+
+.started .rocket {
+  animation: zoomOutRight 1s;
+  animation-iteration-count: 1;
+  transform-origin: right center;
+}
+
+.started button:before {
+  content: "re";
+}
+
+.button:hover .rocket {
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
+}
+
+.congrats {
+  text-transform: uppercase;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #6aaa64;
+}
+
+.wrong {
+  font-weight: bold;
+  color: red;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes zoomOutRight {
+  100% {
+    opacity: 0;
+    transform: scale(0.1) translate(500px, 0);
+  }
+}
+
+.img {
+  display: grid;
+  align-items: center;
+  place-items: center; 
+  margin: 0 auto;
+  padding: 20px; 
+  max-width: 350px;
+}
+
+/*  Glitch remix button styles*/
+/* Navigation grid */
+.footer {
+  position: absolute;
+  bottom: 30px;
+}
+
+.btn--remix {
+  background: white;
+  padding: 10px;
+  border-radius: 30px;
+  text-decoration: none;
+  color: #333333;
+}
+
+.btn--remix:hover {
+  background: #FFC312;
+}
+
+.winner {
+  background-image: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/confetti.gif?v=1695663103834);
+}
+
+.reveal {
+  display: grid;
+  align-items: center;
+  place-items: center; 
+  margin: 0 auto;
+  padding: 20px; 
+  filter: grayscale(100%);
+}
+
+.reveal:hover {
+    filter: grayscale(0%);
+}
+
+footer {
+  padding: 4rem;
+  display: grid;
+  place-items: center;
+  align-items: center;
+}
+
+
+.tooltip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555555;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.dialog {
+  display: flex;
+  justify-content: space-between;
+}
+.dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0; 
+}
+
+.graph-container {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.graph-container .graph {
+  width: 100%;
+  height: 100%;
+  padding-left: 4px;
+}
+
+.graph-container .graph .graph-bar {
+  height: 100%;
+  /* Assume no wins */
+  width: 0%;
+  position: relative;
+  background-color: #787c7e;
+  display: flex;
+  justify-content: center;
+}
+
+.graph-container .graph .graph-bar.highlight {
+  background-color: #6aaa64;
+}
+
+.graph-container .graph .graph-bar.align-right {
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+
+.graph-container .graph .num-guesses {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+#guess-distribution {
+  width: 80%;
+  padding-bottom: 10px;
+}
