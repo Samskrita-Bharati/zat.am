@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <title>Hanuman Chalisa</title>
+    <link rel="icon" href="https://cdn.glitch.global/28c9be22-4fda-4586-b8b0-090d4aa29115/chalisa_icon.png"  type="image/x-icon">
+    <link rel="manifest" href="/056-hanuman-chalisa/manifest.json" />
+    <link rel="stylesheet" href="/056-hanuman-chalisa/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <script src="/056-hanuman-chalisa/script.js" defer></script>
+  </head>
+  <body>
+    <h1>
+      Hanuman Chalisa
+    </h1>
+    <p id="info">
+      Complete the verses from the Hanuman Chalisa, a poem written by Tulsidas in the Awadhi language.
+      <br>
+      <br> Click the start game button to begin
+    </p>
+    <button type="button" class="button" id="start">
+      Start Game <i class="rocket"></i>
+    </button>
+    <p id="reference"></p>
+    <p id="quote"></p>
+    <p id="message"></p>
+    
+    <p class="tooltip"><div>
+      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
+      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+      
+      </button>
+    </div></p>
+    <p id="meaning"></p>
+    <p id="words"></p>
+    <div id="image"><img alt="Hanuman hindu god" class="img" src="https://cdn.glitch.global/28c9be22-4fda-4586-b8b0-090d4aa29115/hanuman.jpg"></div>
+  
+    <div id="list_choices"><ul>  
+    <template id="choice_item">
+      <li class="item"></li>
+    </template>
+    </ul>
+    </div>
+ 
+    <div id="dialog" class="dialog">
+      <div id="guess-distribution"></div>
+    </div>
+  
+    <canvas id="histogram" width="200" height="200"></canvas>
+ 
+    <main>
+    <p id="settings"><div>
+      Shloka progression:
+    <input type="radio" id="rand" name="is_rand" value="1"><label for="rand"> Random </label>
+    <input type="radio" id="seq"  name="is_rand" value="0" checked="checked"><label for="seq"> Sequential </label>
+    </div></p>
+    </main>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker
+            .register("/056-hanuman-chalisa/serviceWorker.js")
+            .then(res => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+        })
+      }
+    </script>
+  </body>
+  <footer>
+    <span style="white-space: nowrap"> &copy; 2024 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Ref: drikpanchang.com </span>
+  </footer>
+  
+</html>
