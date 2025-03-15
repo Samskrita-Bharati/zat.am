@@ -1,0 +1,246 @@
+[
+[
+{
+"chaupai": "जय हनुमान ज्ञान गुण सागर।जय कपीस तिहुँ लोक उजागर॥",
+"meaning": "Victory to Hanuman who is the ocean of wisdom and virtues, Victory to the king of monkeys who is illuminating three worlds.",
+"words" : "सागर, उजागर",
+"translation": "ocean, illuminating"
+},
+{
+"chaupai": "राम दूत अतुलित बल धामा।अंजनि-पुत्र पवनसुत नामा॥",
+"meaning": "You are the messenger of Rama (to Sita), You are the abode of incomparable power. You are also called by the names of 'Anjani Putra' (Son of Anjana) and 'Pavana Suta' (son of wind god).",
+"words" : "धामा, नामा",
+"translation": "abode, names"
+},
+{
+"chaupai": "महावीर विक्रम बजरंगी।कुमति निवार सुमति के संगी॥",
+"meaning": "O mighty valorous one, of terrific deeds whose body organs are as strong as diamond (or the weapon of god Indra). Cure my bad mind oh companion of those with pure (good) mind.",
+"words" : "बजरंगी, संगी",
+"translation": "strong as diamond, companion"
+},
+{
+"chaupai": "कंचन बरन बिराज सुवेसा।कानन कुण्डल कुंचित केसा॥",
+"meaning": "You are golden colored, you are shining in your beautiful attire. You have beautiful earrings in your ear and curly hairs.",
+"words" : "सुवेसा, केसा",
+"translation": "beautiful attire, hairs"
+},
+{
+"chaupai": "हाथ वज्र औ ध्वजा बिराजै।काँधे मूँज जनेऊ साजै॥",
+"meaning": "Vajrayudha (mace) and flag are shining in your hand. Sacred thread made of Munja grass adorns your shoulder.",
+"words" : "बिराजै, साजै",
+"translation": "shining, adorns"
+},
+{
+"chaupai": "शंकर सुवन केसरीनन्दन।तेज प्रताप महा जग वन्दन॥",
+"meaning": "O partial incarnation of Lord Shiva, giver of joy (son) to king Kesari. Your great majesty is revered by the whole world.",
+"words" : "नन्दन, वन्दन",
+"translation": "son, revered"
+},
+{
+"chaupai": "विद्यावान गुणी अति चातुर।राम काज करिबे को आतुर॥",
+"meaning": "O one learned in all Vidyas, one full of virtues, very clever. You are always eager to do Rama's tasks.",
+"words" : "चातुर, आतुर",
+"translation": "clever, eager"
+},
+{
+"chaupai": "प्रभु चरित्र सुनिबे को रसिया।राम लखन सीता मन बसिया॥",
+"meaning": "You delight in listening to the acts of Rama (Ramayana). Lord Rama, Lakshmana and Sita reside in your heart.",
+"words" : "रसिया, बसिया",
+"translation": "delight, reside"
+},
+{
+"chaupai": "सूक्ष्म रुप धरि सियहिं दिखावा।विकट रुप धरि लंक जरावा॥",
+"meaning": "Assuming the extremely minute form you appeared to Sita. Assuming the gigantic form you burnt down the Lanka.",
+"words" : "दिखावा, जरावा",
+"translation": "appeared, burnt"
+},
+{
+"chaupai": "भीम रुप धरि असुर संहारे।रामचन्द्र के काज संवारे॥",
+"meaning": "Assuming a terrible form you slayed demons. You carried out all the tasks of Rama.",
+"words" : "संहारे, संवारे",
+"translation": "slayed, carried out"
+},
+{
+"chaupai": "लाय सजीवन लखन जियाये।श्रीरघुवीर हरषि उर लाये॥",
+"meaning": "You brought the Sanjivini to save Lakshmana's Life. Lord Rama cheerfully embraced you with his heart full of joy.",
+"words" : "जियाये, लाये",
+"translation": "save, joy"
+},
+{
+"chaupai": "रघुपति कीन्ही बहुत बड़ाई।तुम मम प्रिय भरतहि सम भाई॥",
+"meaning": "Lord Rama praised you very much saying 'You are dear to me like my brother Bharata'.",
+"words" : "बड़ाई, भाई",
+"translation": "praised, like"
+},
+{
+"chaupai": "सहस बदन तुम्हरो यश गावैं।अस कहि श्री पति कंठ लगावैं॥",
+"meaning": "Thousands of living beings are chanting hymns of your glories; saying thus, Shri Ram warmly hugged him.",
+"words" : "गावैं, लगावैं",
+"translation": "chanting, hugged"
+},
+{
+"chaupai": "सनकादिक ब्रह्मादि मुनीसा।नारद सारद सहित अहीसा॥",
+"meaning": "When prophets like Sanka, even the Sage like Lord Brahma the great hermit Narad himself, Goddess Saraswati and Adishesha.",
+"words" : "मुनीसा, अहीसा",
+"translation": "prophets, Adishesha"
+},
+{
+"chaupai": "जम कुबेर दिकपाल जहां ते।कवि कोबिद कहि सके कहां ते॥",
+"meaning": "Yama (god of death), Kubera (god of wealth), Digpalas (the guardian deities), poets and scholars have not been able to describe Your glories in full.",
+"words" : "जहां ते, कहां ते",
+"translation": "even, describe"
+},
+{
+"chaupai": "तुम उपकार सुग्रीवहिं कीन्हा।राम मिलाय राज पद दीन्हा॥",
+"meaning": "You did Sugriva a great favour by making him meet Rama and bestowing on him the kingdom of Kishkindha.",
+"words" : "कीन्हा, दीन्हा",
+"translation": "did, bestowing"
+},
+{
+"chaupai": "तुम्हरो मन्त्र विभीषन माना।लंकेश्वर भये सब जग जाना॥",
+"meaning": "Vibhishana accepted your suggestion. He became the king of Lanka because of your advice, whole world knows it.",
+"words" : "माना, जाना",
+"translation": "accepted, knows"
+},
+{
+"chaupai": "जुग सहस्र योजन पर भानू।लील्यो ताहि मधुर फ़ल जानू॥",
+"meaning": "You flew towards the sun who is thousands of years of Yojanas away, thinking of him as a sweet fruit.",
+"words" : "भानू, जानू",
+"translation": "sun, thinking"
+},
+{
+"chaupai": "प्रभु मुद्रिका मेलि मुख माहीं।जलधि लांघि गए अचरज नाहीं॥",
+"meaning": "Putting the ring of Rama in your mouth, you jumped and flew over ocean to Lanka, there is no surprise in that.",
+"words" : "माहीं, नाहीं",
+"translation": "your, no"
+},
+{
+"chaupai": "दुर्गम काज जगत के जेते।सुगम अनुग्रह तुम्हरे तेते॥",
+"meaning": "All the difficult tasks in the world, become easy if there is your grace.",
+"words" : "जेते, तेते",
+"translation": "all the, if there"
+},
+{
+"chaupai": "राम दुआरे तुम रखवारे।होत न आज्ञा बिनु पैसारे॥",
+"meaning": "You are the doorkeeper and protector of the door to Rama's court. Without your permission nobody can enter Rama's abode.",
+"words" : "रखवारे, पैसारे",
+"translation": "protector, permission"
+},
+{
+"chaupai": "सब सुख लहै तुम्हारी सरना।तुम रक्षक काहू को डरना॥",
+"meaning": "Once in your refuge, a Sadhaka obtains all the pleasures. You are the protector, and there is nothing to be afraid of.",
+"words" : "सरना, डरना",
+"translation": "obtains, afraid"
+},
+{
+"chaupai": "आपन तेज सम्हारो आपै।तीनों लोक हांक तें कांपै॥",
+"meaning": "You alone are befitted to carry your own splendid valour. All the three worlds (entire universe) tremor at your thunderous call.",
+"words" : "आपै, कांपै",
+"translation": "yourself, tremor"
+},
+{
+"chaupai": "भूत पिशाच निकट नहिं आवै।महावीर जब नाम सुनावै॥",
+"meaning": "All the ghosts, demons and evil forces won't come close, with the sheer mention of your great name, O'Mahavira.",
+"words" : "आवै, सुनावै",
+"translation": "come, mention"
+},
+
+{
+"chaupai": "नासै रोग हरै सब पीरा।जपत निरंतर हनुमत बीरा॥",
+"meaning": "All diseases, pain and suffering disappear on reciting regularly Shri Hanuman's holy name.",
+"words" : "पीरा, बीरा",
+"translation": "pain, name"
+},
+{
+"chaupai": "संकट ते हनुमान छुड़ावै।मन क्रम वचन ध्यान जो लावै॥",
+"meaning": "Hanuman will release those from troubles who meditate upon him in their mind, actions and words.",
+"words" : "छुड़ावै, लावै",
+"translation": "release, does"
+},
+{
+"chaupai": "सब पर राम तपस्वी राजा।तिन के काज सकल तुम साजा॥",
+"meaning": "All who hail, worship and have faith in Shri Rama as the supreme Lord and the king of penance. You make all their difficult tasks very easy.",
+"words" : "राजा, साजा",
+"translation": "lord, easy"
+},
+{
+"chaupai": "और मनोरथ जो कोई लावै।सोइ अमित जीवन फ़ल पावै॥",
+"meaning": "Whosoever comes to you for fulfillment of any desire with faith and sincerity, Will he alone secure the imperishable fruit of human life.",
+"words" : "लावै, पावै",
+"translation": "comes, secure"
+},
+{
+"chaupai": "चारों जुग परताप तुम्हारा।है परसिद्ध जगत उजियारा॥",
+"meaning": "Your glory is for all the four Yugas, Your greatness is very famous throughout the world, and illumines the world.",
+"words" : "तुम्हारा, उजियारा",
+"translation": "your, illumines"
+},
+{
+"chaupai": "साधु सन्त के तुम रखवारे।असुर निकन्दन राम दुलारे॥",
+"meaning": "You are the guardian of saints and good people. You killed demons and you are dear to Rama.",
+"words" : "रखवारे, दुलारे",
+"translation": "guardian, dear"
+},
+{
+"chaupai": "अष्ट सिद्धि नवनिधि के दाता।अस बर दीन जानकी माता॥",
+"meaning": "Mother Sita granted you a boon to become the bestower of eight Siddhis (supernatural powers) and nine Nidhis (divine treasures).",
+"words" : "दाता, माता",
+"translation": "bestower, mother"
+},
+{
+"chaupai": "राम रसायन तुम्हरे पासा।सदा रहो रघुपति के दासा॥",
+"meaning": "You have the sweet devotion to Rama. May you always be a devotee of Lord Rama.",
+"words" : "पासा, दासा",
+"translation": "devotion, devotee"
+},
+
+{
+"chaupai": "तुम्हरे भजन राम को पावै।जनम जनम के दुख बिसरावै॥",
+"meaning": "Through hymns sung in devotion to you, one can find Shri Rama and become free from sufferings of several births.",
+"words" : "पावै, बिसरावै",
+"translation": "find, free"
+},
+{
+"chaupai": "अन्तकाल रघुबर पुर जाई।जहाँ जन्म हरि-भक्त कहाई॥",
+"meaning": "If at the time of death one enters the divine abode of Shri Rama, thereafter in all future births he is born as the Lord's devotee.",
+"words" : "जाई, कहाई",
+"translation": "enters, whereever"
+},
+{
+"chaupai": "और देवता चित्त न धरई।हनुमत सेई सर्व सुख करई॥",
+"meaning": "Not contemplating on other gods, gets his all happiness from Hanuman by serving Him.",
+"words" : "धरई, करई",
+"translation": "contemplating, gets"
+},
+{
+"chaupai": "संकट कटै मिटै सब पीरा।जो सुमिरै हनुमत बलबीरा॥",
+"meaning": "Pains will be removed, all afflictions will be gone of who remembers Hanuman the mighty brave one.",
+"words" : "पीरा, बलबीरा",
+"translation": "pain, brave one"
+},
+{
+"chaupai": "जय जय जय हनुमान गोसाई।कृपा करहु गुरुदेव की नाई॥",
+"meaning": "Victory to you O master of the senses. Show mercy on us like a Guru does.",
+"words" : "गोसाई, नाई",
+"translation": "master of the senses, like"
+},
+{
+"chaupai": "जो शत बार पाठ कर कोई।छूटहिं बंदि महा सुख होई॥",
+"meaning": "One who recites Chalisa one hundred times, becomes free from the bondage of life and death and enjoys the highest bliss at last.",
+"words" : "कोई, होई",
+"translation": "who, enjoys"
+},
+{
+"chaupai": "जो यह पढ़ै हनुमान चालीसा।होय सिद्धि साखी गौरीसा॥",
+"meaning": "All those who recite Hanuman Chalisa (the forty Chaupais) regularly are sure to be benedicted. Such is the evidence of no less a witness as Lord Shiva.",
+"words" : "चालीसा, गौरीसा",
+"translation": "forty lines, Lord Shiva"
+},
+{
+"chaupai": "तुलसीदास सदा हरि चेरा।कीजै नाथ ह्रदय महँ डेरा॥",
+"meaning": "Tulsidas is always a devotee of Hari. O Lord, make my heart your abode.",
+"words" : "हरि चेरा, डेरा",
+"translation": "devotee, abode"
+}
+]
+]
