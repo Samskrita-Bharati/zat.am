@@ -60,13 +60,6 @@ let lastPlayedTs;
 
 
 function createGame() {
-
-  var today = new Date();
-  
-  if ( Na(new Date(lastPlayedTs), today) < 1) {
-    alert("Play a new puzzle tomorrow!")
-    return;
-  }
   
   // const inputWords = prompt("Enter 16 words separated by spaces:");
   // let word_list = wordsArray[0].split(" ").map((word) => word.trim());
