@@ -344,6 +344,13 @@ const menu = [
     desc: `Sliding puzzle on Shiva sutras or Maheshwarani sutrani `,
   },
   {
+    id: 55,
+    title: "Namavali",
+    category: "RG",
+    dir: "055-namavali",
+    desc: `Connections style game on hindu deities names`,
+  },
+  {
     id: 28,
     title: "शीघ्रम् आगमिष्यति ...",
     category: "TA",
