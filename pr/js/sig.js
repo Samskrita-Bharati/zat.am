@@ -20,7 +20,7 @@ function parseJwt(token) {
 var emls = ["toronto@samskritabharatiusa.org",
     "deeshat@samskritabharatiusa.org",
     "karthikv@samskritabharatiusa.org",
-    "harsht@samskritabharatiusa.org",
+    "harsht@samskritabharatiusa.org","artik@samskritabharatiusa.org","aniketk@samskritabharatiusa.org",
     "vi.raama@gmail.com",
     "amrutputra@gmail.com",
     "samskritam@gmail.com",
