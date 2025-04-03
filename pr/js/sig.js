@@ -1,7 +1,7 @@
 let domain = "";
 let yr = 00;
 $("#if").hide();
-var openyrs = ["1994","1995","1996","1997","1998"];
+var openyrs = ["1994","1995","1996","1997","1998","1999"];
 function parseJwt(token) {
     try {
         var base64Url = token.split('.')[1];
