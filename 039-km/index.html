@@ -218,9 +218,9 @@ videos frame ends -->
 		function transferComplete(evt) {
 		    for (i = 0; i < JSON.parse(this.responseText).values.length; i++)
 		        if (JSON.parse(this.responseText).values[i][0] == tod) {
-				console.log(JSON.parse(this.responseText).values[i][2]);
-				document.getElementById("dtext").innerHTML = JSON.parse(this.responseText).values[i][2].split(";")[0];
-				document.getElementById("if").src=JSON.parse(this.responseText).values[i][2].split(";")[1];
+				//console.log(JSON.parse(this.responseText).values[i][2]);
+				//document.getElementById("dtext").innerHTML = JSON.parse(this.responseText).values[i][2].split(";")[0];
+				//document.getElementById("if").src=JSON.parse(this.responseText).values[i][2].split(";")[1];
 		            kasrc = JSON.parse(this.responseText).values[i][3];
 					kaacaps = JSON.parse(this.responseText).values[i][1];
 					fwd = JSON.parse(this.responseText).values[i][4]+" "+JSON.parse(this.responseText).values[i][5]+" "+JSON.parse(this.responseText).values[i][6]+" "+JSON.parse(this.responseText).values[i][7]+" " +JSON.parse(this.responseText).values[i][8];
