@@ -1,0 +1,178 @@
+body {
+    height: 90vh;
+    width: 90vw;
+    x-background-color: rgba(255, 165, 0, 0.75);
+}
+.mangalam, caption {
+    text-align: center;
+}
+caption {
+	font-weight:bold;
+	font-size: xx-large;
+	font-family:monospace;
+}
+#lead {
+    text-align: center;
+    padding-bottom: 10px;
+}
+#statusMessage {
+    text-align: center;
+    display: none;
+}
+#finishMessage {
+    display: none;
+    text-align: center;
+    color: #ff5555;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#level {
+    position: absolute;
+    right: 2%;
+    top: 35%;
+
+}
+.leveltext{
+    font-size: large;
+}
+
+#refreshLink{
+    position: absolute;
+    bottom: 10%;
+    left: 2%;
+}
+
+#hintLink {
+    position: absolute;
+    left: 2%;
+    top: 10%;
+}
+#hintPopup {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    x-background-color: rgba(64,64,64,0.8);
+}
+#hintPopup .content {
+    background-color: rgba(77, 185, 228, 0.986);
+    transform: translateX(25%) translateY(25%);
+    width: 50%;
+    
+    padding: 10px;
+}
+#finishMessage {
+    text-align: center;
+}
+#gridParent {
+    position: relative;
+}
+#grid {
+    position: absolute;
+    top: 10%;
+    left: 55%;
+    transform: translateX(-50%);
+    x-background-color: #eef5f8;
+    z-index: 1;
+}
+#grid table {
+    width: 100%;
+    height: 100%;
+}
+#grid td {
+    x-background-color: rgb(173, 210, 252);
+     x-background-color: rgba(255,215,0,0.75);
+    text-align: center;
+    font-size: 2em;
+    align-self: stretch; 
+    position: relative;
+}
+
+span{
+    display: grid;
+    place-items: center;
+    border: 1px solid black;
+}
+#nPresent{
+	display: inline;
+    border: none;
+}
+#nFound{
+	display: inline;
+    border: none;
+}
+#lead2,.nob{
+	display: inline;
+    border: none;
+}
+#grid td span{
+    position: absolute;
+font-size:48px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#grid td.selectedCell {
+    x-background-color: #aa7777;
+}
+
+#grid td .markers {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /*top: -100%; */
+    z-index:10;
+}
+.marker {
+    width:100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+}
+.marker0 {
+    background-color:rgba(255,0,0,0.2);
+    z-index: 20;
+}
+.marker1 {
+    background-color:rgba(0,255,0,0.2);
+    z-index: 30;
+}
+.marker2 {
+    background-color:rgba(0,0,255,0.2);
+    z-index: 40;
+}
+.marker3 {
+    background-color:rgba(0,255,255,0.2);
+    z-index: 50;
+}
+.marker4 {
+    background-color:rgba(255,255,0,0.4);
+    z-index: 60;
+}
+.marker5 {
+    background-color:rgba(255,0,255,0.2);
+    z-index: 70;
+}
+.marker6 {
+    background-color:rgba(128,64,128,0.2);
+    z-index: 80;
+}
+.markerX {
+    background-color:rgba(128,128,128,0.2);
+    z-index: 90;
+}
+.dropdown-menu{
+    height: 400px;
+    overflow-y: scroll;
+    scroll-behavior: auto;
+}
+.dropdown{
+ margin: 10px;
+}
