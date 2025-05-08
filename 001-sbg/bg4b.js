@@ -2,6 +2,7 @@ var N_ROWS = 9;
 var N_COLS = 9;
 var N_WORDS_TO_FIND = 5;
 var MAX_MARKER_IDX = 6;
+seg = new Intl.Segmenter('sa');
 var main = function () {
  for (tnum=0;tnum<sList.length;tnum++)
  {
@@ -17,7 +18,7 @@ var main = function () {
 };
 
 var drawGrid = function (num) {
-	console.log(num);
+//	console.log(num);
   var table = $('<table id=t'+num+'><caption id=c'+num+'> '+sList[num]+'&nbsp; </caption></table>');
   var rowIdx = 0;
   var colIdx = 0;
@@ -48,9 +49,13 @@ wordList = slistcl.split(" ");
     indices[j] = tmp;
   }
   var wordsToFind = [];
-  for (i = 0; i < N_WORDS_TO_FIND; i++) {
-    wordsToFind.push(wordList[indices[i]]);
+  for (i = 0; wordsToFind.length < N_WORDS_TO_FIND ; i++) {
+     segments = seg.segment(wordList[indices[i]])
+//console.log(wordList[indices[i]] + " === " + [...segments].length)
+     if ([...segments].length > 1)
+       wordsToFind.push(wordList[indices[i]]);
   }
+console.log(wordsToFind);
   return wordsToFind;
 };
 /**
@@ -304,8 +309,8 @@ var sList = [
 'कर्मणि एव अधिकारः ते मा फलेषु कदाचन | मा कर्मफलहेतुः भूः मा ते सङ्गः अस्तु अकर्मणि ||2.47||',
 'योगस्थः कुरु कर्माणि सङ्गं त्यक्त्वा धनञ्जय | सिद्ध्यसिद्ध्योः समः भूत्वा समत्वं योगः उच्यते ||2.48||',
 'यदा यदा हि धर्मस्य ग्लानिः भवति भारत | अभ्युत्थानम् अधर्मस्य तदा आत्मानं सृजामि अहम् ||4.7||',
+'यो मां पश्यति सर्वत्र सर्वं च मयि पश्यति |, तस्य अहं न प्रणश्यामि स च मे न प्रणश्यति ||6.30||',
 'पत्रं पुष्पं फलं तोयं यो मे भक्त्या प्रयच्छति तत् अहं भक्त्युपहृतम् अश्नामि प्रयतात्मनः ||9.26||',
 'अर्जुनः उवाच | एवं सततयुक्ताः ये भक्ताः त्वां पर्युपासते ये च अपि अक्षरम् अव्यक्तं तेषां के योगवित्तमाः ||12.1||',
 'श्रोत्रं चक्षुः स्पर्शनं च रसनं घ्राणम् एव च अधिष्ठाय मनः च अयं विषयान् उपसेवते ||15.9||',
-'यत्र योगेश्वरः कृष्णः यत्र पार्थः धनुर्धरः तत्र श्रीः विजयः भूतिः ध्रुवा नीतिः मतिः मम ||18.78||'
-];
+'यत्र योगेश्वरः कृष्णः यत्र पार्थः धनुर्धरः तत्र श्रीः विजयः भूतिः ध्रुवा नीतिः मतिः मम ||18.78||'];
