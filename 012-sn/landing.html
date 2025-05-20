@@ -2,10 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Surya Namaskar Game</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: tomato;
+            font-size: 3em;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .instructions {
+            text-align: left;
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: tomato;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #c0392b;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <h1>Welcome to the Surya Namaskar Game</h1>
+        <p>This interactive game helps you learn the 12 names of the Sun (Surya) in Sanskrit through a drag-and-drop puzzle!</p>
+        
+        <div class="instructions">
+            <h2>How to Play:</h2>
+            <ul>
+                <li>Click on the center sun image to reveal a Sanskrit term.</li>
+                <li>Drag the displayed term and drop it into the correct outer circle location.</li>
+                <li>If you're right, the circle will be filled and the progress will update.</li>
+                <li>If wrong, an error count (❌) will be shown.</li>
+                <li>Use arrow keys (← →) to rotate the circles and view better.</li>
+                <li>Complete all 12 placements to win!</li>
+            </ul>
+        </div>
+
+        <a href="index.html">
+            <button>Start Game</button>
+        </a>
+    </div>
 </body>
 </html>
