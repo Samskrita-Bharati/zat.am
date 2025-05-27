@@ -351,6 +351,13 @@ const menu = [
     desc: `Connections style game on hindu deities names`,
   },
   {
+    id: 56,
+    title: "Panchang",
+    category: "RG",
+    dir: "056-panchang",
+    desc: `Jigsaw puzzle based on daily Panchang`,
+  },
+  {
     id: 28,
     title: "शीघ्रम् आगमिष्यति ...",
     category: "TA",
