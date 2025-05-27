@@ -1,0 +1,463 @@
+.puzzle {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    width: 100%;
+    height: 100vmin;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.puzzleCell {
+    font-family: "Verdana";
+    font-size: 180%;
+    user-select: none;
+}
+
+.emoji {
+  font-size: 360%;
+}
+
+.naks {
+    fill: red;  
+}
+
+.svg-content {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vmin;
+}
+
+.draggable {
+    cursor: move;
+}
+
+.puzzleForm, #check, #solve, text {
+    user-select: none;
+}
+
+.bottom {
+    display: flex;
+    flex-direction: column;
+    max-width: 100vmin;
+    width: 100%;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bottomElement {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.bottomElement.nbSols {
+    width: 90%;
+}
+
+#chkrep {
+    align-items: center;
+    justify-content: center;
+}
+
+#solve {
+    display: none;
+}
+
+.bottomButton {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    width: 90%;
+    aspect-ratio: 7/1;
+}
+
+#dateToSolve {
+    height: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.nbSols {
+    border-radius: 5px;
+    border: none;
+    aspect-ratio: 8/1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.clockDisplay {
+    font-family: 'Bruno Ace', cursive;
+    font-family: 'Noto Sans Symbols 2', sans-serif;
+}
+
+.clockContainer  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (any-pointer: fine){
+    .bottomButton, .clockDisplay,  #dateToSolve, #usedSide, #chkrep {
+        font-size: 18px;
+    }
+    .navbar {
+        height: 60px;
+    }
+    #clockButton {
+        width: 60px;
+        height: 60px;
+    }
+
+    #clockButton img {
+        width: 50px;
+        height: 50px;
+    }
+    #top-button {
+        width: 80px;
+    }
+    #menu-img {
+        height: 80px;
+    }
+    .navigation-menu {
+        top: 60px;
+        width: 230px;
+        height: 360px;
+    }
+    #usedSide {
+        height: 40px;
+        font-size: 1em;
+    }
+    .secondary-menu {
+        width: 230px;
+        height: 300px;
+    }
+    .dropdown-menu button {
+        height: 60px;
+    }
+    .main-menu {
+        width: 460px;
+    }
+    .primary-menu {
+        width: 230px;
+    }
+    .dropdown-menu button {
+        font-size: 1.5em;
+        cursor: pointer;
+    }
+    #help-menu-text {
+        font-size: 1.0em;
+    }
+    #shareCopyButton {
+        margin-top: 10px;
+        width: 50%;
+    }
+    #shareMessage {
+        font-size: 1.5em;
+    }
+}
+@media (pointer:none), (pointer:coarse) {
+    .bottomButton, .clockDisplay,  #dateToSolve, #usedSide, #chkrep {
+        font-size: 3.5vmin;
+    }
+    .navbar {
+        height: 12vmin;
+    }
+    #clockButton {
+        width: 12vmin;
+        height: 12vmin;
+    }
+
+    #clockButton img {
+        width: calc(12vmin - 10px);
+        height: calc(12vmin - 10px);
+    }
+    #top-button {
+        width: calc(12vmin + 20px);
+    }
+    #menu-img {
+        height: calc(12vmin);
+    }
+    .navigation-menu, .secondary-menu, .primary-menu {
+        width: 40vmin;
+    }
+    .main-menu {
+        width: 80vmin; /* shall be the double of navigation-menu width */
+    }
+    .navigation-menu {
+        top: 12vmin;
+        height: 72vmin;
+    }
+    #usedSide {
+        width: 60%;
+        font-size: 4vmin;
+        height: 12vmin;
+    }
+    .secondary-menu {
+        height: 72vmin;
+    }
+    .dropdown-menu button {
+        height: 12vmin;
+        font-size: 5vmin;
+        text-align: left;
+    }
+    .material-symbols-sharp {
+        font-size: 5vmin;
+    }
+    #help-menu-text {
+      font-size: 5vmin;
+    }
+    #shareCopyButton {
+      margin-top: 20%;
+      width: 50%;
+      aspect-ratio: 2/1;
+      height: auto;
+    }
+    #shareMessage {
+        font-size: 5vmin;
+    }
+    #shareUrlInput {
+        height: 8%;
+        font-size: 5vmin;
+    }
+}
+
+.navbar {
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.navbar-left {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.navbar-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#menuOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#shareUrlInput {
+    width: 80%;
+    left: 5%;
+    top: 5%;
+    margin-bottom: 10px;
+    padding: 10px;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+}
+
+#shareCopyButton {
+    padding: 10px 20px;
+    background-color: #6495ed;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    margin-left: 10px;
+    width: 90%;
+    justify-content: center;
+    aspect-ratio: 3/1;
+}
+
+#shareMessage {
+    margin-top: 10px;
+    color: #4caf50;
+    display: none;
+    margin-left: 10px;
+}
+
+#clockButton {
+    border: none;
+}
+
+#clockDisplay {
+    vertical-align: middle;
+}
+
+.menu-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-item:hover {
+    background-color: #e0e0e0;
+}
+
+#menu-icon {
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.menu-icon:hover {
+    transform: scale(1.1);
+}
+
+.dropdown-menu {
+    position: relative;
+    perspective: 200px;
+}
+
+.dropdown-menu > button {
+    position: relative;
+    transition: 0.3s;
+}
+
+.dropdown-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    color: black;
+    background: transparent;
+    border: 0;
+    font-family: "Cambria";
+    padding: 10px;
+    width: 100%;
+}
+
+#usedSide {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+#top-button {
+    padding: 0;
+}
+
+.dropdown-menu button .chevron {
+    margin-left: auto;
+}
+
+.dropdown-menu > button:hover {
+    font-wight: bold;
+}
+
+.dropdown-menu.open .navigation-menu {
+    opacity: 1;
+    transform: rotateX(0);
+    visibility: visible;
+}
+
+.navigation-menu {
+    position: absolute;
+    overflow: hidden;
+    z-index: 15;
+    left: 0;
+    opacity: 0;
+    transform-origin: 50% 0%;
+    transform: rotateX(-90deg);
+    visibility: hidden;
+    background: white;
+    transition: 0.4s;
+    border: solid 1px #6495ed;
+}
+
+.main-menu {
+    position: absolute;
+    display: flex;
+    transition: 0.3s;
+}
+
+.main-menu.open {
+    translate: -50%;
+}
+
+.secondary-menu {
+    display: none;
+}
+
+.secondary-menu.open {
+    display: block;
+}
+
+#help-menu-text {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.zback {
+    z-index: 0;
+}
+
+.zoverlay {
+    z-index: 10;
+}
+
+.zmenu {
+    z-index: 11;
+}
+
+.zmenu-content {
+    z-index: 12;
+}
+
+.zsubmenu {
+    z-index: 15;
+    position: relative;
+}
+
+.zsubmenu-content {
+    z-index: 16;
+    position: relative;
+}
+
+#share-menu-background {
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+footer{
+  text-align: center;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Panchang puzzle",
+  "short_name": "Panchang Puz",
+  "start_url": "https://zat.am/056-panchang-puzzle/",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.global/f2db3cf8-7581-4d45-804a-8eaa0cb01b12/panchang_puzzle.jpg",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
