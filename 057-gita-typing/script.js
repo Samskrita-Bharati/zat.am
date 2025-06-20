@@ -114,7 +114,7 @@ let nectar_list = [
 
 let wordQueue, quoteText, highlightPosition, startTime, ch_index = 0, sh_index = -1, is_playing = false;
 
-let num_errors, progression_type, nectar_index=-1;
+let num_errors, progression_type, nectar_index=-1, is_random;
 
 let lastPlayedTs;
 
@@ -130,7 +130,7 @@ function startGame() {
   is_playing = true;
   num_errors = 0;
   
-  // is_random = document.getElementById('rand').checked;
+  is_random = document.getElementById('rand').checked;
   progression_type = document.querySelector('input[name = progression]:checked').value
   // console.log("progression type: ",progression_type);
   
