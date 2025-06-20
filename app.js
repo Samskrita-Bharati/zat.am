@@ -358,6 +358,13 @@ const menu = [
     desc: `Jigsaw puzzle based on daily Panchang`,
   },
   {
+    id: 57,
+    title: "Gita Typing Game",
+    category: "RG",
+    dir: "057-gita-typing",
+    desc: `Practice typing on English (Harvard-Kyoto) transliteration of the sholkas from Bhagavad Gita`,
+  },
+  {
     id: 28,
     title: "शीघ्रम् आगमिष्यति ...",
     category: "TA",
