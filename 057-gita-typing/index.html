@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bhagavad Gita Typing Game</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <script src="script.js" defer></script>
+    <link rel="icon" href="Gita_typing_game.png" type="image/x-icon">
+    <link rel="manifest" href="manifest.json" >
+  </head>
+  <body>
+    <h1>
+      Bhagavad Gita typing game
+    </h1>
+    
+    <p id="info">
+      Practice your typing skills with a verse from the Sacred book. 
+      When you get it right, you will see the meaning of the shloka.
+      <br>
+      <br> Click the start game button to begin
+    </p>
+    <button type="button" class="button" id="start">
+      Start Game <i class="rocket"></i>
+    </button>
+    <p id="reference"></p>
+    <p id="quote"></p>
+    <p id="message"></p>
+    
+    <p class="tooltip"><div>
+      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
+      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+      
+      </button>
+    </div></p>
+    
+    <p id="meaning"></p>
+    <div id="viswaroopa"></div>
+    <input type="text" id="typedValue">
+    <main>
+    <p id="settings"><div>
+      Shloka progression:
+    <input type="radio" id="rand" name="progression" value="1"><label for="rand"> Random </label>
+    <input type="radio" id="seq"  name="progression" value="0" checked="checked"><label for="seq"> Sequential </label>
+    <input type="radio" id="nectar"  name="progression" value="2"><label for="nectar"> 51 key verses </label>
+    </div></p>
+    </main>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker
+            .register("serviceWorker.js")
+            .then(res => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+        })
+      }
+    </script>
+  <footer>
+    <span style="white-space: nowrap"> &copy; 2023 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Ref: T.N. Sethumadhavan, 2010, "Srimad Bhagavad Gita", esamskriti.com </span>
+ </footer>
+  </body>
+</html>
