@@ -120,12 +120,6 @@ let lastPlayedTs;
 
 function startGame() {
 
-  var today = new Date();
-  if ( Na(new Date(lastPlayedTs), today) < 1) {
-    alert("Play a new puzzle tomorrow!")
-    return;
-  }
-  
   console.log("new game started!");
   is_playing = true;
   num_errors = 0;
