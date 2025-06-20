@@ -259,9 +259,9 @@ function gameOver() {
   }
   
   if (Math.random() > 0.5) {
-  viswaroopa.innerHTML = `<img class="img" src="https://cdn.glitch.global/225076cb-51c4-4503-955a-df6183e22d73/viswaroopa.jpg?v=1696161919579">`
+  viswaroopa.innerHTML = `<img class="img" src="viswaroopa.jpg?v=1696161919579">`
   } else {
-  viswaroopa.innerHTML = `<img class="img" src="https://cdn.glitch.global/225076cb-51c4-4503-955a-df6183e22d73/Mahabharata.jpg?v=1696106267514">`
+  viswaroopa.innerHTML = `<img class="img" src="Mahabharata.jpg?v=1696106267514">`
   }
   document.body.className = "viswaroopa";
 //  document.body.className = "winner";
@@ -272,7 +272,7 @@ var copyText;
 
 function ShareIt() {
   
-  let linkURL = "https://gita-typing-game.glitch.me";
+  let linkURL = "https://zat.am/057-gita-typing";
   
   copyText = `#BhagavadGita I learnt the meaning of shloka ${sh_index+1} from chapter ${ch_index+1} in ${Math.round(elapsedTime/1000)} sec at ${linkURL}`;
   
