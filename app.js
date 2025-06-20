@@ -362,7 +362,7 @@ const menu = [
     title: "Gita Typing Game",
     category: "RG",
     dir: "057-gita-typing",
-    desc: `Practice typing on English (Harvard-Kyoto) transliteration of the sholkas from Bhagavad Gita`,
+    desc: `Practice typing on English (Harvard-Kyoto) transliteration of the shlokas from Bhagavad Gita`,
   },
   {
     id: 28,
