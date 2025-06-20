@@ -1,0 +1,16 @@
+{
+  "name": "Bhagavad Gita Typing Game",
+  "short_name": "GitaTyping",
+  "start_url": "https://zat.am/057-gita-typing/",
+  "icons": [
+    {
+      "src": "gita_typing_icon.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#b1dcec",
+  "background_color": "#b1dcec",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
