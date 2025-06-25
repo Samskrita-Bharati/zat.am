@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="sa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="assets/icon.png" rel="icon">
+    <!-- adding google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arvo&family=Bricolage+Grotesque:opsz@10..48&family=Chakra+Petch:wght@400;700&family=Tilt+Prism&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/style.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script defer src="assets/script.js"></script>
+
+    <title>बुद्बुद क्रीडा</title>
+  </head>
+  <body>
+    <div class="menu-screen">
+
+      <div class="main-instruction">
+        <h1>लेखसन्देशहारिन्:</h1>
+        <h4>
+          <ul>
+            <li>Yours task is to find the number/letter in the hit box within 60 secs</li>
+            <li>Choose from the following options</li>
+              <form class="settings-form-start">
+                Type of Characters:
+                <input title="great" type="radio" id="num1" name="startingType" value="numbers">
+                <label for="num1">Numbers</label>
+                <input title="great" type="radio" id="let1" name="startingType" value="letters">
+                <label for="let2">Letters</label> <br>
+                <label class="range-slider"> Choose the difficulty:</label>
+                <input title="difficulty" class="range-value-start" type="range" value="1" min="1" max="10" oninput="this.nextElementSibling.value = this.value">
+                <output class="difficulty">1</output>
+              </form>
+          </ul>
+        </h4>
+      </div>
+      <button class="video-game-button start-game-button">प्रारंभः</button>
+    </div>
+
+      <div class="game-over-screen">
+        <h1>गेम ओवर</h1>
+        <h3>भवतः स्कोरः&nbsp<span class="current-score">०</span></h3>
+        <form class="settings-form-restart">
+          Type of Characters:
+          <input title="great" type="radio" id="num2" name="restartingType" value="numbers">
+          <label for="num1">Numbers</label>
+          <input title="great" type="radio" id="let2" name="restartingType" value="letters">
+          <label for="let2">Letters</label> <br>
+          <label class="range-slider"> Choose the difficulty:</label>
+          <input title="difficulty" class="range-value-restart" type="range" value="1" min="1" max="10" oninput="this.nextElementSibling.value = this.value">
+          <output class="difficulty">1</output>
+        </form>
+        <button class="video-game-button replay-game-button">पुनः क्रीडतु</button>
+    </div>
+    <div class="main">
+      <div class="main-panel">
+        <div class="panel-nav">
+          <div class="elem">
+            <h4>प्रहार</h4>
+            <div class="box hit-box">5</div>
+          </div>
+          <div class="elem">
+            <h4>समयनिर्धारकः</h4>
+            <div class="box timer-box"></div>
+          </div>
+          <div class="elem">
+            <h4>अंक</h4>
+            <div class="box score-box">०</div>
+          </div>
+        </div>
+        <div class="panel-content"></div>
+      </div>
+      <audio autoplay loop class="bg-audio">
+        <source src="assets/bg-music.mp3" type="audio/mpeg">
+        <source src="assets/bg-music2.ogg" type="audio/ogg">
+      </audio>
+    </div>
+  </body>
+</html>
