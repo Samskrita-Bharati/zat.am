@@ -177,7 +177,7 @@ videos frame ends -->
 		    prevtod = new Date(prevtod.getFullYear(), prevtod.getMonth(), prevtod.getDate() - 1);
 		    tod = prevtod.toString().substr(4, 3) + prevtod.toString().substr(7, 3);
 		    sunum = prevtod.getDOY();
-			sunum = sunum % 125;
+			sunum = sunum % 101;
 		    pop_bg(sunum);
 		    n = prevtod.getDay();
 		    document.getElementById("v").innerHTML = va[n];
@@ -192,7 +192,7 @@ videos frame ends -->
 		    tod = newtod.toString().substr(4, 3) + newtod.toString().substr(7, 3);
 
 		    sunum = newtod.getDOY();
-	        sunum = sunum % 125;
+	        sunum = sunum % 101;
 			pop_bg(sunum);
 		    n = newtod.getDay();
 		    document.getElementById("v").innerHTML = va[n];
@@ -209,7 +209,7 @@ videos frame ends -->
 		var da = tod.substr(4, 2);
 		//sunum=(d.getMonth()*30+parseInt(da))%61;
 		sunum = d.getDOY();
-		sunum = sunum % 125;
+		sunum = sunum % 101;
 		pop_bg(sunum);
 		var va = ["रवि", "सोम", "मङ्गल", "बुध", "गुरु", "शुक्र", "शनि"];
 		var n = d.getDay();
@@ -252,9 +252,9 @@ videos frame ends -->
 		});
 		function pop_bg(snum)
 		{
-		if (snum>=24){snum-=24;
+		//if (snum>=24){snum-=24;
 		document.getElementById("bgpb").value=(snum%100);
-	    snum = snum % 125;
+	    snum = snum % 101;
 		document.getElementById("bg1").innerHTML = s[snum].s + " १.१."+ Sanscript.t(String(parseInt(snum)),'itrans', 'devanagari')+"<br>" ;
 		document.getElementById("bg1a").innerHTML = "<a target=sr100 href='"+"https://www.valmiki.iitk.ac.in/sites/default/files/audio/1-1-"+parseInt(snum)+".mp3'>link</a>";
 		//document.getElementById("bg2").innerHTML = Sanscript.t(s[snum], 'devanagari','itrans') + " 1.1."+parseInt(snum);
@@ -262,7 +262,8 @@ videos frame ends -->
 		document.getElementById("bg2t").innerHTML = "<a target=sr100 href='"+"fwfsr.html?snum=" +parseInt(snum)+ "'>link</a>";
 		document.getElementById("bg2a").innerHTML = "<a target=sr100 href='"+"https://zat.am/024-sr/index.html?size=7&s=" +parseInt(snum)+ "'>link</a>";
 		document.getElementById("sr100").innerHTML = snum + " / 100";
-		}
+		//}
+/*
 else
 {
 document.getElementById("bgpb").value=0;
@@ -273,6 +274,7 @@ document.getElementById("bg1").innerHTML = "आरप्स्यते " ;
 		document.getElementById("bg2a").innerHTML = "?";
 		document.getElementById("sr100").innerHTML =  "0 / 100";
 }
+			*/
 		}
 		</script>
 	</body>
