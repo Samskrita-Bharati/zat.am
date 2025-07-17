@@ -177,7 +177,7 @@ videos frame ends -->
 		    prevtod = new Date(prevtod.getFullYear(), prevtod.getMonth(), prevtod.getDate() - 1);
 		    tod = prevtod.toString().substr(4, 3) + prevtod.toString().substr(7, 3);
 		    sunum = prevtod.getDOY();
-			sunum = sunum % 101;
+			sunum = sunum % 125;
 		    pop_bg(sunum);
 		    n = prevtod.getDay();
 		    document.getElementById("v").innerHTML = va[n];
@@ -192,7 +192,7 @@ videos frame ends -->
 		    tod = newtod.toString().substr(4, 3) + newtod.toString().substr(7, 3);
 
 		    sunum = newtod.getDOY();
-	        sunum = sunum % 101;
+	        sunum = sunum % 125;
 			pop_bg(sunum);
 		    n = newtod.getDay();
 		    document.getElementById("v").innerHTML = va[n];
@@ -209,6 +209,7 @@ videos frame ends -->
 		var da = tod.substr(4, 2);
 		//sunum=(d.getMonth()*30+parseInt(da))%61;
 		sunum = d.getDOY();
+		sunum = sunum % 125;
 		pop_bg(sunum);
 		var va = ["रवि", "सोम", "मङ्गल", "बुध", "गुरु", "शुक्र", "शनि"];
 		var n = d.getDay();
@@ -253,7 +254,7 @@ videos frame ends -->
 		{
 		if (snum>=24){snum-=24;
 		document.getElementById("bgpb").value=(snum%100);
-	    snum = snum % 101;
+	    snum = snum % 125;
 		document.getElementById("bg1").innerHTML = s[snum].s + " १.१."+ Sanscript.t(String(parseInt(snum)),'itrans', 'devanagari')+"<br>" ;
 		document.getElementById("bg1a").innerHTML = "<a target=sr100 href='"+"https://www.valmiki.iitk.ac.in/sites/default/files/audio/1-1-"+parseInt(snum)+".mp3'>link</a>";
 		//document.getElementById("bg2").innerHTML = Sanscript.t(s[snum], 'devanagari','itrans') + " 1.1."+parseInt(snum);
