@@ -1,4 +1,18 @@
-﻿var wlist=[['आरक्षकः','वृक्षः','मधुमक्षिका','पक्षी','क्षेपणी','अक्षोटबीजम्','त्रयोदश','छत्राकः','गगनयात्रिकः','त्रीणि','मित्रः','त्रिशूलम्']
+﻿var wlist=[['आरक्षकः','वृक्षः','मधुमक्षिका','पक्षी','क्षेपणी','अक्षोटबीजम्','त्रयोदश','छत्राकः','गगनयात्रिकः','त्रीणि','मित्रः','त्रिशूलम्'],['आरक्षकः','वृक्षः','मधुमक्षिका','पक्षी','क्षेपणी','अक्षोटबीजम्','त्रयोदश','छत्राकः','गगनयात्रिकः','त्रीणि','मित्रः','त्रिशूलम्'],['आरक्षकः','वृक्षः','मधुमक्षिका','पक्षी','क्षेपणी','अक्षोटबीजम्','त्रयोदश','छत्राकः','गगनयात्रिकः','त्रीणि','मित्रः','त्रिशूलम्']
 ];
 
-var ilist=[['https://zat.am/bp26/imgs/p04p13c1.jpg','https://zat.am/bp26/imgs/p04p13c2.jpg','https://zat.am/bp26/imgs/p04p13c3.jpg','https://zat.am/bp26/imgs/p04p13c4.jpg','https://zat.am/bp26/imgs/p04p13c5.jpg','https://zat.am/bp26/imgs/p04p13c6.jpg','https://zat.am/bp26/imgs/p04p15c1.jpg','https://zat.am/bp26/imgs/p04p15c2.jpg','https://zat.am/bp26/imgs/p04p15c3.jpg','https://zat.am/bp26/imgs/p04p15c4.jpg','https://zat.am/bp26/imgs/p04p15c5.jpg','https://zat.am/bp26/imgs/p04p15c6.jpg']];
+var ilist=[['https://zat.am/bp26/imgs/p04p13c1.jpg','https://zat.am/bp26/imgs/p04p13c2.jpg','https://zat.am/bp26/imgs/p04p13c3.jpg','https://zat.am/bp26/imgs/p04p13c4.jpg','https://zat.am/bp26/imgs/p04p13c5.jpg','https://zat.am/bp26/imgs/p04p13c6.jpg','https://zat.am/bp26/imgs/p04p15c1.jpg','https://zat.am/bp26/imgs/p04p15c2.jpg','https://zat.am/bp26/imgs/p04p15c3.jpg','https://zat.am/bp26/imgs/p04p15c4.jpg','https://zat.am/bp26/imgs/p04p15c5.jpg','https://zat.am/bp26/imgs/p04p15c6.jpg'],['https://twemoji.maxcdn.com/v/latest/72x72/1f46e.png','https://twemoji.maxcdn.com/v/latest/72x72/1f333.png','https://twemoji.maxcdn.com/v/latest/72x72/1f41d.png','https://twemoji.maxcdn.com/v/latest/72x72/1f426.png','https://twemoji.maxcdn.com/v/latest/72x72/1f680.png','https://twemoji.maxcdn.com/v/latest/72x72/1f95c.png','https://twemoji.maxcdn.com/v/latest/72x72/p04p15c1.png','https://twemoji.maxcdn.com/v/latest/72x72/1f344.png','https://twemoji.maxcdn.com/v/latest/72x72/1f468.png','https://twemoji.maxcdn.com/v/latest/72x72/p04p15c4.png','https://twemoji.maxcdn.com/v/latest/72x72/1f31e.png','https://twemoji.maxcdn.com/v/latest/72x72/1f531.png'],
+['https://openmoji.org/data/color/svg/1F46E.svg',
+'https://openmoji.org/data/color/svg/1F333.svg',
+'https://openmoji.org/data/color/svg/1F41D.svg',
+'https://openmoji.org/data/color/svg/1F426.svg',
+'https://openmoji.org/data/color/svg/1F680.svg',
+'https://openmoji.org/data/color/svg/1F95C.svg',
+'https://openmoji.org/data/color/svg/13.svg',
+'https://openmoji.org/data/color/svg/1F344.svg',
+'https://openmoji.org/data/color/svg/1F468.svg',
+'https://openmoji.org/data/color/svg/3.svg',
+'https://openmoji.org/data/color/svg/1F506.svg',
+'https://openmoji.org/data/color/svg/1F531.svg']];
+
+
