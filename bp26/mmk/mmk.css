@@ -1,0 +1,26 @@
+html {
+  #background: url("../शत.म्.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.pos1 {
+    position: absolute;
+    top: 0%;
+    right: 2%;
+}
+.pos2 {
+    position: absolute;
+    top: 20%;
+    left: 2%;
+
+}
+.myp{
+	text-align:center;
+	
+}
+td{
+	border: 1px solid blue;
+	cursor:pointer;
+}

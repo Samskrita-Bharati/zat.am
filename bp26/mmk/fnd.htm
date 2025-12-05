@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>अन्वेषणम्</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+<style>
+#svgdiv img{
+  position: absolute;
+}
+img:hover{
+filter: brightness(90%);
+opacity:0.5;
+//background:#e2e2e2;
+}
+div{
+border:1px solid red;
+}
+svg:hover{
+#width:11%;
+}
+.st0:hover{
+fill:red;
+}
+.st1:hover{
+fill:yellow;
+}
+.st2:hover{
+fill:blue;
+}
+*[class^="st"]:hover{
+stroke:green;
+}
+img[id$="1"]{
+transform: rotate(10deg);
+}
+img[id$="2"]{
+transform: rotate(20deg);
+}
+img[id$="3"]{
+transform: rotate(30deg);
+}
+img[id$="4"]{
+transform: rotate(40deg);
+}
+img[id$="5"]{
+transform: rotate(50deg);
+}
+img[id$="6"]{
+transform: rotate(60deg);
+}
+img[id$="7"]{
+transform: rotate(70deg);
+}
+img[id$="8"]{
+transform: rotate(80deg);
+}
+img[id$="9"]{
+transform: rotate(90deg);
+}
+</style>
+<script src="../../cmpk-bp26.json"></script>
+</head>
+<body>
+<center><h3>Find <span style="position:relative;color:tomato;z-index:99" id="tofind"></span> ... ❌ = <span id="wt">०</span></h3></center>
+<div id="svgdiv">
+</div>
+<p></p>
+</body>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+var t = urlParams.get('t');
+if (!t) 
+	t=1;
+var set = urlParams.get('s');
+if (!set || isNaN(set) || (set>=wlist.length))
+	set=0;
+var tofind=parseInt((Math.random()*100)%wlist[set].length);
+var wt=1;
+$("#tofind").html(wlist[set][tofind]);
+if (t>0)
+  $("#tofind").append(" = " + Sanscript.t(wlist[set][tofind],'devanagari','itrans'));
+var chk = function(id)
+ {
+    if (id==tofind)
+	{
+	document.getElementById(id).style["background"]="green";
+	document.getElementById(id).style["border"]="1px solid green";
+	if (confirm("उत्तमम् !  You found it! \n In " + Sanscript.t(String(wt++),'iast', 'devanagari') + " attempt(s) \n पुनः ?  Press 'ok' to play again"))
+	  window.location.reload();
+	}
+	else
+	   {
+	   document.getElementById(id).style["background"]="pink";
+	   document.getElementById(id).style["border"]="1px dotted red";
+	   $("#wt").html(Sanscript.t(String(wt++),'itrans', 'devanagari'));
+	   }
+ }
+$(document).ready(function(){
+ $.each(wlist[set],function(i,v){
+    imglnk=ilist[set][i];	
+	var img = '';
+    positiontop = (Math.random()*(window.visualViewport.height-121))+30;
+    positionright = Math.random()*(window.visualViewport.width-121);
+    zindex = i;
+    img += '<img id="'+i+'" src="'+imglnk+'" style="top: '+positiontop+'px;'+'right: '+positionright+'px;'+'z-index: '+zindex+';" width="121" onclick="chk(this.id)">';
+    document.getElementById('svgdiv').innerHTML+= img;
+  });
+});
+</script>
+</html>

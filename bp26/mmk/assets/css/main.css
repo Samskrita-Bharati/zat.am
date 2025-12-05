@@ -1,0 +1,395 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 99%;
+}
+
+body {
+  font-family: Arial, Tahoma, sans-serif;
+  background-color: rgba(247, 235, 134, 0.5);
+}
+
+.control-buttons {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background-color: rgba(3, 169, 244, 0.950);
+  /* transition: 0.9s ease-in-out; */
+  transition: 0.9s steps(10);
+}
+
+.control-buttons button {
+  position: absolute;
+  left: 25%;
+  top: 40%;
+  /* transform: translate(-50%, -50%); */
+  background-color: rgba(182, 110, 105, 0.849);
+  color: white;
+  padding: 15px 25px;
+  text-align: center;
+  font-size: 50px;
+  font-family: cursive;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0.1rem 0.3rem 2.1rem 0 rgb(233, 235, 135);
+  text-transform: uppercase;
+  transition: 0.9s ease-in-out;
+}
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* ++++++++++++++++++++++++++++++++++++++++++++     Game @Media Queries.     +++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+@media (max-width: 1190.98px) {
+  .control-buttons button {
+    font-size: 40px;
+    text-align: center;
+  }
+
+  section {
+    width: 99%;
+    padding: 5px 0 5px 37px;
+  }
+}
+
+@media (max-width: 992.98px) {
+  .control-buttons button {
+    font-size: 35px;
+    text-align: center;
+  }
+
+  section {
+    width: 99%;
+    padding: 5px 0 5px 37px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .control-buttons button {
+    font-size: 30px;
+    text-align: center;
+  }
+
+  section {
+    width: 99%;
+    padding: 5px 0 5px 37px;
+  }
+}
+
+@media (max-width: 615px) {
+  .control-buttons button {
+    font-size: 25px;
+    text-align: center;
+  }
+
+  section {
+    width: 99%;
+    padding: 5px 0 5px 37px;
+  }
+}
+
+@media (max-device-width: 516px) and (orientation: landscape) {
+  .control-buttons button {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  section {
+    width: 99%;
+    padding: 5px 0 5px 37px;
+  }
+}
+
+@media (max-width:513px) {
+  .control-buttons button {
+    font-size: 15px;
+    text-align: center;
+  }
+
+  section {
+    width: 100%;
+    padding: 5px 0 5px 37px;
+  }
+}
+
+@media (max-width: 348px) {
+  .control-buttons button {
+    font-size: 9px;
+    text-align: center;
+  }
+
+  section {
+    width: 100%;
+    padding: 5px 0 5px 37px;
+  }
+}
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* ++++++++++++++++++++++++++++++++++++++++++++             FINISH .        ++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+.info-container {
+  width: 1080px;
+  margin: 20px auto 0;
+  background-color: rgba(223, 217, 217, 0.007);
+  padding: 20px;
+  font-size: 24px;
+  overflow: auto;
+  border: 2px solid #2196f3;
+}
+
+.info-container .name {
+  float: left;
+  width: 50%;
+  font-family: cursive;
+}
+
+.info-container .tries {
+  float: left;
+  width: 50%;
+  text-align: right;
+  font-family: cursive;
+}
+
+.game-imgs-blocks {
+  display: flex;
+  width: 1100px;
+  flex-wrap: wrap;
+  margin: 20px auto;
+}
+
+.game-imgs-blocks.no-clicking {
+  pointer-events: none;
+}
+
+.game-imgs-blocks .game-block {
+  height: 200px;
+  transition: transform .5s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  position: relative;
+  flex: 1 0 200px;
+  margin: 0 10px 20px;
+}
+
+.game-imgs-blocks .game-block .front {
+  background-color: #333;
+  line-height: 200px;
+  background : url("https://zat.am/%E0%A4%B6%E0%A4%A4.%E0%A4%AE%E0%A5%8D.png");
+  background-size : contain;
+  background-repeat: no-repeat;
+  background-clip: content-box;
+}
+
+.game-imgs-blocks .game-block .back {
+  background-color: rgba(96, 125, 139, 0.178);
+  transform: rotateY(180deg);
+}
+
+.game-imgs-blocks .game-block .back img {
+  width: 140px;
+  height: 140px;
+  margin-top: 30px;
+}
+
+.game-imgs-blocks .game-block .face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  backface-visibility: hidden;
+  border: 1px solid #2196f3;
+}
+
+.game-imgs-blocks .game-block .front::before {
+ content: '🤔';
+ content: '🚩';
+ content: '';
+  color: #FFF;
+  font-size: 100px;
+  font-weight: bold;
+}
+
+.game-imgs-blocks .game-block.is-flipped,
+.game-imgs-blocks .game-block.is-match {
+
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  pointer-events: none;
+}
+.is_match{
+border: 1px solid red;}
+
+.main {
+  zoom: 62%;
+}
+
+
+/* Adding The Modal's Style */
+/* The Modal (background) */
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #e7cd76;
+  margin: 15% auto;
+  /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid rgb(182, 184, 62);
+  width: 80%;
+  /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+.site-footer {
+  background-color: rgba(125, 132, 165, 0.2);
+  color: #645959;
+  padding: auto;
+  margin-top: 20px;
+  width: 102%;
+  font-size: 14px;
+  line-height: 40px;
+  font-family: monospace;
+}
+
+.site-footer .copyright-text {
+  margin-top: 15px;
+  transform: translate(0, -5%);
+}
+
+.site-footer .copyright-text a {
+  color: #4e5285;
+  font-family: Trebuchet MS;
+  font-size: 1.1rem;
+}
+
+.site-footer .copyright-text a:hover {
+  color: #a37355;
+  text-decoration: none;
+}
+
+.site-footer .social-icons {
+  text-align: right;
+  padding-left: 0;
+  /* margin-bottom: 0; */
+  list-style: none;
+  margin-top: 15px;
+}
+
+.site-footer .social-icons a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 6px;
+  margin-right: 0;
+  background-color: #33353d;
+  color: #818a91;
+  font-size: 16px;
+  display: inline-block;
+  text-align: center;
+  transform: translate(-5%, -5%);
+  border-radius: 100%;
+  -webkit-transition: all .2s linear;
+  -o-transition: all .2s linear;
+  transition: all .2s linear
+}
+
+.site-footer .social-icons li {
+  display: inline-block;
+  /* margin-bottom: 0; */
+}
+
+.social-icons a:active,
+.social-icons a:focus,
+.social-icons a:hover {
+  color: #fff;
+  background-color: #29aafe
+}
+
+.social-icons a.facebook:hover {
+  background-color: #3b5998
+}
+
+.social-icons a.twitter:hover {
+  background-color: #00aced
+}
+
+.social-icons a.linkedin:hover {
+  background-color: #007bb6
+}
+
+.social-icons a.dribbble:hover {
+  background-color: #ea4c89
+}
+
+.social-icons a.github:hover {
+  background-color: #696c89
+}
+
+@media (max-width:991px) {
+  .site-footer [class^=col-] {
+    margin-bottom: 20px
+  }
+}
+
+@media (max-width:767px) {
+  .social-icons li.title {
+    display: block;
+    margin-right: 0;
+    font-weight: 600
+  }
+
+  .site-footer {
+    padding-bottom: 0
+  }
+
+  .site-footer .copyright-text,
+  .site-footer .social-icons {
+    text-align: center
+  }
+}
