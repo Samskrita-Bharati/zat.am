@@ -7,7 +7,7 @@ document.getElementById("customSwitch1").checked=false;
 if (!m)
 	m="s";
 var set=getQueryStringValue("set");
-if (!set)
+if (!set || isNaN(set) || (set>=wlist.length))
 	set=0;
 var size = parseInt(getQueryStringValue("size"));
 if (size && size >= 4 && size <= 15) {
