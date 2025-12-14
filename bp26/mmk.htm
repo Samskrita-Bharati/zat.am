@@ -158,8 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     function populateWlist(fildat)
     {
+var wpp=12; // words per page
        fullist=fildat.data;
 var secs=0;
+var openmojibase="https://openmoji.org/data/color/svg/";
 var numberOfWrongTries=0;
 matchesdone=0;
 var timer;
@@ -174,11 +176,15 @@ if (!set || isNaN(set) || (set>=fullist.length))
 
 var image = [];
 var words=[];
- 
-         for (i=0;i<12;i++)
+ var imglnk="";
+         for (i=0;i<wpp;i++)
             {
-                words.push(fullist[(set*12)+i].padam);
-                image.push(fullist[(set*12)+i]["Imaage link"])
+                words.push(fullist[(set*wpp)+i].padam);
+                if (fullist[(set*wpp)+i]["Imaage link"].length ==4 || fullist[(set*wpp)+i]["Imaage link"].length ==5)
+                  imglnk = openmojibase+fullist[(set*wpp)+i]["Imaage link"]+".svg";
+                else
+                  imglnk = fullist[(set*wpp)+i]["Imaage link"];
+                image.push(imglnk)
             }
         debugger;
 //mmk-start
@@ -292,7 +298,7 @@ function genTable(rowLength, colLength, imageData2D)
 			{
             var img = document.createElement("img");
             if (o!=1) 
-				img.src = '../शत.म्.png';
+				img.src = 'bp26e.png';
 			else
 				img.src = imageData2D[i][j].src;
             img.height=height;
