@@ -81,7 +81,12 @@ var words=[];
                   imglnk = fullist[(set*wpp)+i]["Imaage link"];
                 image.push(imglnk)
             }
-        debugger;
+ while (!words[words.length - 1]) {
+  words.pop();
+}
+while (!image[image.length - 1]) {
+  image.pop();
+}
 //mmk-start
 
 var l = urlParams.get('l'); // learn mode - 1 is true
@@ -103,7 +108,8 @@ if (l==1)
       }
 
 
-       var rowLength = 5;//prompt("Please enter number of rows (must not exceed 6) \n NOTE THAT : the multiplier of row and columns must be even number for the game to work");
+       var rowLength = 5; 
+rowLength = words.length/3;
        var colLength = 6;//prompt("Please enter number of columns (must not exceed 6) \n NOTE THAT : the multiplier of row and columns must be even number for the game to work");
        var gamesize = rowLength*colLength;
        var height= 570/rowLength;

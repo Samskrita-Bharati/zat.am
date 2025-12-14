@@ -97,7 +97,12 @@ var words=[];
                 words.push(fullist[(set*wpp)+i].padam);
                 image.push(fullist[(set*wpp)+i]["Imaage link"])
             }
-
+while (!words[words.length - 1]) {
+  words.pop();
+}
+while (!image[image.length - 1]) {
+  image.pop();
+}
 const grid = document.getElementById("dictionaryGrid");
 
 // Create card for each word
