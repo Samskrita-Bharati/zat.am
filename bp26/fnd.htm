@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
 <style>
 #svgdiv img{
   position: absolute;
@@ -60,7 +61,7 @@ img[id$="9"]{
 transform: rotate(90deg);
 }
 </style>
-<script src="../../cmpk-bp26.json"></script>
+
 </head>
 <body>
 <center><h3>Find <span style="position:relative;color:tomato;z-index:99" id="tofind"></span> ... ❌ = <span id="wt">०</span></h3></center>
@@ -69,25 +70,42 @@ transform: rotate(90deg);
 <p></p>
 </body>
 <script>
+    var secs=0;
+function countSecs(elem) {
+	//console.log(secs);
+	//var element = document.getElementById(elem);
+	//element.innerHTML = "Time: " + Sanscript.t(String(secs),'iast', 'devanagari') + " seconds";
+	secs++;
+
+}
+	var wpp=15; // words per page
+
+var tlang=[];
+tlang[1]="itrans";
+tlang['gu']="gujarati";
+tlang['ka']="kannada";
+tlang['be']="bengali";
+tlang['ml']="malayalam";
+tlang['te']="telugu";
+tlang['ta']="tamil";
+
 const urlParams = new URLSearchParams(window.location.search);
 var t = urlParams.get('t');
 if (!t) 
 	t=1;
 var set = urlParams.get('s');
-if (!set || isNaN(set) || (set>=wlist.length))
+if (!set || isNaN(set) )
 	set=0;
-var tofind=parseInt((Math.random()*100)%wlist[set].length);
+var tofind=parseInt((Math.random()*100)%wpp);
 var wt=1;
-$("#tofind").html(wlist[set][tofind]);
-if (t>0)
-  $("#tofind").append(" = " + Sanscript.t(wlist[set][tofind],'devanagari','itrans'));
+
 var chk = function(id)
  {
     if (id==tofind)
 	{
 	document.getElementById(id).style["background"]="green";
 	document.getElementById(id).style["border"]="1px solid green";
-	if (confirm("उत्तमम् !  You found it! \n In " + Sanscript.t(String(wt++),'iast', 'devanagari') + " attempt(s) \n पुनः ?  Press 'ok' to play again"))
+	if (confirm("उत्तमम् !  You found it! \n After " + Sanscript.t(String(wt++),'iast', 'devanagari') + " attempt(s) \n In "+ Sanscript.t(String(secs),'iast', 'devanagari') + " seconds! \n पुनः ?  Press 'ok' to play again"))
 	  window.location.reload();
 	}
 	else
@@ -97,9 +115,39 @@ var chk = function(id)
 	   $("#wt").html(Sanscript.t(String(wt++),'itrans', 'devanagari'));
 	   }
  }
-$(document).ready(function(){
- $.each(wlist[set],function(i,v){
-    imglnk=ilist[set][i];	
+document.addEventListener('DOMContentLoaded', function() {
+	timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
+       countSecs("timer");
+
+	  var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+	  Papa.parse(lnk, {
+          download: true,
+          header: true,
+          complete: populateWlist
+		  })
+    })
+    function populateWlist(fildat)
+    {
+       fullist=fildat.data;
+if (set > fildat.data.length/wpp) set = 0;
+var openmojibase="https://openmoji.org/data/color/svg/";
+var image = [];
+var words=[];
+ var imglnk="";
+         for (i=0;i<wpp;i++)
+            {
+                words.push(fullist[(set*wpp)+i].padam);
+                if (fullist[(set*wpp)+i]["Imaage link"].length ==4 || fullist[(set*wpp)+i]["Imaage link"].length ==5)
+                  imglnk = openmojibase+fullist[(set*wpp)+i]["Imaage link"]+".svg";
+                else
+                  imglnk = fullist[(set*wpp)+i]["Imaage link"];
+                image.push(imglnk)
+            }
+$("#tofind").html(words[tofind]);
+if (t!=0 && tlang[t])
+  $("#tofind").append(" = " + Sanscript.t(words[tofind],'devanagari',tlang[t]));
+ $.each(words,function(i,v){
+    imglnk=image[i];	
 	var img = '';
     positiontop = (Math.random()*(window.visualViewport.height-121))+30;
     positionright = Math.random()*(window.visualViewport.width-121);
@@ -107,6 +155,7 @@ $(document).ready(function(){
     img += '<img id="'+i+'" src="'+imglnk+'" style="top: '+positiontop+'px;'+'right: '+positionright+'px;'+'z-index: '+zindex+';" width="121" onclick="chk(this.id)">';
     document.getElementById('svgdiv').innerHTML+= img;
   });
-});
+}
+
 </script>
 </html>
