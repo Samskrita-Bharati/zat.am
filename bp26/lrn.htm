@@ -91,11 +91,12 @@ if (!t)
 	t=0;
 var image = [];
 var words=[];
- 
+var aud=[];
          for (i=0;i<wpp;i++)
             {
                 words.push(fullist[(set*wpp)+i].padam);
                 image.push(fullist[(set*wpp)+i]["Imaage link"])
+		aud.push(fullist[(set*wpp)+i]["alnk"])
             }
 while (!words[words.length - 1]) {
   words.pop();
@@ -108,6 +109,7 @@ const grid = document.getElementById("dictionaryGrid");
 // Create card for each word
 async function createDictionary() {
     for (const [i, word] of words.entries()) {
+var alnk=aud[`${i}`];
  var lnk=image[`${i}`];
 if (lnk.length ==4 || lnk.length ==5) 
   lnk = "https://openmoji.org/data/color/svg/"+lnk+".svg";
@@ -118,14 +120,22 @@ if (t!=0 && tlang[t])
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `<center>
-            <div class="word">${wrdtxt}</div>
+            <div class="word">${wrdtxt}
+ 
+</div>
             <div class="definition"><img style="max-width: 150px;"  src=${lnk}></div>
+<audio id=a${i} src=${alnk} preload="auto" ></audio>
+<button id=${i} onclick="for (i=0;i<wpp;i++) musicelements[i].pause();musicelements[this.id].play()";>
+    <!-- Use a speaker icon here (e.g., a Font Awesome icon or an image) -->
+    🔊
+</button>
         </center>`;
         grid.appendChild(card);
     }
 }
 
 createDictionary();
+musicelements = document.getElementsByTagName("audio");
 }
 </script>
 
