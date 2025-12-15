@@ -101,6 +101,7 @@ var wt=1;
 
 var chk = function(id)
  {
+
     if (id==tofind)
 	{
 	document.getElementById(id).style["background"]="green";
@@ -133,6 +134,7 @@ if (set > fildat.data.length/wpp) set = 0;
 var openmojibase="https://openmoji.org/data/color/svg/";
 var image = [];
 var words=[];
+var aud=[];
  var imglnk="";
          for (i=0;i<wpp;i++)
             {
@@ -141,20 +143,26 @@ var words=[];
                   imglnk = openmojibase+fullist[(set*wpp)+i]["Imaage link"]+".svg";
                 else
                   imglnk = fullist[(set*wpp)+i]["Imaage link"];
-                image.push(imglnk)
+                image.push(imglnk);
+aud.push(fullist[(set*wpp)+i]["alnk"]);
             }
-$("#tofind").html(words[tofind]);
+$("#tofind").html("<button id="+tofind+" onclick='musicelements[this.id].play()';>🔊</button> " + words[tofind]);
+
 if (t!=0 && tlang[t])
   $("#tofind").append(" = " + Sanscript.t(words[tofind],'devanagari',tlang[t]));
  $.each(words,function(i,v){
-    imglnk=image[i];	
+    imglnk=image[i];
+    alnk=aud[i];	
 	var img = '';
     positiontop = (Math.random()*(window.visualViewport.height-121))+30;
     positionright = Math.random()*(window.visualViewport.width-121);
     zindex = i;
     img += '<img id="'+i+'" src="'+imglnk+'" style="top: '+positiontop+'px;'+'right: '+positionright+'px;'+'z-index: '+zindex+';" width="121" onclick="chk(this.id)">';
-    document.getElementById('svgdiv').innerHTML+= img;
+    document.getElementById('svgdiv').innerHTML+= img+"<audio id="+i+" src="+alnk+" preload='auto' ></audio>";
   });
+musicelements = document.getElementsByTagName("audio");
+musicelements[tofind].autoplay;
+musicelements[tofind].play();
 }
 
 </script>
