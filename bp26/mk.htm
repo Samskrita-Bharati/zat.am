@@ -13,17 +13,14 @@
     <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
 </head>
 <body>
-
+  <center>
 <font size="+18" color=blue> Memory क्रीडा </font>
 
 <br>
-      <p id="wm" style="color: green; font-size: 40px;">Wrong Moves: <span id=nowt>०</span> </p>
-  <center>
+      <p id="wm">Matches Done: <span id=nomd style="color: green; font-size: 20px;">०</span> Wrong Moves: <span style="color: red; font-size: 20px;" id=nowt>०</span> </p>
   <progress id=pr max=15 value=0></progress>
   <div id="mytable">
   </div> </center>
-
-  <script src="mmk.js"></script>
 <script>
     var secs=0;
 function countSecs(elem) {
@@ -88,6 +85,7 @@ while (!image[image.length - 1]) {
   image.pop();
 }
 //mmk-start
+var colors=['tomato','aqua','blue','fuchsia','gray','green','lime','maroon','navy','olive','purple ','red','silver','teal','yellow']
 
 var l = urlParams.get('l'); // learn mode - 1 is true
 if (!l)
@@ -236,16 +234,16 @@ genTable(rowLength, colLength, D2Data); // generate table..
             if(D2Data[row][column].src === clickedCards[0].src){    // if it matches..
 			d=document.getElementsByTagName("tr")[clickedCards[0].x];
 			r=d.getElementsByTagName("td")[clickedCards[0].y];
-			r.style.border="3px solid blue";
+			r.style.border="3px solid "+colors[matchesdone]; //blue";
 			r.style.cursor="no-drop";
 			r.style.color="blue";
 			//r.innerHTML+="✔️";
-            
 			matchesdone++;
             r.innerHTML+="<br>☑️ " + Sanscript.t(String(matchesdone),'iast', 'devanagari')
 			document.getElementById("pr").value=matchesdone;
             //console.log('match')
-			this.parentElement.style.border="3px solid blue";
+document.getElementById("nomd").innerHTML=Sanscript.t(String(matchesdone),'iast', 'devanagari');
+			this.parentElement.style.border="3px solid "+colors[matchesdone-1]; //blue";
 			this.parentElement.style.cursor="no-drop";
 			this.style.color="blue";
 			//this.innerHTML+="✔️";
