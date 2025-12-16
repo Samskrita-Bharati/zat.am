@@ -517,7 +517,16 @@ obj.href+="&d="+getQueryStringValue("d");
 }
 
 //var t = (Math.random()*100) % data.length;
+ function showHint3() {
+      $("#lead2").html("");
+      for (var i = 0; i < wordList.length; i++) {
+        if (answers.includes(wordList[i]))
+          $("#lead2").append("<strong>" + wordList[i] + "</strong> ");
+        else
+          $("#lead2").append("<span class=nob title='" + Sanscript.t(wordList[i], 'devanagari', 'iast') + "'>" + wordList[i] + " </span>");
+      }
 
+    };
 function showHint2()
 {
 	$("#lead2").html("");
