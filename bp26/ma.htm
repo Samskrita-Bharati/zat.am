@@ -6,6 +6,7 @@
   <title>Audio Match – Learn Words</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
   <style>
     :root {
       --bg: #f7f9fc;
@@ -127,6 +128,18 @@
   </main>
 
   <script>
+          const urlParams = new URLSearchParams(window.location.search);
+      var t = urlParams.get('t');
+      if (!t) // open mode - 1 is true - not flipped
+        t = 0;
+         var tlang = [];
+      tlang[1] = "itrans";
+      tlang['gu'] = "gujarati";
+      tlang['ka'] = "kannada";
+      tlang['be'] = "bengali";
+      tlang['ml'] = "malayalam";
+      tlang['te'] = "telugu";
+      tlang['ta'] = "tamil";
     const state = {
       items: [],
       assigned: new Map(), // dropzoneId -> itemId (word)
@@ -232,6 +245,8 @@
         const tile = document.createElement('div');
         tile.className = 'tile';
         tile.textContent = word;
+        if (t != 0 && tlang[t])
+                  tile.textContent  += " - " + Sanscript.t(word, 'devanagari', tlang[t]);
         tile.setAttribute('draggable', 'true');
         tile.setAttribute('role', 'button');
         tile.setAttribute('tabindex', '0');
@@ -394,14 +409,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function populateWlist(fildat) {
       var wpp = 15; // words per page
 
-      var tlang = [];
-      tlang[1] = "itrans";
-      tlang['gu'] = "gujarati";
-      tlang['ka'] = "kannada";
-      tlang['be'] = "bengali";
-      tlang['ml'] = "malayalam";
-      tlang['te'] = "telugu";
-      tlang['ta'] = "tamil";
+     
       fullist = fildat.data;
       var openmojibase = "https://openmoji.org/data/color/svg/";
 
