@@ -51,6 +51,11 @@
             font-size: 0.95em;
             color: #555;
         }
+@media print {
+button {
+display: none !important;
+}
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
@@ -90,11 +95,16 @@
             var t = urlParams.get('t'); // transliterate mode - 1 is true
             if (!t)
                 t = 0;
+var imgm = urlParams.get('m');
+            if (!imgm)
+                imgm = "e";
             var image = [];
             var words = [];
+            var uc=[];
             var aud = [];
             for (i = 0; i < wpp; i++) {
                 words.push(fullist[(set * wpp) + i].padam);
+		uc.push(fullist[(set * wpp) + i].unicode);
                 image.push(fullist[(set * wpp) + i]["Imaage link"])
                 aud.push(fullist[(set * wpp) + i]["alnk"])
             }
@@ -109,21 +119,30 @@
             // Create card for each word
             async function createDictionary() {
                 for (const [i, word] of words.entries()) {
+var txtimg='';
                     var alnk = aud[`${i}`];
-                    var lnk = image[`${i}`];
-                    if (lnk.length == 4 || lnk.length == 5)
-                        lnk = "https://openmoji.org/data/color/svg/" + lnk + ".svg";
+                    var lnk = uc[`${i}`];
+                    // if (lnk.length == 4 || lnk.length == 5)
+			//lnk= String.fromCodePoint(parseInt(lnk, 16));
+                        // lnk = "https://openmoji.org/data/color/svg/" + lnk + ".svg";
                     var wrdtxt = `${word}`
                     if (t != 0 && tlang[t])
                         wrdtxt += " - " + Sanscript.t(`${word}`, 'devanagari', tlang[t]);
 
                     const card = document.createElement("div");
                     card.className = "card";
-                    card.innerHTML = `<center>
-            <div class="word">${wrdtxt}
-</div>
-<div class="definition"><img style="max-width: 150px;"  src=${lnk}></div>
-<audio id=a${i} src=${alnk} preload="auto" ></audio>
+
+if (lnk && lnk.length <12)
+{
+  if (imgm=="u")
+    txtimg ='<span style="font-size: 120px; line-height:150px;">'+ String.fromCodePoint(parseInt(lnk, 16))+'</span>'
+  else if (imgm == "e")
+    txtimg = '<img style="max-width: 150px;"  src="https://openmoji.org/data/color/svg/'+lnk+'.svg">'
+}
+else
+  txtimg = '<img style="max-width: 150px;"  src="'+image[`${i}`]+'">'
+card.innerHTML = `<center><div class="word">${wrdtxt}</div>
+<div class="definition">${txtimg}</div><audio id=a${i} src=${alnk} ></audio>
 <button id=${i} onclick="for (i=0;i<wpp;i++) musicelements[i].pause();musicelements[this.id].play()";>
     <!-- Use a speaker icon here (e.g., a Font Awesome icon or an image) -->
     🔊
