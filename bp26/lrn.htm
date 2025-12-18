@@ -94,7 +94,13 @@ display: none !important;
                 set = 0;
             var t = urlParams.get('t'); // transliterate mode - 1 is true
             if (!t)
+{
                 t = 0;
+}
+if (!tlang[t])
+document.getElementsByTagName("h1")[0].innerHTML += " " + Sanscript.t(`${set}`, 'itrans', 'devanagari');
+else
+document.getElementsByTagName("h1")[0].innerHTML += " " + Sanscript.t(`${set}`, 'itrans', tlang[t]);
 var imgm = urlParams.get('m');
             if (!imgm)
                 imgm = "e";
