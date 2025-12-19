@@ -103,7 +103,7 @@ else
 document.getElementsByTagName("h1")[0].innerHTML += " " + Sanscript.t(`${set}`, 'itrans', tlang[t]);
 var imgm = urlParams.get('m');
             if (!imgm)
-                imgm = "e";
+                imgm = "b";
             var image = [];
             var words = [];
             var uc=[];
@@ -144,6 +144,8 @@ if (lnk && lnk.length <12)
     txtimg ='<span style="font-size: 120px; line-height:150px;">'+ String.fromCodePoint(parseInt(lnk, 16))+'</span>'
   else if (imgm == "e")
     txtimg = '<img style="max-width: 150px;"  src="https://openmoji.org/data/color/svg/'+lnk+'.svg">'
+else
+  txtimg = '<img style="max-width: 150px;"  src="'+image[`${i}`]+'">'
 }
 else
   txtimg = '<img style="max-width: 150px;"  src="'+image[`${i}`]+'">'
