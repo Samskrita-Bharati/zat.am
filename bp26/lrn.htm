@@ -51,7 +51,25 @@
             font-size: 0.95em;
             color: #555;
         }
+
 @media print {
+.k
+{
+border-left:4px ridge green;
+}
+.p
+{
+border-left:3px groove blue;
+}
+.s
+{
+border-left:3px groove red;
+}
+.n
+{
+border-left:3px groove black;
+}
+
 button {
 display: none !important;
 }
@@ -110,11 +128,13 @@ var imgm = urlParams.get('m');
             var words = [];
             var uc=[];
             var aud = [];
+var linga=[];
             for (i = 0; i < wpp; i++) {
                 words.push(fullist[(set * wpp) + i].padam);
 		uc.push(fullist[(set * wpp) + i].unicode);
                 image.push(fullist[(set * wpp) + i]["Imaage link"])
                 aud.push(fullist[(set * wpp) + i]["alnk"])
+linga.push(fullist[(set * wpp) + i]["linga"])
             }
             while (!words[words.length - 1]) {
                 words.pop();
@@ -138,8 +158,9 @@ var txtimg='';
                         wrdtxt += " - " + Sanscript.t(`${word}`, 'devanagari', tlang[t]);
 
                     const card = document.createElement("div");
-                    card.className = "card";
 
+                    card.className = "card";
+              card.classList.add(linga[`${i}`]);
 if (lnk && lnk.length <12)
 {
   if (imgm=="u")
