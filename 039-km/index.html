@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="sl-root decks export loaded ua-phantomjs">
 	<head>
-		<title>कथामाला-२०२५</title>
+		<title>कथामाला-२०२६</title>
 		<meta name=" viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -17,7 +17,7 @@
 				<section data-id="d0917d50dae07a0d9835a3e9de36168f">
 					<div class="sl-block" data-block-type="text" style="width: 807px; left: 76.5005px; top: 13px; height: auto;" data-block-id="989a6c42bd020e3b2ba079dea1cacd3d">
 						<div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;">
-							<h1><span class="saffron" style="color:rgb(251, 140, 0)" onclick="localStorage['2024']=prompt('किम्?');">कथामाला - २०२५</span>
+							<h1><span class="saffron" style="color:rgb(251, 140, 0)" onclick="localStorage['2024']=prompt('किम्?');">कथामाला - २०२६</span>
 							</h1>
 							<h5>http://kathaa.sbusa.org/  - 2020  विश्वसंस्कृतदिनादारभ्य !!!</h5>
 						</div>
@@ -26,7 +26,7 @@
 					<div class="sl-block" data-block-type="image" data-name="image-0cb4b5" data-block-id="7ed16e5bbdbd84b05454ae1e46a00964" style="width: 499.733px; height: 388.092px; left: 250.134px; top: 238.908px; min-width: 1px; min-height: 1px;">
 						<div class="sl-block-content" style="z-index: 11;">
 							<h4><span onclick="pretod()" style="color:blue;cursor:pointer;text-decoration: underline">&lt;&lt;</span>
-								<span id="tod"></span>, 2025<span onclick="nextod()" style="color:tomato;cursor:pointer;text-decoration: underline overline">&gt;&gt;</span>
+								<span id="tod"></span>, 2026<span onclick="nextod()" style="color:tomato;cursor:pointer;text-decoration: underline overline">&gt;&gt;</span>
 								<span style="color:rgb(0, 0, 0); font-size:medium">&nbsp;</span>
 								<strong><p><span id="v">?</span></strong>-वासरः ।</p>
 								<img style="width:50%" src="km24.jpg"/>
@@ -173,7 +173,7 @@ videos frame ends -->
 		}
 		//hht
 		function pretod() {
-		    prevtod = new Date(tod + ", 2025");
+		    prevtod = new Date(tod + ", 2026");
 		    prevtod = new Date(prevtod.getFullYear(), prevtod.getMonth(), prevtod.getDate() - 1);
 		    tod = prevtod.toString().substr(4, 3) + prevtod.toString().substr(7, 3);
 		    sunum = prevtod.getDOY();
@@ -187,7 +187,7 @@ videos frame ends -->
 		}
 		function nextod() {
 
-		    newtod = new Date(tod + ", 2025");
+		    newtod = new Date(tod + ", 2026");
 		    newtod = new Date(newtod.getFullYear(), newtod.getMonth(), newtod.getDate() + 1);
 		    tod = newtod.toString().substr(4, 3) + newtod.toString().substr(7, 3);
 
@@ -253,7 +253,7 @@ videos frame ends -->
 		function pop_bg(snum)
 		{
 		//if (snum>=24){
-			snum-=24;
+			snum+=39;
 		document.getElementById("bgpb").value=(snum%100);
 	    snum = snum % 101;
 		document.getElementById("bg1").innerHTML = s[snum].s + " १.१."+ Sanscript.t(String(parseInt(snum)),'itrans', 'devanagari')+"<br>" ;
