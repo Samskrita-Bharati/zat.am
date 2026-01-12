@@ -2,6 +2,11 @@ var cn=[
   {
     "p": "आरप्स्यते ",
     "a": " .. will start .. ",
+    "t": "after 14 days"
+  },
+  {
+    "p": "आरप्स्यते ",
+    "a": " .. will start .. ",
     "t": "after 13 days"
   },
   {
@@ -52,17 +57,12 @@ var cn=[
   {
     "p": "आरप्स्यते ",
     "a": " .. will start .. ",
-    "t": "after 3 days"
+    "t": "AFTER 3 days"
   },
   {
     "p": "आरप्स्यते ",
     "a": " .. will start .. ",
     "t": "AFTER 2 days"
-  },
-  {
-    "p": "आरप्स्यते ",
-    "a": " .. will start .. ",
-    "t": "AFTER 1 day"
   },
   {
     "p": "आरप्स्यते ",
