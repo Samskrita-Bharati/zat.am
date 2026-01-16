@@ -385,6 +385,13 @@ const menu = [
     dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
+  {
+    id: 31,
+    title: "vishwa संस्कृतम्  ",
+    category: "ET",
+    dir: "bp26",
+    desc: `BodhaPlay संस्कृतम् competition 2026 coming soon - <pre>shiighram aagamiShyati... </pre>`,
+  },
 ];
 // get parent element
 const sectionCenter = document.querySelector(".section-center");
