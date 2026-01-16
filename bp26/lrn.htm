@@ -183,6 +183,11 @@ card.innerHTML = `<center><div class="word">${wrdtxt}</div>
                 }
             }
             createDictionary();
+			for (i=0;i<wpp;i++)
+    		{
+        		if (document.getElementById("a"+i).src.indexOf("mp3")<0) 
+            		document.getElementById(i).style.visibility='hidden';
+			}
             musicelements = document.getElementsByTagName("audio");
         }
     </script>
