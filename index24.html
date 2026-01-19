@@ -13,10 +13,31 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="auth-buttons">
+      <img src="शत.म्.png" alt="Logo" class="logo" />
+
+      <!-- Show when logged out -->
+      <div class="auth-btn">
+        <span id="logged-out">
+          <a href="/auth/login.html">Login</a>
+          <a href="/auth/signup.html">Sign Up</a>
+        </span>
+
+        <!-- Show when logged in -->
+        <span id="logged-in" class="hidden">
+          <span id="user-name">User</span>
+          <button id="logout-button">Logout</button>
+        </span>
+      </div>
+    </div>
     <section class="menu">
+      <!-- <h1>Hi2</h1> -->
       <!-- title -->
       <div class="title">
-	  <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  -->  </h2>
+        <h2>
+          संस्कृतभारती
+          <!--जयतु संस्कृतम् ।  -->
+        </h2>
         <!--<h2><span style="color:red">श</span><span style="color:yellow">त</span>.<span style="color:blue">म्</span></h2>-->
         <div class="underline"></div>
       </div>
@@ -32,11 +53,44 @@
         </button> -->
       </div>
       <!-- menu items -->
-      <div class="section-center">
-        
-      </div>
+      <div class="section-center"></div>
     </section>
     <!-- javascript -->
     <script src="app.js"></script>
+
+    <script type="module">
+      import { auth } from "/auth/api/firebase-config.js";
+      import { onAuthStateChanged, signOut } from "firebase/auth";
+
+      const loggedOut = document.getElementById("logged-out");
+      const loggedIn = document.getElementById("logged-in");
+      const userName = document.getElementById("user-name");
+      const logoutBtn = document.getElementById("logout-button");
+
+      // Check if user is logged in
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is logged in
+          loggedOut.classList.add("hidden");
+          loggedIn.classList.remove("hidden");
+          userName.textContent = user.email;
+        } else {
+          // User is logged out
+          loggedOut.classList.remove("hidden");
+          loggedIn.classList.add("hidden");
+        }
+      });
+
+      // Logout button
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+          alert("Logged out successfully!");
+        } catch (error) {
+          alert("Error logging out");
+          console.error(error);
+        }
+      });
+    </script>
   </body>
 </html>

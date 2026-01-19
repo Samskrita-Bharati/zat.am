@@ -73,13 +73,14 @@ body {
   color: var(--clr-grey-1);
   line-height: 1.5;
   font-size: 0.875rem;
-    background-image: url("शत.म्.png");
+  /* background-image: url("शत.म्.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size:cover;
-    background-size:100% 100%;
-	  background-size:contain;
-	    background-size:200px;
+  background-size: cover;
+  background-size: 100% 100%;
+  background-size: contain;
+  background-size: 200px; */
+  padding-top: 60px;
 }
 ul {
   list-style-type: none;
@@ -268,4 +269,45 @@ Menu
   .photo {
     height: 150px;
   }
+}
+
+/* Authentication CSS */
+
+.auth-buttons {
+  position: fixed;
+  top: 0px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  background: var(--clr-grey-10);
+}
+
+.auth-buttons .logo {
+  width: 10%;
+}
+
+.auth-buttons button,
+.auth-buttons a {
+  margin-left: 10px;
+  padding: 8px 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-btn {
+  padding-top: 20px;
+  padding-right: 20px;
+}
+
+.auth-buttons button:hover,
+.auth-buttons a:hover {
+  background: #0056b3;
+}
+
+.hidden {
+  display: none;
 }
