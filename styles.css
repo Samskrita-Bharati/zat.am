@@ -286,16 +286,20 @@ Menu
   width: 10%;
 }
 
-.auth-buttons button,
-.auth-buttons a {
+.auth-buttons button {
   margin-left: 10px;
   padding: 8px 15px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  text-decoration: none;
+  background: transparent;
+  border-color: var(--clr-gold);
+  font-size: 1rem;
+  text-transform: capitalize;
+  margin: 0 0.5rem;
+  letter-spacing: 1px;
+  border-radius: var(--radius);
+  padding: 0.375rem 0.75rem;
+  color: var(--clr-gold);
   cursor: pointer;
+  transition: var(--transition);
 }
 
 .auth-btn {
@@ -305,7 +309,8 @@ Menu
 
 .auth-buttons button:hover,
 .auth-buttons a:hover {
-  background: #0056b3;
+  background: var(--clr-gold);
+  color: var(--clr-white);
 }
 
 .hidden {

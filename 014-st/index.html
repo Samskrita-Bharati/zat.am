@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <title>Typer</title>
+    <meta name="description" content="A tower defense like typing game" />
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="typer.css" />
+    <script async src="https://kit.fontawesome.com/a1c4b21e48.js"></script>
+    <script defer src="canvas.js"></script>
+    <script
+      defer
+      src="https://berkerol.github.io/libraries/particle.js"
+    ></script>
+    <script defer src="typer.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>Typer</title>
-  <meta name="description" content="A tower defense like typing game">
-  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="typer.css">
-  <script async src="https://kit.fontawesome.com/a1c4b21e48.js"></script>
-  <script defer src="canvas.js"></script>
-  <script defer src="https://berkerol.github.io/libraries/particle.js"></script>
-  <script defer src="typer.js"></script>
-</head>
-
-<body>
-  <canvas id="canvas">Your browser doesn't support HTML5.</canvas>
-</body>
-
+  <body>
+    <!-- Auth Middleware-->
+    <script type="module" src="/auth/api/middleware.js"></script>
+    <canvas id="canvas">Your browser doesn't support HTML5.</canvas>
+  </body>
 </html>
