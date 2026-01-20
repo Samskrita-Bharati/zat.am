@@ -1,4 +1,4 @@
-import { signUp } from "../api/auth-api.js";
+import { signUp, updateUserProfile } from "../api/auth-api.js";
 
 const signupForm = document.getElementById("signup-form");
 const nameInput = document.getElementById("signup-name");
@@ -29,7 +29,15 @@ signupForm.addEventListener("submit", async (e) => {
   }
 
   try {
-    await signUp(email, password);
+    // Create account
+    const userCred = await signUp(email, password);
+    const user = userCred.user;
+
+    // Update user profile with display name
+    await updateUserProfile(user, {
+      displayName: name,
+    });
+
     message.innerHTML = "Account created! Redirecting to login...";
     message.style.color = "green";
 

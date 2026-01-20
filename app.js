@@ -132,13 +132,13 @@ const menu = [
     dir: "019-cs",
     desc: ` Jigsaw puzzle for a <pre>chitram</pre>`,
   },
-  {
-    id: 20,
-    title: "कथा game",
-    category: "RG",
-    dir: "020-kk",
-    desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
-  },
+  // {
+  //   id: 20,
+  //   title: "कथा game",
+  //   category: "RG",
+  //   dir: "020-kk",
+  //   desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
+  // },
   {
     id: 21,
     title: "अन्वेषणम् ",
@@ -430,7 +430,7 @@ function displayMenuButtons() {
       }
       return values;
     },
-    ["all"]
+    ["all"],
   );
   const categoryBtns = categories
     .map(function (category) {

@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "./firebase-config";
 
 export const signUp = async (email, password) => {
@@ -32,4 +33,8 @@ export const checkAuth = () => {
 
 export const getCurrentUser = () => {
   return auth.currentUser;
+};
+
+export const updateUserProfile = async (user, data) => {
+  return await updateProfile(user, data);
 };

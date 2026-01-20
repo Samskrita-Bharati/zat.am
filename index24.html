@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -19,11 +19,11 @@
       <!-- Show when logged out -->
       <div class="auth-btn">
         <span id="logged-out">
-          <button onclick="window.location.href='/auth/login.html'">
+          <button onclick="window.location.href = '/auth/login.html'">
             Login
           </button>
 
-          <button onclick="window.location.href='/auth/signup.html'">
+          <button onclick="window.location.href = '/auth/signup.html'">
             Sign Up
           </button>
         </span>
@@ -79,53 +79,6 @@
     </section>
     <!-- javascript -->
     <script src="app.js"></script>
-    <script type="module">
-      import { auth } from "/auth/api/firebase-config.js";
-      import { onAuthStateChanged, signOut } from "firebase/auth";
-
-      const loggedOut = document.getElementById("logged-out");
-      const loggedIn = document.getElementById("logged-in");
-      const profileBtn = document.getElementById("profile-btn");
-      const dropdown = document.getElementById("profile-dropdown");
-      const userEmailDropdown = document.getElementById("user-email-dropdown");
-      const dropdownLogout = document.getElementById("dropdown-logout");
-
-      // Check if user is logged in
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          loggedOut.classList.add("hidden");
-          loggedIn.classList.remove("hidden");
-          userEmailDropdown.textContent = user.email;
-        } else {
-          loggedOut.classList.remove("hidden");
-          loggedIn.classList.add("hidden");
-        }
-      });
-
-      // Toggle dropdown on profile icon click
-      profileBtn.addEventListener("click", () => {
-        dropdown.classList.toggle("hidden");
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener("click", (e) => {
-        if (!loggedIn.contains(e.target)) {
-          dropdown.classList.add("hidden");
-        }
-      });
-
-      // Logout
-      dropdownLogout.addEventListener("click", async (e) => {
-        e.preventDefault();
-        try {
-          await signOut(auth);
-          dropdown.classList.add("hidden");
-          alert("Logged out successfully!");
-        } catch (error) {
-          alert("Error logging out");
-          console.error(error);
-        }
-      });
-    </script>
+    <script type="module" src="/js/navbar-auth.js"></script>
   </body>
 </html>
