@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - zat.am</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-box">
+        <h2>Sign Up</h2>
+        <form id="signup-form">
+          <input
+            type="text"
+            id="signup-name"
+            placeholder="Full Name"
+            required
+          />
+          <input type="email" id="signup-email" placeholder="Email" required />
+          <input
+            type="password"
+            id="signup-password"
+            placeholder="Password (min 8 characters)"
+            required
+          />
+          <input
+            type="password"
+            id="signup-cpassword"
+            placeholder="Confirm Password"
+            required
+          />
+          <button type="submit">Create Account</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+        <div id="message"></div>
+      </div>
+    </div>
+    <script type="module" src="./js/signup.js"></script>
+  </body>
+</html>

@@ -132,13 +132,13 @@ const menu = [
     dir: "019-cs",
     desc: ` Jigsaw puzzle for a <pre>chitram</pre>`,
   },
-  {
-    id: 20,
-    title: "कथा game",
-    category: "RG",
-    dir: "020-kk",
-    desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
-  },
+  // {
+  //   id: 20,
+  //   title: "कथा game",
+  //   category: "RG",
+  //   dir: "020-kk",
+  //   desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
+  // },
   {
     id: 21,
     title: "अन्वेषणम् ",
@@ -385,6 +385,13 @@ const menu = [
     dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
+  {
+    id: 31,
+    title: "vishwa संस्कृतम्  ",
+    category: "ET",
+    dir: "bp26",
+    desc: `BodhaPlay संस्कृतम् competition 2026 coming soon - <pre>shiighram aagamiShyati... </pre>`,
+  },
 ];
 // get parent element
 const sectionCenter = document.querySelector(".section-center");
@@ -423,7 +430,7 @@ function displayMenuButtons() {
       }
       return values;
     },
-    ["all"]
+    ["all"],
   );
   const categoryBtns = categories
     .map(function (category) {

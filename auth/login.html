@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - zat.am</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-box">
+        <h2>Login</h2>
+        <form id="login-form">
+          <input type="email" id="signin-email" placeholder="Email" required />
+          <input
+            type="password"
+            id="signin-password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+        <div id="message"></div>
+      </div>
+    </div>
+    <script type="module" src="./js/login.js"></script>
+  </body>
+</html>

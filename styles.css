@@ -73,13 +73,14 @@ body {
   color: var(--clr-grey-1);
   line-height: 1.5;
   font-size: 0.875rem;
-    background-image: url("शत.म्.png");
+  /* background-image: url("शत.म्.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size:cover;
-    background-size:100% 100%;
-	  background-size:contain;
-	    background-size:200px;
+  background-size: cover;
+  background-size: 100% 100%;
+  background-size: contain;
+  background-size: 200px; */
+  padding-top: 60px;
 }
 ul {
   list-style-type: none;
@@ -267,5 +268,156 @@ Menu
   }
   .photo {
     height: 150px;
+  }
+}
+
+/* Authentication CSS */
+.auth-buttons {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--clr-grey-10);
+  padding: 15px 20px;
+}
+
+.auth-buttons .logo {
+  width: 10%;
+  max-width: 100px;
+}
+
+.auth-buttons button {
+  margin-left: 10px;
+  padding: 0.375rem 0.75rem;
+  background: transparent;
+  border: 2px solid var(--clr-gold);
+  font-size: 1rem;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  border-radius: var(--radius);
+  color: var(--clr-gold);
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-buttons button:hover,
+.auth-buttons a:hover {
+  background: var(--clr-gold);
+  color: var(--clr-white);
+}
+
+/* Profile Container */
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Profile Icon Button */
+.profile-icon {
+  cursor: pointer;
+  color: var(--clr-gold);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-icon:hover {
+  cursor: pointer;
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background: var(--clr-grey-10);
+  border: 2px solid var(--clr-gold);
+  border-radius: var(--radius);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  min-width: 220px;
+  padding: 10px 0;
+  z-index: 1001;
+}
+
+.dropdown .dropdown-header {
+  text-align: center;
+}
+
+.dropdown .user-email {
+  padding: 10px 15px;
+  margin: 0;
+  color: var(--clr-grey-3);
+  font-size: 0.85rem;
+  font-weight: bold;
+  font-style: italic;
+  word-break: break-all;
+}
+
+#username {
+  padding-top: 20px;
+  font-size: 1.2rem;
+}
+
+.dropdown hr {
+  margin: 5px 0;
+  border: none;
+  border-top: 1px solid var(--clr-grey-8);
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px;
+  color: var(--clr-grey-3);
+  text-decoration: none;
+}
+
+.dropdown a:hover {
+  background: var(--clr-gold);
+  color: var(--clr-white);
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .auth-buttons {
+    padding: 10px 15px;
+  }
+
+  .auth-buttons .logo {
+    width: 60px;
+  }
+
+  .auth-buttons button,
+  .auth-buttons a {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    margin-left: 5px;
+  }
+
+  .profile-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
+
+  .dropdown {
+    min-width: 180px;
   }
 }

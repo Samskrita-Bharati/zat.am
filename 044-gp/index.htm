@@ -1,17 +1,24 @@
 <!DOCTYPE html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
     <title>गणितपरीक्षा</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="MobileOptimized" content="176">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="robots" content="noindex,nofollow">
-    <link href="gp.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="MobileOptimized" content="176" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link href="gp.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
   </head>
   <body class="_hover">
+    <!-- Auth Middleware-->
+    <script type="module" src="/auth/api/middleware.js"></script>
     <div id="page_wrap" class="page_wrap in_result">
       <div class="page_header_wrap">
         <div class="page_header"></div>
@@ -36,13 +43,13 @@
             </div>
           </div>
           <div class="table_content">
-            <div id="game_title" class="game_title">
-              गणितपरीक्षा
-            </div>
+            <div id="game_title" class="game_title">गणितपरीक्षा</div>
             <div class="result_score">
               <div>प्राप्ताङ्काः</div>
-              <span id="result_score_value" class="score_value">24</span><!--
-           --><div class="score_share_wrap">
+              <span id="result_score_value" class="score_value">24</span
+              ><!--
+           -->
+              <div class="score_share_wrap">
                 <div id="score_share" class="score_share">Share</div>
               </div>
             </div>
@@ -56,7 +63,11 @@
         <div class="page_footer">
           <div class="timeline_wrap">
             <div class="timeline">
-              <div id="timeline_progress" class="timeline_progress" style="right: 99.93%;"></div>
+              <div
+                id="timeline_progress"
+                class="timeline_progress"
+                style="right: 99.93%"
+              ></div>
             </div>
           </div>
           <div class="buttons">
@@ -66,8 +77,10 @@
                 <div class="icon_refresh"></div>
                 <div class="icon_play"></div>
               </div>
-            </div><!--
-         --><div class="button_wrap button_wrong">
+            </div>
+            <!--
+         -->
+            <div class="button_wrap button_wrong">
               <div id="button_wrong" class="button">
                 <div class="icon"></div>
               </div>
@@ -77,5 +90,6 @@
       </div>
     </div>
     <script src="gp.min.js"></script>
-  <p>based on Math Battle Telegram bot/game</p>
-</body></html>
+    <p>based on Math Battle Telegram bot/game</p>
+  </body>
+</html>
