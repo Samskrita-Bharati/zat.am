@@ -5,6 +5,7 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  sendPasswordResetEmail,
 } from "./firebase-config";
 
 export const signUp = async (email, password) => {
@@ -17,6 +18,10 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
   return await signOut(auth);
+};
+
+export const resetPassword = async (email) => {
+  return await sendPasswordResetEmail(auth, email);
 };
 
 export const checkAuth = () => {
