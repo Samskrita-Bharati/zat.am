@@ -5,4 +5,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
   },
+  server: {
+    open: "/index24.html",
+  },
 });

@@ -5,6 +5,7 @@ repl-temp-*
 
 # macOS desktop store files
 .DS_Store
-node_modules
-
+.env
+node_modules/
 dist/
+*.log
