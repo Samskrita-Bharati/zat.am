@@ -13,13 +13,19 @@ import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCpDDpIOxNa46or-8oNfr_GZx0sXfXuwHw",
-  authDomain: "zat-am-fd08d.firebaseapp.com",
-  projectId: "zat-am-fd08d",
-  storageBucket: "zat-am-fd08d.firebasestorage.app",
-  messagingSenderId: "625334613977",
-  appId: "1:625334613977:web:43bf99d641abab49b00bc8",
-  measurementId: "G-D7PSEGRQ5P",
+ 
+  apiKey: "AIzaSyC8nm8zQR6fiC_3mTQ3hURXNJPR6faKYOU",
+ 
+  authDomain: "zat-am-main.firebaseapp.com",
+ 
+  projectId: "zat-am-main",
+ 
+  storageBucket: "zat-am-main.firebasestorage.app",
+ 
+  messagingSenderId: "1071341524876",
+ 
+  appId: "1:1071341524876:web:1908319951cd8f50b2e8a9"
+ 
 };
 
 // Initialize Firebase
