@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3B82F6;
+        }
+
+        select {
+            display: block;
+            margin: 20px auto;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .podium {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .podium-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .podium-card.rank-1 {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), white);
+            border: 3px solid #FFD700;
+            transform: scale(1.1);
+        }
+
+        .podium-card.rank-2 {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), white);
+            border: 2px solid #C0C0C0;
+        }
+
+
+        .podium-card.rank-3 {
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.1), white);
+            border: 2px solid #CD7F32;
+        }
+
+        .podium-card .rank {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .rank-1 .rank {
+            color: #FFD700;
+        }
+
+        .rank-2 .rank {
+            color: #C0C0C0;
+        }
+
+        .rank-3 .rank {
+            color: #CD7F32;
+        }
+
+        .podium-card .name {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .podium-card .score {
+            font-size: 28px;
+            font-weight: bold;
+            color: #3B82F6;
+            margin-top: 10px;
+        }
+
+        #leaderboard {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .row {
+            display: flex;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .rank {
+            width: 60px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .name {
+            flex: 1;
+        }
+
+        .score {
+            width: 120px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            cursor: pointer;
+            background: #3B82F6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            display: inline-block;
+            margin: 0 15px;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <select id="gameSelect" onchange="changePage(1)">
+        <!-- PLACE new games HERE! -->
+        <option value="Rock Paper Scissors">Rock Paper Scissors</option>
+        <option value="Snakes and latters">Snakes and latters</option>
+        <option value="General">General (Combined)</option>
+    </select>
+
+    <select id="timeFilter" onchange="changePage(1)">
+        <option value="all">All Time</option>
+        <option value="year">This Year</option>
+        <option value="month">This Month</option>
+        <option value="week">This Week</option>
+    </select>
+
+    <div class="podium">
+        <div class="podium-card rank-2">
+            <div class="rank">#2</div>
+            <div class="name" id="name-2">Player 2</div>
+            <div class="score" id="score-2">0</div>
+        </div>
+        <div class="podium-card rank-1">
+            <div class="rank">#1</div>
+            <div class="name" id="name-1">Player 1</div>
+            <div class="score" id="score-1">0</div>
+        </div>
+        <div class="podium-card rank-3">
+            <div class="rank">#3</div>
+            <div class="name" id="name-3">Player 3</div>
+            <div class="score" id="score-3">0</div>
+        </div>
+    </div>
+
+    <div id="leaderboard"></div>
+    <div class="pagination">
+        <button onclick="changePage(currentPage - 1)" id="prevBtn">Previous</button>
+        <span class="page-info">Page <span id="pageNum">1</span> of <span id="totalPages">2</span></span>
+        <button onclick="changePage(currentPage + 1)" id="nextBtn">Next</button>
+
+    </div>
+    <script>
+        const players = [
+        { name: 'Player 1',  rpsScore: 50, snakesScore: 92, lastRPS: '2026-01-12', lastSnakes: '2026-01-02' },
+        { name: 'Player 2',  rpsScore: 48, snakesScore: 80, lastRPS: '2026-01-02', lastSnakes: '2025-12-01' },
+        { name: 'Player 3',  rpsScore: 47, snakesScore: 86, lastRPS: '2025-06-15', lastSnakes: '2026-01-13' },
+        { name: 'Player 4',  rpsScore: 45, snakesScore: 83, lastRPS: '2025-11-15', lastSnakes: '2025-08-29' },
+        { name: 'Player 5',  rpsScore: 44, snakesScore: 80, lastRPS: '2026-01-14', lastSnakes: '2025-06-10' },
+        { name: 'Player 6',  rpsScore: 42, snakesScore: 77, lastRPS: '2025-08-05', lastSnakes: '2026-01-15' },
+        { name: 'Player 7',  rpsScore: 41, snakesScore: 74, lastRPS: '2025-12-25', lastSnakes: '2025-10-30' },
+        { name: 'Player 8',  rpsScore: 40, snakesScore: 71, lastRPS: '2025-06-05', lastSnakes: '2025-06-20' },
+        { name: 'Player 9',  rpsScore: 39, snakesScore: 68, lastRPS: '2025-10-10', lastSnakes: '2025-11-20' },
+        { name: 'Player 10', rpsScore: 38, snakesScore: 65, lastRPS: '2026-01-10', lastSnakes: '2025-07-04' },
+        { name: 'Player 11', rpsScore: 35, snakesScore: 62, lastRPS: '2025-07-22', lastSnakes: '2026-01-12' },
+        { name: 'Player 12', rpsScore: 32, snakesScore: 59, lastRPS: '2025-09-18', lastSnakes: '2025-09-25' },
+        { name: 'Player 13', rpsScore: 29, snakesScore: 56, lastRPS: '2025-06-28', lastSnakes: '2025-06-25' },
+        { name: 'Player 14', rpsScore: 26, snakesScore: 53, lastRPS: '2025-11-01', lastSnakes: '2025-12-18' },
+        { name: 'Player 15', rpsScore: 23, snakesScore: 50, lastRPS: '2026-01-16', lastSnakes: '2025-11-08' }
+        ];
+
+        let currentPage = 1;
+        const perPage = 10;
+
+        function getFilteredData(game, timeFilter) {
+
+            const now = new Date(2026, 0, 16);
+
+            const limits = {
+                week:  new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+                month: new Date(now.getFullYear(), now.getMonth(), 1),
+                year:  new Date(now.getFullYear(), 0, 1)
+            };
+
+            const getEntry = p => {
+                if (game === 'Rock Paper Scissors')
+                    return { name: p.name, score: p.rpsScore, last: p.lastRPS };
+
+                if (game === 'Snakes and latters')
+                    return { name: p.name, score: p.snakesScore, last: p.lastSnakes };
+
+                // GENERAL COMBINED, use most recent played date
+                const last = new Date(p.lastRPS) > new Date(p.lastSnakes) ? p.lastRPS : p.lastSnakes;
+
+                return {
+                    name: p.name,
+                    score: p.rpsScore + p.snakesScore,
+                    last
+                };
+            };
+
+            return players
+                .map(getEntry)
+                .filter(p => !limits[timeFilter] || new Date(p.last) >= limits[timeFilter])
+                .sort((a, b) => b.score - a.score);
+        }
+
+        function render() {
+            const game = document.getElementById('gameSelect').value;
+            const time = document.getElementById('timeFilter').value;
+
+            const data = getFilteredData(game, time);
+
+            // Podium
+            data.slice(0,3).forEach((p,i) => {
+                document.getElementById('name-' + (i+1)).textContent = p.name;
+                document.getElementById('score-' + (i+1)).textContent = p.score.toLocaleString();
+            });
+
+            // List
+            const listData = data.slice(3);
+            const totalPages = Math.max(1, Math.ceil(listData.length / perPage));
+
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const start = (currentPage - 1) * perPage;
+
+            document.getElementById('leaderboard').innerHTML =
+                listData.slice(start, start + perPage)
+                .map((p,i) => `
+                    <div class="row">
+                        <div class="rank">${start + i + 4}</div>
+                        <div class="name">${p.name}</div>
+                        <div class="score">${p.score.toLocaleString()}</div>
+                    </div>`).join('');
+
+            document.getElementById('pageNum').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        function changePage(page) {
+            const total = Math.max(1,
+                Math.ceil(getFilteredData(
+                    gameSelect.value,
+                    timeFilter.value
+                ).slice(3).length / perPage)
+            );
+
+            if (page < 1 || page > total) return;
+
+            currentPage = page;
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>
