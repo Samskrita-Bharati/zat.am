@@ -1,4 +1,6 @@
 import { login } from "../api/auth-api.js";
+import { signInWithGoogle } from "../api/auth-api.js";
+
 
 const loginForm = document.getElementById("login-form");
 const emailInput = document.getElementById("signin-email");
@@ -35,3 +37,27 @@ loginForm.addEventListener("submit", async (e) => {
     message.style.color = "red";
   }
 });
+
+
+const googleSignInBtn = document.getElementById("google-signin");
+googleSignInBtn.addEventListener("click", async () => {
+  try {
+    await signInWithGoogle();
+    message.innerHTML = "Login successful! Redirecting...";
+    message.style.color = "green";
+    setTimeout(() => {
+      // Get redirect parameter from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get("redirect");
+      if (redirectUrl) {
+        // Redirect to the original page
+        window.location.href = decodeURIComponent(redirectUrl);
+      }}, 1000);
+  } catch (error) {
+    console.error(error);
+    
+      message.innerHTML = "Google sign-in failed. Please try again.";
+    
+    message.style.color = "red";
+  } 
+});  

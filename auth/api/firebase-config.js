@@ -8,24 +8,20 @@ import {
   onAuthStateChanged,
   updateProfile,
   sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
- 
-  apiKey: "AIzaSyC8nm8zQR6fiC_3mTQ3hURXNJPR6faKYOU",
- 
-  authDomain: "zat-am-main.firebaseapp.com",
- 
-  projectId: "zat-am-main",
- 
-  storageBucket: "zat-am-main.firebasestorage.app",
- 
-  messagingSenderId: "1071341524876",
- 
-  appId: "1:1071341524876:web:1908319951cd8f50b2e8a9"
- 
+  apiKey: "AIzaSyB7f5yLKGE91AZXVJWJGwIOTqOqhaOtPdU",
+  authDomain: "test-login-feature-78f63.firebaseapp.com",
+  projectId: "test-login-feature-78f63",
+  storageBucket: "test-login-feature-78f63.firebasestorage.app",
+  messagingSenderId: "18689179105",
+  appId: "1:18689179105:web:29cde4be6f6c081155a6a0",
+  measurementId: "G-S1XQMFR56V"
 };
 
 // Initialize Firebase
@@ -44,4 +40,6 @@ export {
   onAuthStateChanged,
   updateProfile,
   sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup,
 };
