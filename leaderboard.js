@@ -3,7 +3,12 @@ import {
   getFirestore,
   collection,
   getDocs,
+  doc, 
+  getDoc, 
+  writeBatch, 
+  setDoc
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAwqOOawElTcsBIAmJQIkZYs-W-h8kJx7A",
@@ -17,6 +22,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
+const auth = getAuth(app);
 
 // filters
 const gameSelect = document.getElementById("gameSelect");
@@ -104,6 +110,11 @@ gameSelect.addEventListener("change", async (e) => {
   leaderboardData = generateLeaderboardData(gameHistories, "");
   render();
   changePage(1);
+
+  // check reset button status
+  checkResetEligibility(); 
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
 });
 
 // upon time range change, generate new leaderboard data,
@@ -178,8 +189,7 @@ document
   .addEventListener("click", () => changePage(currentPage - 1));
 
 render();
-
-
+checkResetEligibility(); 
 
 
 // --- chart.js --- orz
@@ -268,4 +278,127 @@ const myChart = new Chart(lineGraph, {
     ],
   },
   options: lineGrapOptions,
+});
+
+
+// ============================================
+// ====== Reset and Competition Controls ======
+// ============================================
+
+// For demo use, false for production
+const mockIsAdmin = true;
+
+// Visibility logic for adminPanel 
+onAuthStateChanged(auth, async (user) => {
+  const adminPanel = document.getElementById("adminPanel");
+  if (!adminPanel) return;
+
+  let isAdmin = false;
+
+  if (user) {
+    const idTokenResult = await user.getIdTokenResult();
+    isAdmin = idTokenResult.claims?.admin === true;;
+  }
+
+  if (mockIsAdmin || isAdmin) {
+    adminPanel.style.display = "block";
+    checkResetEligibility();
+    console.log("Admin Panel Shown (Mock/Real)");
+  } else {
+    adminPanel.style.display = "none";
+    console.log("Admin Panel Hidden");
+  }
+});
+
+// Check Competition status
+const statusToggle = document.getElementById("statusToggle");
+async function syncToggleStatus(game) {
+  const statusToggle = document.getElementById("statusToggle");
+  if (!game || game === "Global") {
+    statusToggle.disabled = true; statusToggle.checked = false;
+    return;
+  }
+  statusToggle.disabled = false;
+  const gameSnap = await getDoc(doc(db, "zat-am", game));
+  statusToggle.checked = gameSnap.exists() ? (gameSnap.data().competitionIsActive === true) : false;
+}
+
+document.getElementById("statusToggle").addEventListener("change", async (e) => {
+  const gameId = document.getElementById("gameSelect").value;
+  await setDoc(doc(db, "zat-am", gameId), { competitionIsActive: e.target.checked }, { merge: true });
+  checkResetEligibility();
+});
+
+
+// Check reset button eligibility
+async function checkResetEligibility() {
+  const game = document.getElementById("gameSelect").value;
+  const resetBtn = document.getElementById("resetBtn");
+  const resetHint = document.getElementById("resetHint");
+
+  if (!game || game === "Global") {
+    resetBtn.disabled = false; resetBtn.style.background = ""; resetHint.textContent = "";
+    return;
+  }
+
+  const gameDoc = await getDoc(doc(db, "zat-am", game));
+  if (gameDoc.exists() && gameDoc.data().competitionIsActive) {
+    resetBtn.disabled = true;
+    resetBtn.style.background = "#ccc";
+    resetHint.style.color = "#d30000";
+    resetHint.textContent = "Competition active. Reset locked.";
+  } else {
+    resetBtn.disabled = false;
+    resetBtn.style.background = "";
+    resetHint.textContent = "";
+  }
+}
+
+statusToggle.addEventListener("change", async () => {
+    const gameId = document.getElementById("gameSelect").value;
+    if (gameId === "Global") return;
+
+    const newState = statusToggle.checked;
+    try {
+        const gameDocRef = doc(db, "zat-am", gameId);
+        await setDoc(gameDocRef, { competitionIsActive: newState }, { merge: true });
+        await checkResetEligibility();
+    } catch (error) {
+        console.error("Update failed:", error);
+        statusToggle.checked = !newState;
+        alert("Database update failed.");
+    }
+});
+
+
+// Logic for leaderboard reset
+async function performReset(game) {
+    if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
+
+    const playersColRef = collection(db, "zat-am", game, "players");
+    const snapshot = await getDocs(playersColRef);
+
+    if (snapshot.empty) {
+        alert("Leaderboard is already cleared.");
+        return;
+    }
+
+    const batch = writeBatch(db);
+    snapshot.docs.forEach((d) => {
+        batch.delete(d.ref);
+    });
+
+    try {
+        await batch.commit();
+        alert(`Successfully reset ${game} leaderboard.`);
+        render();
+    } catch (error) {
+        console.error("Reset failed: ", error);
+        alert("Error resetting leaderboard. Check console.");
+    }
+}
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+    const game = document.getElementById("gameSelect").value;
+    performReset(game);
 });

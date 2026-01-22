@@ -147,6 +147,15 @@
             display: inline-block;
             margin: 0 15px;
         }
+
+        /* competition status toggle */
+        .toggle-switch { position: relative; display: inline-block; width: 46px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #3B82F6; }
+        input:checked + .slider:before { transform: translateX(24px); }
+        input:disabled + .slider { background-color: #f0f0f0; cursor: not-allowed; }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
@@ -189,6 +198,18 @@
 
     </div>
     <div><canvas id="line-graph"></canvas></div>
+
+    <div id="adminPanel" style=" text-align: center;">      
+        <br>
+        <span style="font-size: 14px; color: #444;">Competition Active:</span>
+        <label class="toggle-switch">
+            <input type="checkbox" id="statusToggle">
+            <span class="slider round"></span>
+        </label>
+        <button id="resetBtn" style="margin-left: 20px;">Reset Current Leaderboard</button>
+        <p id="resetHint" style="font-size: 13px; margin-top: 10px;"></p>
+    </div>
+    
     <script type="module" src="leaderboard.js">
         
     </script>
