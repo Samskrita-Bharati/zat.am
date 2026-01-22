@@ -149,154 +149,52 @@
         }
     </style>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 </head>
 <body>
     <h1>Leaderboard</h1>
-    <select id="gameSelect" onchange="changePage(1)">
+    <select id="gameSelect">
         <!-- PLACE new games HERE! -->
         <option value="Rock Paper Scissors">Rock Paper Scissors</option>
         <option value="Snakes and latters">Snakes and latters</option>
         <option value="General">General (Combined)</option>
     </select>
 
-    <select id="timeFilter" onchange="changePage(1)">
+    <select id="timeFilter">
         <option value="all">All Time</option>
-        <option value="year">This Year</option>
-        <option value="month">This Month</option>
-        <option value="week">This Week</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
     </select>
 
     <div class="podium">
         <div class="podium-card rank-2">
             <div class="rank">#2</div>
-            <div class="name" id="name-2">Player 2</div>
-            <div class="score" id="score-2">0</div>
+            <div class="name" id="name-2">---</div>
+            <div class="score" id="score-2">---</div>
         </div>
         <div class="podium-card rank-1">
             <div class="rank">#1</div>
-            <div class="name" id="name-1">Player 1</div>
-            <div class="score" id="score-1">0</div>
+            <div class="name" id="name-1">---</div>
+            <div class="score" id="score-1">---</div>
         </div>
         <div class="podium-card rank-3">
             <div class="rank">#3</div>
-            <div class="name" id="name-3">Player 3</div>
-            <div class="score" id="score-3">0</div>
+            <div class="name" id="name-3">---</div>
+            <div class="score" id="score-3">---</div>
         </div>
     </div>
 
     <div id="leaderboard"></div>
     <div class="pagination">
-        <button onclick="changePage(currentPage - 1)" id="prevBtn">Previous</button>
+        <button id="prevBtn">Previous</button>
         <span class="page-info">Page <span id="pageNum">1</span> of <span id="totalPages">2</span></span>
-        <button onclick="changePage(currentPage + 1)" id="nextBtn">Next</button>
+        <button id="nextBtn">Next</button>
 
     </div>
-    <script>
-        const players = [
-        { name: 'Player 1',  rpsScore: 50, snakesScore: 92, lastRPS: '2026-01-12', lastSnakes: '2026-01-02' },
-        { name: 'Player 2',  rpsScore: 48, snakesScore: 80, lastRPS: '2026-01-02', lastSnakes: '2025-12-01' },
-        { name: 'Player 3',  rpsScore: 47, snakesScore: 86, lastRPS: '2025-06-15', lastSnakes: '2026-01-13' },
-        { name: 'Player 4',  rpsScore: 45, snakesScore: 83, lastRPS: '2025-11-15', lastSnakes: '2025-08-29' },
-        { name: 'Player 5',  rpsScore: 44, snakesScore: 80, lastRPS: '2026-01-14', lastSnakes: '2025-06-10' },
-        { name: 'Player 6',  rpsScore: 42, snakesScore: 77, lastRPS: '2025-08-05', lastSnakes: '2026-01-15' },
-        { name: 'Player 7',  rpsScore: 41, snakesScore: 74, lastRPS: '2025-12-25', lastSnakes: '2025-10-30' },
-        { name: 'Player 8',  rpsScore: 40, snakesScore: 71, lastRPS: '2025-06-05', lastSnakes: '2025-06-20' },
-        { name: 'Player 9',  rpsScore: 39, snakesScore: 68, lastRPS: '2025-10-10', lastSnakes: '2025-11-20' },
-        { name: 'Player 10', rpsScore: 38, snakesScore: 65, lastRPS: '2026-01-10', lastSnakes: '2025-07-04' },
-        { name: 'Player 11', rpsScore: 35, snakesScore: 62, lastRPS: '2025-07-22', lastSnakes: '2026-01-12' },
-        { name: 'Player 12', rpsScore: 32, snakesScore: 59, lastRPS: '2025-09-18', lastSnakes: '2025-09-25' },
-        { name: 'Player 13', rpsScore: 29, snakesScore: 56, lastRPS: '2025-06-28', lastSnakes: '2025-06-25' },
-        { name: 'Player 14', rpsScore: 26, snakesScore: 53, lastRPS: '2025-11-01', lastSnakes: '2025-12-18' },
-        { name: 'Player 15', rpsScore: 23, snakesScore: 50, lastRPS: '2026-01-16', lastSnakes: '2025-11-08' }
-        ];
-
-        let currentPage = 1;
-        const perPage = 10;
-
-        function getFilteredData(game, timeFilter) {
-
-            const now = new Date(2026, 0, 16);
-
-            const limits = {
-                week:  new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-                month: new Date(now.getFullYear(), now.getMonth(), 1),
-                year:  new Date(now.getFullYear(), 0, 1)
-            };
-
-            const getEntry = p => {
-                if (game === 'Rock Paper Scissors')
-                    return { name: p.name, score: p.rpsScore, last: p.lastRPS };
-
-                if (game === 'Snakes and latters')
-                    return { name: p.name, score: p.snakesScore, last: p.lastSnakes };
-
-                // GENERAL COMBINED, use most recent played date
-                const last = new Date(p.lastRPS) > new Date(p.lastSnakes) ? p.lastRPS : p.lastSnakes;
-
-                return {
-                    name: p.name,
-                    score: p.rpsScore + p.snakesScore,
-                    last
-                };
-            };
-
-            return players
-                .map(getEntry)
-                .filter(p => !limits[timeFilter] || new Date(p.last) >= limits[timeFilter])
-                .sort((a, b) => b.score - a.score);
-        }
-
-        function render() {
-            const game = document.getElementById('gameSelect').value;
-            const time = document.getElementById('timeFilter').value;
-
-            const data = getFilteredData(game, time);
-
-            // Podium
-            data.slice(0,3).forEach((p,i) => {
-                document.getElementById('name-' + (i+1)).textContent = p.name;
-                document.getElementById('score-' + (i+1)).textContent = p.score.toLocaleString();
-            });
-
-            // List
-            const listData = data.slice(3);
-            const totalPages = Math.max(1, Math.ceil(listData.length / perPage));
-
-            if (currentPage > totalPages) currentPage = totalPages;
-
-            const start = (currentPage - 1) * perPage;
-
-            document.getElementById('leaderboard').innerHTML =
-                listData.slice(start, start + perPage)
-                .map((p,i) => `
-                    <div class="row">
-                        <div class="rank">${start + i + 4}</div>
-                        <div class="name">${p.name}</div>
-                        <div class="score">${p.score.toLocaleString()}</div>
-                    </div>`).join('');
-
-            document.getElementById('pageNum').textContent = currentPage;
-            document.getElementById('totalPages').textContent = totalPages;
-
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage === totalPages;
-        }
-
-        function changePage(page) {
-            const total = Math.max(1,
-                Math.ceil(getFilteredData(
-                    gameSelect.value,
-                    timeFilter.value
-                ).slice(3).length / perPage)
-            );
-
-            if (page < 1 || page > total) return;
-
-            currentPage = page;
-            render();
-        }
-
-        render();
+    <div><canvas id="line-graph"></canvas></div>
+    <script type="module" src="leaderboard.js">
+        
     </script>
 </body>
 </html>
