@@ -5,7 +5,12 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "./firebase-config";
+
+const googleProvider = new GoogleAuthProvider();
 
 export const signUp = async (email, password) => {
   return await createUserWithEmailAndPassword(auth, email, password);
@@ -17,6 +22,10 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
   return await signOut(auth);
+};
+
+export const resetPassword = async (email) => {
+  return await sendPasswordResetEmail(auth, email);
 };
 
 export const checkAuth = () => {
@@ -38,3 +47,7 @@ export const getCurrentUser = () => {
 export const updateUserProfile = async (user, data) => {
   return await updateProfile(user, data);
 };
+
+export const signInWithGoogle = async () => {
+  return await signInWithPopup(auth, googleProvider);
+}
