@@ -58,14 +58,14 @@ function appendEvent( event ) {
   {
 	  if( o == "aam")
   {
-	  var eventElement   = $('<div class="event pastd oks"><a target="sc23" href="' + event.tickets + event.location + '">' + event.name + " - " + event.time + '</a></div>');
+	  var eventElement   = $('<div class="event pastd oks"><a target="bp26" href="' + event.tickets + event.location + '">' + event.name + " - " + event.time + '</a></div>');
 	    $('#' + formattedDate(eventStartDate)).removeClass('no-event').append(eventElement)
   }
   }
     else {
 	if (eventStartDate < today)
 	{
-	  var eventElement = $('<div class="event pastd"><a target="sc23" href="' + event.tickets + event.location + '">' + event.name + " - " + event.time + '</a></div>')
+	  var eventElement = $('<div class="event pastd"><a target="bp26" href="' + event.tickets + event.location + '">' + event.name + " - " + event.time + '</a></div>')
 	}
 	  else
 	  {
