@@ -27,8 +27,8 @@ loginForm.addEventListener("submit", async (e) => {
         // Redirect to the original page
         window.location.href = decodeURIComponent(redirectUrl);
       } else {
-        // Default redirect to dashboard
-        window.location.href = "dashboard.html";
+        // Default redirect to main page
+        window.location.href = "../index24.html";
       }
     }, 1000);
   } catch (error) {
