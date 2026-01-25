@@ -1,5 +1,4 @@
-import { login } from "../api/auth-api.js";
-import { signInWithGoogle } from "../api/auth-api.js";
+import { login, signInWithGoogle, ensureUserDocument } from "../api/auth-api.js";
 
 
 const loginForm = document.getElementById("login-form");
@@ -14,7 +13,8 @@ loginForm.addEventListener("submit", async (e) => {
   const password = passwordInput.value;
 
   try {
-    await login(email, password);
+    const userCred = await login(email, password);
+    await ensureUserDocument(userCred.user);
     message.innerHTML = "Login successful! Redirecting...";
     message.style.color = "green";
 
@@ -42,7 +42,8 @@ loginForm.addEventListener("submit", async (e) => {
 const googleSignInBtn = document.getElementById("google-signin");
 googleSignInBtn.addEventListener("click", async () => {
   try {
-    await signInWithGoogle();
+    const cred = await signInWithGoogle();
+    await ensureUserDocument(cred.user);
     message.innerHTML = "Login successful! Redirecting...";
     message.style.color = "green";
     setTimeout(() => {
