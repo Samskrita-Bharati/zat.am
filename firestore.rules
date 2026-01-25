@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ========================
+    // Users Collection
+    // Stores user profiles and admin status
+    // ========================
+    match /users/{userId} {
+      
+      // Users can read their own document
+      allow read: if request.auth.uid == userId;
+
+      // Users can create their own document on signup
+      allow create: if request.auth.uid == userId;
+
+      // Users can update their own document, BUT cannot change 'isAdmin'
+      allow update: if request.auth.uid == userId
+        && !( 'isAdmin' in request.resource.data
+              && request.resource.data.isAdmin != resource.data.isAdmin );
+
+      // Admins can update ONLY the 'isAdmin' field for other users
+      allow update: if request.auth.uid != userId
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['isAdmin']);
+
+      // Deny all deletes for users
+      allow delete: if false;
+    }
+
+    // ========================
+    // Leaderboards Collection (TODO: Leaderboard team)
+    // Controls score data and resets
+    // ========================
+    /*
+    match /leaderboards/{document=**} {
+
+      // Anyone can read leaderboard scores (public leaderboards)
+      allow read: if true;
+
+      // Individual score documents
+      match /leaderboards/{gameId}/{leaderboardType}/scores/{userId} {
+        
+        // Only authenticated users can write their own scores
+        allow create, update: if request.auth.uid == userId;
+
+        // Only admins can delete/reset scores
+        allow delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      }
+    }
+    */
+
+    // ========================
+    // Admin Logs Collection
+    // Stores audit trail for admin actions (if implemented in future)
+    // ========================
+    match /admin-logs/{document=**} {
+      
+      // Only admins can read admin logs
+      allow read: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+
+      // No writes allowed currently (no Cloud Functions/Admin SDK)
+      allow write: if false;
+    }
+
+    // ========================
+    // Catch-all rule: Deny access to everything else
+    // ========================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
