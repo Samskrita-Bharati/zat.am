@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,16 +7,49 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="form-box">
-        <h2>Welcome!</h2>
-        <div id="user-email"></div>
-        <br />
-        <button id="logout-btn">Logout</button>
-        <br /><br />
-        <a href="../index24.html">← Back to Games</a>
+    <div class="dashboard-page">
+      <h1>Dashboard</h1>
+
+      <div class="user-info">
+        <h2>Welcome, <span id="user-name">User</span>!</h2>
+        <p id="user-email">email@example.com</p>
       </div>
+
+      <hr />
+
+      <div class="change-password">
+        <h3>Change Password</h3>
+        <form id="change-password-form">
+          <input
+            type="password"
+            id="current-password"
+            placeholder="Current Password"
+            required
+          />
+          <input
+            type="password"
+            id="new-password"
+            placeholder="New Password"
+            required
+          />
+          <input
+            type="password"
+            id="confirm-new-password"
+            placeholder="Confirm New Password"
+            required
+          />
+          <button type="submit">Change Password</button>
+        </form>
+        <div id="password-message"></div>
+      </div>
+
+      <hr />
+
+      <button id="logout-btn">Logout</button>
+      <br /><br />
+      <a href="../index24.html">← Back to Games</a>
     </div>
+
     <script type="module" src="./js/dashboard.js"></script>
   </body>
 </html>

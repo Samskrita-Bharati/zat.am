@@ -9,11 +9,12 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-
-
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -40,4 +41,7 @@ export {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 };

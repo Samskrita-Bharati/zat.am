@@ -36,25 +36,25 @@ h2 {
   letter-spacing: 2px;
 }
 
-.san-welcome{
+.san-welcome {
   color: #64a2dd;
   letter-spacing: 0px;
 }
 
-.signin-btn{
+.signin-btn {
   background-color: #64a2dd;
   margin-bottom: 15px;
   font-size: large;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 700;
   letter-spacing: 2px;
 }
 
-.create-btn{
+.create-btn {
   background-color: #64a2dd;
   margin-bottom: 15px;
   font-size: large;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 700;
   letter-spacing: 2px;
 }
@@ -63,53 +63,53 @@ h2 {
   display: flex;
   font-size: 14px;
   color: #333;
-   text-align: center;
+  text-align: center;
   margin: 20px;
   color: #666;
 }
 
-.option-text::before, .option-text::after {
+.option-text::before,
+.option-text::after {
   flex: 1;
-  margin:12px;
-  content:"";
-  height:1px;
+  margin: 12px;
+  content: "";
+  height: 1px;
   background-color: #333;
-
 }
 
-.social-login{
+.social-login {
   display: flex;
   justify-content: center;
   gap: 15px;
   margin-bottom: 20px;
 }
 
-.social-login button{
+.social-login button {
   background-color: white;
   border: #aec6e6 1px solid;
-  color:#333;
+  color: #333;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
-.social-login button:hover{
+.social-login button:hover {
   background-color: #f0f0f0;
 }
-.forgot{
-  color:#666
+.forgot {
+  color: #666;
 }
 
 .divider {
-   content:"";
+  content: "";
   flex: 1;
   height: 1px;
   background-color: #0f0d0d;
   margin: 0 10px;
 }
-.header-divider{
-  content:"";
+.header-divider {
+  content: "";
   flex: 1;
   height: 3px;
   background-color: #ca9e0d;
@@ -124,11 +124,10 @@ input {
   border-radius: 4px;
   font-size: 14px;
   background-color: #e7ebf0;
-  
 }
 
-input::placeholder{
-  font-size:1.1em;
+input::placeholder {
+  font-size: 1.1em;
   font-weight: 600;
 }
 
@@ -175,11 +174,107 @@ a:hover {
   flex-direction: column;
 }
 
-.user-message{
+.user-message {
   font-size: 0.8em;
-  margin:5px;
+  margin: 5px;
 }
 
-i{
-  
+/* Dashboard Page */
+.dashboard-page {
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.dashboard-page h1 {
+  color: darkblue;
+  text-align: center;
+}
+
+.user-info {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.user-info h2 {
+  color: black;
+  margin-bottom: 10px;
+}
+
+.user-info p {
+  color: gray;
+  font-size: 16px;
+}
+
+.dashboard-page hr {
+  border: none;
+  border-top: 2px solid lightgray;
+  margin: 30px 0;
+}
+
+.change-password {
+  margin: 30px 0;
+}
+
+.change-password h3 {
+  color: darkblue;
+  margin-bottom: 20px;
+}
+
+.change-password input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.change-password button {
+  width: 100%;
+  padding: 12px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.change-password button:hover {
+  background-color: darkgreen;
+}
+
+#password-message {
+  margin-top: 15px;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.dashboard-page #logout-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.dashboard-page #logout-btn:hover {
+  background-color: darkred;
+}
+
+.dashboard-page a {
+  display: block;
+  text-align: center;
+  color: blue;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.dashboard-page a:hover {
+  text-decoration: underline;
 }

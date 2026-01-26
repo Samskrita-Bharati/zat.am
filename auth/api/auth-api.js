@@ -9,13 +9,11 @@ import {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "./firebase-config";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -60,7 +58,7 @@ export const signInWithGoogle = async () => {
   // Ensure a Firestore user document exists for this account
   await ensureUserDocument(cred.user);
   return cred;
-}
+};
 
 // Ensure there is a Firestore user document for the given user.
 // Creates it only if missing, with isAdmin defaulting to false.
@@ -107,4 +105,16 @@ export const getCurrentUserProfile = async () => {
 export const isCurrentUserAdmin = async () => {
   const profile = await getCurrentUserProfile();
   return !!(profile && profile.isAdmin === true);
+};
+
+// Change Password Method
+export const changePassword = async (currentPassword, newPassword) => {
+  const user = auth.currentUser;
+
+  // authenticate again user with current password
+  const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  await reauthenticateWithCredential(user, credential);
+
+  // Update to new password
+  return await updatePassword(user, newPassword);
 };
