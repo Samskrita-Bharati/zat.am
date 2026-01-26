@@ -1,57 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./gameStyle.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./gameStyle.css" />
     <title>Free Smash</title>
-</head>
+  </head>
 
-<body>
-
+  <body>
+    <!-- Auth Middleware-->
+    <script type="module" src="/auth/api/middleware.js"></script>
     <!-- Game canvas -->
     <canvas id="c"></canvas>
 
     <!-- Gameplay HUD -->
     <div class="hud">
-        <div class="hud__score">
-            <div class="score-lbl"></div>
-            <div class="cube-count-lbl"></div>
-        </div>
-        <div class="pause-btn">
-            <div></div>
-        </div>
-        <div class="slowmo">
-            <div class="slowmo__bar"></div>
-        </div>
+      <div class="hud__score">
+        <div class="score-lbl"></div>
+        <div class="cube-count-lbl"></div>
+      </div>
+      <div class="pause-btn">
+        <div></div>
+      </div>
+      <div class="slowmo">
+        <div class="slowmo__bar"></div>
+      </div>
     </div>
 
     <!-- Menu System -->
     <div class="menus">
-        <div class="menu menu--main">
-            <h1>Free Smash</h1>
-            <button type="button" class="play-normal-btn">क्रीडां क्रीडतु</button>
-            <button type="button" class="play-casual-btn">Casual Mode</button>
-    
-        </div>
-        <div class="menu menu--pause">
-            <h1>विरामः</h1>
-            <button type="button" class="resume-btn">पुनः क्रीडतु</button>
-            <button type="button" class="menu-btn--pause">Main Menu</button>
-        </div>
-        <div class="menu menu--score">
-            <h1> समाप्तम्</h1>
-            <h2>प्राप्ताङ्काः</h2>
-            <div class="final-score-lbl"></div>
-            <div class="high-score-lbl"></div>
-            <button type="button" class="play-again-btn">क्रीडां क्रीडतु</button>
-            <button type="button" class="menu-btn--score">Main Menu</button>
-        </div>
+      <div class="menu menu--main">
+        <h1>Free Smash</h1>
+        <button type="button" class="play-normal-btn">क्रीडां क्रीडतु</button>
+        <button type="button" class="play-casual-btn">Casual Mode</button>
+      </div>
+      <div class="menu menu--pause">
+        <h1>विरामः</h1>
+        <button type="button" class="resume-btn">पुनः क्रीडतु</button>
+        <button type="button" class="menu-btn--pause">Main Menu</button>
+      </div>
+      <div class="menu menu--score">
+        <h1>समाप्तम्</h1>
+        <h2>प्राप्ताङ्काः</h2>
+        <div class="final-score-lbl"></div>
+        <div class="high-score-lbl"></div>
+        <button type="button" class="play-again-btn">क्रीडां क्रीडतु</button>
+        <button type="button" class="menu-btn--score">Main Menu</button>
+      </div>
     </div>
 
     <script src="./gameLogic.js"></script>
-
-</body>
-
+  </body>
 </html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - zat.am</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <!-- styles -->
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-box">
+        <div class="welcome">
+          <h2 class="san-welcome">स्वागतम</h2>
+          <h2 class="eng-welcome">Welcome Back</h2>
+          <div class="header-divider"></div>
+        </div>
+        <form id="login-form">
+          <input type="email" id="signin-email" placeholder="Email Address" required data-cy="signin-email" />
+          <input
+            type="password"
+            id="signin-password"
+            placeholder="Password"
+            required
+            data-cy="signin-password"
+          />
+          <button class="signin-btn" type="submit" data-cy="signin-btn">SIGN IN</button>
+        </form>
+
+        
+          <div class="option-text">or continue with</div>
+          <div class="social-login">
+            <button id="google-signin"  class="google-btn" data-cy="signin-google">
+            <i class="fab fa-google google-icon"></i>Google
+            
+            </button>
+            <button class="facebook-btn" data-cy="signin-facebook">
+            <i class="fab fa-facebook-f facebook-icon"></i>Facebook
+            </button>
+            <button class="apple-btn" data-cy="signin-apple">
+            <i class="fab fa-apple apple-icon"></i>Apple
+            </button>
+            
+        </div>
+        <div class="divider"></div>
+
+        <div id="btm-login">
+        <p>Don't have an account? <a href="signup.html" data-cy="signup-link">Sign Up</a></p>
+        <p><a href="reset.html" data-cy="reset-link" class="forgot" id="forgot-pswd" data-cy="forgot-pswd">Forgot Password?</a></p>
+        <div id="message" data-cy="message"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./js/login.js"></script>
+  </body>
+</html>
