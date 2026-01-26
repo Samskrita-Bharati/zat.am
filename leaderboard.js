@@ -413,3 +413,77 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     const game = document.getElementById("gameSelect").value;
     performReset(game);
 });
+
+
+// ============================================
+// ====== SPARKLE PARTICLE SYSTEM ======
+// ============================================
+const canvas = document.getElementById('sparkleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let hoveredCard = null;
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.size = Math.random() * 3 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
+        this.speedX = (Math.random() - 0.5) * 5;
+        this.speedY = (Math.random() - 0.5) * 5;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.01;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin = (Math.random() - 0.5) * 0.2;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= this.decay;
+        this.angle += this.spin;
+    }
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = this.color || '#3B82F6';
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+        ctx.restore();
+    }
+}
+
+[1, 2, 3].forEach(rank => {
+    const el = document.getElementById(`card-${rank}`);
+    if(el) {
+        el.addEventListener('mouseenter', () => hoveredCard = el);
+        el.addEventListener('mouseleave', () => hoveredCard = null);
+    }
+});
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (hoveredCard) {
+        const rect = hoveredCard.getBoundingClientRect();
+        const color = hoveredCard.getAttribute('data-color');
+        for (let i = 0; i < 2; i++) {
+            const x = rect.left + Math.random() * rect.width;
+            const y = rect.top + Math.random() * rect.height;
+            particles.push(new Particle(x, y, color));
+        }
+    }
+    particles = particles.filter(p => {
+        p.update();
+        p.draw();
+        return p.alpha > 0;
+    });
+    requestAnimationFrame(animate);
+}
+animate();
