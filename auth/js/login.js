@@ -52,7 +52,11 @@ googleSignInBtn.addEventListener("click", async () => {
       if (redirectUrl) {
         // Redirect to the original page
         window.location.href = decodeURIComponent(redirectUrl);
-      }}, 1000);
+      } else {
+        // Default redirect to index24.html
+        window.location.href = "../index24.html";
+      }
+    }, 1000);
   } catch (error) {
     console.error(error);
     
