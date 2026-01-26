@@ -428,29 +428,40 @@ statusToggle.addEventListener("change", async () => {
 
 // Logic for leaderboard reset
 async function performReset(game) {
-    if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
+  if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
 
-    const playersColRef = collection(db, "zat-am", game, "players");
-    const snapshot = await getDocs(playersColRef);
+  const playersColRef = collection(db, "zat-am", game, "players");
+  const historyColRef = collection(db, "zat-am", game, "gameHistory");
+  const [playersSnapshot, historySnapshot] = await Promise.all([
+    getDocs(playersColRef), getDocs(historyColRef)]);
+  // const playersSnapshot = await getDocs(playersColRef);
+  // const historySnapshot = await getDocs(historyColRef);
 
-    if (snapshot.empty) {
-        alert("Leaderboard is already cleared.");
-        return;
-    }
+  if (playersSnapshot.empty && historySnapshot.empty) {
+    alert("Leaderboard is already cleared.");
+    return;
+  }
 
-    const batch = writeBatch(db);
-    snapshot.docs.forEach((d) => {
-        batch.delete(d.ref);
-    });
+  const batch = writeBatch(db);
 
-    try {
-        await batch.commit();
-        alert(`Successfully reset ${game} leaderboard.`);
-        render();
-    } catch (error) {
-        console.error("Reset failed: ", error);
-        alert("Error resetting leaderboard. Check console.");
-    }
+  playersSnapshot.forEach((document) => {
+    batch.delete(document.ref);
+  });
+
+  historySnapshot.forEach((document) => {
+    batch.delete(document.ref);
+  });
+
+  try {
+    await batch.commit();
+    alert(`Successfully reset ${game} leaderboard.`);
+    gameHistories = [];
+    leaderboardData = generateLeaderboardData(gameHistories, "");
+    render();
+  } catch (error) {
+    console.error("Reset failed: ", error);
+    alert("Error resetting leaderboard. Check console.");
+  }
 }
 
 document.getElementById("resetBtn").addEventListener("click", () => {
