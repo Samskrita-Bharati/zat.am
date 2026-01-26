@@ -41,12 +41,10 @@ async function fetchGames() {
 
 // add all game leaderboards as options to the dropdown
 const games = await fetchGames();
-console.log(games);
 
 if (games) {
   games.forEach((game) => {
     gameSelect.options.add(new Option(game.id, game.id));
-    console.log(game.id);
   });
 }
 
@@ -58,21 +56,74 @@ async function fetchGameHistories(selectedGame) {
     id: doc.id,
     ...doc.data(),
   }));
-  console.log(data);
   return data;
+}
+
+function isToday(timestamp) {
+  const now = new Date();
+  const d = new Date(timestamp);
+
+  if (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  ) {
+    console.log(d);
+  }
+
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
+}
+
+function isThisWeek(timestamp) {
+  const now = new Date();
+  const d = new Date(timestamp);
+
+  // start of this week (local time)
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+  console.log(startOfWeek);
+
+  // start of the week for the given timestamp
+  const startOfTimestampWeek = new Date(d);
+  startOfTimestampWeek.setDate(d.getDate() - d.getDay());
+  startOfTimestampWeek.setHours(0, 0, 0, 0);
+  console.log(startOfTimestampWeek)
+
+  return startOfWeek.getTime() === startOfTimestampWeek.getTime();
+}
+
+function isThisMonth(timestamp) {
+  const now = new Date();
+  const d = new Date(timestamp);
+
+  if (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth()
+  ) {
+    console.log(d);
+  }
+
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth()
+  );
 }
 
 // generates usable leaderboard data from game histories
 function generateLeaderboardData(gameHistories, timeRange) {
   const now = Date.now();
-
   const leaderboardData = Object.values(
     gameHistories.reduce((acc, { username, score, timestamp }) => {
       // time filtering
       if (
-        (timeRange === "daily" && timestamp < now - 24 * 60 * 60 * 1000) ||
-        (timeRange === "weekly" && timestamp < now - 7 * 24 * 60 * 60 * 1000) ||
-        (timeRange === "monthly" && timestamp < now - 30 * 24 * 60 * 60 * 1000)
+        (timeRange === "daily" && !isToday(timestamp)) ||
+        (timeRange === "weekly" && !isThisWeek(timestamp)) ||
+        (timeRange === "monthly" && !isThisMonth(timestamp))
       ) {
         return acc;
       }
@@ -107,7 +158,12 @@ let leaderboardData = generateLeaderboardData(gameHistories, "");
 // re-render leaderboard and change to 1st page
 gameSelect.addEventListener("change", async (e) => {
   gameHistories = await fetchGameHistories(e.target.value);
-  leaderboardData = generateLeaderboardData(gameHistories, "");
+  console.log(
+    `CURRENT DATE & TIME: %c${new Date()} %c`,
+    'color: #00ff33; font-size: 14px;',
+    'text-transform: uppercase; font-size: 16px; color: #ff33dd;'
+  );
+  leaderboardData = generateLeaderboardData(gameHistories, timeSelect.value);
   render();
   changePage(1);
 
@@ -130,7 +186,6 @@ const perPage = 10;
 
 function render() {
   // Podium
-  console.log(leaderboardData);
   for (let i = 0; i < 3; i++) {
     const player = leaderboardData[i];
 
@@ -373,40 +428,29 @@ statusToggle.addEventListener("change", async () => {
 
 // Logic for leaderboard reset
 async function performReset(game) {
-  if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
+    if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
 
-  const playersColRef = collection(db, "zat-am", game, "players");
-  const historyColRef = collection(db, "zat-am", game, "gameHistory");
-  const [playersSnapshot, historySnapshot] = await Promise.all([
-    getDocs(playersColRef), getDocs(historyColRef)]);
-  // const playersSnapshot = await getDocs(playersColRef);
-  // const historySnapshot = await getDocs(historyColRef);
+    const playersColRef = collection(db, "zat-am", game, "players");
+    const snapshot = await getDocs(playersColRef);
 
-  if (playersSnapshot.empty && historySnapshot.empty) {
-    alert("Leaderboard is already cleared.");
-    return;
-  }
+    if (snapshot.empty) {
+        alert("Leaderboard is already cleared.");
+        return;
+    }
 
-  const batch = writeBatch(db);
+    const batch = writeBatch(db);
+    snapshot.docs.forEach((d) => {
+        batch.delete(d.ref);
+    });
 
-  playersSnapshot.forEach((document) => {
-    batch.delete(document.ref);
-  });
-
-  historySnapshot.forEach((document) => {
-    batch.delete(document.ref);
-  });
-
-  try {
-    await batch.commit();
-    alert(`Successfully reset ${game} leaderboard.`);
-    gameHistories = [];
-    leaderboardData = generateLeaderboardData(gameHistories, "");
-    render();
-  } catch (error) {
-    console.error("Reset failed: ", error);
-    alert("Error resetting leaderboard. Check console.");
-  }
+    try {
+        await batch.commit();
+        alert(`Successfully reset ${game} leaderboard.`);
+        render();
+    } catch (error) {
+        console.error("Reset failed: ", error);
+        alert("Error resetting leaderboard. Check console.");
+    }
 }
 
 document.getElementById("resetBtn").addEventListener("click", () => {
