@@ -1,4 +1,4 @@
-import { signUp, updateUserProfile } from "../api/auth-api.js";
+import { signUp, updateUserProfile, ensureUserDocument } from "../api/auth-api.js";
 
 const signupForm = document.getElementById("signup-form");
 const nameInput = document.getElementById("signup-name");
@@ -37,6 +37,9 @@ signupForm.addEventListener("submit", async (e) => {
     await updateUserProfile(user, {
       displayName: name,
     });
+
+    // Create Firestore user document with default isAdmin = false
+    await ensureUserDocument(user, { name });
 
     message.innerHTML = "Account created! Redirecting to login...";
     message.style.color = "green";
