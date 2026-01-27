@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
+  <!-- Get player's name from auth -->
+  <script type="module">
+    import { onAuthStateChanged } from "firebase/auth";
+    import { getFirestore, doc, getDoc } from "firebase/firestore"; 
+    import { auth, db } from "../auth/api/firebase-config.js";
+    window.currentUser = null;
+    onAuthStateChanged(auth, (user) => {
+      window.currentUser = user
+      if (user) {
+        console.log(window.currentUser.displayName)
+      } else {
+        console.log("no user found")
+      }
+      
+    });
+  </script>
+  <title>अन्वेषणम्</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="css/find.css" />
+  <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+
+  <style>
+    .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc; transition: .4s; }
+    .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px;
+      background-color: white; transition: .4s; }
+    input:checked+.slider { background-color: #2196F3; }
+    input:focus+.slider { box-shadow: 0 0 1px #2196F3; }
+    input:checked+.slider:before { transform: translateX(26px); }
+    .slider.round { border-radius: 34px; }
+    .slider.round:before { border-radius: 50%; }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+</head>
+
+<body>
+  <div id="lead">
+    अस्मिन् अक्षरसमूहे अद्यतन-कथा-तः पदानि सन्ति । कति ?
+    <span style="font-weight:bold" id="nPresent">५</span> ।
+    करोतु अन्वेषणम् । <br><span id="lead2"></span>
+  </div>
+
+  <div id="statusMessage"> पदानि अन्वेषितानि</div>
+  <div id="finishMessage">।। शुभमस्तु ।। </div>
+
+  <div id="gridParent">
+    <div id="grid"></div>
+  </div>
+
+  <div id="level">
+    <div class="leveltext">
+      ✔️ = <span id="nFound"></span>
+      <br>
+      <strong>कठिनता</strong>
+      <ul>
+        <li><a href="fw.html?size=5" onclick="sV(this)">सरलम् </a></li>
+        <li><a href="fw.html?size=7" onclick="sV(this)">मध्यमम् </a></li>
+        <li><a href="fw.html?size=10" onclick="sV(this)">कठिनम् </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="hintLink">
+    <div>
+      <a onclick="showHint1()" href="#"><img src="imgs/hint.png" alt="help">नामपदानि ..</a>
+      <a onclick="showHint2()" href="#"><img src="imgs/hint2.png" alt="help">.. कानि ??? </a>
+    </div>
+
+    <div id="hintPopup" onclick="hideHint()">
+      <div class="content" onclick="hideHint()">
+        <ul id="answers"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="refreshLink">
+    <div>
+      <a href="#" onclick="window.location.reload(); return false;">
+        <img src="imgs/refresh.png" alt="re-do">
+        <div>पुनः</div>
+      </a>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+
+  <script>
+    // ======================
+    // BP26 GAME IDENTIFIERS
+    // ======================
+    const BP26_GAME = "bp26-Game4";
+    const BP26_DAY = 4;
+
+    // scoring settings
+    // Score formula:
+    // score = max(0, (wordsFound*10) - ((clicks - wordsFound)*2))
+
+    // score computing function, commented out because it can result in a negative score
+    // function computeScore(wordsTotal, clicks) {
+    //   const raw = (wordsTotal * 10) - ((clicks - wordsTotal) * 2);
+    //   return Math.max(0, raw);
+    // }
+
+    var wpp = 15;
+    var answers = [];
+    var wlist = [];
+    var N_ROWS = 10;
+    var N_COLS = 10;
+    var nc = 0;
+    var N_WORDS_TO_FIND = 5;
+    var isGameFinished = false;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    var data = urlParams.get('d');
+    if (!data) data = "अक्षरसमूहे अद्यतन-कथा पदानि सन्ति करोतु अन्वेषणम्";
+
+    var wordList = Sanscript.t(data, 'iast', 'devanagari').split(" ");
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+      Papa.parse(lnk, {
+        download: true,
+        header: true,
+        complete: populateWlist
+      })
+    });
+
+    function populateWlist(fildat) {
+      var set = urlParams.get('set');
+      if (!set || isNaN(set)) set = 0;
+
+      fullist = fildat.data;
+      if (set > fildat.data.length / wpp) set = 0;
+
+      wlist = [];
+      for (i = 0; i < wpp; i++) {
+        wlist.push(fullist[(set * wpp) + i].padam);
+      }
+      if (wlist.length > 0) wordList = wlist;
+
+      N_WORDS_TO_FIND = Math.min(N_WORDS_TO_FIND, wordList.length);
+
+      var size = urlParams.get('size');
+      if (size && size >= 4 && size <= 15) {
+        N_ROWS = size;
+        N_COLS = size;
+        N_WORDS_TO_FIND = Math.min(Math.floor(size / 2), wordList.length);
+      }
+
+      var MAX_MARKER_IDX = 6;
+
+      var main = function () {
+        drawGrid();
+        var nWordsPut = 0;
+        do {
+          var words = getWordsToFind();
+          nWordsPut = putWords(words);
+        } while (nWordsPut == 0);
+
+        fillRandom();
+        countAnswers();
+        hideHint();
+        resizeGrid();
+        registerEventListeners();
+      };
+
+      var registerEventListeners = function () {
+        $("#grid").on("selectstart", function () { return false; });
+        $("#grid td").bind("click", cellClick);
+      };
+
+      var drawGrid = function () {
+        var table = $("<table></table>");
+        for (var rowIdx = 0; rowIdx < N_ROWS; rowIdx++) {
+          var row = $('<tr id="tblRow_' + rowIdx + '"></tr>');
+          for (var colIdx = 0; colIdx < N_COLS; colIdx++) {
+            var cell = $('<td id="tblCell_' + rowIdx + "_" + colIdx + '"></td>');
+            row.append(cell);
+          }
+          table.append(row);
+        }
+        $("#grid").html("").append(table);
+      };
+
+      var foundStrings = {};
+      var stringToCss = {};
+      var nAnswersPresent = 0;
+      var nAnswersDiscovered = 0;
+
+      var countAnswers = function () {
+        answers = [];
+        nAnswersPresent = 0;
+
+        for (var rowIdx = 0; rowIdx < N_ROWS; rowIdx++) {
+          for (var colIdx = 0; colIdx < N_COLS; colIdx++) {
+            var matches = processCell($("#tblCell_" + rowIdx + "_" + colIdx).get(0), true);
+            answers = answers.concat(matches);
+            nAnswersPresent += matches.length;
+          }
+        }
+
+        $("#finishMessage").hide();
+        $("#nPresent").text(String.fromCharCode(0x0966 + nAnswersPresent));
+        $("#nFound").text(0);
+
+        $("#answers").html("");
+        for (var i = 0; i < answers.length; i++) {
+          $("#answers").append("<li>" + answers[i] + "</li>");
+        }
+      };
+
+      var cellClick = async function (e) {
+        console.log(isGameFinished);
+        if (isGameFinished) return;
+
+        nc++;
+        var cell = $(e.target).closest("td").get(0);
+        nAnswersDiscovered += processCell(cell).length;
+
+        $("#nFound").text(String.fromCharCode(0x0966 + nAnswersDiscovered));
+
+        if (nAnswersDiscovered == nAnswersPresent) {
+          isGameFinished = true;
+          try {
+            if (window.reportScore) {
+              await window.reportScore(nAnswersDiscovered);
+            }
+          } catch (err) {
+            console.error("Score submit failed:", err);
+          }
+
+          $("#finishMessage").append("<br>AFTER " + nc + " clicks!");
+          alert("You found " + nAnswersPresent + " words\nAFTER " + nc + " clicks!\nScore: " + nAnswersPresent);
+
+          var ask = confirm("पुनः ? Press 'ok' to play again");
+          if (ask) window.location.reload();
+
+          $("#finishMessage").show();
+          $("#statusMessage").hide();
+          $("#lead").hide();
+        }
+      };
+
+      var processCell = function (cell, doNotMark) {
+        if ($(cell).hasClass("found")) return [];
+
+        var cellRowIdx = parseInt(cell.id.split("_")[1]);
+        var cellColIdx = parseInt(cell.id.split("_")[2]);
+        var matches = [];
+
+        // horizontal
+        var matchCandidate = "";
+        for (var colIdx = cellColIdx; colIdx < N_COLS; colIdx++) {
+          matchCandidate += $("#tblCell_" + cellRowIdx + "_" + colIdx).text();
+          if (isProperMatch(matchCandidate)) {
+            matches.push(matchCandidate);
+            if (!doNotMark) markMatch(cellRowIdx, cellColIdx, cellRowIdx, colIdx, matchCandidate);
+          }
+        }
+
+        // vertical
+        matchCandidate = "";
+        for (var rowIdx = cellRowIdx; rowIdx < N_ROWS; rowIdx++) {
+          matchCandidate += $("#tblCell_" + rowIdx + "_" + cellColIdx).text();
+          if (convertToArrayOfAksharas(matchCandidate).length > 1 && isProperMatch(matchCandidate)) {
+            matches.push(matchCandidate);
+            if (!doNotMark) markMatch(cellRowIdx, cellColIdx, rowIdx, cellColIdx, matchCandidate);
+          }
+        }
+
+        // diagonal
+        matchCandidate = "";
+        for (var diagIdx = 0; diagIdx + cellRowIdx < N_ROWS && diagIdx + cellColIdx < N_COLS; diagIdx++) {
+          matchCandidate += $("#tblCell_" + (diagIdx + cellRowIdx) + "_" + (diagIdx + cellColIdx)).text();
+          if (convertToArrayOfAksharas(matchCandidate).length > 1 && isProperMatch(matchCandidate)) {
+            matches.push(matchCandidate);
+            if (!doNotMark) markMatch(cellRowIdx, cellColIdx, diagIdx + cellRowIdx, diagIdx + cellColIdx, matchCandidate);
+          }
+        }
+
+        return matches;
+      };
+
+      var markMatch = function (startRowIdx, startColIdx, endRowIdx, endColIdx, word) {
+        if (!stringToCss[word]) {
+          var nCssUsed = Object.keys(stringToCss).length;
+          stringToCss[word] = (nCssUsed > MAX_MARKER_IDX) ? "markerX" : ("marker" + nCssUsed);
+        }
+
+        $("#tblCell_" + startRowIdx + "_" + startColIdx).addClass("found");
+
+        if (startRowIdx == endRowIdx) {
+          for (var colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
+            markCell("tblCell_" + startRowIdx + "_" + colIdx, word);
+          }
+          return;
+        }
+
+        if (startColIdx == endColIdx) {
+          for (var rowIdx = startRowIdx; rowIdx <= endRowIdx; rowIdx++) {
+            markCell("tblCell_" + rowIdx + "_" + startColIdx, word);
+          }
+          return;
+        }
+
+        for (var cellIdx = 0; cellIdx < endColIdx - startColIdx + 1; cellIdx++) {
+          markCell("tblCell_" + (startRowIdx + cellIdx) + "_" + (startColIdx + cellIdx), word);
+        }
+      };
+
+      var markCell = function (cellId, word) {
+        if (!foundStrings[cellId]) {
+          foundStrings[cellId] = {};
+          $("#" + cellId).append('<div class="markers"></div>');
+        }
+        if (!foundStrings[cellId][word]) foundStrings[cellId][word] = {};
+        $("#" + cellId + " .markers").append($("<div class='marker'></div>").addClass(stringToCss[word]));
+      };
+
+      var isProperMatch = function (candidate) {
+        for (var i = 0; i < wordList.length; i++) {
+          if (wordList[i] === candidate) return true;
+        }
+        return false;
+      };
+
+      var hideHint = function () { $("#hintPopup").hide(); };
+
+      var getWordsToFind = function () {
+        var indices = [];
+        for (var i = 0; i < wordList.length; i++) indices.push(i);
+
+        for (var i = indices.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = indices[i]; indices[i] = indices[j]; indices[j] = tmp;
+        }
+
+        var wordsToFind = [];
+        for (var i = 0; i < N_WORDS_TO_FIND; i++) wordsToFind.push(wordList[indices[i]]);
+        return wordsToFind;
+      };
+
+      var putWords = function (words) {
+        var nWordsPut = 0;
+        for (var i = 0; i < words.length; i++) if (putWord(words[i])) nWordsPut++;
+        return nWordsPut;
+      };
+
+      var putWord = function (strWord) {
+        var word = convertToArrayOfAksharas(strWord);
+        var emptySlots = findEmptySlots();
+        var attemptedSlots = [];
+
+        while (attemptedSlots.length < emptySlots.length) {
+          var remainingSlots = emptySlots.filter(s => attemptedSlots.indexOf(s) < 0);
+          var slot = remainingSlots[Math.floor(Math.random() * remainingSlots.length)];
+          attemptedSlots.push(slot);
+
+          var slotRowIdx = parseInt(slot.split("_")[1]);
+          var slotColIdx = parseInt(slot.split("_")[2]);
+
+          var directionsRemaining = ["H", "V", "D"];
+
+          nextDirection: while (directionsRemaining.length > 0) {
+            var direction = directionsRemaining[Math.floor(Math.random() * directionsRemaining.length)];
+            directionsRemaining.splice(directionsRemaining.indexOf(direction), 1);
+
+            for (var wordIdx = 0; wordIdx < word.length; wordIdx++) {
+              var charToPut = word[wordIdx];
+              var targetCell;
+              if (direction === "H") targetCell = "#tblCell_" + slotRowIdx + "_" + (slotColIdx + wordIdx);
+              if (direction === "V") targetCell = "#tblCell_" + (slotRowIdx + wordIdx) + "_" + slotColIdx;
+              if (direction === "D") targetCell = "#tblCell_" + (slotRowIdx + wordIdx) + "_" + (slotColIdx + wordIdx);
+
+              if ($(targetCell).length == 0) break nextDirection;
+              if ($(targetCell).text().trim().length == 0) continue;
+              if ($(targetCell).text().trim() != charToPut) break nextDirection;
+            }
+
+            for (var wordIdx = 0; wordIdx < word.length; wordIdx++) {
+              var charToPut = word[wordIdx];
+              var targetCell;
+              if (direction === "H") targetCell = "#tblCell_" + slotRowIdx + "_" + (slotColIdx + wordIdx);
+              if (direction === "V") targetCell = "#tblCell_" + (slotRowIdx + wordIdx) + "_" + slotColIdx;
+              if (direction === "D") targetCell = "#tblCell_" + (slotRowIdx + wordIdx) + "_" + (slotColIdx + wordIdx);
+
+              $(targetCell).html("<span title='" + Sanscript.t(String(charToPut), 'devanagari', 'iast') + "'>" + charToPut + "</span>");
+            }
+            return true;
+          }
+        }
+        return false;
+      };
+
+      var convertToArrayOfAksharas = function (strWord) {
+        var aksharas = [];
+        var currentAkshara = "";
+
+        for (var charIdx = 0; charIdx < strWord.length; charIdx++) {
+          var char = strWord[charIdx];
+
+          if (fullSwaras.indexOf(char) >= 0) { currentAkshara += char; continue; }
+
+          if (anuswara == char || visarga == char) {
+            currentAkshara += char;
+            aksharas.push(currentAkshara);
+            currentAkshara = "";
+            continue;
+          }
+
+          if (swaras.indexOf(char) >= 0) { currentAkshara += char; continue; }
+
+          if (halant == char) { currentAkshara += char; continue; }
+
+          if (vyanjanas.indexOf(char) >= 0) {
+            if (currentAkshara.length > 0 && halant != currentAkshara[currentAkshara.length - 1]) {
+              aksharas.push(currentAkshara);
+              currentAkshara = "";
+            }
+            currentAkshara += char;
+            continue;
+          }
+
+          if (currentAkshara.length > 0) { aksharas.push(currentAkshara); currentAkshara = ""; }
+          aksharas.push(char);
+        }
+
+        if (currentAkshara.length > 0) aksharas.push(currentAkshara);
+        return aksharas;
+      };
+
+      var findEmptySlots = function () {
+        var emptySlots = [];
+        $("#grid td").each(function (idx, cell) {
+          if ($(cell).text().trim().length == 0) emptySlots.push($(cell).attr("id"));
+        });
+        return emptySlots;
+      };
+
+      var fillRandom = function () {
+        $("#grid td").each(function (idx, cell) {
+          if ($(cell).text().trim().length == 0) {
+            var ra = getRandomAkshara();
+            $(cell).html("<span title='" + Sanscript.t(String(ra), 'devanagari', 'itrans') + "'>" + ra + "</span>");
+          }
+        });
+      };
+
+      var fullSwaras = ["अ", "आ", "इ", "ई", "उ", "ऊ", "ऋ", "ॠ", "ए", "ऐ", "ओ", "औ"];
+      var swaras = ["\u093e", "\u093f", "\u0940", "\u0941", "\u0942", "\u0943", "\u0944", "\u0947", "\u0948", "\u094b", "\u094c"];
+      var vyanjanas = ["क", "ख", "ग", "घ", "ङ", "च", "छ", "ज", "झ", "ञ", "त", "थ", "द", "ध", "न", "ट", "ठ", "ड", "ढ", "ण", "प", "फ", "ब", "भ", "म", "य", "र", "ल", "व", "स", "श", "ष", "ह", "क्ष", "ज्ञ"];
+      var halant = "\u094d";
+      var anuswara = "\u0902";
+      var visarga = "\u0903";
+
+      var getRandomAkshara = function () {
+        var numLetters = Math.floor(Math.random() * 2) + 1;
+        if (numLetters == 1) {
+          var rand = Math.floor(Math.random() * (fullSwaras.length + vyanjanas.length));
+          return (rand >= fullSwaras.length) ? vyanjanas[rand - fullSwaras.length] : fullSwaras[rand];
+        }
+
+        var akshara = "";
+        var lettersLeft = numLetters;
+        while (lettersLeft > 1) {
+          var rand = Math.floor(Math.random() * vyanjanas.length);
+          if (akshara.length != 0) akshara += halant;
+          akshara += vyanjanas[rand];
+          lettersLeft--;
+        }
+        akshara += swaras[Math.floor(Math.random() * swaras.length)];
+        if (Math.floor(Math.random() * 10) < 2) akshara += visarga;
+        return akshara;
+      };
+
+      var resizeGrid = function () {
+        var width = $(window).width();
+        var height = $(window).height();
+        var minDim = Math.min(width, height);
+        $("#grid").width(minDim * 0.85);
+        $("#grid").height(minDim * 0.85);
+      };
+
+      $(window).resize(resizeGrid);
+
+      main();
+    }
+
+    function sV(obj) {
+      obj.href += "&set=" + urlParams.get('set');
+    }
+
+    function showHint1() {
+      $("#lead2").html("");
+      for (var i = 0; i < wordList.length; i++) {
+        $("#lead2").append("<span class=nob title='" + Sanscript.t(wordList[i], 'devanagari', 'iast') + "'>" + wordList[i] + " </span>");
+      }
+    }
+
+    function showHint2() {
+      $("#lead2").html("");
+      for (var i = 0; i < wordList.length; i++) {
+        if (answers.includes(wordList[i])) $("#lead2").append("<strong>" + wordList[i] + "</strong> ");
+        else $("#lead2").append("<span class=nob title='" + Sanscript.t(wordList[i], 'devanagari', 'iast') + "'>" + wordList[i] + " </span>");
+      }
+    }
+  </script>
+
+  <!-- IMPORTANT: This is your Firestore score file -->
+  <script type="module" src="./js/bp26-score.js"></script>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.bp26Init) {
+        window.bp26Init({ game: BP26_GAME, day: BP26_DAY });
+      }
+    });
+  </script>
+
+  <!-- Auth Middleware-->
+  <script type="module" src="/auth/api/middleware.js"></script>
+
+</body>
+</html>

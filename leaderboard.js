@@ -1,6 +1,4 @@
-import { initializeApp } from "firebase/app";
 import {
-  getFirestore,
   collection,
   getDocs,
   doc, 
@@ -8,22 +6,10 @@ import {
   writeBatch, 
   setDoc
 } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
 
-import { auth, db as roleCheckDb } from "./auth/api/firebase-config.js";
+import { onAuthStateChanged } from "firebase/auth"
+import { auth, db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAwqOOawElTcsBIAmJQIkZYs-W-h8kJx7A",
-  authDomain: "temporary-db-e9ace.firebaseapp.com",
-  projectId: "temporary-db-e9ace",
-  storageBucket: "temporary-db-e9ace.firebasestorage.app",
-  messagingSenderId: "810939107125",
-  appId: "1:810939107125:web:25edc649d354c1ca0bee7c",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig, "leaderboardApp");
-const db = getFirestore(app);
 //const auth = getAuth(app);
 
 // filters
@@ -32,7 +18,7 @@ const timeSelect = document.getElementById("timeFilter");
 
 // fetches list of games
 async function fetchGames() {
-  const games = collection(db, "zat-am");
+  const games = collection(leaderboardDb, "zat-am");
   const snapshot = await getDocs(games);
   const data = snapshot.docs.map((doc) => ({
     id: doc.id,
@@ -54,7 +40,7 @@ if (games) {
 
 // fetch all game histories for selected game
 async function fetchGameHistories(selectedGame) {
-  const gameHistories = collection(db, "zat-am", selectedGame, "gameHistory");
+  const gameHistories = collection(leaderboardDb, "zat-am", selectedGame, "gameHistory");
   const snapshot = await getDocs(gameHistories);
   const data = snapshot.docs.map((doc) => ({
     id: doc.id,
@@ -338,13 +324,13 @@ async function syncToggleStatus(game) {
     return;
   }
   statusToggle.disabled = false;
-  const gameSnap = await getDoc(doc(db, "zat-am", game));
+  const gameSnap = await getDoc(doc(leaderboardDb, "zat-am", game));
   statusToggle.checked = gameSnap.exists() ? (gameSnap.data().competitionIsActive === true) : false;
 }
 
 document.getElementById("statusToggle").addEventListener("change", async (e) => {
   const gameId = document.getElementById("gameSelect").value;
-  await setDoc(doc(db, "zat-am", gameId), { competitionIsActive: e.target.checked }, { merge: true });
+  await setDoc(doc(leaderboardDb, "zat-am", gameId), { competitionIsActive: e.target.checked }, { merge: true });
   checkResetEligibility();
 });
 
@@ -360,7 +346,7 @@ async function checkResetEligibility() {
     return;
   }
 
-  const gameDoc = await getDoc(doc(db, "zat-am", game));
+  const gameDoc = await getDoc(doc(leaderboardDb, "zat-am", game));
   if (gameDoc.exists() && gameDoc.data().competitionIsActive) {
     resetBtn.disabled = true;
     resetBtn.style.background = "#ccc";
@@ -379,7 +365,7 @@ statusToggle.addEventListener("change", async () => {
 
     const newState = statusToggle.checked;
     try {
-        const gameDocRef = doc(db, "zat-am", gameId);
+        const gameDocRef = doc(leaderboardDb, "zat-am", gameId);
         await setDoc(gameDocRef, { competitionIsActive: newState }, { merge: true });
         await checkResetEligibility();
     } catch (error) {
@@ -394,7 +380,7 @@ statusToggle.addEventListener("change", async () => {
 async function performReset(game) {
   if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
 
-  const historyColRef = collection(db, "zat-am", game, "gameHistory");
+  const historyColRef = collection(leaderboardDb, "zat-am", game, "gameHistory");
   const historySnapshot = await getDocs(historyColRef);
 
   if (historySnapshot.empty) {
@@ -402,7 +388,7 @@ async function performReset(game) {
     return;
   }
 
-  const batch = writeBatch(db);
+  const batch = writeBatch(leaderboardDb);
 
   historySnapshot.forEach((document) => {
     batch.delete(document.ref);

@@ -24,10 +24,23 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
+const leaderboardConfig = {
+  apiKey: import.meta.env.VITE_LEADERBOARD_API_KEY,
+  authDomain: import.meta.env.VITE_LEADERBOARD_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_LEADERBOARD_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_LEADERBOARD_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_LEADERBOARD_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_LEADERBOARD_APP_ID,
+};
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Initialize Leaderboard Database
+const leaderboardApp = initializeApp(leaderboardConfig, "leaderboardApp");
+const leaderboardDb = getFirestore(leaderboardApp);
 
 export {
   auth,
@@ -40,4 +53,5 @@ export {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
+  leaderboardDb
 };

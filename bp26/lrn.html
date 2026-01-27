@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
+  <!-- Get player's name from auth -->
+  <script type="module">
+    import { onAuthStateChanged } from "firebase/auth";
+    import { getFirestore, doc, getDoc } from "firebase/firestore"; 
+    import { auth, db } from "../auth/api/firebase-config.js";
+    window.currentUser = null;
+    onAuthStateChanged(auth, (user) => {
+      window.currentUser = user
+      if (user) {
+        console.log(window.currentUser.displayName)
+      } else {
+        console.log("no user found")
+      }
+      
+    });
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>शब्दावली</title>
+
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; }
+
+    .grid{
+      width: 80vw; height: 80vh; margin: auto;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 15px; overflow-y: auto; padding-bottom: 140px;
+    }
+
+    .card{
+      background: white; padding: 15px; border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s; text-align: center;
+    }
+    .card:hover{ transform: scale(1.03); }
+
+    .word{ font-size: 1.2em; font-weight: bold; margin-bottom: 8px; color: #333; }
+    .definition{ font-size: 0.95em; color: #555; min-height: 160px; display:flex; align-items:center; justify-content:center; }
+
+    .playBtn{
+      margin-top: 10px; padding: 8px 12px;
+      border-radius: 10px; border: 1px solid #ccc;
+      cursor: pointer; background: #fff; font-size: 16px;
+    }
+    .playBtn:hover{ background:#f0f0f0; }
+
+    #submitScoreBtn{
+      position: fixed; right: 20px; bottom: 20px;
+      padding: 12px 16px; border: none; border-radius: 12px;
+      background: #1f2937; color: #fff; font-size: 14px;
+      cursor: pointer; z-index: 9999;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    #submitScoreBtn:disabled{ opacity: 0.6; cursor: not-allowed; }
+
+    #scoreBadge{
+      position: fixed; left: 20px; bottom: 24px;
+      padding: 10px 14px; border-radius: 12px;
+      background: #ffffff; color: #111827; font-size: 14px;
+      z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+      border: 1px solid #e5e7eb;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+</head>
+
+<body>
+  <h1>शब्दावली</h1>
+
+  <div class="grid" id="dictionaryGrid"></div>
+
+  <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
+  <button id="submitScoreBtn">Submit Score (Day 1)</button>
+
+  <script>
+    const wpp = 15;
+    const tlang = [];
+    tlang[1] = "itrans";
+    tlang["gu"] = "gujarati";
+    tlang["ka"] = "kannada";
+    tlang["be"] = "bengali";
+    tlang["ml"] = "malayalam";
+    tlang["te"] = "telugu";
+    tlang["ta"] = "tamil";
+    tlang["ia"] = "iast";
+
+    let fullist = [];
+    let musicelements = [];
+    const played = new Set();
+    let submitted = false;
+
+    function updateScoreBadge() {
+      document.getElementById("scoreValue").textContent = String(played.size);
+    }
+
+    // ALWAYS show something
+    function buildImageHTML({ imgm, unicodeHex, imgUrl }) {
+      const u = (unicodeHex || "").trim();
+      const img = (imgUrl || "").trim();
+
+      if (u && u.length < 12) {
+        if (imgm === "u") {
+          try {
+            return `<span style="font-size:120px; line-height:150px;">${String.fromCodePoint(parseInt(u, 16))}</span>`;
+          } catch(e) {}
+        }
+        if (imgm === "e") {
+          return `<img style="max-width:150px;" src="https://openmoji.org/data/color/svg/${u}.svg" onerror="this.style.display='none'">`;
+        }
+      }
+
+      if (img) {
+        return `<img style="max-width:150px;" src="${img}" onerror="this.style.display='none'">`;
+      }
+
+      return `<div style="opacity:.6;font-size:14px;">(no image)</div>`;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lnk =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+
+      Papa.parse(lnk, { download: true, header: true, complete: populateWlist });
+    });
+
+    function populateWlist(fildat) {
+      fullist = fildat.data || [];
+
+      const urlParams = new URLSearchParams(window.location.search);
+      let set = urlParams.get("s");
+      if (!set || isNaN(set) || (set >= fullist.length)) set = 0;
+
+      let t = urlParams.get("t");
+      if (!t) t = 0;
+
+      let imgm = urlParams.get("m");
+      if (!imgm) imgm = "b";
+
+      const grid = document.getElementById("dictionaryGrid");
+      grid.innerHTML = "";
+
+      for (let i = 0; i < wpp; i++) {
+        const row = fullist[(set * wpp) + i];
+        if (!row) continue;
+
+        const word = row.padam || "";
+        const unicodeHex = row.unicode || "";
+        const imgUrl = row["Imaage link"] || "";
+        const alnk = row["alnk"] || "";
+
+        let wrdtxt = `${word}`;
+        if (t != 0 && tlang[t]) {
+          try { wrdtxt += " - " + Sanscript.t(`${word}`, "devanagari", tlang[t]); } catch(e) {}
+        }
+
+        const txtimg = buildImageHTML({ imgm, unicodeHex, imgUrl });
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="word">${wrdtxt}</div>
+          <div class="definition">${txtimg}</div>
+          <audio id="a${i}" src="${alnk}"></audio>
+          <button class="playBtn" data-idx="${i}">🔊</button>
+        `;
+        grid.appendChild(card);
+      }
+
+      musicelements = document.getElementsByTagName("audio");
+
+      document.querySelectorAll(".playBtn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = btn.getAttribute("data-idx");
+
+          for (let k = 0; k < musicelements.length; k++) {
+            try { musicelements[k].pause(); } catch(e) {}
+          }
+
+          const audio = document.getElementById("a" + idx);
+          if (audio) {
+            try { audio.currentTime = 0; audio.play(); } catch(e) {}
+          }
+
+          played.add(String(idx));
+          updateScoreBadge();
+        });
+      });
+
+      updateScoreBadge();
+    }
+  </script>
+
+  <!-- Firebase + ask name at START + submit button -->
+  <script type="module">
+    import "./js/bp26-score.js";
+
+    // ✅ writes to: zat-am / bp26-Game1 / players / {userId}
+    // ✅ also increments: zat-am / bp26 / players / {userId}  (aggregate)
+    window.bp26Init({ game: "bp26-Game1", day: 1 });
+
+    const submitBtn = document.getElementById("submitScoreBtn");
+
+    submitBtn.addEventListener("click", async () => {
+      if (submitted) return;
+
+      // ✅ allow 0
+      const score = Number(played.size) || 0;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+
+      try {
+        await window.reportScore(score);
+        submitted = true;
+        submitBtn.textContent = `Submitted ✅ (Score: ${score})`;
+      } catch (e) {
+        console.error("❌ submit failed", e);
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Score (Day 1)";
+      }
+    });
+  </script>
+  <!-- Auth Middleware-->
+  <script type="module" src="/auth/api/middleware.js"></script>
+</body>
+</html>

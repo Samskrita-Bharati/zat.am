@@ -2,6 +2,23 @@
 <html>
 
 <head>
+  <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
+  <!-- Get player's name from auth -->
+  <script type="module">
+    import { onAuthStateChanged } from "firebase/auth";
+    import { getFirestore, doc, getDoc } from "firebase/firestore"; 
+    import { auth, db } from "../auth/api/firebase-config.js";
+    window.currentUser = null;
+    onAuthStateChanged(auth, (user) => {
+      window.currentUser = user
+      if (user) {
+        console.log(window.currentUser.displayName)
+      } else {
+        console.log("no user found")
+      }
+      
+    });
+  </script>
   <title>अन्वेषणम्</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -15,7 +32,7 @@
     img:hover {
       filter: brightness(90%);
       opacity: 0.5;
-      x-background:#e2e2e2;
+      x-background: #e2e2e2;
     }
 
     div {
@@ -90,15 +107,16 @@
   </div>
   <p></p>
 </body>
+
 <script>
+  const BP26_GAME_ID = "bp26-Game3";
+  const BP26_DAY_NUM = 5;
+
   var secs = 0;
   function countSecs(elem) {
-    //console.log(secs);
-    //var element = document.getElementById(elem);
-    //element.innerHTML = "Time: " + Sanscript.t(String(secs),'iast', 'devanagari') + " seconds";
     secs++;
-
   }
+
   var wpp = 15; // words per page
 
   var tlang = [];
@@ -116,17 +134,68 @@
     t = 1;
   var set = urlParams.get('s');
   if (!set || isNaN(set))
-    set = 0;
-  var tofind = parseInt((Math.random() * 100) % wpp);
-  var wt = 1;
+    set = 1;
 
-  var chk = function (id) {
+  var tofind = parseInt((Math.random() * 100) % wpp);
+  var wt = 1; 
+
+  let gameFinished = false;
+
+  // higher is better. Uses: time + wrong attempts
+  // wrongAttempts = (attempts - 1)
+  function computeScore(attempts, seconds) {
+    const wrongAttempts = Math.max(0, attempts - 1);
+    // 100 is the initialized score, penalties reduce it from there
+    const score = 100 - (wrongAttempts * 5) - Math.floor(seconds / 2);
+    return Math.max(0, Math.floor(score));
+  }
+
+  // submitting to firebase
+  async function submitScoreNow(finalScore) {
+    console.log("[BP26] submitScoreNow()", {
+      game: BP26_GAME_ID,
+      day: BP26_DAY_NUM,
+      finalScore
+    });
+
+    if (typeof window.reportScore !== "function") {
+      console.warn("[BP26] reportScore() not found. Check that ./js/bp26-score.js is loading.");
+      return;
+    }
+
+    try {
+      await window.reportScore(finalScore);
+      console.log("[BP26] ✅ reportScore success");
+    } catch (err) {
+      console.error("[BP26] ❌ reportScore failed", err);
+    }
+  }
+
+  var chk = async function (id) {
+    if (gameFinished) return;
 
     if (id == tofind) {
       document.getElementById(id).style["background"] = "green";
       document.getElementById(id).style["border"] = "1px solid green";
-      if (confirm("उत्तमम् !  You found it! \n After " + Sanscript.t(String(wt++), 'iast', 'devanagari') + " attempt(s) \n In " + Sanscript.t(String(secs), 'iast', 'devanagari') + " seconds! \n पुनः ?  Press 'ok' to play again"))
+
+      // compute score at win-time
+      // wt is attempt counter(starts at 1, increments each try)
+      const attempts = wt; // attempts taken
+      const finalScore = computeScore(attempts, secs);
+
+      console.log("[BP26] WIN", { attempts, secs, finalScore });
+
+      gameFinished = true;
+      // always submit when finished
+      await submitScoreNow(finalScore);
+
+      if (confirm(
+        "उत्तमम् !  You found it! \n After " + Sanscript.t(String(wt++), 'iast', 'devanagari') +
+        " attempt(s) \n In " + Sanscript.t(String(secs), 'iast', 'devanagari') +
+        " seconds! \n Score: " + finalScore + "\n पुनः ?  Press 'ok' to play again"
+      )) {
         window.location.reload();
+      }
     }
     else {
       document.getElementById(id).style["background"] = "pink";
@@ -134,8 +203,19 @@
       $("#wt").html(Sanscript.t(String(wt++), 'itrans', 'devanagari'));
     }
   }
+
   document.addEventListener('DOMContentLoaded', function () {
-    timer = setInterval('countSecs("timer")', 1000); //1000ms to wait before executing the code =1 second  
+
+    // prompt name + set game/day
+    // This must happen as the game starts.
+    if (typeof window.bp26Init === "function") {
+      window.bp26Init({ game: BP26_GAME_ID, day: BP26_DAY_NUM });
+      console.log("[BP26] bp26Init called", { game: BP26_GAME_ID, day: BP26_DAY_NUM });
+    } else {
+      console.warn("[BP26] bp26Init not found yet (bp26-score.js might not be loaded yet).");
+    }
+
+    timer = setInterval('countSecs("timer")', 1000);
     countSecs("timer");
 
     var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
@@ -145,40 +225,67 @@
       complete: populateWlist
     })
   })
+
   function populateWlist(fildat) {
     fullist = fildat.data;
     if (set > fildat.data.length / wpp) set = 0;
+
     var openmojibase = "https://openmoji.org/data/color/svg/";
     var image = [];
     var words = [];
     var aud = [];
     var imglnk = "";
+
     for (i = 0; i < wpp; i++) {
       words.push(fullist[(set * wpp) + i].padam);
+
       if (fullist[(set * wpp) + i]["Imaage link"].length == 4 || fullist[(set * wpp) + i]["Imaage link"].length == 5)
         imglnk = openmojibase + fullist[(set * wpp) + i]["Imaage link"] + ".svg";
       else
         imglnk = fullist[(set * wpp) + i]["Imaage link"];
+
       image.push(imglnk);
       aud.push(fullist[(set * wpp) + i]["alnk"]);
     }
+
+    console.log("[BP26] Loaded set", { set, tofind, word: words[tofind], audio: aud[tofind] });
+
     $("#tofind").html("<button id=" + tofind + " onclick='musicelements[this.id].play()';>🔊</button> " + words[tofind]);
 
     if (t != 0 && tlang[t])
       $("#tofind").append(" = " + Sanscript.t(words[tofind], 'devanagari', tlang[t]));
+
     $.each(words, function (i, v) {
       imglnk = image[i];
       alnk = aud[i];
+
       var img = '';
       positiontop = (Math.random() * (window.visualViewport.height - 121)) + 30;
       positionright = Math.random() * (window.visualViewport.width - 121);
       zindex = i;
-      img += '<img id="' + i + '" src="' + imglnk + '" style="top: ' + positiontop + 'px;' + 'right: ' + positionright + 'px;' + 'z-index: ' + zindex + ';" width="121" onclick="chk(this.id)">';
-      document.getElementById('svgdiv').innerHTML += img + "<audio id=" + i + " src=" + alnk + " preload='auto' ></audio>";
+
+      img += '<img id="' + i + '" src="' + imglnk +
+        '" style="top: ' + positiontop + 'px;' +
+        'right: ' + positionright + 'px;' +
+        'z-index: ' + zindex +
+        ';" width="121" onclick="chk(this.id)">';
+
+      document.getElementById('svgdiv').innerHTML += img +
+        "<audio id=" + i + " src=" + alnk + " preload='auto'></audio>";
     });
+
     musicelements = document.getElementsByTagName("audio");
-    musicelements[tofind].autoplay;
-    musicelements[tofind].play();
+
+    // autoplay target audio once
+    try {
+      musicelements[tofind].play();
+    } catch (e) {
+      console.warn("[BP26] autoplay blocked", e);
+    }
   }
 </script>
+
+<script type="module" src="./js/bp26-score.js"></script>
+<script type="module" src="/auth/api/middleware.js"></script>
+
 </html>

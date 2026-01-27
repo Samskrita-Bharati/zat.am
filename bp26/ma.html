@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
+  <!-- Get player's name from auth -->
+  <script type="module">
+    import { onAuthStateChanged } from "firebase/auth";
+    import { getFirestore, doc, getDoc } from "firebase/firestore"; 
+    import { auth, db } from "../auth/api/firebase-config.js";
+    window.currentUser = null;
+    onAuthStateChanged(auth, (user) => {
+      window.currentUser = user
+      if (user) {
+        console.log(window.currentUser.displayName)
+      } else {
+        console.log("no user found")
+      }
+      
+    });
+  </script>
+  <meta charset="utf-8" />
+  <title>Audio Match – Learn Words</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+
+  <style>
+    body { margin:0; font-family: system-ui, Arial, sans-serif; background:#f7f9fc; }
+    header { padding:1rem; background:white; border-bottom:1px solid #ddd; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    button { padding:8px 14px; border-radius:8px; border:1px solid #ccc; cursor:pointer; }
+    .accent { background:#16a34a; color:white; }
+    .warn { background:#dc2626; color:white; }
+    main { max-width:1100px; margin:auto; padding:1rem; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .card { background:white; border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px; }
+    .play { border-radius:50%; width:42px; height:42px; }
+    .dropzone { flex:1; border:2px dashed #ccc; padding:10px; border-radius:8px; min-height:28px; }
+    .correct { border-color:#16a34a; }
+    .incorrect { border-color:#dc2626; }
+    .tiles { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .tile { background:#edf2f7; padding:6px 10px; border-radius:8px; border:1px solid #ccc; cursor:grab; user-select:none; }
+  </style>
+</head>
+
+<body>
+<header>
+  <h2 style="margin:0;">Audio Match</h2>
+  <button id="checkBtn" class="accent">Check Answers</button>
+  <button id="resetBtn" class="warn">Reset</button>
+</header>
+
+<main>
+  <section class="grid" id="cards"></section>
+
+  <h3>Word Bank</h3>
+  <div class="tiles" id="tiles"></div>
+
+  <p><b>Score:</b> <span id="score">0</span>/<span id="total">0</span></p>
+</main>
+
+<script>
+  const state = { items: [], assigned: new Map() };
+  const els = {
+    cards: document.getElementById("cards"),
+    tiles: document.getElementById("tiles"),
+    score: document.getElementById("score"),
+    total: document.getElementById("total"),
+    checkBtn: document.getElementById("checkBtn"),
+    resetBtn: document.getElementById("resetBtn")
+  };
+
+  function render(items) {
+    els.cards.innerHTML = "";
+    els.tiles.innerHTML = "";
+    state.assigned.clear();
+
+    items.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const btn = document.createElement("button");
+      btn.className = "play";
+      btn.textContent = "▶";
+      const audio = new Audio(item.audio);
+      btn.onclick = () => { audio.currentTime = 0; audio.play(); };
+
+      const drop = document.createElement("div");
+      drop.className = "dropzone";
+      drop.dataset.id = item.id;
+      drop.textContent = "Drop word here";
+
+      drop.ondragover = e => e.preventDefault();
+      drop.ondrop = e => {
+        e.preventDefault();
+        const draggedId = e.dataTransfer.getData("text");
+        assign(draggedId, drop);
+      };
+
+      card.append(btn, drop);
+      els.cards.appendChild(card);
+
+      const tile = document.createElement("div");
+      tile.className = "tile";
+      tile.textContent = item.word;
+      tile.draggable = true;
+      tile.dataset.id = item.id;
+      tile.ondragstart = e => e.dataTransfer.setData("text", item.id);
+
+      els.tiles.appendChild(tile);
+    });
+
+    els.total.textContent = items.length;
+    els.score.textContent = "0";
+  }
+
+  function assign(id, drop) {
+    const tile = document.querySelector(`.tile[data-id="${id}"]`);
+    if (!tile) return;
+
+    drop.textContent = tile.textContent;
+    state.assigned.set(drop.dataset.id, id);
+  }
+
+  async function checkAnswers() {
+    let correct = 0;
+
+    state.items.forEach(item => {
+      const drop = document.querySelector(`.dropzone[data-id="${item.id}"]`);
+      drop.classList.remove("correct","incorrect");
+
+      const chosen = state.assigned.get(item.id);
+
+      if (chosen) {
+        if (chosen === item.id) {
+          drop.classList.add("correct");
+          correct++;
+        } else {
+          drop.classList.add("incorrect");
+        }
+      } else {
+        drop.classList.add("incorrect");
+      }
+    });
+
+    els.score.textContent = correct;
+
+    // ✅ Always submit (even if correct = 0)
+    try {
+      if (typeof window.reportScore !== "function") {
+        alert("Score system not loaded. Check js/bp26-score.js path.");
+        return;
+      }
+      console.log("Submitting score:", correct);
+      await window.reportScore(correct);
+      alert("Score submitted: " + correct);
+    } catch (e) {
+      console.error("Submit error:", e);
+      alert("Firebase submit failed. Open Console (F12) and send the red error.");
+    }
+  }
+
+  els.checkBtn.onclick = checkAnswers;
+  els.resetBtn.onclick = () => location.reload();
+
+  // LOAD WORDS (12)
+  Papa.parse(
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv",
+    {
+      download: true,
+      header: true,
+      complete: (res) => {
+        const rows = (res.data || []).filter(r => r && r.padam && r.alnk).slice(0, 12);
+        state.items = rows.map((r, i) => ({
+          id: String(i + 1),
+          word: r.padam,
+          audio: r.alnk
+        }));
+        render(state.items);
+      }
+    }
+  );
+</script>
+
+<!-- ✅ module loads first, then init runs -->
+<script type="module">
+  import { bp26Init, reportScore } from "./js/bp26-score.js";
+
+  // keep compatibility
+  window.reportScore = reportScore;
+
+  // init this game
+  bp26Init({ game: "bp26-Game5" });
+</script>
+<!-- Auth Middleware-->
+<script type="module" src="/auth/api/middleware.js"></script>
+</body>
+</html>
