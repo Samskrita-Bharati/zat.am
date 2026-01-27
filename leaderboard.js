@@ -28,6 +28,8 @@ const auth = getAuth(app);
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
 
+let myChart = null;
+
 // fetches list of games
 async function fetchGames() {
   const games = collection(db, "zat-am");
@@ -101,6 +103,7 @@ function generateLeaderboardData(gameHistories, timeRange) {
 let gameHistories = await fetchGameHistories("Global");
 // empty time range means "All time"
 let leaderboardData = generateLeaderboardData(gameHistories, ""); 
+updateAnalyticsChart(gameHistories, "");
 
 // upon game selection change, fetch game history for selected game,
 // generate new leaderboard array,
@@ -115,6 +118,7 @@ gameSelect.addEventListener("change", async (e) => {
   checkResetEligibility(); 
   // sync toggle status
   syncToggleStatus(gameSelect.value);
+  updateAnalyticsChart(gameHistories, ""); // !!!!!!! reset chart to all time, maybe change later idk
 });
 
 // upon time range change, generate new leaderboard data,
@@ -123,6 +127,7 @@ timeSelect.addEventListener("change", (e) => {
   leaderboardData = generateLeaderboardData(gameHistories, e.target.value);
   render();
   changePage(1);
+  updateAnalyticsChart(gameHistories, e.target.value)
 })
 
 let currentPage = 1;
@@ -192,94 +197,102 @@ render();
 checkResetEligibility(); 
 
 
-// --- chart.js --- orz
-// WORK IN PROGRESS
-const MS_IN_DAY = 24 * 60 * 60 * 1000;
+// --- ANALYTICS CHART LOGIC (I remade it) ---
+function updateAnalyticsChart(history, timeRange) {
+    const canvas = document.getElementById("line-graph");
+    if (!canvas) return;
 
-function getLast7DaysLabels() {
-  const labels = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(Date.now() - i * MS_IN_DAY);
-    labels.push(
-      d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-    );
-  }
-  return labels;
-}
-
-function gamesLast7Days(history) {
-  const counts = Array(7).fill(0);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  for (const { timestamp } of history) {
-    const d = new Date(timestamp);
-    d.setHours(0, 0, 0, 0);
-
-    const diffDays = (today - d) / 86400000;
-
-    if (diffDays >= 0 && diffDays < 7) {
-      counts[6 - diffDays]++;
+    // Determine number of steps and label formatting based on time filter
+    let steps = 7; // Default for "All Time" and Weekly
+    let formatOptions = { month: "short", day: "numeric" };
+    
+    if (timeRange === "daily") {
+        steps = 24; // Show hours
+        formatOptions = { hour: 'numeric', minute: '2-digit' };
+    } else if (timeRange === "monthly") {
+        steps = 30; // Last 30 days
     }
-  }
 
-  return counts;
+    const labels = [];
+    const counts = Array(steps).fill(0);
+    const now = new Date();
+
+    if (timeRange === "daily") {
+        // Daily: Last 24 hours
+        for (let i = steps - 1; i >= 0; i--) {
+            const d = new Date(now.getTime() - i * (60 * 60 * 1000));
+            labels.push(d.toLocaleTimeString("en-US", { hour: 'numeric', hour12: true }));
+        }
+
+        history.forEach(({ timestamp }) => {
+            const diffHours = Math.floor((now - timestamp) / (60 * 60 * 1000));
+            if (diffHours >= 0 && diffHours < steps) {
+                counts[(steps - 1) - diffHours]++;
+            }
+        });
+    } else {
+        // Weekly or Monthly: Days
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        for (let i = steps - 1; i >= 0; i--) {
+            const d = new Date(today.getTime() - i * (24 * 60 * 60 * 1000));
+            labels.push(d.toLocaleDateString("en-US", { month: "short", day: "numeric" }));
+        }
+
+        history.forEach(({ timestamp }) => {
+            const d = new Date(timestamp);
+            d.setHours(0, 0, 0, 0);
+            const diffDays = Math.floor((today - d) / (24 * 60 * 60 * 1000));
+            if (diffDays >= 0 && diffDays < steps) {
+                counts[(steps - 1) - diffDays]++;
+            }
+        });
+    }
+
+    if (myChart) {
+        myChart.destroy();
+    } // Destroy previous chart cause it was spawning a bunch of them, make a new one
+
+    myChart = new Chart(canvas, { //designing the chart
+        type: "line",
+        data: {
+            labels,
+            datasets: [{
+                label: 'Games Played',
+                data: counts,
+                borderColor: "hsl(228, 70%, 60%)",
+                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                pointBorderColor: "rgba(255,255,255,1)",
+                pointBackgroundColor: "rgba(59, 130, 246, 1)",
+                borderWidth: 3,
+                fill: true,
+                tension: 0.3
+            }],
+        },
+        options: {
+            aspectRatio: 3,
+            scales: {
+                yAxes: [{ 
+                    ticks: { beginAtZero: true, stepSize: 1 },
+                    scaleLabel: { display: true, labelString: 'Games Played' }
+                }],
+                xAxes: [{ 
+                    gridLines: { display: false },
+                    ticks: { maxTicksLimit: steps > 10 ? 10 : steps }
+                }]
+            },
+            legend: { display: false },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return ` Games Played: ${tooltipItem.yLabel}`;
+                    }
+                }
+            }
+        }
+    });
 }
-
-const gameHistoryData = gamesLast7Days(gameHistories);
-
-let lineGraph = document.getElementById("line-graph");
-
-const labels = getLast7DaysLabels();
-
-// Options
-const lineGrapOptions = {
-  aspectRatio: 6,
-  scales: {
-    yAxes: [
-      {
-        gridLines: {
-          display: false,
-        },
-        ticks: {
-          beginAtZero: true,
-          padding: 12,
-        },
-      },
-    ],
-    xAxes: [
-      {
-        ticks: {
-          padding: 12,
-        },
-        gridLines: {
-          display: false,
-        },
-      },
-    ],
-  },
-  legend: {
-    display: false,
-  },
-};
-const myChart = new Chart(lineGraph, {
-  type: "line",
-  data: {
-    labels,
-    datasets: [
-      {
-        data: gameHistoryData,
-        borderColor: "hsl(228, 70%, 60%)",
-        pointBorderColor: "rgba(255,255,255,1)",
-        pointBackgroundColor: "rgba(255,255,255,1)",
-        borderWidth: 3,
-        fill: true,
-      },
-    ],
-  },
-  options: lineGrapOptions,
-});
-
 
 // ============================================
 // ====== Reset and Competition Controls ======
