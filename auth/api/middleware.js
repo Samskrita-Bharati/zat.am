@@ -10,10 +10,9 @@ const protectedGames = [
   "043-trs",
   "044-gp",
   "048-fs",
-  // Add more games here
 ];
 
-// Check if current page is a protected
+// Check if current page is a protected game
 const isProtectedGame = () => {
   const path = window.location.pathname;
   return protectedGames.some((game) => path.includes(`/${game}/`));
@@ -26,7 +25,14 @@ if (isProtectedGame()) {
     })
     .catch(() => {
       const redirectUrl = encodeURIComponent(window.location.href);
-      window.location.href = `../auth/login.html?redirect=${redirectUrl}`;
+
+      // Get the base path from current location
+      const pathParts = window.location.pathname.split("/");
+      const basePath = pathParts.includes("deployment-testing")
+        ? "/deployment-testing"
+        : "";
+
+      window.location.href = `${basePath}/auth/login.html?redirect=${redirectUrl}`;
     });
 }
 
