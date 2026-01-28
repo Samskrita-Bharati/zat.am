@@ -10,26 +10,6 @@ const form = document.getElementById("preferences-form");
 const message = document.getElementById("message");
 
 
-/*const provinces = {
-  "United States": [
-    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
-    "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
-    "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
-    "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
-    "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
-    "New Hampshire", "New Jersey", "New Mexico", "New York",
-    "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
-    "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
-    "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
-    "West Virginia", "Wisconsin", "Wyoming"
-  ],
-  "Canada": [
-    "Alberta", "British Columbia", "Manitoba", "New Brunswick",
-    "Newfoundland and Labrador", "Nova Scotia", "Ontario",
-    "Prince Edward Island", "Quebec", "Saskatchewan",
-    "Northwest Territories", "Nunavut", "Yukon"
-  ]
-};*/
 
 const provinces = {
   "United States": [],
@@ -76,7 +56,7 @@ countrySelect.addEventListener("change", async () => {
     provinceSelect.innerHTML = `<option value="">Select Province / State</option>` +
       regions.map(p => `<option value="${p}">${p}</option>`).join("");
 
-    provinceSelect.required = true;
+    //provinceSelect.required = true;
     otherCountryInput.required = false;
 
   } else if (selected === "other") {
@@ -84,7 +64,7 @@ countrySelect.addEventListener("change", async () => {
     otherCountryGroup.classList.remove("hidden");
 
     provinceSelect.required = false;
-    otherCountryInput.required = true;
+    //otherCountryInput.required = true;
   } else {
     provinceGroup.classList.add("hidden");
     otherCountryGroup.classList.add("hidden");
@@ -99,31 +79,29 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const language = languageSelect.value;
-  const country = countrySelect.value;
+  let country = countrySelect.value;
 
   let region = "";
   
 
-  if (!language || !country) {
-    showMessage("Please select language and country", "red");
+  if (!language && !country) {
+    showMessage("Please select an option before continuing!", "red");
     return;
   }
 
   if (country === "other") {
-    region = otherCountryInput.value.trim();
-    if (!region) {
-      showMessage("Please enter your country name", "red");
-      return;
+    const customCountry = otherCountryInput.value.trim();
+    if (customCountry) {
+      country = customCountry;
+      region = "";
+    } else {
+      country = "";
     }
-  } else {
-    region = provinceSelect.value;
-    if (!region) {
-      showMessage("Please select a province or state", "red");
-      return;
-    }
+  } else if (country) {
+    region = provinceSelect.value || "";
   }
 
-  const location = country === "other" ? region : `${region}, ${country}`;
+  const location = region ? `${country}, ${region}` : country;
 
   try{
     const user = getCurrentUser();
@@ -145,7 +123,7 @@ form.addEventListener("submit", (e) => {
   showMessage("Preferences saved! Redirecting...", "green");
 
   setTimeout(() => {
-    window.location.href = "../index24.html"; // ✅ Redirect to home page
+    window.location.href = "../index24.html"; 
   }, 1200);
 });
 
@@ -155,7 +133,7 @@ document.getElementById("skip-btn").addEventListener("click", () => {
 
 
   setTimeout(() => {
-    window.location.href = "../index24.html"; // ✅ Redirect to home page
+    window.location.href = "../index24.html"; 
   }, 1000);
 });
 
