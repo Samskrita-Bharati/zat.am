@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - zat.am</title>
+    <script type="module" crossorigin src="/zat.am/assets/signup-CRn5Y9iC.js"></script>
+    <link rel="modulepreload" crossorigin href="/zat.am/assets/firebase-config-BpSi-wPl.js">
+    <link rel="modulepreload" crossorigin href="/zat.am/assets/auth-api-B38Ftrpm.js">
+    <link rel="stylesheet" crossorigin href="/zat.am/assets/style-ChcepNMx.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-box">
+        <h2>Create Account</h2>
+        <div class="header-divider"></div>
+        <form id="signup-form">
+          <input
+            type="text"
+            id="signup-name"
+            data-cy="signup-name"
+            placeholder="Full Name"
+          />
+          <input
+            type="email"
+            id="signup-email"
+            data-cy="signin-email"
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            id="signup-password"
+            data-cy="signup-password"
+            placeholder="Password (min 8 characters)"
+            required
+          />
+          <input
+            type="password"
+            id="signup-cpassword"
+            data-cy="signup-cpassword"
+            placeholder="Confirm Password"
+            required
+          />
+          <button type="submit" class="create-btn" data-cy="create-btn">
+            CREATE ACCOUNT
+          </button>
+        </form>
+        <div class="divider"></div>
+        <p>
+          Already have an account?
+          <a href="login.html" data-cy="login-link">Login</a>
+        </p>
+        <div id="message" data-cy="message"></div>
+      </div>
+    </div>
+  </body>
+</html>

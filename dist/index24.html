@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>शत.म् zat.am</title>
+    <!-- font-awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <!-- styles -->
+    <script type="module" crossorigin src="/zat.am/assets/main-CLCHkl-3.js"></script>
+    <link rel="modulepreload" crossorigin href="/zat.am/assets/firebase-config-BpSi-wPl.js">
+    <link rel="stylesheet" crossorigin href="/zat.am/assets/main-DK0-REjz.css">
+  </head>
+  <body>
+    <div class="auth-buttons">
+      <img src="/zat.am/assets/%E0%A4%B6%E0%A4%A4.%E0%A4%AE%E0%A5%8D-CYA-5KRL.png" alt="Logo" class="logo" />
+
+      <!-- Show when logged out -->
+      <div class="auth-btn">
+        <span id="logged-out">
+          <button onclick="window.location.href = './auth/login.html'">
+            Login
+          </button>
+
+          <button onclick="window.location.href = './auth/signup.html'">
+            Sign Up
+          </button>
+        </span>
+
+        <!-- Show when logged in -->
+        <div id="logged-in" class="hidden profile-container">
+          <!-- Profile Icon -->
+          <span id="profile-btn"
+            ><i class="fas fa-user-circle fa-2x profile-icon"></i
+          ></span>
+          <!-- Dropdown Menu -->
+          <div id="profile-dropdown" class="dropdown hidden">
+            <div class="dropdown-header">
+              <p class="user-email" id="user-email-dropdown">
+                user@example.com
+              </p>
+              <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
+              <span id="username">Hi, username!</span>
+            </div>
+            <hr />
+            <a href="#">Leaderboard</a>
+            <a href="./auth/profile.html">Profile</a>
+            <a href="#" id="dropdown-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="menu">
+      <!-- <h1>Hi2</h1> -->
+      <!-- title -->
+      <div class="title">
+        <h2>
+          संस्कृतभारती
+          <!--जयतु संस्कृतम् ।  -->
+        </h2>
+        <!--<h2><span style="color:red">श</span><span style="color:yellow">त</span>.<span style="color:blue">म्</span></h2>-->
+        <div class="underline"></div>
+      </div>
+      <!-- filter buttons -->
+      <div class="btn-container">
+        <!-- <button type="button" class="filter-btn" data-id="all">all</button>
+        <button type="button" class="filter-btn" data-id="breakfast">
+          breakfast
+        </button>
+        <button type="button" class="filter-btn" data-id="lunch">lunch</button>
+        <button type="button" class="filter-btn" data-id="shakes">
+          shakes
+        </button> -->
+      </div>
+      <!-- menu items -->
+      <div class="section-center"></div>
+    </section>
+    <footer style="text-align: center; padding: 20px">
+      <a href="./legal/privacy.html" target="_blank">Privacy Policy</a>
+    </footer>
+    <!-- javascript -->
+  </body>
+</html>
