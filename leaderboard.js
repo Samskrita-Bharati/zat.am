@@ -174,7 +174,7 @@ gameSelect.addEventListener("change", async (e) => {
   checkResetEligibility(); 
   // sync toggle status
   syncToggleStatus(gameSelect.value);
-  updateAnalyticsChart(gameHistories, ""); // !!!!!!! reset chart to all time, maybe change later idk
+  updateAnalyticsChart(gameHistories, timeSelect.value); // !!!!!!! reset chart to all time, maybe change later idk
 });
 
 // upon time range change, generate new leaderboard data,
