@@ -140,6 +140,7 @@
     }
     else {
       document.getElementById(id).style["background"] = "pink";
+      document.getElementById(id).style["z-index"] -= wpp;
       document.getElementById(id).style["border"] = "1px dotted red";
       $("#wt").html(Sanscript.t(String(wt++), 'itrans', 'devanagari'));
     }
