@@ -10,7 +10,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
     />
     <!-- styles -->
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="auth-buttons">
@@ -19,11 +19,11 @@
       <!-- Show when logged out -->
       <div class="auth-btn">
         <span id="logged-out">
-          <button onclick="window.location.href = '/auth/login.html'">
+          <button onclick="window.location.href = './auth/login.html'">
             Login
           </button>
 
-          <button onclick="window.location.href = '/auth/signup.html'">
+          <button onclick="window.location.href = './auth/signup.html'">
             Sign Up
           </button>
         </span>
@@ -45,7 +45,7 @@
             </div>
             <hr />
             <a href="#">Leaderboard</a>
-            <a href="/auth/profile.html">Profile</a>
+            <a href="./auth/profile.html">Profile</a>
             <a href="#" id="dropdown-logout">Logout</a>
           </div>
         </div>
@@ -77,10 +77,10 @@
       <div class="section-center"></div>
     </section>
     <footer style="text-align: center; padding: 20px">
-      <a href="/legal/privacy.html" target="_blank">Privacy Policy</a>
+      <a href="./legal/privacy.html" target="_blank">Privacy Policy</a>
     </footer>
     <!-- javascript -->
-    <script src="app.js"></script>
-    <script type="module" src="/js/navbar-auth.js"></script>
+    <script type="module" src="./app.js"></script>
+    <script type="module" src="./js/navbar-auth.js"></script>
   </body>
 </html>
