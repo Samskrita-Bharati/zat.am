@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preferences - zat.am</title>
+
+  <!-- ✅ CSS path is correct (already working) -->
+  <link rel="stylesheet" href="./css/preferences.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="form-box">
+      <h2 id="heading">Select Your Preferences</h2>
+      <div class="header-divider"></div>
+
+      <form id="preferences-form">
+        <!-- Language -->
+        <div class="form-group">
+          <label for="language">Choose Language</label>
+          <select id="language" class="form-input" required>
+            <option value="">Select Language</option>
+            <option value="dev">Devanagari (देवनागरी)</option>
+            <option value="ben">Bengali (বাংলা)</option>
+            <option value="gujr">Gujarati (ગુજરાતી)</option>
+            <option value="gurm">Gurmukhi (ਗੁਰਮੁਖੀ)</option>
+            <option value="kann">Kannada (ಕನ್ನಡ)</option>
+            <option value="mala">Malayalam (മലയാളം)</option>
+          </select>
+        </div>
+
+        <!-- Country -->
+        <div class="form-group">
+          <label for="country">Choose Your Country</label>
+          <select id="country" class="form-input" required>
+            <option value="">Select Country</option>
+            <option value="usa">United States</option>
+            <option value="canada">Canada</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <!-- Province/State -->
+        <div class="form-group hidden" id="province-group">
+          <label for="province">Select Province / State</label>
+          <select id="province" class="form-input"></select>
+        </div>
+
+        <!-- Other Country -->
+        <div class="form-group hidden" id="other-country-group">
+          <label for="other-country">Enter Your Country</label>
+          <input type="text" id="other-country" class="form-input" />
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Continue</button>
+          <button type="button" class="btn btn-secondary" id="skip-btn">Skip for Now</button>
+        </div>
+      </form>
+
+      <div id="message"></div>
+    </div>
+  </div>
+
+  <!-- ✅ JS path based on your actual folder -->
+  <script src="./js/preferences.js"></script>
+</body>
+</html>

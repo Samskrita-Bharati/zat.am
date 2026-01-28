@@ -45,7 +45,7 @@ signupForm.addEventListener("submit", async (e) => {
     message.style.color = "green";
 
     setTimeout(() => {
-      window.location.href = "login.html";
+      window.location.href = "preferences.html"; // ✅ Redirect to preferences page
     }, 1500);
   } catch (error) {
     console.error(error);
