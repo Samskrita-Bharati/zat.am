@@ -1,5 +1,5 @@
-// Firebase Configuration for zat.am project
-import { initializeApp } from "firebase/app";
+// Import Firebase from CDN
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -13,7 +13,7 @@ import {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
-} from "firebase/auth";
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
   getFirestore,
   doc,
@@ -21,7 +21,7 @@ import {
   setDoc,
   updateDoc,
   serverTimestamp,
-} from "firebase/firestore";
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCpDDpIOxNa46or-8oNfr_GZx0sXfXuwHw",

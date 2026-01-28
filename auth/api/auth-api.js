@@ -16,7 +16,7 @@ import {
   getDoc,
   setDoc,
   serverTimestamp,
-} from "./firebase-config";
+} from "./firebase-config.js";
 
 const googleProvider = new GoogleAuthProvider();
 
