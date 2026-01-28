@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Audio Match – Learn Words</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --card: #ffffff;
+      --primary: #2b6cb0;
+      --accent: #38a169;
+      --warn: #e53e3e;
+      --text: #1a202c;
+      --muted: #718096;
+      --tile: #edf2f7;
+      --tile-border: #cbd5e0;
+    }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+    header { padding: 1rem 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; border-bottom: 1px solid #e2e8f0; background: #fff; position: sticky; top: 0; z-index: 5; }
+    header h1 { font-size: 1.25rem; margin: 0; }
+    header .controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    button { cursor: pointer; border: 1px solid #cbd5e0; background: #fff; color: var(--text); border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.95rem; }
+    button.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    button.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+    button.warn { background: var(--warn); color: #fff; border-color: var(--warn); }
+    button:focus { outline: 3px solid #90cdf4; outline-offset: 2px; }
+
+    main { max-width: 1150px; margin: 0 auto; padding: 1rem; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card);
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: auto auto;
+      align-items: center;
+      gap: 0.5rem 0.75rem;
+    }
+    .play {
+      grid-row: span 2;
+      border-radius: 50%;
+      width: 42px; height: 42px;
+      display: grid; place-items: center;
+      border: 2px solid var(--primary);
+      background: #fff;
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .play:active { transform: scale(0.98); }
+    .label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .dropzone {
+      border: 2px dashed var(--tile-border);
+      border-radius: 0.6rem;
+      background: var(--tile);
+      padding: 0.5rem 0.6rem;
+      min-height: 2.4rem;
+    }
+    .dropzone.filled { border-style: solid; background: #fff; }
+    .dropzone.correct { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2); }
+    .dropzone.incorrect { border-color: var(--warn); box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2); }
+
+    .wordbank {
+      margin-top: 1rem;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+    }
+    .tiles { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tile {
+      background: var(--tile);
+      border: 1px solid var(--tile-border);
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.65rem;
+      font-size: 1rem;
+      user-select: none;
+      touch-action: none;
+    }
+    .tile[draggable="true"] { cursor: grab; }
+    .tile.dragging { opacity: 0.6; }
+    .tile.assigned { opacity: 0.4; text-decoration: line-through; }
+    .hint { font-size: 0.85rem; color: var(--muted); }
+
+    .status { margin-top: 0.75rem; display: flex; gap: 0.75rem; align-items: center; }
+    .status .score { font-weight: 700; }
+    .sr-only { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="appTitle">Audio Match (wip)</h1>
+    <div class="controls" role="group" aria-label="Controls">
+
+      <button id="checkBtn" class="accent">Check Answers</button>
+      <button id="resetBtn" class="warn">Reset</button>
+      <button id="playAllBtn" title="Play all sounds in order">Play All ▶</button>
+
+    </div>
+  </header>
+
+  <main>
+    <p class="hint" id="headingHint">
+      Drag a word from the bank onto the matching sound card. On touch devices, tap a word, then tap a card.
+    </p>
+
+    <section class="grid" id="cards" aria-label="Sound cards"></section>
+
+    <section class="wordbank" aria-label="Word bank">
+      <h2 style="margin:0 0 0.5rem;">Word Bank</h2>
+      <div class="tiles" id="tiles"></div>
+      <div class="status" aria-live="polite">
+        <div id="statusText">Ready.</div>
+        <div class="score">Score: <span id="score">0</span>/<span id="total">0</span></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+          const urlParams = new URLSearchParams(window.location.search);
+      var t = urlParams.get('t');
+      if (!t) // open mode - 1 is true - not flipped
+        t = 0;
+         var tlang = [];
+      tlang[1] = "itrans";
+      tlang['gu'] = "gujarati";
+      tlang['ka'] = "kannada";
+      tlang['be'] = "bengali";
+      tlang['ml'] = "malayalam";
+      tlang['te'] = "telugu";
+      tlang['ta'] = "tamil";
+    const state = {
+      items: [],
+      assigned: new Map(), // dropzoneId -> itemId (word)
+      selectedTileId: null, // touch/keyboard selection
+      lastCheck: null
+    };
+
+    const els = {
+      appTitle: document.getElementById('appTitle'),
+      cards: document.getElementById('cards'),
+      tiles: document.getElementById('tiles'),
+
+      checkBtn: document.getElementById('checkBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      playAllBtn: document.getElementById('playAllBtn'),
+
+      statusText: document.getElementById('statusText'),
+      score: document.getElementById('score'),
+      total: document.getElementById('total')
+    };
+
+    // --- Utilities ---
+    const shuffle = arr => {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
+
+    const speakStatus = (text) => { els.statusText.textContent = text; };
+
+    const buildAudio = (src) => {
+      const audio = new Audio();
+      audio.src = src;
+      audio.preload = 'metadata';
+      return audio;
+    };
+
+    // --- Rendering ---
+    const renderCards = (items) => {
+      els.cards.innerHTML = '';
+      items.forEach((item, idx) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.setAttribute('role', 'group');
+        card.setAttribute('aria-label', `Sound card ${idx+1}`);
+
+        const playBtn = document.createElement('button');
+        playBtn.className = 'play';
+        playBtn.setAttribute('aria-label', `Play sound ${item.word}`);
+        playBtn.textContent = '▶';
+        const audio = buildAudio(item.audio);
+        playBtn.addEventListener('click', () => {
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
+        });
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.innerHTML = `<span class="sr-only">Card ID:</span><code>${item.id}</code>`;
+        label.style.display = 'none'; 
+
+        const drop = document.createElement('div');
+        drop.className = 'dropzone';
+        drop.setAttribute('role', 'button');
+        drop.setAttribute('tabindex', '0');
+        drop.setAttribute('aria-label', `Drop matching word here for ${item.word} sound`);
+        drop.dataset.dropFor = item.id;
+
+        // Drag-over / drop handlers
+        drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('filled'); });
+        drop.addEventListener('dragleave', () => { drop.classList.remove('filled'); });
+        drop.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const tileId = e.dataTransfer.getData('text/plain');
+          assignTileToDrop(tileId, drop);
+        });
+
+        // Keyboard/touch: tap card assigns selected tile
+        drop.addEventListener('click', () => {
+          if (state.selectedTileId) assignTileToDrop(state.selectedTileId, drop);
+        });
+        drop.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (state.selectedTileId) assignTileToDrop(state.selectedTileId, drop);
+          }
+        });
+
+        card.appendChild(playBtn);
+        card.appendChild(label);
+        card.appendChild(drop);
+        els.cards.appendChild(card);
+      });
+    };
+
+    const renderTiles = (items) => {
+      els.tiles.innerHTML = '';
+      const order = shuffle(items.map(i => ({ id: i.id, word: i.word })));
+      order.forEach(({ id, word }) => {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.textContent = word;
+        if (t != 0 && tlang[t])
+                  tile.textContent  += " - " + Sanscript.t(word, 'devanagari', tlang[t]);
+        tile.setAttribute('draggable', 'true');
+        tile.setAttribute('role', 'button');
+        tile.setAttribute('tabindex', '0');
+        tile.dataset.tileId = id;
+
+        tile.addEventListener('dragstart', (e) => {
+          tile.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', id);
+        });
+        tile.addEventListener('dragend', () => tile.classList.remove('dragging'));
+
+        // Touch/keyboard selection
+        tile.addEventListener('click', () => selectTile(tile));
+        tile.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectTile(tile); }
+        });
+
+        els.tiles.appendChild(tile);
+      });
+    };
+
+    const selectTile = (tile) => {
+      // Toggle selection
+      const id = tile.dataset.tileId;
+      const already = state.selectedTileId === id;
+      Array.from(document.querySelectorAll('.tile')).forEach(t => t.classList.remove('dragging'));
+      if (already) {
+        state.selectedTileId = null;
+        tile.classList.remove('dragging');
+        speakStatus('Selection cleared.');
+      } else {
+        state.selectedTileId = id;
+        tile.classList.add('dragging');
+        speakStatus(`Selected: ${tile.textContent}. Tap a card to assign.`);
+      }
+    };
+
+    const assignTileToDrop = (tileId, dropEl) => {
+      const tile = document.querySelector(`.tile[data-tile-id="${tileId}"]`);
+      if (!tile) return;
+      const dropForId = dropEl.dataset.dropFor;
+
+      // If this drop had a previous assignment, unassign that tile
+      const prev = state.assigned.get(dropForId);
+      if (prev && prev !== tileId) {
+        const prevTile = document.querySelector(`.tile[data-tile-id="${prev}"]`);
+        if (prevTile) prevTile.classList.remove('assigned');
+      }
+
+      // Assign
+      state.assigned.set(dropForId, tileId);
+      dropEl.textContent = tile.textContent;
+      dropEl.classList.add('filled');
+      tile.classList.add('assigned');
+
+      // Clear selection feedback
+      Array.from(document.querySelectorAll('.dropzone')).forEach(d => d.classList.remove('incorrect', 'correct'));
+
+      // Update score preview (without check)
+      updateScorePreview();
+      speakStatus(`Assigned "${tile.textContent}" to card ${dropForId}.`);
+    };
+
+    const updateScorePreview = () => {
+      const { items, assigned } = state;
+      let correct = 0;
+      items.forEach(item => {
+        const a = assigned.get(item.id);
+        if (a && a === item.id) correct++;
+      });
+      els.score.textContent = correct;
+      els.total.textContent = items.length;
+    };
+
+    const checkAnswers = () => {
+      let correct = 0;
+      state.items.forEach(item => {
+        const drop = document.querySelector(`.dropzone[data-drop-for="${item.id}"]`);
+        const assignedId = state.assigned.get(item.id);
+        drop.classList.remove('incorrect', 'correct');
+        if (assignedId) {
+          if (assignedId === item.id) {
+            drop.classList.add('correct');
+            correct++;
+          } else {
+            drop.classList.add('incorrect');
+          }
+        }
+      });
+      state.lastCheck = Date.now();
+      els.score.textContent = correct;
+      els.total.textContent = state.items.length;
+      speakStatus(`You have ${correct} correct out of ${state.items.length}.`);
+    };
+
+    const resetAll = () => {
+      state.assigned.clear();
+      state.selectedTileId = null;
+      Array.from(document.querySelectorAll('.dropzone')).forEach(d => {
+        d.textContent = '';
+        d.classList.remove('filled', 'incorrect', 'correct');
+      });
+      Array.from(document.querySelectorAll('.tile')).forEach(t => {
+        t.classList.remove('assigned', 'dragging');
+      });
+      els.score.textContent = '0';
+      els.total.textContent = state.items.length;
+      speakStatus('Reset. Try again!');
+    };
+
+    const shuffleAll = () => {
+      // Re-render tiles in random order
+      renderTiles(state.items);
+      // Shuffle cards display order for extra variation
+      const shuffledItems = shuffle(state.items);
+      renderCards(shuffledItems);
+      // Clear assignments
+      state.assigned.clear();
+      els.score.textContent = '0';
+      els.total.textContent = state.items.length;
+      speakStatus('Shuffled.');
+    };
+
+    const playAll = async () => {
+      speakStatus('Playing all sounds in order...');
+      for (const item of state.items) {
+        const audio = buildAudio(item.audio);
+        try { await audio.play(); } catch (e) {}
+        // Wait for ~1.2s or audio end (whichever is earlier)
+        await new Promise(res => {
+          const timer = setTimeout(res, 1200);
+          audio.addEventListener('ended', () => { clearTimeout(timer); res(); }, { once: true });
+        });
+      }
+      speakStatus('Done playing all.');
+    };
+
+    const applyHintVisibility = () => {
+      const show = document.getElementById('hintToggle').checked;
+      Array.from(document.querySelectorAll('.card .label')).forEach(el => {
+        el.style.display = show ? 'block' : 'none';
+      });
+    };
+
+    // --- Init ---
+    const init = async () => {
+//      try {
+//        const res = await fetch('sounds.json');
+//        if (!res.ok) throw new Error('Failed to fetch sounds.json');
+//        const data = await res.json();
+
+document.addEventListener('DOMContentLoaded', function () {
+      var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+      Papa.parse(lnk, {
+        download: true,
+        header: true,
+        complete: populateWlist
+      })
+    })
+    function populateWlist(fildat) {
+      var wpp = 15; // words per page
+
+     
+      fullist = fildat.data;
+      var openmojibase = "https://openmoji.org/data/color/svg/";
+
+
+      var timer;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      var o = urlParams.get('o');
+      if (!o) // open mode - 1 is true - not flipped
+        o = 0;
+      var set = urlParams.get('s');
+      if (!set || isNaN(set) || (set >= fullist.length))
+        set = 0;
+      var image = [];
+      var words = [];
+      var aud = [];
+      var imglnk = "";
+      for (i = 0; i < wpp; i++) {
+        words.push(fullist[(set * wpp) + i].padam);
+        if (fullist[(set * wpp) + i]["Imaage link"].length == 4 || fullist[(set * wpp) + i]["Imaage link"].length == 5)
+          imglnk = openmojibase + fullist[(set * wpp) + i]["Imaage link"] + ".svg";
+        else
+          imglnk = fullist[(set * wpp) + i]["Imaage link"];
+        aud.push(fullist[(set * wpp) + i].alnk);
+        image.push(imglnk)
+      }
+      while (!words[words.length - 1]) {
+        words.pop();
+      }
+      while (!image[image.length - 1]) {
+        image.pop();
+      }
+    
+ state.items = [];
+      for (let i = 0; i < words.length; i++) {
+        state.items.push({
+          id: (i + 1).toString(),
+          word: words[i],
+          audio: aud[i],
+        });
+    }
+        //state.items = data.items;
+        els.appTitle.textContent = 'Audio Match';
+        renderCards(state.items);
+        renderTiles(state.items);
+        els.total.textContent = state.items.length;
+        speakStatus('Loaded. Drag words onto sound cards or tap to assign.');
+
+      
+    };
+}
+    // --- Wire controls ---
+
+    els.checkBtn.addEventListener('click', checkAnswers);
+    els.resetBtn.addEventListener('click', resetAll);
+    els.playAllBtn.addEventListener('click', playAll);
+
+
+    // Start
+    init();
+  </script>
+</body>
+</html>
