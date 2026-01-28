@@ -1,7 +1,5 @@
 // js/bp26-score.js
-import { initializeApp } from "firebase/app";
 import { 
-  getFirestore, 
   doc, 
   getDoc, 
   setDoc, 
@@ -13,23 +11,10 @@ import {
 } from "firebase/firestore";
 
 import { onAuthStateChanged } from "firebase/auth"
-import { auth, db as playerCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
+import { auth, db as playerCheckDb, leaderboardDb } from "../../auth/api/firebase-config.js";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAwqOOawElTcsBIAmJQIkZYs-W-h8kJx7A",
-//   authDomain: "temporary-db-e9ace.firebaseapp.com",
-//   databaseURL: "https://temporary-db-e9ace-default-rtdb.firebaseio.com",
-//   projectId: "temporary-db-e9ace",
-//   storageBucket: "temporary-db-e9ace.firebasestorage.app",
-//   messagingSenderId: "810939107125",
-//   appId: "1:810939107125:web:25edc649d354c1ca0bee7c"
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
-console.log("✅ Firebase connected to projectId:", leaderboardDb.options.projectId);
-console.log("✅ Firebase connected to projectId:", playerCheckDb.options.projectId);
+console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
+console.log("✅ Firebase connected to projectId:", playerCheckDb.app.options.projectId);
 
 let CURRENT_USER = "";
 let CURRENT_UID = ""; 
@@ -149,10 +134,9 @@ export async function reportScore(score) {
   await ensureParentsUnderZatAm();
 
   // ✅ refs
-  // TBC: shall we keep this players records ?
-  const gamePlayerRef = doc(leaderboardDb, "zat-am", BP26_GAME, "players", id);
-  const bp26PlayerRef = doc(leaderboardDb, "zat-am", "bp26", "players", id);
-  const globPlayerRef = doc(leaderboardDb, "zat-am", "Global", "players", id);
+  const gamePlayerRef = doc(leaderboardDb, "zat-am", BP26_GAME, "players", uid);
+  const bp26PlayerRef = doc(leaderboardDb, "zat-am", "bp26", "players", uid);
+  const globPlayerRef = doc(leaderboardDb, "zat-am", "Global", "players", uid);
 
   // ✅ write players (so leaderboard shows it)
   await Promise.all([

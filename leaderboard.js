@@ -55,7 +55,7 @@ function generateLeaderboardData(gameHistories, timeRange) {
   const now = Date.now();
 
   const leaderboardData = Object.values(
-    gameHistories.reduce((acc, { username, score, timestamp }) => {
+    gameHistories.reduce((acc, { username, score, timestamp, playerUID }) => {
       // time filtering
       if (
         (timeRange === "daily" && timestamp < now - 24 * 60 * 60 * 1000) ||
@@ -65,18 +65,24 @@ function generateLeaderboardData(gameHistories, timeRange) {
         return acc;
       }
 
-      if (!acc[username]) {
-        acc[username] = {
-          username,
+      // use playerUID as key if available, else username
+      const key = playerUID || username;
+
+      if (!acc[key]) {
+        acc[key] = {
+          uid: key,
+          username: username, 
           totalScore: 0,
           latestTimestamp: timestamp,
         };
       }
 
-      acc[username].totalScore += score;
+      acc[key].totalScore += score;
 
-      if (timestamp > acc[username].latestTimestamp) {
-        acc[username].latestTimestamp = timestamp;
+      if (timestamp >= acc[key].latestTimestamp) {
+        acc[key].latestTimestamp = timestamp;
+        // Use the name in history with a newer timestamp
+        acc[key].username = username; 
       }
 
       return acc;
