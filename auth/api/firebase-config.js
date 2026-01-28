@@ -1,5 +1,5 @@
 // Import Firebase from CDN
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -13,7 +13,7 @@ import {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 import {
   getFirestore,
   doc,
@@ -21,7 +21,7 @@ import {
   setDoc,
   updateDoc,
   serverTimestamp,
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC8nm8zQR6fiC_3mTQ3hURXNJPR6faKYOU",
