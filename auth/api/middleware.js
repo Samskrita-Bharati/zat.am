@@ -26,7 +26,7 @@ if (isProtectedGame()) {
     })
     .catch(() => {
       const redirectUrl = encodeURIComponent(window.location.href);
-      window.location.href = `../auth/login.html?redirect=${redirectUrl}`;
+      window.location.href = `/auth/login.html?redirect=${redirectUrl}`;
     });
 }
 
