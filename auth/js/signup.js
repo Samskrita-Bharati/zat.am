@@ -41,7 +41,7 @@ signupForm.addEventListener("submit", async (e) => {
     // Create Firestore user document with default isAdmin = false
     await ensureUserDocument(user, { name });
 
-    message.innerHTML = "Account created! Redirecting to login...";
+    message.innerHTML = "Account created! Redirecting...";
     message.style.color = "green";
 
     setTimeout(() => {

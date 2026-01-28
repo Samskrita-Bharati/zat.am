@@ -11,11 +11,6 @@ const message = document.getElementById("message");
 
 
 
-const provinces = {
-  "United States": [],
-  "Canada": []
-};
-
 async function loadProvinces(country) {
   try {
     const response = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
@@ -30,7 +25,7 @@ async function loadProvinces(country) {
     const data = await response.json();
 
     if (!data || !data.data || !Array.isArray(data.data.states)) {
-      return provinces[country] || [];
+      
     }
 
     return data.data.states.map((state) => state.name).filter(Boolean);
@@ -56,21 +51,13 @@ countrySelect.addEventListener("change", async () => {
     provinceSelect.innerHTML = `<option value="">Select Province / State</option>` +
       regions.map(p => `<option value="${p}">${p}</option>`).join("");
 
-    //provinceSelect.required = true;
-    otherCountryInput.required = false;
-
   } else if (selected === "other") {
     provinceGroup.classList.add("hidden");
     otherCountryGroup.classList.remove("hidden");
 
-    provinceSelect.required = false;
-    //otherCountryInput.required = true;
   } else {
     provinceGroup.classList.add("hidden");
     otherCountryGroup.classList.add("hidden");
-
-    provinceSelect.required = false;
-    otherCountryInput.required = false;
   }
 });
 
@@ -80,9 +67,7 @@ form.addEventListener("submit", (e) => {
 
   const language = languageSelect.value;
   let country = countrySelect.value;
-
   let region = "";
-  
 
   if (!language && !country) {
     showMessage("Please select an option before continuing!", "red");
@@ -101,7 +86,7 @@ form.addEventListener("submit", (e) => {
     region = provinceSelect.value || "";
   }
 
-  const location = region ? `${country}, ${region}` : country;
+  const location = region ? `${region}, ${country} ` : country;
 
   try{
     const user = getCurrentUser();
@@ -130,7 +115,6 @@ form.addEventListener("submit", (e) => {
 // Skip button
 document.getElementById("skip-btn").addEventListener("click", () => {
   showMessage("Skipping... Redirecting...", "green");
-
 
   setTimeout(() => {
     window.location.href = "../index24.html"; 
