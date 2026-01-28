@@ -12,8 +12,11 @@ import {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
 } from "./firebase-config";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 const googleProvider = new GoogleAuthProvider();
 
