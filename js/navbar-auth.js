@@ -64,7 +64,7 @@
 //   }
 // });
 
-import { auth } from "/auth/api/firebase-config.js";
+import { auth } from "../auth/api/firebase-config.js";
 import {
   onAuthStateChanged,
   signOut,
