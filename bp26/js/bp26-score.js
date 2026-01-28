@@ -59,13 +59,16 @@ export function bp26Init({ game } = {}) {
 }
 
 // Upsert (and increment) player doc
-async function upsertIncrement(ref, name, delta) {
+// Update player's uid into the record
+async function upsertIncrement(ref, name, uid, delta) {
   const snap = await getDoc(ref);
 
   if (snap.exists()) {
     await updateDoc(ref, {
       name,
+      uid,
       playerName: name,
+      playerUID: uid,
       score: increment(delta),      // leaderboard uses score
       lastScore: delta,
       updatedAt: serverTimestamp()  // leaderboard reads this for lastPlayed
@@ -73,7 +76,9 @@ async function upsertIncrement(ref, name, delta) {
   } else {
     await setDoc(ref, {
       name,
+      uid,
       playerName: name,
+      playerUID: uid,
       score: delta,                 // can be 0 ✅
       lastScore: delta,
       createdAt: serverTimestamp(),
@@ -82,11 +87,14 @@ async function upsertIncrement(ref, name, delta) {
   }
 }
 
+
+
 // Add a history record (like your screenshot: score, timestamp, username)
-async function addHistory(gameId, name, score) {
-  const historyCol = collection(db, "zat-am", gameId, "gameHistory");
+async function addHistory(gameId, name, uid, score) {
+  const historyCol = collection(leaderboardDb, "zat-am", gameId, "gameHistory");
   await addDoc(historyCol, {
     username: name,
+    playerUID: uid,
     score: Number(score),
     timestamp: Date.now(),        
   });
