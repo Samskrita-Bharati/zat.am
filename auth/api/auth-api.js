@@ -88,9 +88,7 @@ export const ensureUserDocument = async (user, extraData = {}) => {
     isAdmin: false,
     createdAt: serverTimestamp(),
     language: "1", // Default language
-    country: "",
-    region: "",
-    location: "",
+  
 
     ...safeExtraData,
   });
@@ -119,12 +117,13 @@ export const updateUserPreferences= async (user, preferences) => {
   const userRef = doc(db, "users", user.uid);
   
   // Add default values for language, country, and region if not provided
-  /*const preferencesWithDefaults = {
-    Language: preferences.Language || "1",
+  const preferencesWithDefaults = {
+    language: preferences.language || "1",
     country: preferences.country || "",
     region: preferences.region || "",
-    ...preferences  
-  };*/
+    location: preferences.location || "",
+    ...preferences
+  };
   
   return await setDoc(userRef, preferencesWithDefaults, { merge: true });
 };

@@ -10,7 +10,7 @@ const form = document.getElementById("preferences-form");
 const message = document.getElementById("message");
 
 
-const provinces = {
+/*const provinces = {
   "United States": [
     "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
     "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
@@ -29,11 +29,40 @@ const provinces = {
     "Prince Edward Island", "Quebec", "Saskatchewan",
     "Northwest Territories", "Nunavut", "Yukon"
   ]
+};*/
+
+const provinces = {
+  "United States": [],
+  "Canada": []
 };
+
+async function loadProvinces(country) {
+  try {
+    const response = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ country })
+    });
+
+    if (!response.ok) throw new Error("Failed to load regions");
+    const data = await response.json();
+
+    if (!data || !data.data || !Array.isArray(data.data.states)) {
+      return provinces[country] || [];
+    }
+
+    return data.data.states.map((state) => state.name).filter(Boolean);
+  } catch (error) {
+    console.error("Failed to load provinces/states", error);
+    return provinces[country] || [];
+  }
+}
 
 
 // Show/hide province or custom country input
-countrySelect.addEventListener("change", () => {
+countrySelect.addEventListener("change", async () => {
   const selected = countrySelect.value;
   provinceSelect.innerHTML = "";
   otherCountryInput.value = "";
@@ -42,8 +71,10 @@ countrySelect.addEventListener("change", () => {
     provinceGroup.classList.remove("hidden");
     otherCountryGroup.classList.add("hidden");
 
+    const regions = await loadProvinces(selected);
+
     provinceSelect.innerHTML = `<option value="">Select Province / State</option>` +
-      provinces[selected].map(p => `<option value="${p}">${p}</option>`).join("");
+      regions.map(p => `<option value="${p}">${p}</option>`).join("");
 
     provinceSelect.required = true;
     otherCountryInput.required = false;
@@ -91,6 +122,8 @@ form.addEventListener("submit", (e) => {
       return;
     }
   }
+
+  const location = country === "other" ? region : `${region}, ${country}`;
 
   try{
     const user = getCurrentUser();
