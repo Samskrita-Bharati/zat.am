@@ -1,11 +1,14 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/zat.am/",
+  root: "./",
+  base: "/deployment-testing/", // Add this
   build: {
     outDir: "dist",
     rollupOptions: {
-      input: "index24.html",
+      input: {
+        main: "./index24.html",
+      },
     },
   },
   server: {
