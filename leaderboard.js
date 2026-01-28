@@ -10,8 +10,6 @@ import {
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
 
-//const auth = getAuth(app);
-
 // filters
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
@@ -286,8 +284,8 @@ function updateAnalyticsChart(history, timeRange) {
 // ====== Reset and Competition Controls ======
 // ============================================
 
-// For demo use, false for production
-const mockIsAdmin = false;
+// // For demo use, false for production
+// const mockIsAdmin = false;
 
 // Visibility logic for adminPanel 
 onAuthStateChanged(auth, async (user) => {
@@ -318,7 +316,8 @@ onAuthStateChanged(auth, async (user) => {
     }
   }
 
-  if (mockIsAdmin || isAdmin) {
+  // if (mockIsAdmin || isAdmin) {
+  if (isAdmin) {
     adminPanel.style.display = "block";
     checkResetEligibility();
     console.log("Admin Panel Shown (Mock/Real)");
@@ -338,12 +337,14 @@ async function syncToggleStatus(game) {
   }
   statusToggle.disabled = false;
   const gameSnap = await getDoc(doc(leaderboardDb, "zat-am", game));
-  statusToggle.checked = gameSnap.exists() ? (gameSnap.data().competitionIsActive === true) : false;
+  statusToggle.checked = gameSnap.exists() 
+                      ? (gameSnap.data().competitionIsActive === true) : false;
 }
 
 document.getElementById("statusToggle").addEventListener("change", async (e) => {
   const gameId = document.getElementById("gameSelect").value;
-  await setDoc(doc(leaderboardDb, "zat-am", gameId), { competitionIsActive: e.target.checked }, { merge: true });
+  await setDoc(doc(leaderboardDb, "zat-am", gameId), 
+                  { competitionIsActive: e.target.checked }, { merge: true });
   checkResetEligibility();
 });
 
@@ -355,7 +356,9 @@ async function checkResetEligibility() {
   const resetHint = document.getElementById("resetHint");
 
   if (!game || game === "Global") {
-    resetBtn.disabled = false; resetBtn.style.background = ""; resetHint.textContent = "";
+    resetBtn.disabled = false; 
+    resetBtn.style.background = ""; 
+    resetHint.textContent = "";
     return;
   }
 
