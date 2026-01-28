@@ -1,3 +1,5 @@
+import { getCurrentUser, updateUserPreferences } from "../api/auth-api";
+
 const languageSelect = document.getElementById("language");
 const countrySelect = document.getElementById("country");
 const provinceGroup = document.getElementById("province-group");
@@ -6,10 +8,10 @@ const otherCountryGroup = document.getElementById("other-country-group");
 const otherCountryInput = document.getElementById("other-country");
 const form = document.getElementById("preferences-form");
 const message = document.getElementById("message");
-const heading = document.getElementById("heading");
+
 
 const provinces = {
-  usa: [
+  "United States": [
     "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
     "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
     "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
@@ -21,7 +23,7 @@ const provinces = {
     "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
     "West Virginia", "Wisconsin", "Wyoming"
   ],
-  canada: [
+  "Canada": [
     "Alberta", "British Columbia", "Manitoba", "New Brunswick",
     "Newfoundland and Labrador", "Nova Scotia", "Ontario",
     "Prince Edward Island", "Quebec", "Saskatchewan",
@@ -29,19 +31,6 @@ const provinces = {
   ]
 };
 
-const headingsByLang = {
-  dev: "भाषा और स्थान चुनें",
-  ben: "ভাষা এবং অবস্থান নির্বাচন করুন",
-  gujr: "ભાષા અને સ્થાન પસંદ કરો",
-  gurm: "ਭਾਸ਼ਾ ਅਤੇ ਸਥਾਨ ਚੁਣੋ",
-  kann: "ಭಾಷೆ ಮತ್ತು ಸ್ಥಳವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
-  mala: "ഭാഷയും സ്ഥലവും തിരഞ്ഞെടുക്കുക"
-};
-
-// Update heading when language changes
-/*languageSelect.addEventListener("change", () => {
-  heading.innerText = headingsByLang[languageSelect.value] || "Select Your Preferences";
-});*/
 
 // Show/hide province or custom country input
 countrySelect.addEventListener("change", () => {
@@ -49,7 +38,7 @@ countrySelect.addEventListener("change", () => {
   provinceSelect.innerHTML = "";
   otherCountryInput.value = "";
 
-  if (selected === "usa" || selected === "canada") {
+  if (selected === "United States" || selected === "Canada") {
     provinceGroup.classList.remove("hidden");
     otherCountryGroup.classList.add("hidden");
 
@@ -80,7 +69,9 @@ form.addEventListener("submit", (e) => {
 
   const language = languageSelect.value;
   const country = countrySelect.value;
+
   let region = "";
+  
 
   if (!language || !country) {
     showMessage("Please select language and country", "red");
@@ -101,6 +92,23 @@ form.addEventListener("submit", (e) => {
     }
   }
 
+  try{
+    const user = getCurrentUser();
+    if(!user){
+      showMessage("No logged in user found. Please log in again.", "red");
+      return;
+    }
+    updateUserPreferences(user, {
+      language: language,
+      country: country,
+      region: region, 
+      location: location,
+    });
+  } catch (error) {
+    showMessage("Failed to save preferences. Please try again.", "red");
+    return;
+  }
+
   showMessage("Preferences saved! Redirecting...", "green");
 
   setTimeout(() => {
@@ -111,6 +119,8 @@ form.addEventListener("submit", (e) => {
 // Skip button
 document.getElementById("skip-btn").addEventListener("click", () => {
   showMessage("Skipping... Redirecting...", "green");
+
+
   setTimeout(() => {
     window.location.href = "../index24.html"; // ✅ Redirect to home page
   }, 1000);

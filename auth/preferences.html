@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Preferences - zat.am</title>
 
-  <!-- ✅ CSS path is correct (already working) -->
+  
   <link rel="stylesheet" href="./css/preferences.css" />
 </head>
 <body>
@@ -17,25 +17,25 @@
       <form id="preferences-form">
         <!-- Language -->
         <div class="form-group">
-          <label for="language">Choose Language</label>
+          <label for="language">Choose Second Language</label>
           <select id="language" class="form-input" required>
             <option value="">Select Language</option>
-            <option value="dev">Devanagari (देवनागरी)</option>
-            <option value="ben">Bengali (বাংলা)</option>
-            <option value="gujr">Gujarati (ગુજરાતી)</option>
-            <option value="gurm">Gurmukhi (ਗੁਰਮੁਖੀ)</option>
-            <option value="kann">Kannada (ಕನ್ನಡ)</option>
-            <option value="mala">Malayalam (മലയാളം)</option>
+            <option value="be">Bengali (বাংলা)</option>
+            <option value="gu">Gujarati (ગુજરાતી)</option>
+            <option value="ka">Kannada (ಕನ್ನಡ)</option>
+            <option value="ml">Malayalam (മലയാളം)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+            <option value="ta">Tamil (தமிழ்)</option>
           </select>
         </div>
 
         <!-- Country -->
         <div class="form-group">
           <label for="country">Choose Your Country</label>
-          <select id="country" class="form-input" required>
+          <select id="country" class="form-input" >
             <option value="">Select Country</option>
-            <option value="usa">United States</option>
-            <option value="canada">Canada</option>
+            <option value="United States">United States</option>
+            <option value="Canada">Canada</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <!-- ✅ JS path based on your actual folder -->
-  <script src="./js/preferences.js"></script>
+  
+  <script type="module" src="./js/preferences.js"></script>
 </body>
 </html>

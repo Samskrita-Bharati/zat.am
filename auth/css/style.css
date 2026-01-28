@@ -180,6 +180,8 @@ a:hover {
   margin:5px;
 }
 
-i{
-  
+@media (max-width: 500px) {
+  .container {
+    padding: 10px;
+  }
 }

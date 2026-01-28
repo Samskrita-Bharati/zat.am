@@ -55,6 +55,7 @@ export const updateUserProfile = async (user, data) => {
   return await updateProfile(user, data);
 };
 
+// Sign in with Google and ensure Firestore user document exists
 export const signInWithGoogle = async () => {
   const cred = await signInWithPopup(auth, googleProvider);
   // Ensure a Firestore user document exists for this account
@@ -86,6 +87,11 @@ export const ensureUserDocument = async (user, extraData = {}) => {
     name: displayName || safeExtraData.name || "",
     isAdmin: false,
     createdAt: serverTimestamp(),
+    language: "1", // Default language
+    country: "",
+    region: "",
+    location: "",
+
     ...safeExtraData,
   });
 };
@@ -107,4 +113,18 @@ export const getCurrentUserProfile = async () => {
 export const isCurrentUserAdmin = async () => {
   const profile = await getCurrentUserProfile();
   return !!(profile && profile.isAdmin === true);
+};
+
+export const updateUserPreferences= async (user, preferences) => {
+  const userRef = doc(db, "users", user.uid);
+  
+  // Add default values for language, country, and region if not provided
+  /*const preferencesWithDefaults = {
+    Language: preferences.Language || "1",
+    country: preferences.country || "",
+    region: preferences.region || "",
+    ...preferences  
+  };*/
+  
+  return await setDoc(userRef, preferencesWithDefaults, { merge: true });
 };

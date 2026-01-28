@@ -1,3 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+
 .container {
   width: 100%;
   max-width: 430px;
@@ -35,7 +51,7 @@ h2 {
   margin-bottom: 8px;
   color: #333;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 1.1em;
 }
 
 .form-input {
@@ -45,7 +61,7 @@ h2 {
   border-radius: 4px;
   font-size: 14px;
   background-color: #e7ebf0;
-  color: #333;
+  color: #666;
   font-family: Arial, Helvetica, sans-serif;
 }
 
