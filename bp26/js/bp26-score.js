@@ -1,31 +1,35 @@
 // js/bp26-score.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  increment,
-  serverTimestamp,
-  collection,
-  addDoc
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { initializeApp } from "firebase/app";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  updateDoc, 
+  increment, 
+  serverTimestamp, 
+  collection, 
+  addDoc 
+} from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAwqOOawElTcsBIAmJQIkZYs-W-h8kJx7A",
-  authDomain: "temporary-db-e9ace.firebaseapp.com",
-  databaseURL: "https://temporary-db-e9ace-default-rtdb.firebaseio.com",
-  projectId: "temporary-db-e9ace",
-  storageBucket: "temporary-db-e9ace.firebasestorage.app",
-  messagingSenderId: "810939107125",
-  appId: "1:810939107125:web:25edc649d354c1ca0bee7c"
-};
+import { onAuthStateChanged } from "firebase/auth"
+import { auth, db as playerCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAwqOOawElTcsBIAmJQIkZYs-W-h8kJx7A",
+//   authDomain: "temporary-db-e9ace.firebaseapp.com",
+//   databaseURL: "https://temporary-db-e9ace-default-rtdb.firebaseio.com",
+//   projectId: "temporary-db-e9ace",
+//   storageBucket: "temporary-db-e9ace.firebasestorage.app",
+//   messagingSenderId: "810939107125",
+//   appId: "1:810939107125:web:25edc649d354c1ca0bee7c"
+// };
 
-console.log("✅ Firebase connected to projectId:", app.options.projectId);
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+
+console.log("✅ Firebase connected to projectId:", leaderboardDb.options.projectId);
+console.log("✅ Firebase connected to projectId:", playerCheckDb.options.projectId);
 
 let CURRENT_USER = "";
 let BP26_GAME = "bp26-Game1"; // default
@@ -43,9 +47,9 @@ function safeId(name) {
 // Create parent docs so they show in Firestore left panel (zat-am collection)
 async function ensureParentsUnderZatAm() {
   await Promise.all([
-    setDoc(doc(db, "zat-am", "Global"), { label: "Global", updatedAt: serverTimestamp() }, { merge: true }),
-    setDoc(doc(db, "zat-am", "bp26"), { label: "bp26", updatedAt: serverTimestamp() }, { merge: true }),
-    setDoc(doc(db, "zat-am", BP26_GAME), { label: BP26_GAME, updatedAt: serverTimestamp() }, { merge: true })
+    setDoc(doc(leaderboardDb, "zat-am", "Global"), { label: "Global", updatedAt: serverTimestamp() }, { merge: true }),
+    setDoc(doc(leaderboardDb, "zat-am", "bp26"), { label: "bp26", updatedAt: serverTimestamp() }, { merge: true }),
+    setDoc(doc(leaderboardDb, "zat-am", BP26_GAME), { label: BP26_GAME, updatedAt: serverTimestamp() }, { merge: true })
   ]);
 }
 
