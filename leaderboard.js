@@ -290,7 +290,7 @@ function updateAnalyticsChart(history, timeRange) {
 // Visibility logic for adminPanel 
 onAuthStateChanged(auth, async (user) => {
 
-  console.log("DEBUG - roleCheckDb:", roleCheckDb);
+  //console.log("DEBUG - roleCheckDb:", roleCheckDb);
 
   const adminPanel = document.getElementById("adminPanel");
   if (!adminPanel) return;
