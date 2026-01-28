@@ -1,5 +1,8 @@
-import { auth } from "/auth/api/firebase-config.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../auth/api/firebase-config";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 const loggedOut = document.getElementById("logged-out");
 const loggedIn = document.getElementById("logged-in");
