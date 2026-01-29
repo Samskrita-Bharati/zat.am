@@ -1,71 +1,69 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>शत.म् zat.am</title>
-    <!-- font-awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
-    />
-    <!-- styles -->
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="auth-buttons">
-      <img src="शत.म्.png" alt="Logo" class="logo" />
 
-      <!-- Show when logged out -->
-      <div class="auth-btn">
-        <span id="logged-out">
-          <button onclick="window.location.href = '/auth/login.html'">
-            Login
-          </button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>शत.म् zat.am</title>
+  <!-- font-awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+  <!-- styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
-          <button onclick="window.location.href = '/auth/signup.html'">
-            Sign Up
-          </button>
-        </span>
+<body>
+  <div class="auth-buttons">
+    <img src="शत.म्.png" alt="Logo" class="logo" />
 
-        <!-- Show when logged in -->
-        <div id="logged-in" class="hidden profile-container">
-          <!-- Profile Icon -->
-          <span id="profile-btn"
-            ><i class="fas fa-user-circle fa-2x profile-icon"></i
-          ></span>
-          <!-- Dropdown Menu -->
-          <div id="profile-dropdown" class="dropdown hidden">
-            <div class="dropdown-header">
-              <p class="user-email" id="user-email-dropdown">
-                user@example.com
-              </p>
-              <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
-              <span id="username">Hi, username!</span>
-            </div>
-            <hr />
-            <a href="leaderboard.html">Leaderboard</a>
-            <a href="/auth/dashboard.html">Dashboard</a>
-            <a href="#">Change Password</a>
-            <a href="#" id="dropdown-logout">Logout</a>
+    <!-- Show when logged out -->
+    <div class="auth-btn">
+      <span id="logged-out">
+        <button onclick="window.location.href = '/auth/login.html'">
+          Login
+        </button>
+
+        <button onclick="window.location.href = '/auth/signup.html'">
+          Sign Up
+        </button>
+      </span>
+
+      <!-- Show when logged in -->
+      <div id="logged-in" class="hidden profile-container">
+        <!-- Profile Icon -->
+        <span id="profile-btn"><i class="fas fa-user-circle fa-2x profile-icon"></i></span>
+        <!-- Dropdown Menu -->
+        <div id="profile-dropdown" class="dropdown hidden">
+          <div class="dropdown-header">
+            <p class="user-email" id="user-email-dropdown">
+              user@example.com
+            </p>
+            <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
+            <span id="username">Hi, username!</span>
           </div>
+          <hr />
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="/auth/dashboard.html">Dashboard</a>
+          <a href="#">Change Password</a>
+          <a href="#" id="dropdown-logout">Logout</a>
         </div>
       </div>
     </div>
-    <section class="menu">
-      <!-- <h1>Hi2</h1> -->
-      <!-- title -->
-       
-        <div class="title">
-            <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  -->  </h2>
-            <a href="leaderboard.html" class="filter-btn" style="text-decoration: none; display: inline-block; text-align: center;">Leaderboard</a>
-            <!--<h2><span style="color:red">श</span><span style="color:yellow">त</span>.<span style="color:blue">म्</span></h2>-->
-            <div class="underline"></div>
-        </div>
+  </div>
+  <section class="menu">
+    <!-- <h1>Hi2</h1> -->
+    <!-- title -->
 
-      <!-- filter buttons -->
-      <div class="btn-container">
-        <!-- <button type="button" class="filter-btn" data-id="all">all</button>
+    <div class="title">
+      <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  --> </h2>
+      <a href="leaderboard.html" class="filter-btn"
+        style="text-decoration: none; display: inline-block; text-align: center;">Leaderboard</a>
+      <!--<h2><span style="color:red">श</span><span style="color:yellow">त</span>.<span style="color:blue">म्</span></h2>-->
+      <div class="underline"></div>
+    </div>
+
+    <!-- filter buttons -->
+    <div class="btn-container">
+      <!-- <button type="button" class="filter-btn" data-id="all">all</button>
         <button type="button" class="filter-btn" data-id="breakfast">
           breakfast
         </button>
@@ -73,12 +71,108 @@
         <button type="button" class="filter-btn" data-id="shakes">
           shakes
         </button> -->
+    </div>
+    <!-- menu items -->
+    <div class="section-center"></div>
+  </section>
+  <div class="leaderboard-container">
+    <a class="leaderboard-btn" href="leaderboard.html">🏆 Leaderboard</a>
+
+    <div class="leaderboard-panel">
+      <div class="lb-title">🏆 Top Players</div>
+
+      <div class="lb-item gold">
+        🥇 <span id="p1Name">—</span>
+        <span id="p1Score">0</span>
       </div>
-      <!-- menu items -->
-      <div class="section-center"></div>
-    </section>
-    <!-- javascript -->
-    <script src="app.js"></script>
-    <script type="module" src="/js/navbar-auth.js"></script>
+
+      <div class="lb-item silver">
+        🥈 <span id="p2Name">—</span>
+        <span id="p2Score">0</span>
+      </div>
+
+      <div class="lb-item bronze">
+        🥉 <span id="p3Name">—</span>
+        <span id="p3Score">0</span>
+      </div>
+
+      <a href="leaderboard.html" class="lb-link">View Full Leaderboard →</a>
+    </div>
+  </div>
+  <!-- javascript -->
+  <script src="app.js"></script>
+  <script type="module" src="/js/navbar-auth.js"></script>
+  <!-- Mini-leaderboard -->
+  <script type="module">
+    import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+    import { leaderboardDb } from "./auth/api/firebase-config.js";
+
+    async function fetchGlobalHistory() {
+      const gameHistoriesRef = collection(leaderboardDb, "zat-am", "Global", "gameHistory");
+      const snapshot = await getDocs(gameHistoriesRef);
+      return snapshot.docs.map(doc => doc.data());
+    }
+
+    // 2. 聚合逻辑（完全同步 leaderboard.js 的 generateLeaderboardData 逻辑）
+    function getTop3Data(history) {
+      const aggregated = Object.values(
+        history.reduce((acc, { username, score }) => {
+          if (!username) return acc;
+          if (!acc[username]) {
+            acc[username] = { username, totalScore: 0 };
+          }
+          acc[username].totalScore += score;
+          return acc;
+        }, {})
+      ).sort((a, b) => b.totalScore - a.totalScore);
+
+      return aggregated.slice(0, 3);
+    }
+
+    // 3. 执行渲染
+    async function initMiniLeaderboard() {
+      try {
+        const history = await fetchGlobalHistory();
+        const top3 = getTop3Data(history);
+
+        // 填充 DOM
+        for (let i = 0; i < 3; i++) {
+          const player = top3[i];
+          const nameEl = document.getElementById(`p${i + 1}Name`);
+          const scoreEl = document.getElementById(`p${i + 1}Score`);
+
+          if (nameEl) nameEl.textContent = player ? player.username : "—";
+          if (scoreEl) scoreEl.textContent = player ? player.totalScore.toLocaleString() : "0";
+        }
+      } catch (error) {
+        console.error("Mini-leaderboard load failed:", error);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initMiniLeaderboard);
+  </script>
+  <!-- ✅ inject Scoring + Contest buttons -->
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        const btnContainer = document.querySelector(".btn-container");
+        if (!btnContainer) return;
+
+        function addTab(id, text, href) {
+          if (btnContainer.querySelector(`[data-id="${id}"]`)) return;
+          const a = document.createElement("a");
+          a.className = "filter-btn";
+          a.setAttribute("data-id", id);
+          a.href = href;
+          a.textContent = text;
+          btnContainer.appendChild(a);
+        }
+
+        addTab("scoring", "🎯 Scoring Games", "scoring.html");
+        addTab("contest", "🏆 Contest ", "contest.html");
+      }, 0);
+    });
+  </script>
   </body>
+
 </html>
