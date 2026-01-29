@@ -84,9 +84,9 @@ async function upsertIncrement(ref, name, uid, delta) {
 
   if (snap.exists()) {
     await updateDoc(ref, {
-      name,
+      //name,
       uid,
-      playerName: name,
+      //playerName: name,
       playerUID: uid,
       score: increment(delta),      // leaderboard uses score
       lastScore: delta,
@@ -94,9 +94,9 @@ async function upsertIncrement(ref, name, uid, delta) {
     });
   } else {
     await setDoc(ref, {
-      name,
+      //name,
       uid,
-      playerName: name,
+      //playerName: name,
       playerUID: uid,
       score: delta,                 // can be 0 ✅
       lastScore: delta,
@@ -111,7 +111,7 @@ async function upsertIncrement(ref, name, uid, delta) {
 async function addHistory(gameId, name, uid, score) {
   const historyCol = collection(leaderboardDb, "zat-am", gameId, "gameHistory");
   await addDoc(historyCol, {
-    username: name,
+    //username: name,
     playerUID: uid,
     score: Number(score),
     timestamp: Date.now(),        

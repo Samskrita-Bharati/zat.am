@@ -46,8 +46,46 @@ async function fetchGameHistories(selectedGame) {
     id: doc.id,
     ...doc.data(),
   }));
-  console.log(data);
-  return data;
+
+  const nameCache = {};
+  const dataWithNames = await Promise.all(data.map(async (record) => {
+    const uid = record.playerUID;
+    if (!uid) return { ...record, username: "Unknown Player" };
+
+    if (!nameCache[uid]) {
+      nameCache[uid] = await getUserNameByUid(uid);
+    }
+
+    return {
+      ...record,
+      username: nameCache[uid] || "Unknown Player"
+    };
+  }));
+
+  console.log("dataWithNames:", dataWithNames);
+  return dataWithNames;
+}
+
+// fetch player's name by UID
+async function getUserNameByUid(uid) {
+
+    console.log("Getting name of UID:", uid);
+    try {
+      const userDocRef = doc(roleCheckDb, "users", uid);
+      const userSnap = await getDoc(userDocRef);
+      
+      if (userSnap.exists()) {
+        console.log("Name fetched:", userSnap.data().name);
+        return userSnap.data().name;
+      }
+      else {
+        console.warn("User document not found in Firestore");
+        return "";
+      }
+    } catch (error) {
+        console.error("unable to get username:", error);
+        return "";
+    }
 }
 
 // generates usable leaderboard data from game histories
@@ -55,7 +93,7 @@ function generateLeaderboardData(gameHistories, timeRange) {
   const now = Date.now();
 
   const leaderboardData = Object.values(
-    gameHistories.reduce((acc, { username, score, timestamp, playerUID }) => {
+    gameHistories.reduce((acc, { score, timestamp, playerUID, username }) => {
       // time filtering
       if (
         (timeRange === "daily" && timestamp < now - 24 * 60 * 60 * 1000) ||
@@ -65,24 +103,22 @@ function generateLeaderboardData(gameHistories, timeRange) {
         return acc;
       }
 
-      // use playerUID as key if available, else username
-      const key = playerUID || username;
+      // use playerUID as key 
+      const key = playerUID;
+      if (!key) return acc; 
 
       if (!acc[key]) {
         acc[key] = {
           uid: key,
-          username: username, 
+          username: username,
           totalScore: 0,
           latestTimestamp: timestamp,
         };
       }
 
       acc[key].totalScore += score;
-
       if (timestamp >= acc[key].latestTimestamp) {
         acc[key].latestTimestamp = timestamp;
-        // Use the name in history with a newer timestamp
-        acc[key].username = username; 
       }
 
       return acc;
