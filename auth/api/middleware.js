@@ -22,9 +22,7 @@ if (isProtectedGame()) {
 
       // Get the base path from current location
       const pathParts = window.location.pathname.split("/");
-      const basePath = pathParts.includes("deployment-testing")
-        ? "/deployment-testing"
-        : "";
+      const basePath = pathParts.includes("zat.am") ? "/zat.am" : "";
 
       window.location.href = `${basePath}/auth/login.html?redirect=${redirectUrl}`;
     });
