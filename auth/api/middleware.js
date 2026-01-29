@@ -38,5 +38,5 @@ if (isProtectedGame()) {
 
 /*
   Usage: Add this line at the top of  game's index.html (right after <body> tag) to make it authenticated:
-  <script type="module" src="/auth/api/middleware.js"></script>
+  <script type="module" src="./auth/api/middleware.js"></script>
 */
