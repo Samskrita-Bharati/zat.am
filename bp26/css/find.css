@@ -85,7 +85,6 @@ body {
 }
 #grid td {
     background-color: rgb(173, 210, 252);
-     background-color: rgba(255,215,0,0.75);
     text-align: center;
     font-size: 2em;
     align-self: stretch; 
