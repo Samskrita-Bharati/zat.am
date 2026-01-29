@@ -10,5 +10,3 @@ repl-temp-*
 node_modules/
 dist/
 *.log
-
-.env
