@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -19,12 +19,23 @@
   <body
     id="t"
     class="offline"
-    onload="zatamhs=(localStorage['trexsamszatamhs'])?localStorage['trexsamszatamhs']:0;alert('Your HighScore is : ' + Sanscript.t(String(zatamhs),'iast','devanagari'));"
+    onload="
+      zatamhs = localStorage['trexsamszatamhs']
+        ? localStorage['trexsamszatamhs']
+        : 0;
+      alert(
+        'Your HighScore is : ' +
+          Sanscript.t(String(zatamhs), 'iast', 'devanagari'),
+      );
+    "
   >
-    <!-- Auth Middleware-->
-    <script type="module" src="/auth/api/middleware.js"></script>
     <div id="messageBox" class="sendmessage">
-      <h1 style="text-align: center; font-family: 'Open Sans', sans-serif">
+      <h1
+        style="
+          text-align: center;
+          font-family: &quot;Open Sans&quot;, sans-serif;
+        "
+      >
         कृपया Space नोदयतु
       </h1>
       <div class="niokbutton" onclick="okbuttonsend()"></div>

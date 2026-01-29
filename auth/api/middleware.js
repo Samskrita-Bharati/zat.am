@@ -3,13 +3,7 @@ import { checkAuth } from "./auth-api.js";
 // List of games that require authentication
 const protectedGames = [
   "bp26",
-  "002-zpk",
-  "014-st",
-  "015-2048",
-  "022-p",
-  "043-trs",
-  "044-gp",
-  "048-fs",
+  // Add more games here in the future
 ];
 
 // Check if current page is a protected game
@@ -37,6 +31,6 @@ if (isProtectedGame()) {
 }
 
 /*
-  Usage: Add this line at the top of  game's index.html (right after <body> tag) to make it authenticated:
+  Usage: Add this line at the top of  game's index.html (right after <body> tag) to make it protected:
   <script type="module" src="./auth/api/middleware.js"></script>
 */
