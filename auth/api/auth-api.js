@@ -56,6 +56,7 @@ export const updateUserProfile = async (user, data) => {
   return await updateProfile(user, data);
 };
 
+// Sign in with Google and ensure Firestore user document exists
 export const signInWithGoogle = async () => {
   const cred = await signInWithPopup(auth, googleProvider);
   // Ensure a Firestore user document exists for this account
@@ -87,6 +88,8 @@ export const ensureUserDocument = async (user, extraData = {}) => {
     name: displayName || safeExtraData.name || "",
     isAdmin: false,
     createdAt: serverTimestamp(),
+    language: "1", // Default language
+
     ...safeExtraData,
   });
 };
@@ -120,4 +123,19 @@ export const changePassword = async (currentPassword, newPassword) => {
 
   // Update to new password
   return await updatePassword(user, newPassword);
+};
+
+export const updateUserPreferences = async (user, preferences) => {
+  const userRef = doc(db, "users", user.uid);
+
+  // Add default values for language, country, and region if not provided
+  const preferencesWithDefaults = {
+    language: preferences.language || "1",
+    country: preferences.country || "",
+    region: preferences.region || "",
+    location: preferences.location || "",
+    ...preferences,
+  };
+
+  return await setDoc(userRef, preferencesWithDefaults, { merge: true });
 };

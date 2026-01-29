@@ -41,11 +41,11 @@ signupForm.addEventListener("submit", async (e) => {
     // Create Firestore user document with default isAdmin = false
     await ensureUserDocument(user, { name });
 
-    message.innerHTML = "Account created! Redirecting to login...";
+    message.innerHTML = "Account created! Redirecting...";
     message.style.color = "green";
 
     setTimeout(() => {
-      window.location.href = "login.html";
+      window.location.href = "preferences.html"; // ✅ Redirect to preferences page
     }, 1500);
   } catch (error) {
     console.error(error);

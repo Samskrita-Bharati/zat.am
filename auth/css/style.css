@@ -178,3 +178,9 @@ a:hover {
   font-size: 0.8em;
   margin: 5px;
 }
+
+@media (max-width: 500px) {
+  .container {
+    padding: 10px;
+  }
+}
