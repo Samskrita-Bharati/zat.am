@@ -10,8 +10,6 @@ import {
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
 
-//const auth = getAuth(app);
-
 // filters
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
@@ -52,17 +50,71 @@ async function fetchGameHistories(selectedGame) {
   return data;
 }
 
+function isToday(timestamp) {
+  const now = new Date();
+  const d = new Date(timestamp);
+
+  if (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  ) {
+    console.log(d);
+  }
+
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
+}
+
+function isThisWeek(timestamp) {
+  const now = new Date();
+  const d = new Date(timestamp);
+
+  // start of this week (local time)
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+  console.log(startOfWeek);
+
+  // start of the week for the given timestamp
+  const startOfTimestampWeek = new Date(d);
+  startOfTimestampWeek.setDate(d.getDate() - d.getDay());
+  startOfTimestampWeek.setHours(0, 0, 0, 0);
+  console.log(startOfTimestampWeek)
+
+  return startOfWeek.getTime() === startOfTimestampWeek.getTime();
+}
+
+function isThisMonth(timestamp) {
+  const now = new Date();
+  const d = new Date(timestamp);
+
+  if (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth()
+  ) {
+    console.log(d);
+  }
+
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth()
+  );
+}
+
 // generates usable leaderboard data from game histories
 function generateLeaderboardData(gameHistories, timeRange) {
   const now = Date.now();
-
   const leaderboardData = Object.values(
     gameHistories.reduce((acc, { username, score, timestamp }) => {
       // time filtering
       if (
-        (timeRange === "daily" && timestamp < now - 24 * 60 * 60 * 1000) ||
-        (timeRange === "weekly" && timestamp < now - 7 * 24 * 60 * 60 * 1000) ||
-        (timeRange === "monthly" && timestamp < now - 30 * 24 * 60 * 60 * 1000)
+        (timeRange === "daily" && !isToday(timestamp)) ||
+        (timeRange === "weekly" && !isThisWeek(timestamp)) ||
+        (timeRange === "monthly" && !isThisMonth(timestamp))
       ) {
         return acc;
       }
@@ -98,6 +150,11 @@ updateAnalyticsChart(gameHistories, "");
 // re-render leaderboard and change to 1st page
 gameSelect.addEventListener("change", async (e) => {
   gameHistories = await fetchGameHistories(e.target.value);
+  console.log(
+    `CURRENT DATE & TIME: %c${new Date()} %c`,
+    'color: #00ff33; font-size: 14px;',
+    'text-transform: uppercase; font-size: 16px; color: #ff33dd;'
+  );
   leaderboardData = generateLeaderboardData(gameHistories, "");
   render();
   changePage(1);
@@ -286,8 +343,8 @@ function updateAnalyticsChart(history, timeRange) {
 // ====== Reset and Competition Controls ======
 // ============================================
 
-// For demo use, false for production
-const mockIsAdmin = false;
+// // For demo use, false for production
+// const mockIsAdmin = true;
 
 // Visibility logic for adminPanel 
 onAuthStateChanged(auth, async (user) => {
@@ -307,7 +364,7 @@ onAuthStateChanged(auth, async (user) => {
 
       if (userSnap.exists()) {
         const userData = userSnap.data();
-        isAdmin = userData.admin === true || userData.role === "admin";
+        isAdmin = userData.admin === true;
         console.log("isAdmin:", isAdmin);
       }
       else {
@@ -318,7 +375,7 @@ onAuthStateChanged(auth, async (user) => {
     }
   }
 
-  if (mockIsAdmin || isAdmin) {
+  if (isAdmin) {
     adminPanel.style.display = "block";
     checkResetEligibility();
     console.log("Admin Panel Shown (Mock/Real)");
@@ -423,3 +480,77 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     const game = document.getElementById("gameSelect").value;
     performReset(game);
 });
+
+
+// ============================================
+// ====== SPARKLE PARTICLE SYSTEM ======
+// ============================================
+const canvas = document.getElementById('sparkleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let hoveredCard = null;
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.size = Math.random() * 15 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
+        this.speedX = (Math.random() - 0.5) * 5;
+        this.speedY = (Math.random() - 0.5) * 5;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.01;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin = (Math.random() - 0.5) * 0.2;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= this.decay;
+        this.angle += this.spin;
+    }
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = this.color || '#3B82F6';
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+        ctx.restore();
+    }
+}
+
+[1, 2, 3].forEach(rank => {
+    const el = document.getElementById(`card-${rank}`);
+    if(el) {
+        el.addEventListener('mouseenter', () => hoveredCard = el);
+        el.addEventListener('mouseleave', () => hoveredCard = null);
+    }
+});
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (hoveredCard) {
+        const rect = hoveredCard.getBoundingClientRect();
+        const color = hoveredCard.getAttribute('data-color');
+        for (let i = 0; i < 2; i++) {
+            const x = rect.left + Math.random() * rect.width;
+            const y = rect.top + Math.random() * rect.height;
+            particles.push(new Particle(x, y, color));
+        }
+    }
+    particles = particles.filter(p => {
+        p.update();
+        p.draw();
+        return p.alpha > 0;
+    });
+    requestAnimationFrame(animate);
+}
+animate();
