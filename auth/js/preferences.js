@@ -1,4 +1,4 @@
-import { getCurrentUser, updateUserPreferences } from "../api/auth-api";
+import { getCurrentUser, updateUserPreferences } from "../api/auth-api.js";
 
 const languageSelect = document.getElementById("language");
 const countrySelect = document.getElementById("country");
@@ -50,10 +50,6 @@ countrySelect.addEventListener("change", async () => {
 
     provinceSelect.innerHTML = `<option value="">Select Province / State</option>` +
       regions.map(p => `<option value="${p}">${p}</option>`).join("");
-
-  } else if (selected === "other") {
-    provinceGroup.classList.add("hidden");
-    otherCountryGroup.classList.remove("hidden");
 
   } else {
     provinceGroup.classList.add("hidden");
