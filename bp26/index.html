@@ -2,45 +2,6 @@
 <html>
   <head>
 
-<!-- Get player's name from auth -->
-<script type="module">
-  import { onAuthStateChanged } from "firebase/auth";
-  import { getFirestore, doc, getDoc } from "firebase/firestore"; 
-  import { auth, db } from "../auth/api/firebase-config.js";
-
-  onAuthStateChanged(auth, async (user) => {
-    const playerNameElement = document.getElementById("playerName");
-
-    if (user) {
-      console.log("UID:", user.uid);
-
-      // Get name from auth profile
-      if (user.displayName) {
-        playerNameElement.innerText = `${user.displayName}`;
-      }
-      // Get name from Firestore
-      else {
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDoc = await getDoc(userDocRef);
-
-          if (userDoc.exists() && userDoc.data().name) {
-            playerNameElement.innerText = `${userDoc.data().name}`;
-          } else {
-            playerNameElement.innerText = "Unknow User"; 
-          }
-        } catch (error) {
-          console.error("unable to get user name:", error);
-          playerNameElement.innerText = "Error loading name";
-        }
-      }
-    } else {
-      playerName.innerText = "Vistor";
-    }
-    
-  });
-</script>
-
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-1QD88MYKWG"></script>
 <script>
@@ -69,10 +30,6 @@
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
   <body>
-    
-    <!-- Get username from login -->
-    <h1 id="playerName">Hi, name!</h1><br>
-
     <!-- Auth Middleware-->
     <script type="module" src="/auth/api/middleware.js"></script>
     <h1>
