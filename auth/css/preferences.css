@@ -122,6 +122,8 @@ h2 {
   display: none;
 }
 
+
+
 @media (max-width: 500px) {
   .button-group {
     flex-direction: column;
