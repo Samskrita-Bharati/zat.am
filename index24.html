@@ -106,44 +106,44 @@
   <script type="module">
     import { collection, getDocs, doc, getDoc } from "firebase/firestore";
     import { leaderboardDb } from "./auth/api/firebase-config.js";
+    //console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
 
-    async function fetchGlobalHistory() {
-      const gameHistoriesRef = collection(leaderboardDb, "zat-am", "Global", "gameHistory");
-      const snapshot = await getDocs(gameHistoriesRef);
-      return snapshot.docs.map(doc => doc.data());
+    async function getTop3(selectedGame) {
+      const colRef = collection(leaderboardDb, "zat-am", selectedGame, "gameHistory");
+      const snapshot = await getDocs(colRef);
+
+      const summary = snapshot.docs.reduce((acc, doc) => {
+        const { playerUID, score } = doc.data();
+        if (!playerUID) return acc;
+        acc[playerUID] = (acc[playerUID] || 0) + score;
+        return acc;
+      }, {});
+
+      const top3Ids = Object.entries(summary)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+
+      return await Promise.all(top3Ids.map(async ([uid, score]) => {
+        const name = await fetchName(uid);
+        return { username: name, totalScore: score };
+      }));
     }
 
-    function getTop3Data(history) {
-      const aggregated = Object.values(
-        history.reduce((acc, { username, score }) => {
-          if (!username) return acc;
-          if (!acc[username]) {
-            acc[username] = { username, totalScore: 0 };
-          }
-          acc[username].totalScore += score;
-          return acc;
-        }, {})
-      ).sort((a, b) => b.totalScore - a.totalScore);
-
-      return aggregated.slice(0, 3);
+    async function fetchName(uid) {
+      try {
+        const snap = await getDoc(doc(roleCheckDb, "users", uid, "public", "profile"));
+        return snap.exists() ? snap.data().name : "Unknown Player";
+      } catch { return "Unknown Player"; }
     }
 
     async function initMiniLeaderboard() {
-      try {
-        const history = await fetchGlobalHistory();
-        const top3 = getTop3Data(history);
-
-        for (let i = 0; i < 3; i++) {
-          const player = top3[i];
-          const nameEl = document.getElementById(`p${i + 1}Name`);
-          const scoreEl = document.getElementById(`p${i + 1}Score`);
-
-          if (nameEl) nameEl.textContent = player ? player.username : "—";
-          if (scoreEl) scoreEl.textContent = player ? player.totalScore.toLocaleString() : "0";
-        }
-      } catch (error) {
-        console.error("Mini-leaderboard load failed:", error);
-      }
+      const top3 = await getTop3("Global");
+      top3.forEach((player, i) => {
+        const nameEl = document.getElementById(`p${i + 1}Name`);
+        const scoreEl = document.getElementById(`p${i + 1}Score`);
+        if (nameEl) nameEl.textContent = player.username;
+        if (scoreEl) scoreEl.textContent = player.totalScore.toLocaleString();
+      });
     }
 
     window.addEventListener('DOMContentLoaded', initMiniLeaderboard);
