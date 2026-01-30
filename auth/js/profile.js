@@ -11,6 +11,8 @@ const profileName = document.getElementById("profile-name");
 const profileEmail = document.getElementById("profile-email");
 const displayRole = document.getElementById("display-role");
 const displayDate = document.getElementById("display-date");
+const displayLanguage = document.getElementById("display-language");
+const displayLocation = document.getElementById("display-location");
 
 const editNameForm = document.getElementById("edit-name-form");
 const newNameInput = document.getElementById("new-name");
@@ -43,6 +45,16 @@ checkAuth()
       displayDate.textContent = date.toLocaleDateString("en-US", options);
     } else {
       displayDate.textContent = "Not available";
+    }
+
+    if (profile.language) {
+      displayLanguage.textContent = profile.language;
+      displayLanguage.classList.remove("coming-soon");
+    }
+
+    if (profile.location) {
+      displayLocation.textContent = profile.location;
+      displayLocation.classList.remove("coming-soon");
     }
 
     newNameInput.value = profile.name || "";
