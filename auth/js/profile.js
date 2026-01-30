@@ -80,8 +80,8 @@ editNameForm.addEventListener("submit", async (e) => {
   try {
     await updateUserProfile(currentUser, { displayName: newName });
 
-    const userRef = doc(db, "users", currentUser.uid);
-    await updateDoc(userRef, { name: newName });
+    const profileRef = doc(db, "users", currentUser.uid, "public", "profile");
+    await updateDoc(profileRef, { name: newName });
 
     profileName.textContent = newName;
 
