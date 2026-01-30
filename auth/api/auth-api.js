@@ -10,12 +10,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "./firebase-config";
-import {
-  doc,
-  getDoc,
-  setDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -61,13 +56,13 @@ export const signInWithGoogle = async () => {
   // Ensure a Firestore user document exists for this account
   await ensureUserDocument(cred.user);
   return cred;
-}
+};
 
 // Ensure there is a Firestore user document for the given user.
 // Creates it only if missing, with isAdmin defaulting to false.
 // This respects security rules by never changing isAdmin on existing docs.
 export const ensureUserDocument = async (user, extraData = {}) => {
-  if (!user) return;
+  if (!user) return false;
 
   const userRef = doc(db, "users", user.uid);
   const snapshot = await getDoc(userRef);
@@ -88,10 +83,10 @@ export const ensureUserDocument = async (user, extraData = {}) => {
     isAdmin: false,
     createdAt: serverTimestamp(),
     language: "1", // Default language
-  
 
     ...safeExtraData,
   });
+  return true;
 };
 
 // Fetch the current user's profile document from Firestore
@@ -113,17 +108,17 @@ export const isCurrentUserAdmin = async () => {
   return !!(profile && profile.isAdmin === true);
 };
 
-export const updateUserPreferences= async (user, preferences) => {
+export const updateUserPreferences = async (user, preferences) => {
   const userRef = doc(db, "users", user.uid);
-  
+
   // Add default values for language, country, and region if not provided
   const preferencesWithDefaults = {
     language: preferences.language || "1",
     country: preferences.country || "",
     region: preferences.region || "",
     location: preferences.location || "",
-    ...preferences
+    ...preferences,
   };
-  
+
   return await setDoc(userRef, preferencesWithDefaults, { merge: true });
 };
