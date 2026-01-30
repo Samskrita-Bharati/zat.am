@@ -1,5 +1,5 @@
-// Import Firebase from CDN
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+// Firebase Configuration for zat.am project
+import { initializeApp } from "firebase/app";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,19 +9,10 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   GoogleAuthProvider,
-  signInWithPopup,
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  serverTimestamp,
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+  signInWithPopup
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
 
 
 const firebaseConfig = {
@@ -62,13 +53,5 @@ export {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  serverTimestamp,
   leaderboardDb
 };

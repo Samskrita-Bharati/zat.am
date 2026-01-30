@@ -1,5 +1,8 @@
-import { login, signInWithGoogle, ensureUserDocument } from "../api/auth-api.js";
-
+import {
+  login,
+  signInWithGoogle,
+  ensureUserDocument,
+} from "../api/auth-api.js";
 
 const loginForm = document.getElementById("login-form");
 const emailInput = document.getElementById("signin-email");
@@ -38,7 +41,6 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
-
 const googleSignInBtn = document.getElementById("google-signin");
 googleSignInBtn.addEventListener("click", async () => {
   try {
@@ -53,12 +55,16 @@ googleSignInBtn.addEventListener("click", async () => {
       if (redirectUrl) {
         // Redirect to the original page
         window.location.href = decodeURIComponent(redirectUrl);
-      }}, 1000);
+      } else {
+        // Default redirect to index24.html
+        window.location.href = "../index24.html";
+      }
+    }, 1000);
   } catch (error) {
     console.error(error);
-    
-      message.innerHTML = "Google sign-in failed. Please try again.";
-    
+
+    message.innerHTML = "Google sign-in failed. Please try again.";
+
     message.style.color = "red";
-  } 
-});  
+  }
+});

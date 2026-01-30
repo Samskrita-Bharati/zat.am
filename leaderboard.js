@@ -5,7 +5,7 @@ import {
   getDoc, 
   writeBatch, 
   setDoc
-} from "firebase/firestore";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
@@ -18,7 +18,9 @@ let myChart = null;
 
 // fetches list of games
 async function fetchGames() {
+  console.log("DSF")
   const games = collection(leaderboardDb, "zat-am");
+  console.log("DSF")
   const snapshot = await getDocs(games);
   const data = snapshot.docs.map((doc) => ({
     id: doc.id,

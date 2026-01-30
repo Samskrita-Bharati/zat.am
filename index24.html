@@ -42,8 +42,7 @@
           </div>
           <hr />
           <a href="leaderboard.html">Leaderboard</a>
-          <a href="/auth/dashboard.html">Dashboard</a>
-          <a href="#">Change Password</a>
+          <a href="./auth/profile.html">Profile</a>
           <a href="#" id="dropdown-logout">Logout</a>
         </div>
       </div>
@@ -54,8 +53,6 @@
       <!-- title -->
         <div class="title">
             <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  -->  </h2>
-            <a href="leaderboard.html" class="filter-btn" style="text-decoration: none; display: inline-block; text-align: center;">Leaderboard</a>
-            <!--<h2><span style="color:red">श</span><span style="color:yellow">त</span>.<span style="color:blue">म्</span></h2>-->
             <div class="underline"></div>
         </div>
       <!-- filter buttons -->
@@ -107,7 +104,7 @@
   <script type="module" src="/js/navbar-auth.js"></script>
   <!-- Mini-leaderboard -->
   <script type="module">
-    import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+    import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
     import { db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
     //console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
 

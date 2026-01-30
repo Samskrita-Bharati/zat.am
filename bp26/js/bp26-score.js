@@ -8,7 +8,7 @@ import {
   serverTimestamp, 
   collection, 
   addDoc 
-} from "firebase/firestore";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, db as playerCheckDb, leaderboardDb } from "../../auth/api/firebase-config.js";
