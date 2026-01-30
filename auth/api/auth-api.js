@@ -53,8 +53,6 @@ export const updateUserProfile = async (user, data) => {
 // Sign in with Google and ensure Firestore user document exists
 export const signInWithGoogle = async () => {
   const cred = await signInWithPopup(auth, googleProvider);
-  // Ensure a Firestore user document exists for this account
-  await ensureUserDocument(cred.user);
   return cred;
 };
 
@@ -69,7 +67,7 @@ export const ensureUserDocument = async (user, extraData = {}) => {
 
   if (snapshot.exists()) {
     // Do not modify existing documents here (especially isAdmin).
-    return;
+    return false;
   }
 
   const { displayName, email } = user;

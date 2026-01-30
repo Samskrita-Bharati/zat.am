@@ -43,14 +43,15 @@ const googleSignInBtn = document.getElementById("google-signin");
 googleSignInBtn.addEventListener("click", async () => {
   try {
     const cred = await signInWithGoogle();
-    const isNewUser =await ensureUserDocument(cred.user);
+    const isNewUser = await ensureUserDocument(cred.user);
+    console.log("isNewUser:", isNewUser, "Type:", typeof isNewUser);
     message.innerHTML = "Login successful! Redirecting...";
     message.style.color = "green";
 
     
     setTimeout(() => {
       // Check if new user first - they should set preferences
-      if (isNewUser) {
+      if (isNewUser === true) {
         // Default redirect to preferences page
         window.location.href = "preferences.html";
       } else {
