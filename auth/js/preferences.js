@@ -75,12 +75,9 @@ countrySelect.addEventListener("change", async () => {
     provinceSelect.innerHTML = `<option value="">Select Province / State</option>` +
       regions.map(p => `<option value="${p}">${p}</option>`).join("");
 
-<<<<<<< HEAD
-=======
   } else if (selected === "other") {
     provinceGroup.classList.add("hidden");
     otherCountryGroup.classList.remove("hidden");
->>>>>>> feat--dropdown-country-list
   } else {
     provinceGroup.classList.add("hidden");
     otherCountryGroup.classList.add("hidden");
