@@ -43,19 +43,28 @@ const googleSignInBtn = document.getElementById("google-signin");
 googleSignInBtn.addEventListener("click", async () => {
   try {
     const cred = await signInWithGoogle();
-    await ensureUserDocument(cred.user);
+    const isNewUser = await ensureUserDocument(cred.user);
+    console.log("isNewUser:", isNewUser, "Type:", typeof isNewUser);
     message.innerHTML = "Login successful! Redirecting...";
     message.style.color = "green";
+
+    
     setTimeout(() => {
-      // Get redirect parameter from URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectUrl = urlParams.get("redirect");
-      if (redirectUrl) {
-        // Redirect to the original page
-        window.location.href = decodeURIComponent(redirectUrl);
+      // Check if new user first - they should set preferences
+      if (isNewUser === true) {
+        // Default redirect to preferences page
+        window.location.href = "preferences.html";
       } else {
-        // Default redirect to index24.html
-        window.location.href = "../index24.html";
+        // Get redirect parameter from URL for returning users
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get("redirect");
+        if (redirectUrl) {
+          // Redirect to the original page
+          window.location.href = decodeURIComponent(redirectUrl);
+        } else {
+          // Default redirect to main page
+          window.location.href = "../index24.html";
+        }
       }
     }, 1000);
   } catch (error) {
