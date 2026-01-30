@@ -26,7 +26,7 @@ onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
           CURRENT_UID = user.uid;
-          console.log("UID saved:", CURRENT_UID);
+          //console.log("UID saved:", CURRENT_UID);
         } catch (error) {
           console.error("unable to get user uid:", error);
         }
@@ -98,10 +98,8 @@ async function addHistory(gameId, uid, score) {
 }
 
 export async function reportScore(score) {
-    //console.log("== In reportScore == UID:", user.uid);
-    console.log("== In reportScore == CURR_UID:", CURRENT_UID);
   if (!CURRENT_UID ) {
-    console.warn("⚠️ player name not set yet, cannot report score.");
+    console.warn("⚠️ player uid not set yet, cannot report score.");
     return;
   }
 
