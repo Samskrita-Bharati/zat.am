@@ -59,8 +59,6 @@ export const updateUserProfile = async (user, data) => {
 // Sign in with Google and ensure Firestore user document exists
 export const signInWithGoogle = async () => {
   const cred = await signInWithPopup(auth, googleProvider);
-  // Ensure a Firestore user document exists for this account
-  await ensureUserDocument(cred.user);
   return cred;
 };
 
@@ -71,7 +69,7 @@ export const signInWithGoogle = async () => {
 // Creates docs only if missing, with isAdmin defaulting to false.
 // Never changes isAdmin on existing docs (respecting security rules).
 export const ensureUserDocument = async (user, extraData = {}) => {
-  if (!user) return;
+  if (!user) return false;
 
   const accountRef = doc(db, "users", user.uid, "private", "account");
   const profileRef = doc(db, "users", user.uid, "public", "profile");
@@ -158,6 +156,7 @@ export const updateUserPreferences = async (user, preferences) => {
 
   // Add default values for language, country, and region if not provided
   const preferencesWithDefaults = {
+    ...preferences,
     language: preferences.language || "1",
     country: preferences.country || "",
     region: preferences.region || "",
