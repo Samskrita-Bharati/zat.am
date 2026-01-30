@@ -1,4 +1,5 @@
 import { auth } from "../auth/api/firebase-config.js";
+import { getCurrentUserProfile } from "../auth/api/auth-api.js";
 import {
   onAuthStateChanged,
   signOut,
@@ -11,6 +12,22 @@ const dropdown = document.getElementById("profile-dropdown");
 const userEmailDropdown = document.getElementById("user-email-dropdown");
 const usernameDisplay = document.getElementById("username");
 const dropdownLogout = document.getElementById("dropdown-logout");
+const bilingualBtn = document.getElementById("bilingual-toggle");
+
+// Initialize shared bilingual state from localStorage
+const storedBilingual = localStorage.getItem("zatBilingualOn");
+window.zatBilingualOn = storedBilingual === "1";
+
+const storedLang = localStorage.getItem("zatPreferredLang");
+if (storedLang) {
+  window.zatPreferredLang = storedLang;
+}
+
+const updateBilingualButton = () => {
+  if (!bilingualBtn) return;
+  const on = window.zatBilingualOn === true;
+  bilingualBtn.textContent = on ? "Bilingual: On" : "Bilingual: Off";
+};
 
 // Check if user is logged in
 onAuthStateChanged(auth, (user) => {
@@ -31,9 +48,23 @@ onAuthStateChanged(auth, (user) => {
     }
 
     usernameDisplay.textContent = `Hi, ${displayName}!`;
+
+    // Load user profile to get preferred language code
+    getCurrentUserProfile()
+      .then((profile) => {
+        if (profile && profile.language) {
+          window.zatPreferredLang = profile.language;
+          localStorage.setItem("zatPreferredLang", profile.language);
+        }
+        updateBilingualButton();
+      })
+      .catch(() => {
+        updateBilingualButton();
+      });
   } else {
     loggedOut.classList.remove("hidden");
     loggedIn.classList.add("hidden");
+    updateBilingualButton();
   }
 });
 
@@ -62,6 +93,23 @@ if (dropdownLogout) {
     } catch (error) {
       alert("Error logging out");
       console.error(error);
+    }
+  });
+}
+
+// Bilingual mode toggle handler
+if (bilingualBtn) {
+  updateBilingualButton();
+
+  bilingualBtn.addEventListener("click", () => {
+    window.zatBilingualOn = !window.zatBilingualOn;
+    localStorage.setItem("zatBilingualOn", window.zatBilingualOn ? "1" : "0");
+    updateBilingualButton();
+
+    // If the main menu is present, refresh it so links (like bp26)
+    // immediately pick up the new bilingual state without needing reload.
+    if (typeof window.zatRefreshMenu === "function") {
+      window.zatRefreshMenu();
     }
   });
 }
