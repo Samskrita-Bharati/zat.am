@@ -16,52 +16,31 @@ import { auth, db as playerCheckDb, leaderboardDb } from "../../auth/api/firebas
 console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
 console.log("✅ Firebase connected to projectId:", playerCheckDb.app.options.projectId);
 
-let CURRENT_USER = "";
+//let CURRENT_USER = "";
 let CURRENT_UID = ""; 
 let BP26_GAME = "bp26-Game1"; // default
 
-// Get player's name from auth
+// Get player's uid from auth
+// Leaderboard name will be reteived in realtime
 onAuthStateChanged(auth, async (user) => {
-
     if (user) {
-      console.log("UID:", user.uid);
-
-      // Get name from auth profile
-      if (user.displayName) {
-        CURRENT_UID = user.uid;
-        CURRENT_USER = user.displayName;
-      }
-      // Get name from Firestore
-      else {
         try {
-          const userDocRef = doc(playerCheckDb, "users", user.uid);
-          const userDoc = await getDoc(userDocRef);
-
-          if (userDoc.exists() && userDoc.data().name) {
-            CURRENT_UID = user.uid;
-            CURRENT_USER = userDoc.data().name;
-          } else {
-            CURRENT_USER = "Unknow User"; 
-          }
+          CURRENT_UID = user.uid;
+          console.log("UID saved:", CURRENT_UID);
         } catch (error) {
-          console.error("unable to get user name:", error);
-          CURRENT_USER = "Error loading name";
+          console.error("unable to get user uid:", error);
         }
       }
-    } else {
-      CURRENT_USER = "Vistor";
-    }
   });
 
-function safeId(name) {
-  return (
-    name
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "_")
-      .replace(/[^a-z0-9_]/g, "") || CURRENT_UID || "guest"
-  );
-}
+// function safeId(name) {
+//   return (
+//     name
+//       .toLowerCase()
+//       .trim()
+//       .replace(/\s+/g, "_")
+//       .replace(/[^a-z0-9_]/g, ""));
+// }
 
 // Create parent docs so they show in Firestore left panel (zat-am collection)
 async function ensureParentsUnderZatAm() {
@@ -78,8 +57,8 @@ export function bp26Init({ game } = {}) {
 }
 
 // Upsert (and increment) player doc
-// Update player's uid into the record
-async function upsertIncrement(ref, name, uid, delta) {
+// Update player's uid instead of name into the record
+async function upsertIncrement(ref, uid, delta) {
   const snap = await getDoc(ref);
 
   if (snap.exists()) {
@@ -107,8 +86,8 @@ async function upsertIncrement(ref, name, uid, delta) {
 }
 
 
-// Add a history record (like your screenshot: score, timestamp, username)
-async function addHistory(gameId, name, uid, score) {
+// Add a history record (like your screenshot: score, timestamp, uid)
+async function addHistory(gameId, uid, score) {
   const historyCol = collection(leaderboardDb, "zat-am", gameId, "gameHistory");
   await addDoc(historyCol, {
     //username: name,
@@ -119,7 +98,9 @@ async function addHistory(gameId, name, uid, score) {
 }
 
 export async function reportScore(score) {
-  if (!CURRENT_USER || !CURRENT_UID ) {
+    //console.log("== In reportScore == UID:", user.uid);
+    console.log("== In reportScore == CURR_UID:", CURRENT_UID);
+  if (!CURRENT_UID ) {
     console.warn("⚠️ player name not set yet, cannot report score.");
     return;
   }
@@ -127,9 +108,9 @@ export async function reportScore(score) {
   const s = Number(score);
   if (!Number.isFinite(s)) throw new Error("Score must be a number."); // 0 allowed ✅
 
-  const id = safeId(CURRENT_USER);
-  const name = CURRENT_USER;
   const uid = CURRENT_UID;
+  // const id = safeId(CURRENT_USER);
+  // const name = id;
 
   await ensureParentsUnderZatAm();
 
@@ -140,15 +121,15 @@ export async function reportScore(score) {
 
   // ✅ write players (so leaderboard shows it)
   await Promise.all([
-    upsertIncrement(gamePlayerRef, name, uid, s),
-    upsertIncrement(bp26PlayerRef, name, uid, s),
-    upsertIncrement(globPlayerRef, name, uid, s)
+    upsertIncrement(gamePlayerRef, uid, s),
+    upsertIncrement(bp26PlayerRef, uid, s),
+    upsertIncrement(globPlayerRef, uid, s)
   ]);
 
   // ✅ write history (so format matches Game1)
   await Promise.all([
-    addHistory(BP26_GAME, name, uid, s),
-    addHistory("Global", name, uid, s)
+    addHistory(BP26_GAME, uid, s),
+    addHistory("Global", uid, s)
     // (optional) if you also want bp26 history:
     // addHistory("bp26", name, uid, s),
   ]);

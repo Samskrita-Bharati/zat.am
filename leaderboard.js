@@ -62,20 +62,20 @@ async function fetchGameHistories(selectedGame) {
     };
   }));
 
-  console.log("dataWithNames:", dataWithNames);
+  //console.log("dataWithNames:", dataWithNames);
   return dataWithNames;
 }
 
 // fetch player's name by UID
 async function getUserNameByUid(uid) {
 
-    console.log("Getting name of UID:", uid);
+    //console.log("Getting name of UID:", uid);
     try {
-      const userDocRef = doc(roleCheckDb, "users", uid);
+      const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
       const userSnap = await getDoc(userDocRef);
       
       if (userSnap.exists()) {
-        console.log("Name fetched:", userSnap.data().name);
+        //console.log("Name fetched:", userSnap.data().name);
         return userSnap.data().name;
       }
       else {
@@ -342,12 +342,12 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("UID:", user.uid);
     try {
-      const userDocRef = doc(roleCheckDb, "users", user.uid);
+      const userDocRef = doc(roleCheckDb, "users", user.uid, "private", "account");
       const userSnap = await getDoc(userDocRef);
 
       if (userSnap.exists()) {
         const userData = userSnap.data();
-        isAdmin = userData.admin === true || userData.role === "admin";
+        isAdmin = userData.isAdmin === true;
         console.log("isAdmin:", isAdmin);
       }
       else {
