@@ -113,7 +113,6 @@
       return snapshot.docs.map(doc => doc.data());
     }
 
-    // 2. 聚合逻辑（完全同步 leaderboard.js 的 generateLeaderboardData 逻辑）
     function getTop3Data(history) {
       const aggregated = Object.values(
         history.reduce((acc, { username, score }) => {
@@ -129,13 +128,11 @@
       return aggregated.slice(0, 3);
     }
 
-    // 3. 执行渲染
     async function initMiniLeaderboard() {
       try {
         const history = await fetchGlobalHistory();
         const top3 = getTop3Data(history);
 
-        // 填充 DOM
         for (let i = 0; i < 3; i++) {
           const player = top3[i];
           const nameEl = document.getElementById(`p${i + 1}Name`);

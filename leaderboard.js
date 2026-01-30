@@ -46,8 +46,46 @@ async function fetchGameHistories(selectedGame) {
     id: doc.id,
     ...doc.data(),
   }));
-  console.log(data);
-  return data;
+
+  const nameCache = {};
+  const dataWithNames = await Promise.all(data.map(async (record) => {
+    const uid = record.playerUID;
+    if (!uid) return { ...record, username: "Unknown Player" };
+
+    if (!nameCache[uid]) {
+      nameCache[uid] = await getUserNameByUid(uid);
+    }
+
+    return {
+      ...record,
+      username: nameCache[uid] || "Unknown Player"
+    };
+  }));
+
+  //console.log("dataWithNames:", dataWithNames);
+  return dataWithNames;
+}
+
+// fetch player's name by UID
+async function getUserNameByUid(uid) {
+
+    //console.log("Getting name of UID:", uid);
+    try {
+      const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
+      const userSnap = await getDoc(userDocRef);
+      
+      if (userSnap.exists()) {
+        //console.log("Name fetched:", userSnap.data().name);
+        return userSnap.data().name;
+      }
+      else {
+        console.warn("User document not found in Firestore");
+        return "";
+      }
+    } catch (error) {
+        console.error("unable to get username:", error);
+        return "";
+    }
 }
 
 function isToday(timestamp) {
@@ -109,7 +147,7 @@ function isThisMonth(timestamp) {
 function generateLeaderboardData(gameHistories, timeRange) {
   const now = Date.now();
   const leaderboardData = Object.values(
-    gameHistories.reduce((acc, { username, score, timestamp }) => {
+    gameHistories.reduce((acc, { score, timestamp, playerUID, username }) => {
       // time filtering
       if (
         (timeRange === "daily" && !isToday(timestamp)) ||
@@ -119,18 +157,22 @@ function generateLeaderboardData(gameHistories, timeRange) {
         return acc;
       }
 
-      if (!acc[username]) {
-        acc[username] = {
-          username,
+      // use playerUID as key 
+      const key = playerUID;
+      if (!key) return acc; 
+
+      if (!acc[key]) {
+        acc[key] = {
+          uid: key,
+          username: username,
           totalScore: 0,
           latestTimestamp: timestamp,
         };
       }
 
-      acc[username].totalScore += score;
-
-      if (timestamp > acc[username].latestTimestamp) {
-        acc[username].latestTimestamp = timestamp;
+      acc[key].totalScore += score;
+      if (timestamp >= acc[key].latestTimestamp) {
+        acc[key].latestTimestamp = timestamp;
       }
 
       return acc;
@@ -349,7 +391,7 @@ function updateAnalyticsChart(history, timeRange) {
 // Visibility logic for adminPanel 
 onAuthStateChanged(auth, async (user) => {
 
-  console.log("DEBUG - roleCheckDb:", roleCheckDb);
+  //console.log("DEBUG - roleCheckDb:", roleCheckDb);
 
   const adminPanel = document.getElementById("adminPanel");
   if (!adminPanel) return;
@@ -357,15 +399,15 @@ onAuthStateChanged(auth, async (user) => {
   let isAdmin = false;
 
   if (user) {
-    console.log("UID:", user.uid);
+    //console.log("UID:", user.uid);
     try {
-      const userDocRef = doc(roleCheckDb, "users", user.uid);
+      const userDocRef = doc(roleCheckDb, "users", user.uid, "private", "account");
       const userSnap = await getDoc(userDocRef);
 
       if (userSnap.exists()) {
         const userData = userSnap.data();
-        isAdmin = userData.admin === true;
-        console.log("isAdmin:", isAdmin);
+        isAdmin = userData.isAdmin === true;
+        //console.log("isAdmin:", isAdmin);
       }
       else {
         console.warn("User document not found in Firestore");
@@ -375,13 +417,14 @@ onAuthStateChanged(auth, async (user) => {
     }
   }
 
+  // if (mockIsAdmin || isAdmin) {
   if (isAdmin) {
     adminPanel.style.display = "block";
     checkResetEligibility();
-    console.log("Admin Panel Shown (Mock/Real)");
+    //console.log("Admin Panel Shown");
   } else {
     adminPanel.style.display = "none";
-    console.log("Admin Panel Hidden");
+    //console.log("Admin Panel Hidden");
   }
 });
 
@@ -395,12 +438,14 @@ async function syncToggleStatus(game) {
   }
   statusToggle.disabled = false;
   const gameSnap = await getDoc(doc(leaderboardDb, "zat-am", game));
-  statusToggle.checked = gameSnap.exists() ? (gameSnap.data().competitionIsActive === true) : false;
+  statusToggle.checked = gameSnap.exists() 
+                      ? (gameSnap.data().competitionIsActive === true) : false;
 }
 
 document.getElementById("statusToggle").addEventListener("change", async (e) => {
   const gameId = document.getElementById("gameSelect").value;
-  await setDoc(doc(leaderboardDb, "zat-am", gameId), { competitionIsActive: e.target.checked }, { merge: true });
+  await setDoc(doc(leaderboardDb, "zat-am", gameId), 
+                  { competitionIsActive: e.target.checked }, { merge: true });
   checkResetEligibility();
 });
 
@@ -412,7 +457,9 @@ async function checkResetEligibility() {
   const resetHint = document.getElementById("resetHint");
 
   if (!game || game === "Global") {
-    resetBtn.disabled = false; resetBtn.style.background = ""; resetHint.textContent = "";
+    resetBtn.disabled = false; 
+    resetBtn.style.background = ""; 
+    resetHint.textContent = "";
     return;
   }
 

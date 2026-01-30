@@ -2,22 +2,6 @@
 <html lang="en">
 <head>
   <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
-  <!-- Get player's name from auth -->
-  <script type="module">
-    import { onAuthStateChanged } from "firebase/auth";
-    import { getFirestore, doc, getDoc } from "firebase/firestore"; 
-    import { auth, db } from "../auth/api/firebase-config.js";
-    window.currentUser = null;
-    onAuthStateChanged(auth, (user) => {
-      window.currentUser = user
-      if (user) {
-        console.log(window.currentUser.displayName)
-      } else {
-        console.log("no user found")
-      }
-      
-    });
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>शब्दावली</title>
@@ -66,7 +50,6 @@
       border: 1px solid #e5e7eb;
     }
   </style>
-
   <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
 </head>
@@ -197,9 +180,9 @@
     }
   </script>
 
-  <!-- Firebase + ask name at START + submit button -->
+  <!-- Firebase + submit button -->
   <script type="module">
-    import "./js/bp26-score.js";
+    import { bp26Init, reportScore } from "./js/bp26-score.js"; 
 
     // ✅ writes to: zat-am / bp26-Game1 / players / {userId}
     // ✅ also increments: zat-am / bp26 / players / {userId}  (aggregate)
@@ -217,9 +200,12 @@
       submitBtn.textContent = "Submitting...";
 
       try {
-        await window.reportScore(score);
-        submitted = true;
-        submitBtn.textContent = `Submitted ✅ (Score: ${score})`;
+        const result = await window.reportScore(score);
+        if (result && result.ok) {
+          submitted = true;
+          submitBtn.textContent = `Submitted ✅ (Score: ${score})`;
+        }
+
       } catch (e) {
         console.error("❌ submit failed", e);
         submitBtn.disabled = false;

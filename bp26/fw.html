@@ -4,22 +4,6 @@
 <head>
 
   <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
-  <!-- Get player's name from auth -->
-  <script type="module">
-    import { onAuthStateChanged } from "firebase/auth";
-    import { getFirestore, doc, getDoc } from "firebase/firestore"; 
-    import { auth, db } from "../auth/api/firebase-config.js";
-    window.currentUser = null;
-    onAuthStateChanged(auth, (user) => {
-      window.currentUser = user
-      if (user) {
-        console.log(window.currentUser.displayName)
-      } else {
-        console.log("no user found")
-      }
-      
-    });
-  </script>
   <title>अन्वेषणम्</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1">
