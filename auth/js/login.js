@@ -1,5 +1,8 @@
-import { login, signInWithGoogle, ensureUserDocument } from "../api/auth-api.js";
-
+import {
+  login,
+  signInWithGoogle,
+  ensureUserDocument,
+} from "../api/auth-api.js";
 
 const loginForm = document.getElementById("login-form");
 const emailInput = document.getElementById("signin-email");
@@ -38,7 +41,6 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
-
 const googleSignInBtn = document.getElementById("google-signin");
 googleSignInBtn.addEventListener("click", async () => {
   try {
@@ -53,7 +55,7 @@ googleSignInBtn.addEventListener("click", async () => {
       // Check if new user first - they should set preferences
       if (isNewUser === true) {
         // Default redirect to preferences page
-        window.location.href = "preferences.html";
+        window.location.href = "./preferences.html";
       } else {
         // Get redirect parameter from URL for returning users
         const urlParams = new URLSearchParams(window.location.search);
@@ -69,9 +71,9 @@ googleSignInBtn.addEventListener("click", async () => {
     }, 1000);
   } catch (error) {
     console.error(error);
-    
-      message.innerHTML = "Google sign-in failed. Please try again.";
-    
+
+    message.innerHTML = "Google sign-in failed. Please try again.";
+
     message.style.color = "red";
-  } 
-});  
+  }
+});

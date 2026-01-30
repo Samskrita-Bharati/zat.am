@@ -1,5 +1,8 @@
-import { auth } from "/auth/api/firebase-config.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../auth/api/firebase-config.js";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 const loggedOut = document.getElementById("logged-out");
 const loggedIn = document.getElementById("logged-in");
@@ -22,10 +25,8 @@ onAuthStateChanged(auth, (user) => {
     let displayName;
 
     if (user.displayName) {
-      // Get first name only
       displayName = user.displayName.split(" ")[0];
     } else {
-      // Get email username before '@' symbol
       displayName = user.email.split("@")[0];
     }
 
@@ -37,26 +38,30 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // Toggle dropdown on profile icon click
-profileBtn.addEventListener("click", () => {
-  dropdown.classList.toggle("hidden");
-});
+if (profileBtn) {
+  profileBtn.addEventListener("click", () => {
+    dropdown.classList.toggle("hidden");
+  });
+}
 
 // Close dropdown when clicking outside
 document.addEventListener("click", (e) => {
-  if (!loggedIn.contains(e.target)) {
+  if (loggedIn && !loggedIn.contains(e.target)) {
     dropdown.classList.add("hidden");
   }
 });
 
 // Logout
-dropdownLogout.addEventListener("click", async (e) => {
-  e.preventDefault();
-  try {
-    await signOut(auth);
-    dropdown.classList.add("hidden");
-    alert("Logged out successfully!");
-  } catch (error) {
-    alert("Error logging out");
-    console.error(error);
-  }
-});
+if (dropdownLogout) {
+  dropdownLogout.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      await signOut(auth);
+      dropdown.classList.add("hidden");
+      alert("Logged out successfully!");
+    } catch (error) {
+      alert("Error logging out");
+      console.error(error);
+    }
+  });
+}

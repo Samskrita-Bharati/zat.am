@@ -9,8 +9,14 @@ import {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
-} from "./firebase-config";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+} from "./firebase-config.js";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -56,49 +62,74 @@ export const signInWithGoogle = async () => {
   return cred;
 };
 
-// Ensure there is a Firestore user document for the given user.
-// Creates it only if missing, with isAdmin defaulting to false.
-// This respects security rules by never changing isAdmin on existing docs.
+// Ensure there are Firestore user documents for the given user
+// in the new, nested structure:
+//   users/{uid}/private/account   -> email, isAdmin, createdAt
+//   users/{uid}/public/profile    -> name, language, location, etc.
+// Creates docs only if missing, with isAdmin defaulting to false.
+// Never changes isAdmin on existing docs (respecting security rules).
 export const ensureUserDocument = async (user, extraData = {}) => {
   if (!user) return false;
 
-  const userRef = doc(db, "users", user.uid);
-  const snapshot = await getDoc(userRef);
+  const accountRef = doc(db, "users", user.uid, "private", "account");
+  const profileRef = doc(db, "users", user.uid, "public", "profile");
 
-  if (snapshot.exists()) {
-    // Do not modify existing documents here (especially isAdmin).
-    return false;
-  }
+  const [accountSnap, profileSnap] = await Promise.all([
+    getDoc(accountRef),
+    getDoc(profileRef),
+  ]);
 
   const { displayName, email } = user;
 
   // Never allow callers to override isAdmin from the client
   const { isAdmin, ...safeExtraData } = extraData || {};
 
-  await setDoc(userRef, {
-    email: email || "",
-    name: displayName || safeExtraData.name || "",
-    isAdmin: false,
-    createdAt: serverTimestamp(),
-    language: "1", // Default language
+  if (!accountSnap.exists()) {
+    await setDoc(accountRef, {
+      email: email || "",
+      isAdmin: false,
+      createdAt: serverTimestamp(),
+    });
+  }
+
+  if (!profileSnap.exists()) {
+    await setDoc(profileRef, {
+      name: displayName || safeExtraData.name || "",
+      language: safeExtraData.language || "1", // Default language
       country: safeExtraData.country || "",
-    region: safeExtraData.region || "",
-    location: safeExtraData.location || "",
-    ...safeExtraData,
-  });
-  return true;
+      region: safeExtraData.region || "",
+      location: safeExtraData.location || "",
+      createdAt: serverTimestamp(),
+    });
+  }
 };
 
-// Fetch the current user's profile document from Firestore
+// Fetch the current user's profile data from the new structure
+// and merge private/public fields into a single convenient object.
 export const getCurrentUserProfile = async () => {
   const user = auth.currentUser;
   if (!user) return null;
 
-  const userRef = doc(db, "users", user.uid);
-  const snapshot = await getDoc(userRef);
-  if (!snapshot.exists()) return null;
+  const accountRef = doc(db, "users", user.uid, "private", "account");
+  const profileRef = doc(db, "users", user.uid, "public", "profile");
 
-  return { id: snapshot.id, ...snapshot.data() };
+  const [accountSnap, profileSnap] = await Promise.all([
+    getDoc(accountRef),
+    getDoc(profileRef),
+  ]);
+
+  if (!accountSnap.exists() && !profileSnap.exists()) return null;
+
+  const account = accountSnap.exists() ? accountSnap.data() : {};
+  const profile = profileSnap.exists() ? profileSnap.data() : {};
+
+  return {
+    id: user.uid,
+    email: account.email || user.email || "",
+    isAdmin: !!account.isAdmin,
+    createdAt: account.createdAt || profile.createdAt || null,
+    ...profile,
+  };
 };
 
 // Convenience helper for other teams (e.g., leaderboards)
@@ -108,8 +139,20 @@ export const isCurrentUserAdmin = async () => {
   return !!(profile && profile.isAdmin === true);
 };
 
+// Change Password Method
+export const changePassword = async (currentPassword, newPassword) => {
+  const user = auth.currentUser;
+
+  // authenticate again user with current password
+  const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  await reauthenticateWithCredential(user, credential);
+
+  // Update to new password
+  return await updatePassword(user, newPassword);
+};
+
 export const updateUserPreferences = async (user, preferences) => {
-  const userRef = doc(db, "users", user.uid);
+  const profileRef = doc(db, "users", user.uid, "public", "profile");
 
   // Add default values for language, country, and region if not provided
   const preferencesWithDefaults = {
@@ -118,8 +161,8 @@ export const updateUserPreferences = async (user, preferences) => {
     country: preferences.country || "",
     region: preferences.region || "",
     location: preferences.location || "",
-    
+    ...preferences,
   };
 
-  return await setDoc(userRef, preferencesWithDefaults, { merge: true });
+  return await setDoc(profileRef, preferencesWithDefaults, { merge: true });
 };

@@ -13,19 +13,21 @@ const countriesOptGroup = document.getElementById("all-countries");
 
 async function loadProvinces(country) {
   try {
-    const response = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+    const response = await fetch(
+      "https://countriesnow.space/api/v0.1/countries/states",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ country }),
       },
-      body: JSON.stringify({ country })
-    });
+    );
 
     if (!response.ok) throw new Error("Failed to load regions");
     const data = await response.json();
 
     if (!data || !data.data || !Array.isArray(data.data.states)) {
-      
     }
 
     return data.data.states.map((state) => state.name).filter(Boolean);
@@ -72,9 +74,9 @@ countrySelect.addEventListener("change", async () => {
 
     const regions = await loadProvinces(selected);
 
-    provinceSelect.innerHTML = `<option value="">Select Province / State</option>` +
-      regions.map(p => `<option value="${p}">${p}</option>`).join("");
-
+    provinceSelect.innerHTML =
+      `<option value="">Select Province / State</option>` +
+      regions.map((p) => `<option value="${p}">${p}</option>`).join("");
   } else if (selected === "other") {
     provinceGroup.classList.add("hidden");
     otherCountryGroup.classList.remove("hidden");
@@ -111,16 +113,20 @@ form.addEventListener("submit", (e) => {
 
   const location = region ? `${region}, ${country} ` : country;
 
-  try{
+  try {
     const user = getCurrentUser();
-    if(!user){
+    console.log("Getting user:");
+
+    console.log(user);
+
+    if (!user) {
       showMessage("No logged in user found. Please log in again.", "red");
       return;
     }
     updateUserPreferences(user, {
       language: language,
       country: country,
-      region: region, 
+      region: region,
       location: location,
     });
   } catch (error) {
@@ -131,7 +137,7 @@ form.addEventListener("submit", (e) => {
   showMessage("Preferences saved! Redirecting...", "green");
 
   setTimeout(() => {
-    window.location.href = "../index24.html"; 
+    window.location.href = "../index24.html";
   }, 1200);
 });
 
@@ -140,7 +146,7 @@ document.getElementById("skip-btn").addEventListener("click", () => {
   showMessage("Skipping... Redirecting...", "green");
 
   setTimeout(() => {
-    window.location.href = "../index24.html"; 
+    window.location.href = "../index24.html";
   }, 1000);
 });
 
