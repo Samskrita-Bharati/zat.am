@@ -111,18 +111,6 @@ export async function reportScore(score) {
 
   await ensureParentsUnderZatAm();
 
-  // ✅ refs
-  const gamePlayerRef = doc(leaderboardDb, "zat-am", BP26_GAME, "players", uid);
-  const bp26PlayerRef = doc(leaderboardDb, "zat-am", "bp26", "players", uid);
-  const globPlayerRef = doc(leaderboardDb, "zat-am", "Global", "players", uid);
-
-  // ✅ write players (so leaderboard shows it)
-  await Promise.all([
-    upsertIncrement(gamePlayerRef, uid, s),
-    upsertIncrement(bp26PlayerRef, uid, s),
-    upsertIncrement(globPlayerRef, uid, s)
-  ]);
-
   // ✅ write history (so format matches Game1)
   await Promise.all([
     addHistory(BP26_GAME, uid, s),

@@ -18,9 +18,7 @@ let myChart = null;
 
 // fetches list of games
 async function fetchGames() {
-  console.log("DSF")
   const games = collection(leaderboardDb, "zat-am");
-  console.log("DSF")
   const snapshot = await getDocs(games);
   const data = snapshot.docs.map((doc) => ({
     id: doc.id,
