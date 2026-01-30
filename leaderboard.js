@@ -497,11 +497,13 @@ statusToggle.addEventListener("change", async () => {
 async function performReset(game) {
   if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
 
-  const historyColRef = collection(leaderboardDb, "zat-am", game, "gameHistory");
-  const historySnapshot = await getDocs(historyColRef);
+  const playersColRef = collection(db, "zat-am", game, "players");
+  const historyColRef = collection(db, "zat-am", game, "gameHistory");
+  const [playersSnapshot, historySnapshot] = await Promise.all([
+    getDocs(playersColRef), getDocs(historyColRef)]);
 
-  if (historySnapshot.empty) {
-    alert("Leaderboard is already cleared.");
+  if (historySnapshot.empty && playersSnapshot.empty) {
+    alert("Leaderboard is cleared.");
     return;
   }
 
@@ -509,6 +511,10 @@ async function performReset(game) {
 
   historySnapshot.forEach((document) => {
     batch.delete(document.ref);
+  });
+
+  playerSnapshot.forEach((doc) => {
+    batch.delete(doc.ref);
   });
 
   try {

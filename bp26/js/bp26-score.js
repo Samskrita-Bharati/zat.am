@@ -64,7 +64,7 @@ async function upsertIncrement(ref, uid, delta) {
   if (snap.exists()) {
     await updateDoc(ref, {
       //name,
-      uid,
+      //uid,
       //playerName: name,
       playerUID: uid,
       score: increment(delta),      // leaderboard uses score
@@ -74,7 +74,7 @@ async function upsertIncrement(ref, uid, delta) {
   } else {
     await setDoc(ref, {
       //name,
-      uid,
+      //uid,
       //playerName: name,
       playerUID: uid,
       score: delta,                 // can be 0 ✅
@@ -84,7 +84,6 @@ async function upsertIncrement(ref, uid, delta) {
     });
   }
 }
-
 
 // Add a history record (like your screenshot: score, timestamp, uid)
 async function addHistory(gameId, uid, score) {
@@ -107,8 +106,8 @@ export async function reportScore(score) {
   if (!Number.isFinite(s)) throw new Error("Score must be a number."); // 0 allowed ✅
 
   const uid = CURRENT_UID;
-  // const id = safeId(CURRENT_USER);
-  // const name = id;
+  //const id = safeId(CURRENT_USER);
+  //const name = id;
 
   await ensureParentsUnderZatAm();
 

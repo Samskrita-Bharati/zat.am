@@ -105,7 +105,7 @@
   <!-- Mini-leaderboard -->
   <script type="module">
     import { collection, getDocs, doc, getDoc } from "firebase/firestore";
-    import { leaderboardDb } from "./auth/api/firebase-config.js";
+    import { db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
     //console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
 
     async function getTop3(selectedGame) {
@@ -132,8 +132,8 @@
     async function fetchName(uid) {
       try {
         const snap = await getDoc(doc(roleCheckDb, "users", uid, "public", "profile"));
-        return snap.exists() ? snap.data().name : "Unknown Player";
-      } catch { return "Unknown Player"; }
+        return snap.exists() ? snap.data().name : "Unknown";
+      } catch { return "Unknown"; }
     }
 
     async function initMiniLeaderboard() {
