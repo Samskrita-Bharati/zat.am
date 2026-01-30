@@ -13,6 +13,7 @@ const displayRole = document.getElementById("display-role");
 const displayDate = document.getElementById("display-date");
 const displayLanguage = document.getElementById("display-language");
 const displayLocation = document.getElementById("display-location");
+const roleRow = document.getElementById("role-row");
 
 const editNameForm = document.getElementById("edit-name-form");
 const newNameInput = document.getElementById("new-name");
@@ -35,8 +36,9 @@ checkAuth()
 
     if (profile.isAdmin) {
       displayRole.textContent = "Admin";
+      roleRow.style.display = "flex";
     } else {
-      displayRole.textContent = "User";
+      roleRow.style.display = "none";
     }
 
     if (profile.createdAt) {
