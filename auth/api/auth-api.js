@@ -161,7 +161,6 @@ export const updateUserPreferences = async (user, preferences) => {
     country: preferences.country || "",
     region: preferences.region || "",
     location: preferences.location || "",
-    ...preferences,
   };
 
   return await setDoc(profileRef, preferencesWithDefaults, { merge: true });

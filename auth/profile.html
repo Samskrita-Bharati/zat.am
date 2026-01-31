@@ -60,6 +60,38 @@
               required
             />
 
+            <label for="language">Choose Second Language</label>
+            <select id="language">
+              <option value="">Select Language</option>
+              <option value="1">Devanagari</option>
+              <option value="be">Bengali (বাংলা)</option>
+              <option value="gu">Gujarati (ગુજરાતી)</option>
+              <option value="ka">Kannada (ಕನ್ನಡ)</option>
+              <option value="ml">Malayalam (മലയാളം)</option>
+              <option value="te">Telugu (తెలుగు)</option>
+              <option value="ta">Tamil (தமிழ்)</option>
+            </select>
+
+            <label for="country">Choose Your Country</label>
+            <select id="country">
+              <optgroup label="Popular Countries">
+                <option value="">Select Country</option>
+                <option value="United States">United States</option>
+                <option value="Canada">Canada</option>
+              </optgroup>
+              <optgroup label="All Countries" id="all-countries"></optgroup>
+            </select>
+
+            <div id="province-group" style="display: none">
+              <label for="province">Select Province / State</label>
+              <select id="province"></select>
+            </div>
+
+            <div id="other-country-group" style="display: none">
+              <label for="other-country">Enter Your Country</label>
+              <input type="text" id="other-country" />
+            </div>
+
             <button type="submit">Save Changes</button>
           </form>
           <div id="name-message"></div>
