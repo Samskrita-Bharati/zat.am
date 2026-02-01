@@ -146,7 +146,21 @@
     if (!data)
       data = "अक्षरसमूहे अद्यतन-कथा पदानि सन्ति करोतु अन्वेषणम्";
 
-    var wordList = Sanscript.t(data, 'iast', 'devanagari').split(" ");
+  // Bilingual support: read transliteration target from `t` param
+  // (e.g., t=gu, t=ka). When missing or unsupported, fall back to
+  // IAST for tooltips/overlays.
+  var t = urlParams.get('t');
+  if (!t) t = 0;
+  var tlang = [];
+  tlang[1] = "itrans";
+  tlang['gu'] = "gujarati";
+  tlang['ka'] = "kannada";
+  tlang['be'] = "bengali";
+  tlang['ml'] = "malayalam";
+  tlang['te'] = "telugu";
+  tlang['ta'] = "tamil";
+
+  var wordList = Sanscript.t(data, 'iast', 'devanagari').split(" ");
     document.addEventListener('DOMContentLoaded', function () {
       //	timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
       //       countSecs("timer");
@@ -532,7 +546,10 @@
                     (slotColIdx + wordIdx);
                 default:
               }
-              $(targetCell).html("<span title='" + Sanscript.t(String(charToPut), 'devanagari', 'iast') + "'>" + charToPut + "</span>");
+              var ttChar = (t && tlang[t])
+                ? Sanscript.t(String(charToPut), 'devanagari', tlang[t])
+                : Sanscript.t(String(charToPut), 'devanagari', 'iast');
+              $(targetCell).html("<span title='" + ttChar + "'>" + charToPut + "</span>");
             }
             //placed the word
             return true;
@@ -608,7 +625,10 @@
         $("#grid td").each(function (idx, cell) {
           if ($(cell).text().trim().length == 0) {
             ra = getRandomAkshara();
-            $(cell).html("<span title='" + Sanscript.t(String(ra), 'devanagari', 'itrans') + "'>" + ra + "</span>");
+            var ttRa = (t && tlang[t])
+              ? Sanscript.t(String(ra), 'devanagari', tlang[t])
+              : Sanscript.t(String(ra), 'devanagari', 'itrans');
+            $(cell).html("<span title='" + ttRa + "'>" + ra + "</span>");
           }
         });
       };
@@ -681,7 +701,10 @@
     function showHint1() {
       $("#lead2").html("");
       for (var i = 0; i < wordList.length; i++) {
-        $("#lead2").append("<span class=nob title='" + Sanscript.t(wordList[i], 'devanagari', 'iast') + "'>" + wordList[i] + " </span>");
+        var ttWord = (t && tlang[t])
+          ? Sanscript.t(wordList[i], 'devanagari', tlang[t])
+          : Sanscript.t(wordList[i], 'devanagari', 'iast');
+        $("#lead2").append("<span class=nob title='" + ttWord + "'>" + wordList[i] + " </span>");
       }
 
     };
@@ -691,7 +714,9 @@
         if (answers.includes(wordList[i]))
           $("#lead2").append("<strong>" + wordList[i] + "</strong> ");
         else
-          $("#lead2").append("<span class=nob title='" + Sanscript.t(wordList[i], 'devanagari', 'iast') + "'>" + wordList[i] + " </span>");
+          $("#lead2").append("<span class=nob title='" + ((t && tlang[t])
+            ? Sanscript.t(wordList[i], 'devanagari', tlang[t])
+            : Sanscript.t(wordList[i], 'devanagari', 'iast')) + "'>" + wordList[i] + " </span>");
       }
 
     };</script>
