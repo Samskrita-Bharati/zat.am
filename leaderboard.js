@@ -281,7 +281,10 @@ document
   .addEventListener("click", () => changePage(currentPage - 1));
 
 render();
+// check reset button status
 checkResetEligibility(); 
+// sync toggle status
+syncToggleStatus(gameSelect.value);
 
 
 // --- ANALYTICS CHART LOGIC (I remade it) ---
