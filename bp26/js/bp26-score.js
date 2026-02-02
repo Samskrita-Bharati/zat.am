@@ -13,6 +13,12 @@ import {
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, db as playerCheckDb, leaderboardDb } from "../../auth/api/firebase-config.js";
 
+const timestamp = Date.now();
+const date = new Date(timestamp);
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, "0");
+const formattedDate = `${year}-${month}`
+
 console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
 console.log("✅ Firebase connected to projectId:", playerCheckDb.app.options.projectId);
 
@@ -23,15 +29,15 @@ let BP26_GAME = "bp26-Game1"; // default
 // Get player's uid from auth
 // Leaderboard name will be reteived in realtime
 onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        try {
-          CURRENT_UID = user.uid;
-          //console.log("UID saved:", CURRENT_UID);
-        } catch (error) {
-          console.error("unable to get user uid:", error);
-        }
+  if (user) {
+      try {
+        CURRENT_UID = user.uid;
+        //console.log("UID saved:", CURRENT_UID);
+      } catch (error) {
+        console.error("unable to get user uid:", error);
       }
-  });
+    }
+});
 
 // function safeId(name) {
 //   return (
@@ -87,12 +93,16 @@ async function upsertIncrement(ref, uid, delta) {
 
 // Add a history record (like your screenshot: score, timestamp, uid)
 async function addHistory(gameId, uid, score) {
-  const historyCol = collection(leaderboardDb, "zat-am", gameId, "gameHistory");
-  await addDoc(historyCol, {
-    //username: name,
-    playerUID: uid,
-    score: Number(score),
-    timestamp: Date.now(),        
+  const entryKey = `${timestamp}_${uid}`
+  console.log(entryKey)
+
+  const historyDoc = doc(leaderboardDb, "zat-am", gameId, "gameHistory", formattedDate);
+  await setDoc(historyDoc, {
+    entries: {
+      [entryKey]: Number(score)
+    }    
+  }, {
+    merge: true
   });
 }
 
@@ -114,7 +124,7 @@ export async function reportScore(score) {
   // ✅ write history (so format matches Game1)
   await Promise.all([
     addHistory(BP26_GAME, uid, s),
-    addHistory("Global", uid, s)
+    addHistory("Global", uid, s),
     // (optional) if you also want bp26 history:
     // addHistory("bp26", name, uid, s),
   ]);
