@@ -109,13 +109,36 @@
     //console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
 
     async function getTop3(selectedGame) {
-      const colRef = collection(leaderboardDb, "zat-am", selectedGame, "gameHistory");
-      const snapshot = await getDocs(colRef);
+      const timestamp = Date.now();
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      // used for getting document for current month
+      const formattedDate = `${year}-${month}` // YYYY-MM
 
-      const summary = snapshot.docs.reduce((acc, doc) => {
-        const { playerUID, score } = doc.data();
-        if (!playerUID) return acc;
-        acc[playerUID] = (acc[playerUID] || 0) + score;
+      const docRef = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", formattedDate);
+      const snapshot = await getDoc(docRef);
+      let data;
+      if (snapshot.data()) {
+        data = snapshot.data();
+      }
+      else {
+        data = []
+      }
+      const formattedData = Object.entries(data.entries).map(([key, score]) => {
+        const [timestamp, uid] = key.split("_");
+
+        return {
+          uid,
+          timestamp: Number(timestamp),
+          score,
+        };
+      });
+      
+      const summary = formattedData.reduce((acc, data) => {
+        const { uid, score } = data;
+        if (!uid) return acc;
+        acc[uid] = (acc[uid] || 0) + score;
         return acc;
       }, {});
 
