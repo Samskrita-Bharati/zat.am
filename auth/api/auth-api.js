@@ -69,7 +69,7 @@ export const signInWithGoogle = async () => {
 // Creates docs only if missing, with isAdmin defaulting to false.
 // Never changes isAdmin on existing docs (respecting security rules).
 export const ensureUserDocument = async (user, extraData = {}) => {
-  if (!user) return false;
+  if (!user) return;
 
   const accountRef = doc(db, "users", user.uid, "private", "account");
   const profileRef = doc(db, "users", user.uid, "public", "profile");
@@ -83,6 +83,9 @@ export const ensureUserDocument = async (user, extraData = {}) => {
 
   // Never allow callers to override isAdmin from the client
   const { isAdmin, ...safeExtraData } = extraData || {};
+
+  // Track if this is a new user
+  const isNewUser = !accountSnap.exists() && !profileSnap.exists();
 
   if (!accountSnap.exists()) {
     await setDoc(accountRef, {
@@ -102,6 +105,8 @@ export const ensureUserDocument = async (user, extraData = {}) => {
       createdAt: serverTimestamp(),
     });
   }
+
+  return isNewUser;
 };
 
 // Fetch the current user's profile data from the new structure
@@ -161,7 +166,7 @@ export const updateUserPreferences = async (user, preferences) => {
     country: preferences.country || "",
     region: preferences.region || "",
     location: preferences.location || "",
-    ...preferences,
+    
   };
 
   return await setDoc(profileRef, preferencesWithDefaults, { merge: true });

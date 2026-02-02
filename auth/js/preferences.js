@@ -27,13 +27,13 @@ async function loadProvinces(country) {
     if (!response.ok) throw new Error("Failed to load regions");
     const data = await response.json();
 
-    if (!data || !data.data || !Array.isArray(data.data.states)) {
-    }
+    //if (!data || !data.data || !Array.isArray(data.data.states)) {
+    //}
 
     return data.data.states.map((state) => state.name).filter(Boolean);
   } catch (error) {
     console.error("Failed to load provinces/states", error);
-    return provinces[country] || [];
+    return [];
   }
 }
 
@@ -56,7 +56,7 @@ async function loadAllCountries() {
   }
 };
 
-//load all countries
+//load all countries when the page loads
 loadAllCountries();
 
 
