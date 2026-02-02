@@ -9,7 +9,6 @@
   <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
   <style>
     #svgdiv img {
-      position: absolute;
     }
 
     img:hover {
@@ -82,6 +81,7 @@
 </head>
 
 <body>
+  <script type="module" src="../js/bilingual-toggle.js"></script>
   <center>
     <h3>Find <span style="position:relative;color:tomato;z-index:99" id="tofind"></span> ... ❌ = <span id="wt">०</span>
     </h3>
@@ -112,8 +112,11 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   var t = urlParams.get('t');
+  // Default: no transliteration when `t` is missing.
+  // When bilingual mode is ON, `t` will be set by the
+  // main menu / toggle (e.g., t=gu, t=ka, etc.).
   if (!t)
-    t = 1;
+    t = 0;
   var set = urlParams.get('s');
   if (!set || isNaN(set))
     set = 0;
