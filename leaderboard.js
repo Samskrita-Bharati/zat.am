@@ -188,7 +188,7 @@ updateAnalyticsChart(gameHistories, "daily");
 // re-render leaderboard and change to 1st page
 gameSelect.addEventListener("change", async (e) => {
   gameHistories = await fetchGameHistories(e.target.value);
-  leaderboardData = await generateLeaderboardData(gameHistories, "");
+  leaderboardData = await generateLeaderboardData(gameHistories, timeSelect.value);
   render();
   changePage(1);
 
