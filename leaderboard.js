@@ -1,4 +1,5 @@
 import {
+  query,
   collection,
   getDocs,
   doc, 
@@ -10,58 +11,41 @@ import {
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
 
+const timestamp = Date.now();
+const date = new Date(timestamp);
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, "0");
+// used for getting document for current month
+const formattedDate = `${year}-${month}` // YYYY-MM
+
 // filters
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
 
-// fetches list of games
-async function fetchGames() {
-  const games = collection(leaderboardDb, "zat-am");
-  const snapshot = await getDocs(games);
-  const data = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  return data;
-}
+let myChart = null;
 
-// add all game leaderboards as options to the dropdown
-const games = await fetchGames();
-console.log(games);
-
-if (games) {
-  games.forEach((game) => {
-    gameSelect.options.add(new Option(game.id, game.id));
-    console.log(game.id);
-  });
-}
-
-// fetch all game histories for selected game
+// fetch all game histories for selected game and the current month
 async function fetchGameHistories(selectedGame) {
-  const gameHistories = collection(leaderboardDb, "zat-am", selectedGame, "gameHistory");
-  const snapshot = await getDocs(gameHistories);
-  const data = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  const gameHistories = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", formattedDate);
+  const snapshot = await getDoc(gameHistories);
+  const data = snapshot.data()
 
-  const nameCache = {};
-  const dataWithNames = await Promise.all(data.map(async (record) => {
-    const uid = record.playerUID;
-    if (!uid) return { ...record, username: "Unknown Player" };
+  if (data) {
+    const formattedData = Object.entries(data.entries).map(([key, score]) => {
+      const [timestamp, uid] = key.split("_");
 
-    if (!nameCache[uid]) {
-      nameCache[uid] = await getUserNameByUid(uid);
-    }
+      return {
+        uid,
+        timestamp: Number(timestamp),
+        score,
+      };
+    });
+    console.log("rawData:", formattedData)
+    return formattedData
+  }
 
-    return {
-      ...record,
-      username: nameCache[uid] || "Unknown Player"
-    };
-  }));
-
-  //console.log("dataWithNames:", dataWithNames);
-  return dataWithNames;
+  console.log("rawData:", [])
+  return [];
 }
 
 // fetch player's name by UID
@@ -95,7 +79,6 @@ function isToday(timestamp) {
     d.getMonth() === now.getMonth() &&
     d.getDate() === now.getDate()
   ) {
-    console.log(d);
   }
 
   return (
@@ -113,13 +96,11 @@ function isThisWeek(timestamp) {
   const startOfWeek = new Date(now);
   startOfWeek.setDate(now.getDate() - now.getDay());
   startOfWeek.setHours(0, 0, 0, 0);
-  console.log(startOfWeek);
 
   // start of the week for the given timestamp
   const startOfTimestampWeek = new Date(d);
   startOfTimestampWeek.setDate(d.getDate() - d.getDay());
   startOfTimestampWeek.setHours(0, 0, 0, 0);
-  console.log(startOfTimestampWeek)
 
   return startOfWeek.getTime() === startOfTimestampWeek.getTime();
 }
@@ -132,7 +113,6 @@ function isThisMonth(timestamp) {
     d.getFullYear() === now.getFullYear() &&
     d.getMonth() === now.getMonth()
   ) {
-    console.log(d);
   }
 
   return (
@@ -142,10 +122,9 @@ function isThisMonth(timestamp) {
 }
 
 // generates usable leaderboard data from game histories
-function generateLeaderboardData(gameHistories, timeRange) {
-  const now = Date.now();
+async function generateLeaderboardData(gameHistories, timeRange) {
   const leaderboardData = Object.values(
-    gameHistories.reduce((acc, { score, timestamp, playerUID, username }) => {
+    gameHistories.reduce((acc, { score, timestamp, uid }) => {
       // time filtering
       if (
         (timeRange === "daily" && !isToday(timestamp)) ||
@@ -156,13 +135,12 @@ function generateLeaderboardData(gameHistories, timeRange) {
       }
 
       // use playerUID as key 
-      const key = playerUID;
+      const key = uid;
       if (!key) return acc; 
 
       if (!acc[key]) {
         acc[key] = {
           uid: key,
-          username: username,
           totalScore: 0,
           latestTimestamp: timestamp,
         };
@@ -176,25 +154,40 @@ function generateLeaderboardData(gameHistories, timeRange) {
       return acc;
     }, {}),
   ).sort((a, b) => b.totalScore - a.totalScore);
-  return leaderboardData;
+
+  console.log("dataWithoutNames:", leaderboardData);
+
+  // associate names with each uid
+  const nameCache = {};
+  const dataWithNames = await Promise.all(leaderboardData.map(async (record) => {
+    const uid = record.uid;
+    if (!uid) return { ...record, username: "Unknown Player" };
+
+    if (!nameCache[uid]) {
+      nameCache[uid] = await getUserNameByUid(uid);
+    }
+
+    return {
+      ...record,
+      username: nameCache[uid] || "Unknown Player"
+    };
+  }));
+
+  console.log("dataWithNames:", dataWithNames);
+  return dataWithNames;
 }
 
 // default leaderboard settings
 let gameHistories = await fetchGameHistories("Global");
 // empty time range means "All time"
-let leaderboardData = generateLeaderboardData(gameHistories, ""); 
+let leaderboardData = await generateLeaderboardData(gameHistories, "daily"); 
 
 // upon game selection change, fetch game history for selected game,
 // generate new leaderboard array,
 // re-render leaderboard and change to 1st page
 gameSelect.addEventListener("change", async (e) => {
   gameHistories = await fetchGameHistories(e.target.value);
-  console.log(
-    `CURRENT DATE & TIME: %c${new Date()} %c`,
-    'color: #00ff33; font-size: 14px;',
-    'text-transform: uppercase; font-size: 16px; color: #ff33dd;'
-  );
-  leaderboardData = generateLeaderboardData(gameHistories, "");
+  leaderboardData = await generateLeaderboardData(gameHistories, timeSelect.value);
   render();
   changePage(1);
 
@@ -206,8 +199,8 @@ gameSelect.addEventListener("change", async (e) => {
 
 // upon time range change, generate new leaderboard data,
 // re-render leaderboard and change to 1st page
-timeSelect.addEventListener("change", (e) => {
-  leaderboardData = generateLeaderboardData(gameHistories, e.target.value);
+timeSelect.addEventListener("change", async (e) => {
+  leaderboardData = await generateLeaderboardData(gameHistories, e.target.value);
   render();
   changePage(1);
 })
@@ -217,7 +210,6 @@ const perPage = 10;
 
 function render() {
   // Podium
-  console.log(leaderboardData);
   for (let i = 0; i < 3; i++) {
     const player = leaderboardData[i];
 
@@ -397,7 +389,6 @@ statusToggle.addEventListener("change", async () => {
 async function performReset(game) {
   if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
 
-  const playersColRef = collection(db, "zat-am", game, "players");
   const historyColRef = collection(db, "zat-am", game, "gameHistory");
   const [playersSnapshot, historySnapshot] = await Promise.all([
     getDocs(playersColRef), getDocs(historyColRef)]);
@@ -421,7 +412,7 @@ async function performReset(game) {
     await batch.commit();
     alert(`Successfully reset ${game} leaderboard.`);
     gameHistories = [];
-    leaderboardData = generateLeaderboardData(gameHistories, "");
+    leaderboardData = await generateLeaderboardData(gameHistories, "");
     render();
   } catch (error) {
     console.error("Reset failed: ", error);

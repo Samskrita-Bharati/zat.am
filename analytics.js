@@ -1,36 +1,45 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 import {
-  getFirestore,
   collection,
   getDocs,
-} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAwqOOawElTcsBIAmJQIkZYs-W-h8kJx7A",
-  authDomain: "temporary-db-e9ace.firebaseapp.com",
-  projectId: "temporary-db-e9ace",
-  storageBucket: "temporary-db-e9ace.firebasestorage.app",
-  messagingSenderId: "810939107125",
-  appId: "1:810939107125:web:25edc649d354c1ca0bee7c",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore();
+import { leaderboardDb } from "./auth/api/firebase-config.js";
 
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
 let myChart = null;
 
-async function fetchGames() {
-    const gamesCol = collection(db, "zat-am");
-    const snapshot = await getDocs(gamesCol);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-}
+// Get current month in YYYY-MM format
+const timestamp = Date.now();
+const date = new Date(timestamp);
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, "0");
+const formattedDate = `${year}-${month}`;
 
+// Fetch game histories for selected game and current month
 async function fetchGameHistories(selectedGame) {
-    const historyCol = collection(db, "zat-am", selectedGame, "gameHistory");
-    const snapshot = await getDocs(historyCol);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const gameHistoryDoc = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", formattedDate);
+  const snapshot = await getDoc(gameHistoryDoc);
+  const data = snapshot.data();
+
+  if (data) {
+    const formattedData = Object.entries(data.entries).map(([key, score]) => {
+      const [timestamp, uid] = key.split("_");
+
+      return {
+        uid,
+        timestamp: Number(timestamp),
+        score,
+      };
+    });
+    console.log("Analytics rawData:", formattedData);
+    return formattedData;
+  }
+
+  console.log("Analytics rawData: empty");
+  return [];
 }
 
 function updateStats(counts, history, labels) {
@@ -39,8 +48,8 @@ function updateStats(counts, history, labels) {
     const peakIndex = counts.indexOf(peak);
     const peakTime = labels[peakIndex] || "N/A";
     
-    // Unique players, use SET so we can filter duplicates; unique meaning different usernames; need to change later to u/uid
-    const uniquePlayers = new Set(history.map(h => h.username)).size;
+    // Unique players by UID
+    const uniquePlayers = new Set(history.map(h => h.uid).filter(Boolean)).size;
 
     document.getElementById("stat-total").textContent = total.toLocaleString();
     document.getElementById("stat-peak").textContent = peak.toLocaleString();
@@ -135,9 +144,6 @@ function updateAnalyticsChart(history, timeRange) {
 
 // Startup
 (async () => {
-    const games = await fetchGames();
-    games.forEach(g => gameSelect.options.add(new Option(g.id, g.id)));
-    
     const loadData = async () => {
         const histories = await fetchGameHistories(gameSelect.value || "Global");
         updateAnalyticsChart(histories, timeSelect.value);
@@ -147,4 +153,8 @@ function updateAnalyticsChart(history, timeRange) {
     timeSelect.addEventListener("change", loadData);
 
     await loadData();
+    
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 })();
