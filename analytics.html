@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+    <!-- Chart.js 2.9.4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="analyticsStyles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <a href="leaderboard.html" class="back-btn">Back</a>
+            <h1>Analytics</h1>
+            <div style="width: 100px;"></div>
+        </div>
+
+        <div class="controls">
+            <select id="gameSelect"></select>
+            <select id="timeFilter">
+                <option value="daily">Daily View</option>
+                <option value="weekly" selected>Weekly View</option>
+                <option value="monthly">Monthly View</option>
+            </select>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Game Sessions</div>
+                <div class="stat-value" id="stat-total">-</div>
+                <div class="stat-footer">Across the selected time period</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Peak Concurrent</div>
+                <div class="stat-value" id="stat-peak">-</div>
+                <div class="stat-footer" id="stat-peak-time">N/A</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Players</div>
+                <div class="stat-value" id="stat-players">-</div>
+                <div class="stat-footer">How many unique playes played our games</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <p class="chart-title">Activity Frequency</p>
+                <i data-lucide="trending-up" style="color: var(--primary)"></i>
+            </div>
+            <canvas id="line-graph"></canvas>
+        </div>
+    </div>
+
+    <script type="module" src="analytics.js"></script>
+</body>
+</html>
