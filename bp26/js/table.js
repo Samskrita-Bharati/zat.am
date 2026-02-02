@@ -3,6 +3,17 @@ var weekdays   = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 weekdays = ["सोमवासरः", "मङ्गलवासरः", "बुधवासरः", "गुरुवासरः", "शुक्रवासरः", "शनिवासरः", "रविवासरः"]
 var symbols = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९','१०', '११', '१२', '१३', '१४', '१५', '१६', '१७', '१८', '१९','२०', '२१', '२२', '२३', '२४', '२५', '२६', '२७', '२८', '२९','३०','३१'];
 const urlParams = new URLSearchParams(window.location.search);
+
+// Helper: append the current bilingual `t` parameter (if any) to a link
+function appendT(href) {
+  if (!href) return href;
+  var t = urlParams.get('t');
+  if (!t) return href;
+  if (href.indexOf('t=') !== -1) return href;
+  var joinChar = href.indexOf('?') === -1 ? '?' : '&';
+  return href + joinChar + 't=' + encodeURIComponent(t);
+}
+
 var o = urlParams.get('oks');
 if (o!="aam")
 {
@@ -58,14 +69,16 @@ function appendEvent( event ) {
   {
 	  if( o == "aam")
   {
-	  var eventElement   = $('<div class="event pastd oks"><a target="sc23" href="' + event.tickets + event.location + '">' + event.name + " - " + event.time + '</a></div>');
+    var hrefSpecial = appendT(event.tickets + event.location);
+    var eventElement   = $('<div class="event pastd oks"><a target="sc23" href="' + hrefSpecial + '">' + event.name + " - " + event.time + '</a></div>');
 	    $('#' + formattedDate(eventStartDate)).removeClass('no-event').append(eventElement)
   }
   }
     else {
 	if (eventStartDate < today)
 	{
-	  var eventElement = $('<div class="event pastd"><a target="sc23" href="' + event.tickets + event.location + '">' + event.name + " - " + event.time + '</a></div>')
+    var hrefPast = appendT(event.tickets + event.location);
+    var eventElement = $('<div class="event pastd"><a target="sc23" href="' + hrefPast + '">' + event.name + " - " + event.time + '</a></div>')
 	}
 	  else
 	  {
@@ -94,7 +107,8 @@ function appendEvent( event ) {
         dateElement.append('<div class="event spacer">&nbsp;</div>')
       })
 
-      dateElement.removeClass('no-event').append('<div class="event multi-days following-days" title="' + event.name + '"><a target="_blank" href="' + event.tickets + '">' + event.name + '</a></div>')
+      var hrefFollow = appendT(event.tickets);
+      dateElement.removeClass('no-event').append('<div class="event multi-days following-days" title="' + event.name + '"><a target="_blank" href="' + hrefFollow + '">' + event.name + '</a></div>')
     }
   }
 

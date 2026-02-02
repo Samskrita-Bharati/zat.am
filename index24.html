@@ -18,6 +18,9 @@
 
       <!-- Show when logged out -->
       <div class="auth-btn">
+        <!-- Bilingual mode toggle (shown only when logged in via navbar-auth.js) -->
+        <button id="bilingual-toggle" class="hidden" style="display: none;">Bilingual: Off</button>
+
         <span id="logged-out">
           <button onclick="window.location.href = './auth/login.html'">
             Login
@@ -27,7 +30,6 @@
             Sign Up
           </button>
         </span>
-
         <!-- Show when logged in -->
         <div id="logged-in" class="hidden profile-container">
           <!-- Profile Icon -->
