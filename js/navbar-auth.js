@@ -35,6 +35,12 @@ onAuthStateChanged(auth, (user) => {
     loggedOut.classList.add("hidden");
     loggedIn.classList.remove("hidden");
 
+    // Show bilingual toggle only for logged-in users
+    if (bilingualBtn) {
+      bilingualBtn.classList.remove("hidden");
+      bilingualBtn.style.display = "";
+    }
+
     // Display email
     userEmailDropdown.textContent = user.email;
 
@@ -64,6 +70,12 @@ onAuthStateChanged(auth, (user) => {
   } else {
     loggedOut.classList.remove("hidden");
     loggedIn.classList.add("hidden");
+
+    // Hide bilingual toggle for logged-out users
+    if (bilingualBtn) {
+      bilingualBtn.classList.add("hidden");
+      bilingualBtn.style.display = "none";
+    }
     updateBilingualButton();
   }
 });
