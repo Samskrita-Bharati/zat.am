@@ -8,6 +8,8 @@ const otherCountryGroup = document.getElementById("other-country-group");
 const otherCountryInput = document.getElementById("other-country");
 const form = document.getElementById("preferences-form");
 const message = document.getElementById("message");
+const countriesOptGroup = document.getElementById("all-countries");
+
 
 async function loadProvinces(country) {
   try {
@@ -34,6 +36,31 @@ async function loadProvinces(country) {
     return provinces[country] || [];
   }
 }
+
+async function loadAllCountries() {
+  try{
+    const response = await fetch("https://countriesnow.space/api/v0.1/countries");
+    if (!response.ok) throw new Error("Failed to load countries");
+    const data = await response.json();
+    
+
+    const countries = data.data.map(c => c.country).filter(Boolean).sort();
+
+    countriesOptGroup.innerHTML = countries.map(country => 
+      `<option value="${country}">${country}</option>`
+    ).join("") + `<option value="other">Other</option>`;
+    
+    console.log(`Successfully loaded ${countries.length} countries`);
+  } catch (error) {
+    console.error("Failed to load countries", error);
+  }
+};
+
+//load all countries
+loadAllCountries();
+
+
+
 
 // Show/hide province or custom country input
 countrySelect.addEventListener("change", async () => {

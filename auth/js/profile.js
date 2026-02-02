@@ -11,9 +11,18 @@ const profileName = document.getElementById("profile-name");
 const profileEmail = document.getElementById("profile-email");
 const displayRole = document.getElementById("display-role");
 const displayDate = document.getElementById("display-date");
+const displayLanguage = document.getElementById("display-language");
+const displayLocation = document.getElementById("display-location");
+const roleRow = document.getElementById("role-row");
 
 const editNameForm = document.getElementById("edit-name-form");
 const newNameInput = document.getElementById("new-name");
+const languageSelect = document.getElementById("language");
+const countrySelect = document.getElementById("country");
+const provinceGroup = document.getElementById("province-group");
+const provinceSelect = document.getElementById("province");
+const otherCountryGroup = document.getElementById("other-country-group");
+const otherCountryInput = document.getElementById("other-country");
 const nameMessage = document.getElementById("name-message");
 
 const logoutBtn = document.getElementById("logout-btn");
@@ -21,31 +30,152 @@ const changePasswordForm = document.getElementById("change-password-form");
 const passwordMessage = document.getElementById("password-message");
 const passwordCard = document.getElementById("password-card");
 
-let currentUser = null;
+const countriesOptGroup = document.getElementById("all-countries");
 
+// const languageNames = {
+//   1: "Devanagari (देवनागरी)",
+//   be: "Bengali (বাংলা)",
+//   gu: "Gujarati (ગુજરાતી)",
+//   ka: "Kannada (ಕನ್ನಡ)",
+//   ml: "Malayalam (മലയാളം)",
+//   te: "Telugu (తెలుగు)",
+//   ta: "Tamil (தமிழ்)",
+// };
+
+const languageNames = {
+  1: "Devanagari",
+  be: "Bengali",
+  gu: "Gujarati",
+  ka: "Kannada",
+  ml: "Malayalam",
+  te: "Telugu",
+  ta: "Tamil",
+};
+
+let currentUser = null;
+let currentProfile = null;
+
+// Load all countries
+async function loadAllCountries() {
+  try {
+    const response = await fetch(
+      "https://countriesnow.space/api/v0.1/countries",
+    );
+    if (!response.ok) throw new Error("Failed to load countries");
+    const data = await response.json();
+
+    const countries = data.data
+      .map((c) => c.country)
+      .filter(Boolean)
+      .sort();
+    countriesOptGroup.innerHTML =
+      countries
+        .map((country) => `<option value="${country}">${country}</option>`)
+        .join("") + `<option value="other">Other</option>`;
+  } catch (error) {
+    console.error("Failed to load countries", error);
+  }
+}
+
+// Load provinces/states
+async function loadProvinces(country) {
+  try {
+    const response = await fetch(
+      "https://countriesnow.space/api/v0.1/countries/states",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country }),
+      },
+    );
+    if (!response.ok) throw new Error("Failed to load regions");
+    const data = await response.json();
+
+    if (!data || !data.data || !Array.isArray(data.data.states)) {
+      return [];
+    }
+    return data.data.states.map((state) => state.name).filter(Boolean);
+  } catch (error) {
+    console.error("Failed to load provinces/states", error);
+    return [];
+  }
+}
+
+// Country select change handler
+countrySelect.addEventListener("change", async () => {
+  const selected = countrySelect.value;
+  provinceSelect.innerHTML = "";
+  otherCountryInput.value = "";
+
+  if (selected === "United States" || selected === "Canada") {
+    provinceGroup.style.display = "block";
+    otherCountryGroup.style.display = "none";
+
+    const regions = await loadProvinces(selected);
+    provinceSelect.innerHTML =
+      `<option value="">Select Province / State</option>` +
+      regions.map((p) => `<option value="${p}">${p}</option>`).join("");
+
+    if (currentProfile && currentProfile.region) {
+      provinceSelect.value = currentProfile.region;
+    }
+  } else if (selected === "other") {
+    provinceGroup.style.display = "none";
+    otherCountryGroup.style.display = "block";
+  } else {
+    provinceGroup.style.display = "none";
+    otherCountryGroup.style.display = "none";
+  }
+});
+
+// Load user profile
 checkAuth()
   .then(async (user) => {
     currentUser = user;
-    const profile = await getCurrentUserProfile();
+    currentProfile = await getCurrentUserProfile();
 
-    profileName.textContent = profile.name || "User";
+    profileName.textContent = currentProfile.name || "User";
     profileEmail.textContent = user.email;
 
-    if (profile.isAdmin) {
+    if (currentProfile.isAdmin) {
       displayRole.textContent = "Admin";
+      roleRow.style.display = "flex";
     } else {
-      displayRole.textContent = "User";
+      roleRow.style.display = "none";
     }
 
-    if (profile.createdAt) {
-      const date = profile.createdAt.toDate();
+    if (currentProfile.createdAt) {
+      const date = currentProfile.createdAt.toDate();
       const options = { year: "numeric", month: "long", day: "numeric" };
       displayDate.textContent = date.toLocaleDateString("en-US", options);
     } else {
       displayDate.textContent = "Not available";
     }
 
-    newNameInput.value = profile.name || "";
+    if (currentProfile.language) {
+      displayLanguage.textContent =
+        languageNames[currentProfile.language] || currentProfile.language;
+    }
+
+    if (currentProfile.location) {
+      displayLocation.textContent = currentProfile.location;
+    }
+
+    // Load countries first
+    await loadAllCountries();
+
+    newNameInput.value = currentProfile.name || "";
+    languageSelect.value = currentProfile.language || "";
+    countrySelect.value = currentProfile.country || "";
+
+    // Trigger country change to load provinces if needed
+    if (
+      currentProfile.country === "United States" ||
+      currentProfile.country === "Canada"
+    ) {
+      const event = new Event("change");
+      countrySelect.dispatchEvent(event);
+    }
 
     // Check if user signed in with Google
     const isGoogleUser = user.providerData.some(
@@ -53,9 +183,7 @@ checkAuth()
     );
 
     if (isGoogleUser) {
-      // Disable password change section for Google users
       passwordCard.classList.add("disabled");
-
       const inputs = changePasswordForm.querySelectorAll("input");
       inputs.forEach((input) => (input.disabled = true));
       const button = changePasswordForm.querySelector("button");
@@ -66,10 +194,14 @@ checkAuth()
     window.location.href = "login.html";
   });
 
+// Edit Profile Form
 editNameForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const newName = newNameInput.value.trim();
+  const language = languageSelect.value;
+  let country = countrySelect.value;
+  let region = "";
 
   if (!newName) {
     nameMessage.innerHTML = "Name cannot be empty!";
@@ -77,15 +209,47 @@ editNameForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Handle country selection
+  if (country === "other") {
+    const customCountry = otherCountryInput.value.trim();
+    if (customCountry) {
+      country = customCountry;
+      region = "";
+    } else {
+      country = "";
+    }
+  } else if (country === "United States" || country === "Canada") {
+    region = provinceSelect.value || "";
+  }
+
+  const location = region ? `${region}, ${country}` : country;
+
   try {
     await updateUserProfile(currentUser, { displayName: newName });
 
     const profileRef = doc(db, "users", currentUser.uid, "public", "profile");
-    await updateDoc(profileRef, { name: newName });
+    await updateDoc(profileRef, {
+      name: newName,
+      language: language || "",
+      country: country || "",
+      region: region || "",
+      location: location || "",
+    });
 
+    // Update display
     profileName.textContent = newName;
+    if (language) {
+      displayLanguage.textContent = languageNames[language] || language;
+    } else {
+      displayLanguage.textContent = "Not set yet";
+    }
+    if (location) {
+      displayLocation.textContent = location;
+    } else {
+      displayLocation.textContent = "Not set yet";
+    }
 
-    nameMessage.innerHTML = "Name updated successfully!";
+    nameMessage.innerHTML = "Profile updated successfully!";
     nameMessage.style.color = "green";
 
     setTimeout(() => {
@@ -93,7 +257,7 @@ editNameForm.addEventListener("submit", async (e) => {
     }, 3000);
   } catch (error) {
     console.error(error);
-    nameMessage.innerHTML = "Failed to update name. Please try again.";
+    nameMessage.innerHTML = "Failed to update profile. Please try again.";
     nameMessage.style.color = "red";
   }
 });
