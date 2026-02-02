@@ -194,6 +194,25 @@ body {
   transition: var(--transition);
 }
 
+.profile-card select {
+  width: 93%;
+  padding: 12px 15px;
+  border: 2px solid var(--clr-grey-8);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: var(--ff-secondary);
+  margin-bottom: 15px;
+  background: var(--clr-white);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.profile-card select:focus {
+  outline: none;
+  border-color: var(--clr-gold);
+  box-shadow: 0 0 0 3px rgba(197, 157, 95, 0.1);
+}
+
 .profile-card input:focus {
   outline: none;
   border-color: var(--clr-gold);
