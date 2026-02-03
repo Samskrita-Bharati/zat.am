@@ -32,24 +32,14 @@ const passwordCard = document.getElementById("password-card");
 
 const countriesOptGroup = document.getElementById("all-countries");
 
-// const languageNames = {
-//   1: "Devanagari (देवनागरी)",
-//   be: "Bengali (বাংলা)",
-//   gu: "Gujarati (ગુજરાતી)",
-//   ka: "Kannada (ಕನ್ನಡ)",
-//   ml: "Malayalam (മലയാളം)",
-//   te: "Telugu (తెలుగు)",
-//   ta: "Tamil (தமிழ்)",
-// };
-
 const languageNames = {
-  1: "Devanagari",
-  be: "Bengali",
-  gu: "Gujarati",
-  ka: "Kannada",
-  ml: "Malayalam",
-  te: "Telugu",
-  ta: "Tamil",
+  1: "Devanagari (देवनागरी)",
+  be: "Bengali (বাংলা)",
+  gu: "Gujarati (ગુજરાતી)",
+  ka: "Kannada (ಕನ್ನಡ)",
+  ml: "Malayalam (മലയാളം)",
+  te: "Telugu (తెలుగు)",
+  ta: "Tamil (தமிழ்)",
 };
 
 let currentUser = null;
@@ -241,6 +231,7 @@ editNameForm.addEventListener("submit", async (e) => {
       country: country || "",
       region: region || "",
       location: location || "",
+      preferencesSet: true,
     });
 
     // Update display
