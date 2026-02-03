@@ -7,13 +7,29 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            padding-bottom: 20px;
+            font-size:1.4em;
         }
         h1 {
             text-align: center;
             margin-bottom: 20px;
+            color:#333;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 10px;
+            color:#666;
+            font-size:0.9em;
+            font-style: italic;
+        }
+        .head-divider {
+            content:"";
+            width: 80%;
+            height: 4px;
+            background: #ca9e0d;
+            margin: 20px auto;
         }
         .grid {
             width: 80vw;
@@ -26,7 +42,10 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
+
+            
         }
+        
 
         .card {
             background: white;
@@ -50,6 +69,11 @@
         .definition {
             font-size: 0.95em;
             color: #555;
+        }
+
+        .speaker-icon {
+            font-size: 24px;
+            cursor: pointer;
         }
 
 @media print {
@@ -81,6 +105,8 @@ display: none !important;
 <body>
     <script type="module" src="../js/bilingual-toggle.js"></script>
     <h1>शब्दावली</h1>
+    <p class="instructions">Click the button to hear the pronunciation</p>
+    <div id="head-divider" class="head-divider"></div>
     <div class="grid" id="dictionaryGrid"></div>
     <script>
         var wpp = 15; //words per page
@@ -177,7 +203,7 @@ card.innerHTML = `<center><div class="word">${wrdtxt}</div>
 <div class="definition">${txtimg}</div><audio id=a${i} src=${alnk} ></audio>
 <button id=${i} onclick="for (i=0;i<wpp;i++) musicelements[i].pause();musicelements[this.id].play()";>
     <!-- Use a speaker icon here (e.g., a Font Awesome icon or an image) -->
-    🔊
+    <span class="speaker-icon">🔊</span>
 </button>
         </center>`;
                     grid.appendChild(card);
