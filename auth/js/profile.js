@@ -137,6 +137,13 @@ checkAuth()
     profileName.textContent = currentProfile.name || "User";
     profileEmail.textContent = user.email;
 
+    const profileIconElement = document.querySelector(".profile-icon");
+    if (user.photoURL) {
+      profileIconElement.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="profile-avatar-img">`;
+    } else {
+      profileIconElement.innerHTML = '<i class="fas fa-user-circle"></i>';
+    }
+
     if (currentProfile.isAdmin) {
       displayRole.textContent = "Admin";
       roleRow.style.display = "flex";
