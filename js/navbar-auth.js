@@ -89,6 +89,24 @@ onAuthStateChanged(auth, (user) => {
       }
     };
 
+    // Google Profile image
+    if (user.photoURL) {
+      profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="profile-image">`;
+    } else {
+      profileBtn.innerHTML =
+        '<i class="fas fa-user-circle fa-2x profile-icon"></i>';
+    }
+
+    const dropdownIconSpan = dropdown.querySelector(".dropdown-header > span");
+    if (dropdownIconSpan) {
+      if (user.photoURL) {
+        dropdownIconSpan.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="dropdown-profile-image">`;
+      } else {
+        dropdownIconSpan.innerHTML =
+          '<i class="fas fa-user-circle fa-3x profile-icon"></i>';
+      }
+    }
+
     // Load user profile to get preferred language code and update UI
     getCurrentUserProfile()
       .then((profile) => {
@@ -151,24 +169,6 @@ if (profileBtn) {
     dropdown.classList.toggle("hidden");
   });
 }
-
-    // Google Profile image
-    if (user.photoURL) {
-      profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="profile-image">`;
-    } else {
-      profileBtn.innerHTML =
-        '<i class="fas fa-user-circle fa-2x profile-icon"></i>';
-    }
-
-    const dropdownIconSpan = dropdown.querySelector(".dropdown-header > span");
-    if (dropdownIconSpan) {
-      if (user.photoURL) {
-        dropdownIconSpan.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="dropdown-profile-image">`;
-      } else {
-        dropdownIconSpan.innerHTML =
-          '<i class="fas fa-user-circle fa-3x profile-icon"></i>';
-      }
-    }
 
 // Close dropdown when clicking outside
 document.addEventListener("click", (e) => {
