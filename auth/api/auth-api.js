@@ -102,6 +102,7 @@ export const ensureUserDocument = async (user, extraData = {}) => {
       country: safeExtraData.country || "",
       region: safeExtraData.region || "",
       location: safeExtraData.location || "",
+      preferencesSet: false, // Default preferences set to False
       createdAt: serverTimestamp(),
     });
   }

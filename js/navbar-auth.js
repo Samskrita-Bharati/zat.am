@@ -44,7 +44,6 @@ const updateBilingualButton = () => {
 // Check if user is logged in
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("Photo URL:", user.photoURL);
     loggedOut.classList.add("hidden");
     loggedIn.classList.remove("hidden");
 
