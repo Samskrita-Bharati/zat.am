@@ -70,6 +70,31 @@ async function getUserNameByUid(uid) {
     }
 }
 
+// fetch player's location by UID
+async function getUserLocationByUid(uid) {
+
+    //console.log("Getting location of UID:", uid);
+    try {
+      const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
+      const userSnap = await getDoc(userDocRef);
+      
+      if (userSnap.exists()) {
+        const fullLocation = userSnap.data().location || "";
+        const parts = fullLocation.split(',');
+        const country = parts[parts.length - 1].trim();
+        //console.log("Country fetched:", country);
+        return country;
+      }
+      else {
+        console.warn("User document not found in Firestore");
+        return "";
+      }
+    } catch (error) {
+        console.error("unable to get location:", error);
+        return "";
+    }
+}
+
 function isToday(timestamp) {
   const now = new Date();
   const d = new Date(timestamp);
@@ -157,24 +182,33 @@ async function generateLeaderboardData(gameHistories, timeRange) {
 
   console.log("dataWithoutNames:", leaderboardData);
 
-  // associate names with each uid
-  const nameCache = {};
-  const dataWithNames = await Promise.all(leaderboardData.map(async (record) => {
+  // associate names and locations with each uid
+  const userCache = {};
+  const dataWithUserProfile = await Promise.all(leaderboardData.map(async (record) => {
     const uid = record.uid;
-    if (!uid) return { ...record, username: "Unknown Player" };
+    if (!uid) return { ...record, username: "Unknown Player", location: "Unknown" };
 
-    if (!nameCache[uid]) {
-      nameCache[uid] = await getUserNameByUid(uid);
+    if (!userCache[uid]) {
+      const [name, loc] = await Promise.all([
+        getUserNameByUid(uid),
+        getUserLocationByUid(uid)
+      ]);
+    
+      userCache[uid] = {
+        name: name || "Unknown Player",
+        location: loc || "Unknown"
+      };
     }
 
     return {
       ...record,
-      username: nameCache[uid] || "Unknown Player"
+      username: userCache[uid].name,
+      location: userCache[uid].location
     };
   }));
 
-  console.log("dataWithNames:", dataWithNames);
-  return dataWithNames;
+  console.log("dataWithUserProfile:", dataWithUserProfile);
+  return dataWithUserProfile;
 }
 
 // default leaderboard settings
@@ -217,10 +251,14 @@ function render() {
     const player = leaderboardData[i];
 
     const username = document.getElementById("name-" + (i + 1));
+    const location = document.getElementById("location-" + (i + 1));
     const score = document.getElementById("score-" + (i + 1));
 
     if (username) {
       username.textContent = player ? player.username : "---";
+    } 
+    if (location) {
+      location.textContent = player ? `📍${player.location}` : "---";
     } 
     if (score) {
       score.textContent = player ? player.totalScore.toLocaleString() : "---";
@@ -241,7 +279,10 @@ function render() {
       (p, i) => `
                     <div class="row">
                         <div class="rank">${start + i + 4}</div>
-                        <div class="name">${p.username}</div>
+                        <div class="name" style="display: flex; align-items: center; gap: 2em;">
+                            <span>${p.username}</span>
+                            <span>📍${p.location}</span>
+                        </div>
                         <div class="score">${p.totalScore.toLocaleString()}</div>
                     </div>`,
     )
@@ -491,10 +532,9 @@ async function performReset(game) {
   if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
 
   const historyColRef = collection(db, "zat-am", game, "gameHistory");
-  const [playersSnapshot, historySnapshot] = await Promise.all([
-    getDocs(playersColRef), getDocs(historyColRef)]);
+  const historySnapshot = await getDocs(historyColRef);
 
-  if (historySnapshot.empty && playersSnapshot.empty) {
+  if (historySnapshot.empty) {
     alert("Leaderboard is cleared.");
     return;
   }
@@ -503,10 +543,6 @@ async function performReset(game) {
 
   historySnapshot.forEach((document) => {
     batch.delete(document.ref);
-  });
-
-  playerSnapshot.forEach((doc) => {
-    batch.delete(doc.ref);
   });
 
   try {
