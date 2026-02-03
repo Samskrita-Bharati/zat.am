@@ -48,51 +48,19 @@ async function fetchGameHistories(selectedGame) {
   return [];
 }
 
-// fetch player's name by UID
-async function getUserNameByUid(uid) {
-
-    //console.log("Getting name of UID:", uid);
-    try {
-      const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
-      const userSnap = await getDoc(userDocRef);
-      
-      if (userSnap.exists()) {
-        //console.log("Name fetched:", userSnap.data().name);
-        return userSnap.data().name;
-      }
-      else {
-        console.warn("User document not found in Firestore");
-        return "";
-      }
-    } catch (error) {
-        console.error("unable to get username:", error);
-        return "";
+async function getUserProfile(uid) {
+    const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
+    const userSnap = await getDoc(userDocRef);
+    
+    if (userSnap.exists()) {
+        const data = userSnap.data();
+        const location = (data.location || "").split(/[，,]/);
+        return {
+            name: data.name || "Unknown Player",
+            location: location[location.length - 1].trim() || "Unknown"
+        };
     }
-}
-
-// fetch player's location by UID
-async function getUserLocationByUid(uid) {
-
-    //console.log("Getting location of UID:", uid);
-    try {
-      const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
-      const userSnap = await getDoc(userDocRef);
-      
-      if (userSnap.exists()) {
-        const fullLocation = userSnap.data().location || "";
-        const parts = fullLocation.split(',');
-        const country = parts[parts.length - 1].trim();
-        //console.log("Country fetched:", country);
-        return country;
-      }
-      else {
-        console.warn("User document not found in Firestore");
-        return "";
-      }
-    } catch (error) {
-        console.error("unable to get location:", error);
-        return "";
-    }
+    return { name: "Unknown Player", location: "Unknown" };
 }
 
 function isToday(timestamp) {
@@ -180,7 +148,7 @@ async function generateLeaderboardData(gameHistories, timeRange) {
     }, {}),
   ).sort((a, b) => b.totalScore - a.totalScore);
 
-  console.log("dataWithoutNames:", leaderboardData);
+  //console.log("dataWithoutNames:", leaderboardData);
 
   // associate names and locations with each uid
   const userCache = {};
@@ -189,15 +157,8 @@ async function generateLeaderboardData(gameHistories, timeRange) {
     if (!uid) return { ...record, username: "Unknown Player", location: "Unknown" };
 
     if (!userCache[uid]) {
-      const [name, loc] = await Promise.all([
-        getUserNameByUid(uid),
-        getUserLocationByUid(uid)
-      ]);
-    
-      userCache[uid] = {
-        name: name || "Unknown Player",
-        location: loc || "Unknown"
-      };
+      const profile = await getUserProfile(uid);
+      userCache[uid] = profile;
     }
 
     return {
@@ -207,7 +168,7 @@ async function generateLeaderboardData(gameHistories, timeRange) {
     };
   }));
 
-  console.log("dataWithUserProfile:", dataWithUserProfile);
+  //console.log("dataWithUserProfile:", dataWithUserProfile);
   return dataWithUserProfile;
 }
 
