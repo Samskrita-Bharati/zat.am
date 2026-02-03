@@ -44,6 +44,7 @@ const updateBilingualButton = () => {
 // Check if user is logged in
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    console.log("Photo URL:", user.photoURL);
     loggedOut.classList.add("hidden");
     loggedIn.classList.remove("hidden");
 
@@ -65,6 +66,9 @@ onAuthStateChanged(auth, (user) => {
       displayName = user.email.split("@")[0];
     }
 
+    usernameDisplay.textContent = `Hi, ${displayName}!`;
+
+    // Load user profile to get preferred language code
     // Helper: map preferred language code to a localized "Namaste"
     const getLocalizedNamaste = (langCode) => {
       switch (langCode) {
@@ -147,6 +151,24 @@ if (profileBtn) {
     dropdown.classList.toggle("hidden");
   });
 }
+
+    // Google Profile image
+    if (user.photoURL) {
+      profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="profile-image">`;
+    } else {
+      profileBtn.innerHTML =
+        '<i class="fas fa-user-circle fa-2x profile-icon"></i>';
+    }
+
+    const dropdownIconSpan = dropdown.querySelector(".dropdown-header > span");
+    if (dropdownIconSpan) {
+      if (user.photoURL) {
+        dropdownIconSpan.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="dropdown-profile-image">`;
+      } else {
+        dropdownIconSpan.innerHTML =
+          '<i class="fas fa-user-circle fa-3x profile-icon"></i>';
+      }
+    }
 
 // Close dropdown when clicking outside
 document.addEventListener("click", (e) => {
