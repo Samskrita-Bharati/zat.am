@@ -32,6 +32,7 @@ const updateBilingualButton = () => {
 // Check if user is logged in
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    console.log("Photo URL:", user.photoURL);
     loggedOut.classList.add("hidden");
     loggedIn.classList.remove("hidden");
 
@@ -54,6 +55,24 @@ onAuthStateChanged(auth, (user) => {
     }
 
     usernameDisplay.textContent = `Hi, ${displayName}!`;
+
+    // Google Profile image
+    if (user.photoURL) {
+      profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="profile-image">`;
+    } else {
+      profileBtn.innerHTML =
+        '<i class="fas fa-user-circle fa-2x profile-icon"></i>';
+    }
+
+    const dropdownIconSpan = dropdown.querySelector(".dropdown-header > span");
+    if (dropdownIconSpan) {
+      if (user.photoURL) {
+        dropdownIconSpan.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="dropdown-profile-image">`;
+      } else {
+        dropdownIconSpan.innerHTML =
+          '<i class="fas fa-user-circle fa-3x profile-icon"></i>';
+      }
+    }
 
     // Load user profile to get preferred language code
     getCurrentUserProfile()
