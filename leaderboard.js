@@ -219,7 +219,7 @@ function render() {
       username.textContent = player ? player.username : "---";
     } 
     if (location) {
-      location.textContent = player ? `📍${player.location}` : "---";
+      location.textContent = player ? `📍 ${player.location}` : "---";
     } 
     if (score) {
       score.textContent = player ? player.totalScore.toLocaleString() : "---";
@@ -240,9 +240,10 @@ function render() {
       (p, i) => `
                     <div class="row">
                         <div class="rank">${start + i + 4}</div>
-                        <div class="name" style="display: flex; align-items: center; gap: 2em;">
-                            <span>${p.username}</span>
-                            <span>📍${p.location}</span>
+                        <div class="name" style="display: flex; align-items: center; gap: 3em;">
+                            <span style="overflow: hidden; text-overflow: ellipsis; 
+                                        white-space: nowrap; width: 200px;">${p.username}</span>
+                            <span>📍 ${p.location}</span>
                         </div>
                         <div class="score">${p.totalScore.toLocaleString()}</div>
                     </div>`,
