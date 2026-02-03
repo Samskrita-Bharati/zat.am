@@ -1,6 +1,4 @@
 import {
-  collection,
-  getDocs,
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
@@ -53,7 +51,7 @@ function updateStats(counts, history, labels) {
 
     document.getElementById("stat-total").textContent = total.toLocaleString();
     document.getElementById("stat-peak").textContent = peak.toLocaleString();
-    document.getElementById("stat-peak-time").textContent = `Peak at: ${peakTime}`;
+    document.getElementById("stat-peak-time").textContent = `Peak games time at: ${peakTime}`; //Set text in peak time stat
     document.getElementById("stat-players").textContent = uniquePlayers.toLocaleString();
 }
 
@@ -61,43 +59,44 @@ function updateAnalyticsChart(history, timeRange) {
     const canvas = document.getElementById("line-graph");
     if (!canvas) return;
 
-    let steps = 7;
-    if (timeRange === "daily") steps = 24;
-    else if (timeRange === "monthly") steps = 30;
+    let steps = 7; // default set to weekly, has 7 steps
+    if (timeRange === "daily") steps = 24; // 24 steps for daily
+    else if (timeRange === "monthly") steps = 30; // 30 steps for monthly
 
     const labels = [];
     const counts = Array(steps).fill(0);
     const now = new Date();
 
     if (timeRange === "daily") {
-        for (let i = steps - 1; i >= 0; i--) {
+        for (let i = steps - 1; i >= 0; i--) { //create labels for last 24 hours
             const d = new Date(now.getTime() - i * (60 * 60 * 1000));
             labels.push(d.toLocaleTimeString([], { hour: 'numeric' }));
         }
         history.forEach(({ timestamp }) => {
-            const diff = Math.floor((now - timestamp) / (3600000));
-            if (diff >= 0 && diff < steps) counts[(steps - 1) - diff]++;
+            const diff = Math.floor((now - timestamp) / (3600000)); // difference in hours
+            if (diff >= 0 && diff < steps) counts[(steps - 1) - diff]++; // add to corresponding hour slot
         });
-    } else {
+    } else { // weekly or monthly (both use days as steps so ill use same logic)
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        for (let i = steps - 1; i >= 0; i--) {
-            const d = new Date(today.getTime() - i * (86400000));
+        today.setHours(0, 0, 0, 0); // set to start of today
+        for (let i = steps - 1; i >= 0; i--) { //create labels for last days in time range (i)
+            const d = new Date(today.getTime() - i * (86400000)); // go back (i) days
             labels.push(d.toLocaleDateString([], { month: 'short', day: 'numeric' }));
         }
         history.forEach(({ timestamp }) => {
             const d = new Date(timestamp);
             d.setHours(0, 0, 0, 0);
             const diff = Math.floor((today - d) / 86400000);
-            if (diff >= 0 && diff < steps) counts[(steps - 1) - diff]++;
+            if (diff >= 0 && diff < steps) counts[(steps - 1) - diff]++; // add to corresponding day slot | "(steps - 1) - diff" to reverse order
         });
     }
 
-    updateStats(counts, history, labels);
+    updateStats(counts, history, labels); // Update stats display based on new data at the end
 
-    if (myChart) myChart.destroy();
-
-    myChart = new Chart(canvas, {
+    if (myChart) myChart.destroy(); // Destroy previous chart if exists (some charts overlap ;-;)
+    
+    // Create new chart
+    myChart = new Chart(canvas, { 
         type: "line",
         data: {
             labels,
