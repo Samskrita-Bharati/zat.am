@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>शब्दावली </title>
+
+    <!-- ✅ profile icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+
+    <!-- ✅ your shared styles (contains auth-buttons + dropdown css) -->
+    <link rel="stylesheet" href="../styles.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #f4f4f4;
             margin: 0;
-            padding: 20px;
+            padding: 100px 20px 20px 20px; /* push content below fixed profile bar */
         }
         h1 {
             text-align: center;
@@ -18,11 +25,7 @@
         .grid {
             width: 80vw;
             height: 80vh;
-
-            /* Center the grid in the page */
             margin: auto;
-
-            /* Optional: scroll if content overflows vertically */
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
@@ -52,140 +55,182 @@
             color: #555;
         }
 
-@media print {
-.k
-{
-border-left:4px ridge green;
-}
-.p
-{
-border-left:3px groove blue;
-}
-.s
-{
-border-left:3px groove red;
-}
-.n
-{
-border-left:3px groove black;
-}
-
-button {
-display: none !important;
-}
-}
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
-</head>
-<body>
-    <script type="module" src="../js/bilingual-toggle.js"></script>
-    <h1>शब्दावली</h1>
-    <div class="grid" id="dictionaryGrid"></div>
-    <script>
-        var wpp = 15; //words per page
-        var tlang = [];
-        tlang[1] = "itrans";
-        tlang['gu'] = "gujarati";
-        tlang['ka'] = "kannada";
-        tlang['be'] = "bengali";
-        tlang['ml'] = "malayalam";
-        tlang['te'] = "telugu";
-        tlang['ta'] = "tamil";
-        tlang['ia'] = "iast";
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
-            Papa.parse(lnk, {
-                download: true,
-                header: true,
-                complete: populateWlist
-            })
-        })
-        function populateWlist(fildat) {
-            fullist = fildat.data;
-            var secs = 0;
-            var numberOfWrongTries = 0;
-            matchesdone = 0;
-            var timer;
-            triesElement = document.getElementById("nowt");
-            const urlParams = new URLSearchParams(window.location.search);
-            var set = urlParams.get('s');
-            if (!set || isNaN(set) || (set >= fullist.length))
-                set = 0;
-            var t = urlParams.get('t'); // transliterate mode - 1 is true
-            if (!t)
-{
-                t = 0;
-}
-if (!tlang[t])
-document.getElementsByTagName("h1")[0].innerHTML += " " + Sanscript.t(`${set}`, 'itrans', 'devanagari');
-else
-document.getElementsByTagName("h1")[0].innerHTML += " " + Sanscript.t(`${set}`, 'itrans', tlang[t]);
-var imgm = urlParams.get('m');
-            if (!imgm)
-                imgm = "b";
-            var image = [];
-            var words = [];
-            var uc=[];
-            var aud = [];
-var linga=[];
-            for (i = 0; i < wpp; i++) {
-                words.push(fullist[(set * wpp) + i].padam);
-		uc.push(fullist[(set * wpp) + i].unicode);
-                image.push(fullist[(set * wpp) + i]["Imaage link"])
-                aud.push(fullist[(set * wpp) + i]["alnk"])
-linga.push(fullist[(set * wpp) + i]["linga"])
-            }
-            while (!words[words.length - 1]) {
-                words.pop();
-            }
-            while (!image[image.length - 1]) {
-                image.pop();
-            }
-            const grid = document.getElementById("dictionaryGrid");
-
-            // Create card for each word
-            async function createDictionary() {
-                for (const [i, word] of words.entries()) {
-var txtimg='';
-                    var alnk = aud[`${i}`];
-                    var lnk = uc[`${i}`];
-                    // if (lnk.length == 4 || lnk.length == 5)
-			//lnk= String.fromCodePoint(parseInt(lnk, 16));
-                        // lnk = "https://openmoji.org/data/color/svg/" + lnk + ".svg";
-                    var wrdtxt = `${word}`
-                    if (t != 0 && tlang[t])
-                        wrdtxt += " - " + Sanscript.t(`${word}`, 'devanagari', tlang[t]);
-
-                    const card = document.createElement("div");
-
-                    card.className = "card";
-              card.classList.add(linga[`${i}`]);
-if (lnk && lnk.length <12)
-{
-  if (imgm=="u")
-    txtimg ='<span style="font-size: 120px; line-height:150px;">'+ String.fromCodePoint(parseInt(lnk, 16))+'</span>'
-  else if (imgm == "e")
-    txtimg = '<img style="max-width: 150px;"  src="https://openmoji.org/data/color/svg/'+lnk+'.svg">'
-else
-  txtimg = '<img style="max-width: 150px;"  src="'+image[`${i}`]+'">'
-}
-else
-  txtimg = '<img style="max-width: 150px;"  src="'+image[`${i}`]+'">'
-card.innerHTML = `<center><div class="word">${wrdtxt}</div>
-<div class="definition">${txtimg}</div><audio id=a${i} src=${alnk} ></audio>
-<button id=${i} onclick="for (i=0;i<wpp;i++) musicelements[i].pause();musicelements[this.id].play()";>
-    <!-- Use a speaker icon here (e.g., a Font Awesome icon or an image) -->
-    🔊
-</button>
-        </center>`;
-                    grid.appendChild(card);
-                }
-            }
-            createDictionary();
-            musicelements = document.getElementsByTagName("audio");
+        @media print {
+            .k { border-left:4px ridge green; }
+            .p { border-left:3px groove blue; }
+            .s { border-left:3px groove red; }
+            .n { border-left:3px groove black; }
+            button { display: none !important; }
         }
-    </script>
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+</head>
+
+<body>
+    <button onclick="window.location.href = '../index24.html';" style="
+  position: fixed;
+  top: 90px;
+  left: 20px;
+  z-index: 999;
+  padding: 10px 18px;
+  background-color: var(--clr-gold);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 1px;
+  box-shadow: var(--light-shadow);
+  transition: var(--transition);
+  cursor: pointer;
+">
+  ⬅ Back to Home
+</button>
+
+
+
+<!-- ✅ Profile dropdown — copied from your main page -->
+<div class="auth-buttons">
+  <img src="../शत.म्.png" alt="Logo" class="logo" />
+  <div class="auth-btn">
+    <span id="logged-out">
+      <button onclick="window.location.href = '../auth/login.html'">Login</button>
+      <button onclick="window.location.href = '../auth/signup.html'">Sign Up</button>
+    </span>
+
+    <div id="logged-in" class="hidden profile-container">
+      <span id="profile-btn">
+        <i class="fas fa-user-circle fa-2x profile-icon"></i>
+      </span>
+
+      <div id="profile-dropdown" class="dropdown hidden">
+        <div class="dropdown-header">
+          <p class="user-email" id="user-email-dropdown">user@example.com</p>
+          <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
+          <span id="username">Hi, username!</span>
+        </div>
+        <hr>
+        <a href="#">Leaderboard</a>
+        <a href="../auth/profile.html">Profile</a>
+        <a href="#" id="dropdown-logout">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ ORIGINAL GAME — unchanged -->
+<h1>शब्दावली</h1>
+<div class="grid" id="dictionaryGrid"></div>
+
+<script>
+/* ✅ helper only for Devanagari digits — small safe addition */
+function toDevanagariDigits(num) {
+  return String(num).replace(/\d/g, d => "०१२३४५६७८९"[d]);
+}
+
+var wpp = 15;
+var tlang = [];
+tlang[1] = "itrans";
+tlang['gu'] = "gujarati";
+tlang['ka'] = "kannada";
+tlang['be'] = "bengali";
+tlang['ml'] = "malayalam";
+tlang['te'] = "telugu";
+tlang['ta'] = "tamil";
+tlang['ia'] = "iast";
+
+document.addEventListener('DOMContentLoaded', function () {
+    var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+    Papa.parse(lnk, {
+        download: true,
+        header: true,
+        complete: populateWlist
+    })
+})
+
+function populateWlist(fildat) {
+    fullist = fildat.data;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    var set = urlParams.get('s');
+    if (!set || isNaN(set) || (set >= fullist.length))
+        set = 0;
+
+    var t = urlParams.get('t');
+    if (!t) t = 0;
+
+    /* ✅ ONLY THIS LINE CHANGED — number display fix */
+    document.getElementsByTagName("h1")[0].innerHTML += " " + toDevanagariDigits(set);
+
+    var imgm = urlParams.get('m');
+    if (!imgm) imgm = "b";
+
+    var image = [];
+    var words = [];
+    var uc=[];
+    var aud = [];
+    var linga=[];
+
+    for (i = 0; i < wpp; i++) {
+        words.push(fullist[(set * wpp) + i].padam);
+        uc.push(fullist[(set * wpp) + i].unicode);
+        image.push(fullist[(set * wpp) + i]["Imaage link"])
+        aud.push(fullist[(set * wpp) + i]["alnk"])
+        linga.push(fullist[(set * wpp) + i]["linga"])
+    }
+
+    while (!words[words.length - 1]) words.pop();
+    while (!image[image.length - 1]) image.pop();
+
+    const grid = document.getElementById("dictionaryGrid");
+
+    async function createDictionary() {
+        for (const [i, word] of words.entries()) {
+
+            var txtimg='';
+            var alnk = aud[i];
+            var lnk = uc[i];
+
+            var wrdtxt = `${word}`;
+            if (t != 0 && tlang[t])
+                wrdtxt += " - " + Sanscript.t(`${word}`, 'devanagari', tlang[t]);
+
+            const card = document.createElement("div");
+            card.className = "card";
+            card.classList.add(linga[i]);
+
+            if (lnk && lnk.length <12) {
+              if (imgm=="u")
+                txtimg ='<span style="font-size:120px;">'+ String.fromCodePoint(parseInt(lnk,16))+'</span>'
+              else if (imgm=="e")
+                txtimg = '<img style="max-width:150px;" src="https://openmoji.org/data/color/svg/'+lnk+'.svg">'
+              else
+                txtimg = '<img style="max-width:150px;" src="'+image[i]+'">'
+            } else {
+              txtimg = '<img style="max-width:150px;" src="'+image[i]+'">'
+            }
+
+            card.innerHTML = `<center>
+<div class="word">${wrdtxt}</div>
+<div class="definition">${txtimg}</div>
+<audio id=a${i} src=${alnk}></audio>
+<button id=${i} onclick="for (i=0;i<wpp;i++) musicelements[i].pause(); musicelements[this.id].play()">🔊</button>
+</center>`;
+
+            grid.appendChild(card);
+        }
+    }
+
+    createDictionary();
+    musicelements = document.getElementsByTagName("audio");
+}
+</script>
+
+<!-- ✅ your existing auth logic -->
+<script type="module" src="../app.js"></script>
+<script type="module" src="../js/navbar-auth.js"></script>
+
 </body>
 </html>

@@ -15,7 +15,122 @@
 </head>
 
 <body>
-  <script type="module" src="../js/bilingual-toggle.js"></script>
+  <!-- ✅ profile icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+
+    <!-- ✅ your shared styles (contains auth-buttons + dropdown css) -->
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 100px 20px 20px 20px; /* push content below fixed profile bar */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .grid {
+            width: 80vw;
+            height: 80vh;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .word {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .definition {
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        @media print {
+            .k { border-left:4px ridge green; }
+            .p { border-left:3px groove blue; }
+            .s { border-left:3px groove red; }
+            .n { border-left:3px groove black; }
+            button { display: none !important; }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+</head>
+
+<body>
+    <button onclick="window.location.href = '../index24.html';" style="
+  position: fixed;
+  top: 90px;
+  left: 20px;
+  z-index: 999;
+  padding: 10px 18px;
+  background-color: var(--clr-gold);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 1px;
+  box-shadow: var(--light-shadow);
+  transition: var(--transition);
+  cursor: pointer;
+">
+  ⬅ Back to Home
+</button>
+
+
+
+<!-- ✅ Profile dropdown — copied from your main page -->
+<div class="auth-buttons">
+  <img src="../शत.म्.png" alt="Logo" class="logo" />
+  <div class="auth-btn">
+    <span id="logged-out">
+      <button onclick="window.location.href = '../auth/login.html'">Login</button>
+      <button onclick="window.location.href = '../auth/signup.html'">Sign Up</button>
+    </span>
+
+    <div id="logged-in" class="hidden profile-container">
+      <span id="profile-btn">
+        <i class="fas fa-user-circle fa-2x profile-icon"></i>
+      </span>
+
+      <div id="profile-dropdown" class="dropdown hidden">
+        <div class="dropdown-header">
+          <p class="user-email" id="user-email-dropdown">user@example.com</p>
+          <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
+          <span id="username">Hi, username!</span>
+        </div>
+        <hr>
+        <a href="#">Leaderboard</a>
+        <a href="../auth/profile.html">Profile</a>
+        <a href="#" id="dropdown-logout">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
   <center>
     <font size="+18" color=blue> Memory क्रीडा </font>
 
@@ -295,5 +410,8 @@
       //mmk-end
     }
   </script>
+  <script type="module" src="../app.js"></script>
+<script type="module" src="../js/navbar-auth.js"></script>
+
 </body>
 </html>
