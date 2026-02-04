@@ -13,35 +13,66 @@ let myChart = null;
 const timestamp = Date.now();
 const date = new Date(timestamp);
 const year = date.getFullYear();
-const month = String(date.getMonth() + 1).padStart(2, "0");
+const month = String(date.getMonth() + 1).padStart(2, "0"); // we gotta add one cause JAN is 0 in code but is 1 in firebase
 const formattedDate = `${year}-${month}`;
 
-// Fetch game histories for selected game and current month
+// Helper to get YYYY-MM strings for current and previous months
+function getMonthKeys() {
+    const now = new Date();
+    
+    // Current Month
+    const currYear = now.getFullYear();
+    const currMonth = String(now.getMonth() + 1).padStart(2, "0");
+    const currentKey = `${currYear}-${currMonth}`;
+
+    // Previous Month
+    const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevYear = prevDate.getFullYear();
+    const prevMonth = String(prevDate.getMonth() + 1).padStart(2, "0");
+    const previousKey = `${prevYear}-${prevMonth}`;
+
+    return [previousKey, currentKey];
+}
+
 async function fetchGameHistories(selectedGame) {
-  const gameHistoryDoc = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", formattedDate);
-  const snapshot = await getDoc(gameHistoryDoc);
-  const data = snapshot.data();
+    const [prevKey, currKey] = getMonthKeys();
+    
+    // Define document references
+    const prevDocRef = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", prevKey);
+    const currDocRef = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", currKey);
 
-  if (data) {
-    const formattedData = Object.entries(data.entries).map(([key, score]) => {
-      const [timestamp, uid] = key.split("_");
+    // Fetch both in parallel for speed
+    const [prevSnap, currSnap] = await Promise.all([
+        getDoc(prevDocRef),
+        getDoc(currDocRef)
+    ]);
 
-      return {
-        uid,
-        timestamp: Number(timestamp),
-        score,
-      };
-    });
-    console.log("Analytics rawData:", formattedData);
-    return formattedData;
-  }
+    // Merge entries from both documents
+    const allEntries = {
+        ...(prevSnap.exists() ? prevSnap.data().entries : {}),
+        ...(currSnap.exists() ? currSnap.data().entries : {})
+    };
 
-  console.log("Analytics rawData: empty");
-  return [];
+    if (Object.keys(allEntries).length > 0) {
+        const formattedData = Object.entries(allEntries).map(([key, score]) => {
+            const [timestamp, uid] = key.split("_");
+            return {
+                uid,
+                timestamp: Number(timestamp),
+                score,
+            };
+        });
+        
+        console.log(`Analytics rawData: Merged ${prevKey} and ${currKey}`);
+        return formattedData;
+    }
+
+    console.log("Analytics rawData: empty");
+    return [];
 }
 
 function updateStats(counts, history, labels) {
-    const total = counts.reduce((a, b) => a + b, 0);
+    const total = counts.reduce((a, b) => a + b, 0); // just counts the number of entries
     const peak = Math.max(...counts);
     const peakIndex = counts.indexOf(peak);
     const peakTime = labels[peakIndex] || "N/A";
@@ -86,7 +117,7 @@ function updateAnalyticsChart(history, timeRange) {
         history.forEach(({ timestamp }) => {
             const d = new Date(timestamp);
             d.setHours(0, 0, 0, 0);
-            const diff = Math.floor((today - d) / 86400000);
+            const diff = Math.floor((today.getTime() - d.getTime()) / 86400000);
             if (diff >= 0 && diff < steps) counts[(steps - 1) - diff]++; // add to corresponding day slot | "(steps - 1) - diff" to reverse order
         });
     }
