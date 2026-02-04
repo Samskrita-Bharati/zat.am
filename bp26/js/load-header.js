@@ -11,7 +11,7 @@
       // Load navbar auth script after header is loaded
       const script = document.createElement("script");
       script.type = "module";
-      script.src = "../../js/navbar-auth.js";
+      script.src = "../js/navbar-auth.js";
       document.body.appendChild(script);
     })
     .catch((error) => {

@@ -360,6 +360,14 @@
           if (l != 1) {
             var list = document.getElementsByTagName("img");
             for (var i = 0; i < list.length; i++) {
+              // Skip logo and profile images
+              if (
+                list[i].classList.contains("logo") ||
+                list[i].classList.contains("profile-image") ||
+                list[i].classList.contains("dropdown-profile-image")
+              ) {
+                continue;
+              }
               list[i].onclick = clkfn;
             }
             var plist = document.getElementsByClassName("myp");
