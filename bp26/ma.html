@@ -24,6 +24,53 @@
     .incorrect { border-color:#dc2626; }
     .tiles { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
     .tile { background:#edf2f7; padding:6px 10px; border-radius:8px; border:1px solid #ccc; cursor:grab; user-select:none; }
+    
+    /* ✅ Celebration UI (inline - no external file) */
+    #bp26CelebrateOverlay{
+      position: fixed; inset: 0;
+      display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,0.35);
+      z-index: 10000;
+      padding: 20px;
+    }
+    .bp26CelebrateBox{
+      position: relative;
+      width: min(460px, 92vw);
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      text-align: center;
+      font-family: system-ui, Arial, sans-serif;
+    }
+    .bp26Sparkles{
+      font-size: 54px;
+      line-height: 1.1;
+      margin: 8px 0 6px;
+      animation: bp26Pop 600ms ease-out both;
+    }
+    @keyframes bp26Pop{
+      0%{ transform: scale(0.6); opacity: 0; }
+      100%{ transform: scale(1); opacity: 1; }
+    }
+    .bp26Btn{
+      margin-top: 12px; padding: 10px 14px;
+      border-radius: 12px; border: 1px solid #ddd;
+      background: #f9fafb; cursor: pointer;
+    }
+    .bp26Confetti{
+      position: fixed;
+      top: -12px;
+      width: 10px; height: 10px;
+      border-radius: 3px;
+      z-index: 10001;
+      opacity: .95;
+      animation: bp26Fall 950ms linear forwards;
+      pointer-events: none;
+    }
+    @keyframes bp26Fall{
+      to{ transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
+    }
   </style>
 </head>
 
@@ -43,7 +90,64 @@
   <p><b>Score:</b> <span id="score">0</span>/<span id="total">0</span></p>
 </main>
 
+<!-- ✅ Celebration overlay (inline) -->
+<div id="bp26CelebrateOverlay">
+  <div class="bp26CelebrateBox">
+    <div class="bp26Sparkles">✨🎉✨</div>
+    <div id="bp26CelebrateTitle" style="font-weight:700;font-size:18px;margin-bottom:6px;">
+      Submitted ✅
+    </div>
+    <div id="bp26CelebrateSub" style="font-size:14px;color:#374151;">
+      Nice work!
+    </div>
+    <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
+  </div>
+</div>
+
 <script>
+  /* -------------------------------
+     Celebration (inline)
+  -------------------------------- */
+  function bp26Celebrate({ title="Submitted ✅", subtitle="Nice work!", score=null } = {}) {
+    const overlay = document.getElementById("bp26CelebrateOverlay");
+    const t = document.getElementById("bp26CelebrateTitle");
+    const s = document.getElementById("bp26CelebrateSub");
+
+    t.textContent = title;
+    s.textContent = score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
+
+    overlay.style.display = "flex";
+    bp26BurstConfetti(70);
+
+    setTimeout(() => { overlay.style.display = "none"; }, 2200);
+  }
+
+  function bp26BurstConfetti(count=60) {
+    for (let i = 0; i < count; i++) {
+      const c = document.createElement("div");
+      c.className = "bp26Confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.width = (6 + Math.random() * 8) + "px";
+      c.style.height = (6 + Math.random() * 8) + "px";
+      c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
+      c.style.transform = `translateY(0) rotate(${Math.random() * 180}deg)`;
+      c.style.animationDuration = (800 + Math.random() * 600) + "ms";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 1600);
+    }
+  }
+
+  // close handlers
+  document.getElementById("bp26CelebrateClose").addEventListener("click", () => {
+    document.getElementById("bp26CelebrateOverlay").style.display = "none";
+  });
+  document.getElementById("bp26CelebrateOverlay").addEventListener("click", (e) => {
+    if (e.target.id === "bp26CelebrateOverlay") e.target.style.display = "none";
+  });
+
+  /* -------------------------------
+     Game logic (UNCHANGED behavior)
+  -------------------------------- */
   const state = { items: [], assigned: new Map() };
   const els = {
     cards: document.getElementById("cards"),
@@ -137,7 +241,15 @@
       }
       console.log("Submitting score:", correct);
       await window.reportScore(correct);
-      alert("Score submitted: " + correct);
+
+      // ✅ Celebration ONLY after submit success
+      bp26Celebrate({
+        title: "Score Submitted ✅",
+        subtitle: `Great job! `,
+        score: correct
+      });
+
+      //alert("Score submitted: " + correct);
     } catch (e) {
       console.error("Submit error:", e);
       alert("Firebase submit failed. Open Console (F12) and send the red error.");

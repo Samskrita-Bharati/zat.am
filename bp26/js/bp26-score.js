@@ -7,7 +7,8 @@ import {
   increment, 
   serverTimestamp, 
   collection, 
-  addDoc 
+  addDoc,
+  writeBatch
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 import { onAuthStateChanged } from "firebase/auth"
@@ -25,6 +26,10 @@ console.log("✅ Firebase connected to projectId:", playerCheckDb.app.options.pr
 //let CURRENT_USER = "";
 let CURRENT_UID = ""; 
 let BP26_GAME = "bp26-Game1"; // default
+
+function dayIdFromDate(d = new Date()) {
+  return d.toISOString().split("T")[0]; // YYYY-MM-DD
+}
 
 // Get player's uid from auth
 // Leaderboard name will be reteived in realtime
@@ -94,16 +99,37 @@ async function upsertIncrement(ref, uid, delta) {
 // Add a history record (like your screenshot: score, timestamp, uid)
 async function addHistory(gameId, uid, score) {
   const entryKey = `${timestamp}_${uid}`
+  const scoreNum = Number(score);
   console.log(entryKey)
 
+  const batch = writeBatch(leaderboardDb);
+
+  const dayId = dayIdFromDate(new Date());
+
   const historyDoc = doc(leaderboardDb, "zat-am", gameId, "gameHistory", formattedDate);
-  await setDoc(historyDoc, {
+  const gameSeasonDoc = doc(leaderboardDb, "zat-am", gameId, "seasons", dayId, "gameHistory", formattedDate);
+  const globalHistoryDoc = doc(leaderboardDb, "zat-am", "Global", "gameHistory", formattedDate);
+  const globalSeasonDoc = doc(leaderboardDb, "zat-am", "Global", "seasons", dayId, "gameHistory", formattedDate);
+
+  const updateData = {
     entries: {
-      [entryKey]: Number(score)
-    }    
-  }, {
-    merge: true
-  });
+      [entryKey]: scoreNum
+    }
+  };
+  const options = { merge: true };
+
+  batch.set(historyDoc, updateData, options);
+  batch.set(gameSeasonDoc, updateData, options);
+  batch.set(globalHistoryDoc, updateData, options);
+  batch.set(globalSeasonDoc, updateData, options);
+
+  try {
+    await batch.commit();
+    console.log("All history records updated successfully!");
+  } catch (error) {
+    console.error("Error updating history: ", error);
+  }
+
 }
 
 export async function reportScore(score) {
@@ -124,9 +150,7 @@ export async function reportScore(score) {
   // ✅ write history (so format matches Game1)
   await Promise.all([
     addHistory(BP26_GAME, uid, s),
-    addHistory("Global", uid, s),
-    // (optional) if you also want bp26 history:
-    // addHistory("bp26", name, uid, s),
+    // addHistory("Global", uid, s), //merged into game score update
   ]);
 
   console.log("🔥 SCORE SAVED:", { game: BP26_GAME, user: uid, score: s });
