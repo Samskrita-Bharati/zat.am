@@ -6,81 +6,77 @@ html {
   background-size: cover;
 }
 
-
-body{
-    background: #f0f0f0;
+body {
+  background: #f0f0f0;
 }
 .pos1 {
-    position: absolute;
-    top: 0%;
-    right: 2%;
+  position: absolute;
+  top: 0%;
+  right: 2%;
 }
 .pos2 {
-    position: absolute;
-    top: 20%;
-    left: 2%;
-
+  position: absolute;
+  top: 20%;
+  left: 2%;
 }
-.myp{
-	text-align:center;
-	
+.myp {
+  text-align: center;
 }
-td{
-	border: 3px solid #ca9e0d;
-	cursor:pointer;
+td {
+  border: 3px solid #ca9e0d;
+  cursor: pointer;
 }
-h1{
-    font-size:3.3em;
-    color:#333;
-    font-weight: 600;
+h1 {
+  font-size: 3.3em;
+  color: #333;
+  font-weight: 600;
 }
-#wm{
-    font-size:2.0em;
-    color:#333;
-   
+#wm {
+  font-size: 2em;
+  color: #333;
 }
 
-span{
-    font-size:1.5em;
-    
-   
-}
-#nomd{
-    color: green;
+center span {
+  font-size: 1.5em;
 }
 
-#nowt{
-    color: red; 
-}
-p{
-    font-size:1.3em;
-    color:#333;
-    padding:0px;
-    margin:0px;
+#nomd {
+  color: green;
 }
 
-center{
-    margin: 10px auto;
-    width:90vw;
-    height:90%;
+#nowt {
+  color: red;
+}
+
+center p {
+  font-size: 1.3em;
+  color: #333;
+  padding: 0px;
+  margin: 0px;
+}
+
+center {
+  margin: 10px auto;
+  width: 90vw;
+  height: 90%;
 }
 
 .header-divider {
-    content:"";
-    width: 60%;
-    height: 3px;
-    background-color: goldenrod;
-    margin: 10px auto 25px;
+  content: "";
+  width: 60%;
+  height: 3px;
+  background-color: goldenrod;
+  margin: 10px auto 25px;
 }
 
-#tbl{
-    background-color: white;
-    padding:10px;
-    box-shadow: 1px 2px 5px black;
-    font-size:1.1em;
-    font-weight:600;
+#tbl {
+  background-color: white;
+  padding: 10px;
+  box-shadow: 1px 2px 5px black;
+  font-size: 1.1em;
+  font-weight: 600;
 }
 
-#tbl tr td{
-    padding:15px;
+#tbl tr td {
+  padding: 15px;
 }
