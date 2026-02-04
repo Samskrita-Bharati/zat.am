@@ -44,15 +44,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// function safeId(name) {
-//   return (
-//     name
-//       .toLowerCase()
-//       .trim()
-//       .replace(/\s+/g, "_")
-//       .replace(/[^a-z0-9_]/g, ""));
-// }
-
 // Create parent docs so they show in Firestore left panel (zat-am collection)
 async function ensureParentsUnderZatAm() {
   await Promise.all([
@@ -107,9 +98,9 @@ async function addHistory(gameId, uid, score) {
   const dayId = dayIdFromDate(new Date());
 
   const historyDoc = doc(leaderboardDb, "zat-am", gameId, "gameHistory", formattedDate);
-  const gameSeasonDoc = doc(leaderboardDb, "zat-am", gameId, "seasons", dayId, "gameHistory", formattedDate);
+  const gameSeasonDoc = doc(leaderboardDb, "zat-am", gameId, "seasons", formattedDate);
   const globalHistoryDoc = doc(leaderboardDb, "zat-am", "Global", "gameHistory", formattedDate);
-  const globalSeasonDoc = doc(leaderboardDb, "zat-am", "Global", "seasons", dayId, "gameHistory", formattedDate);
+  const globalSeasonDoc = doc(leaderboardDb, "zat-am", "Global", "seasons", formattedDate);
 
   const updateData = {
     entries: {

@@ -21,8 +21,93 @@ const formattedDate = `${year}-${month}` // YYYY-MM
 // filters
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
+const seasonDate = document.getElementById("seasonDate");
+const applyTimeBtn = document.getElementById("applyTimeBtn");
 
-let myChart = null;
+//let myChart = null;
+
+// Apply button only available when 
+// seasonDate and timeFilter are both valued
+function validateApplyButton() {
+    const hasDate = seasonDate.value.trim() !== "";
+    const hasFilter = timeSelect.value.trim() !== "";
+
+    applyTimeBtn.disabled = !(hasDate && hasFilter);
+}
+seasonDate.addEventListener("input", validateApplyButton);
+timeSelect.addEventListener("change", validateApplyButton);
+
+// Get the date range selected from HTML
+function getFilterRange(mode, pickedDate) {
+
+  const base = pickedDate ? new Date(pickedDate + "T00:00:00") : new Date();
+  const pickedStart = new Date(base).setHours(0, 0, 0, 0);
+
+  if (mode === "allDates") {
+    console.log("%c Range Filtered: ALL DATES", "color: blue; font-weight: bold;");
+    return { start: 0, end: pickedStart + 86400000 - 1 };
+  }
+
+  let start = 0;
+  let end = Infinity;
+
+  switch (mode) {
+    case "daily":
+      start = pickedStart;
+      end = pickedStart + 86400000 - 1; // 24小时
+      break;
+    case "weekly":
+      // Get the day in week of selected day
+      const day = base.getDay(); 
+      
+      // Get the monday date of selected week
+      const sunday = new Date(base);
+      sunday.setDate(base.getDate() - day); 
+      start = sunday.setHours(0, 0, 0, 0);
+      
+      // Get the sunday date of selected week
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+      end = saturday.setHours(23, 59, 59, 999);
+      break;
+    case "monthly":
+      // The 1st day to the last daye of selected month
+      start = new Date(base.getFullYear(), base.getMonth(), 1).getTime();
+      end = new Date(base.getFullYear(), base.getMonth() + 1, 1).getTime() - 1;
+      break;
+  }
+
+  const sDate = new Date(start).toLocaleString();
+  const eDate = new Date(end).toLocaleString();
+
+  console.log(`%c Range Filtered [${mode}]:`, "color: green; font-weight: bold;", `\nStart: ${sDate}\nEnd:   ${eDate}`);
+  return { start, end };
+}
+
+applyTimeBtn.addEventListener("click", async () => {
+    const mode = timeSelect.value;
+    const dateValue = seasonDate.value;
+
+    // Get start and end date
+    const { start, end } = getFilterRange(mode, dateValue);
+
+    // Display filter range in HTML
+    const displayEl = document.getElementById("filterRangeDisplay");
+    if (mode === "allDates") {
+        displayEl.innerText = "Showing: All Time Records";
+    } else {
+        const sStr = new Date(start).toLocaleDateString();
+        const eStr = new Date(end).toLocaleDateString();
+        displayEl.innerText = `Showing: ${sStr} — ${eStr}`;
+    }
+
+    // Generate leaderboard data with selected time range
+    leaderboardData = await generateLeaderboardData(gameHistories, start, end);
+
+    currentPage = 1;
+    render();
+    
+});
 
 // fetch all game histories for selected game and the current month
 async function fetchGameHistories(selectedGame) {
@@ -63,67 +148,12 @@ async function getUserProfile(uid) {
     return { name: "Unknown Player", location: "Unknown" };
 }
 
-function isToday(timestamp) {
-  const now = new Date();
-  const d = new Date(timestamp);
-
-  if (
-    d.getFullYear() === now.getFullYear() &&
-    d.getMonth() === now.getMonth() &&
-    d.getDate() === now.getDate()
-  ) {
-  }
-
-  return (
-    d.getFullYear() === now.getFullYear() &&
-    d.getMonth() === now.getMonth() &&
-    d.getDate() === now.getDate()
-  );
-}
-
-function isThisWeek(timestamp) {
-  const now = new Date();
-  const d = new Date(timestamp);
-
-  // start of this week (local time)
-  const startOfWeek = new Date(now);
-  startOfWeek.setDate(now.getDate() - now.getDay());
-  startOfWeek.setHours(0, 0, 0, 0);
-
-  // start of the week for the given timestamp
-  const startOfTimestampWeek = new Date(d);
-  startOfTimestampWeek.setDate(d.getDate() - d.getDay());
-  startOfTimestampWeek.setHours(0, 0, 0, 0);
-
-  return startOfWeek.getTime() === startOfTimestampWeek.getTime();
-}
-
-function isThisMonth(timestamp) {
-  const now = new Date();
-  const d = new Date(timestamp);
-
-  if (
-    d.getFullYear() === now.getFullYear() &&
-    d.getMonth() === now.getMonth()
-  ) {
-  }
-
-  return (
-    d.getFullYear() === now.getFullYear() &&
-    d.getMonth() === now.getMonth()
-  );
-}
-
 // generates usable leaderboard data from game histories
-async function generateLeaderboardData(gameHistories, timeRange) {
+async function generateLeaderboardData(gameHistories, start, end) {
   const leaderboardData = Object.values(
     gameHistories.reduce((acc, { score, timestamp, uid }) => {
       // time filtering
-      if (
-        (timeRange === "daily" && !isToday(timestamp)) ||
-        (timeRange === "weekly" && !isThisWeek(timestamp)) ||
-        (timeRange === "monthly" && !isThisMonth(timestamp))
-      ) {
+      if (!timestamp || timestamp < start || timestamp > end) {
         return acc;
       }
 
@@ -147,7 +177,6 @@ async function generateLeaderboardData(gameHistories, timeRange) {
       return acc;
     }, {}),
   ).sort((a, b) => b.totalScore - a.totalScore);
-
   //console.log("dataWithoutNames:", leaderboardData);
 
   // associate names and locations with each uid
@@ -174,15 +203,17 @@ async function generateLeaderboardData(gameHistories, timeRange) {
 
 // default leaderboard settings
 let gameHistories = await fetchGameHistories("Global");
-// empty time range means "All time"
-let leaderboardData = await generateLeaderboardData(gameHistories, "daily"); 
+// empty time range means today's daily
+const initialRange = getFilterRange("daily", ""); 
+let leaderboardData = await generateLeaderboardData(gameHistories, initialRange.start, initialRange.end);
 
 // upon game selection change, fetch game history for selected game,
 // generate new leaderboard array,
 // re-render leaderboard and change to 1st page
 gameSelect.addEventListener("change", async (e) => {
   gameHistories = await fetchGameHistories(e.target.value);
-  leaderboardData = await generateLeaderboardData(gameHistories, timeSelect.value);
+  const { start, end } = getFilterRange(timeSelect.value, seasonDate.value);
+  leaderboardData = await generateLeaderboardData(gameHistories, start, end);
   render();
   changePage(1);
 
@@ -191,14 +222,6 @@ gameSelect.addEventListener("change", async (e) => {
   // sync toggle status
   syncToggleStatus(gameSelect.value);
 });
-
-// upon time range change, generate new leaderboard data,
-// re-render leaderboard and change to 1st page
-timeSelect.addEventListener("change", async (e) => {
-  leaderboardData = await generateLeaderboardData(gameHistories, e.target.value);
-  render();
-  changePage(1);
-})
 
 let currentPage = 1;
 const perPage = 10;
@@ -390,13 +413,13 @@ statusToggle.addEventListener("change", async () => {
 
 // Logic for leaderboard reset
 async function performReset(game) {
-  if (!confirm(`Are you sure you want to clear leaderboard for [${game}]?`)) return;
+  if (!confirm(`Are you sure you want to clear all the score histories for ${game} ?`)) return;
 
-  const historyColRef = collection(db, "zat-am", game, "gameHistory");
+  const historyColRef = collection(leaderboardDb, "zat-am", game, "gameHistory");
   const historySnapshot = await getDocs(historyColRef);
 
   if (historySnapshot.empty) {
-    alert("Leaderboard is cleared.");
+    alert(`Score histories for ${game} are cleared.`);
     return;
   }
 
@@ -408,9 +431,10 @@ async function performReset(game) {
 
   try {
     await batch.commit();
-    alert(`Successfully reset ${game} leaderboard.`);
+    alert(`Successfully reset ${game} histories.`);
     gameHistories = [];
-    leaderboardData = await generateLeaderboardData(gameHistories, "");
+    const { start, end } = getFilterRange(timeSelect.value, seasonDate.value);
+    leaderboardData = await generateLeaderboardData(gameHistories, start, end);
     render();
   } catch (error) {
     console.error("Reset failed: ", error);
