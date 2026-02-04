@@ -63,9 +63,26 @@ select {
 }
 
 .controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ✅ All dropdowns consistent */
+.controls select {
+  margin: 10px 0;
+  padding: 8px 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+/* ✅ Season dropdown (optional highlight) */
+#seasonSelect {
+  min-width: 160px;
 }
 
 .podium {
