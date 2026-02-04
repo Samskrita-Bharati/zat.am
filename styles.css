@@ -421,7 +421,6 @@ Menu
     min-width: 180px;
   }
 }
-<<<<<<< HEAD
 
 /* Profile images */
 .profile-image,
@@ -451,68 +450,3 @@ Menu
   margin: 10px auto;
   display: block;
 }
-=======
-/* ===== Universal Header ===== */
-
-.uh-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  background: #f7f7f7;
-  z-index: 9999;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 25px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.1);
-}
-
-.uh-logo {
-  height: 42px;
-}
-
-.uh-profile {
-  position: relative;
-}
-
-.uh-icon {
-  font-size: 32px;
-  color: #c79a57;
-  cursor: pointer;
-}
-
-.uh-menu {
-  position: absolute;
-  right: 0;
-  top: 52px;
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  width: 220px;
-  display: none;
-  box-shadow: 0 10px 25px rgba(0,0,0,.15);
-}
-
-.uh-menu.show {
-  display: block;
-}
-
-.uh-menu a {
-  display: block;
-  padding: 8px 0;
-  text-decoration: none;
-  color: #333;
-}
-
-.uh-user-email {
-  font-size: 12px;
-  color: #666;
-}
-
-.uh-user-name {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
->>>>>>> main
