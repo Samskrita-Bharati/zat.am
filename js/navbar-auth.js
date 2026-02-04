@@ -196,14 +196,32 @@ if (bilingualBtn) {
   updateBilingualButton();
 
   bilingualBtn.addEventListener("click", () => {
-    window.zatBilingualOn = !window.zatBilingualOn;
-    localStorage.setItem("zatBilingualOn", window.zatBilingualOn ? "1" : "0");
+    const preferredLang =
+      window.zatPreferredLang || localStorage.getItem("zatPreferredLang") || "";
+
+    const turningOn = !window.zatBilingualOn;
+
+    // Require a preferred language before turning bilingual mode ON
+    if (turningOn && !preferredLang) {
+      alert("Please set your preferred language in the Preferences page first.");
+      return;
+    }
+
+    window.zatBilingualOn = turningOn;
+    localStorage.setItem("zatBilingualOn", turningOn ? "1" : "0");
     updateBilingualButton();
 
     // If the main menu is present, refresh it so links (like bp26)
-    // immediately pick up the new bilingual state without needing reload.
+    // immediately pick up the new bilingual state.
     if (typeof window.zatRefreshMenu === "function") {
       window.zatRefreshMenu();
+    }
+
+    // On pages that support bilingual query-param behavior
+    // (e.g., competition/game pages that load bilingual-toggle.js),
+    // sync the current page URL's `t` parameter with the new state.
+    if (typeof window.zatSyncBilingualQueryParam === "function") {
+      window.zatSyncBilingualQueryParam();
     }
   });
 }

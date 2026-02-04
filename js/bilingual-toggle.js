@@ -1,6 +1,6 @@
-// Lightweight bilingual mode toggle for game pages (e.g., bp26)
-// Adds a floating button that toggles the `t` query param based on
-// the user's stored preferred language in localStorage.
+// Lightweight bilingual mode helper for game pages (e.g., bp26)
+// Handles URL `t` query param based on the user's stored
+// preferred language and the shared global bilingual flag.
 
 function initBilingualToggle() {
   try {
@@ -39,86 +39,41 @@ function initBilingualToggle() {
       return;
     }
 
-    var hasT = params.get("t");
-
-    var btn = document.createElement("button");
-    btn.id = "zat-bilingual-game-toggle";
-    btn.textContent = hasT ? "Bilingual: On" : "Bilingual: Off";
-    // Match main header button styling as much as possible
-    btn.style.position = "fixed";
-    btn.style.bottom = "20px";
-    btn.style.right = "20px";
-    btn.style.zIndex = "9999";
-    btn.style.padding = "0.375rem 0.75rem";
-    btn.style.borderRadius = "0.5rem";
-    btn.style.border = "2px solid #c59d5f"; // var(--clr-gold)
-    btn.style.backgroundColor = "rgba(255,255,255,0.95)";
-    btn.style.color = "#c59d5f";
-    btn.style.fontSize = "0.95rem";
-    btn.style.letterSpacing = "1px";
-    btn.style.textTransform = "capitalize";
-    btn.style.cursor = "pointer";
-    btn.style.boxShadow = "0 1px 3px rgba(0,0,0,0.2)";
-    btn.style.transition = "all 0.3s linear";
-
-    btn.addEventListener("mouseenter", function () {
-      btn.style.backgroundColor = "#c59d5f";
-      btn.style.color = "#fff";
-    });
-
-    btn.addEventListener("mouseleave", function () {
-      btn.style.backgroundColor = "rgba(255,255,255,0.95)";
-      btn.style.color = "#c59d5f";
-    });
-
-    btn.addEventListener("click", function () {
-      var currentParams = new URLSearchParams(window.location.search);
-      var currentT = currentParams.get("t");
-
-      if (currentT) {
-        // Turn bilingual mode off globally and for this page:
-        // update persisted flag so auto-add logic won't re-enable it.
+    // Expose a helper so the navbar bilingual button can
+    // keep this page's `t` parameter in sync with the
+    // global bilingual flag and preferred language.
+    if (typeof window !== "undefined") {
+      window.zatSyncBilingualQueryParam = function () {
         try {
-          localStorage.setItem("zatBilingualOn", "0");
-          if (typeof window !== "undefined") {
-            window.zatBilingualOn = false;
-            if (typeof window.zatRefreshMenu === "function") {
-              window.zatRefreshMenu();
-            }
-          }
-        } catch (e) {
-          console.warn("Failed to persist bilingual OFF state", e);
-        }
-        // Remove `t` and reload
-        currentParams.delete("t");
-      } else {
-        if (!preferred) {
-          alert(
-            "Please set your preferred language in the Preferences page first.",
-          );
-          return;
-        }
-        // Turn bilingual mode on globally and for this page
-        try {
-          localStorage.setItem("zatBilingualOn", "1");
-          if (typeof window !== "undefined") {
-            window.zatBilingualOn = true;
-            if (typeof window.zatRefreshMenu === "function") {
-              window.zatRefreshMenu();
-            }
-          }
-        } catch (e) {
-          console.warn("Failed to persist bilingual ON state", e);
-        }
-        currentParams.set("t", preferred);
-      }
+          var preferredLang =
+            window.zatPreferredLang ||
+            localStorage.getItem("zatPreferredLang") ||
+            "";
+          var currentParams = new URLSearchParams(window.location.search);
+          var existingT = currentParams.get("t");
 
-      var newQuery = currentParams.toString();
-      var newUrl = window.location.pathname + (newQuery ? "?" + newQuery : "");
-      window.location.href = newUrl;
-    });
+          if (window.zatBilingualOn === true && preferredLang) {
+            if (existingT !== preferredLang) {
+              currentParams.set("t", preferredLang);
+            }
+          } else if (existingT) {
+            currentParams.delete("t");
+          }
 
-    document.body.appendChild(btn);
+          var newQuery = currentParams.toString();
+          var newUrl =
+            window.location.pathname + (newQuery ? "?" + newQuery : "");
+          var currentUrl =
+            window.location.pathname + window.location.search;
+
+          if (newUrl !== currentUrl) {
+            window.location.href = newUrl;
+          }
+        } catch (err) {
+          console.error("zatSyncBilingualQueryParam failed", err);
+        }
+      };
+    }
   } catch (e) {
     // Fail silently; games should still work even if this script fails.
     console.error("bilingual-toggle init failed", e);

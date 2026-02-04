@@ -5,82 +5,117 @@ html {
   -o-background-size: cover;
   background-size: cover;
 }
-
-
-body{
-    background: #f0f0f0;
+body {
+  background: #f0f0f0;
 }
 .pos1 {
-    position: absolute;
-    top: 0%;
-    right: 2%;
+  position: absolute;
+  top: 0%;
+  right: 2%;
 }
 .pos2 {
-    position: absolute;
-    top: 20%;
-    left: 2%;
-
+  position: absolute;
+  top: 20%;
+  left: 2%;
 }
-.myp{
-	text-align:center;
-	
+.myp {
+  text-align: center;
 }
-td{
-	border: 3px solid #ca9e0d;
-	cursor:pointer;
+td {
+  border: 3px solid #ca9e0d;
+  cursor: pointer;
 }
-h1{
-    font-size:3.3em;
-    color:#333;
-    font-weight: 600;
-}
-#wm{
-    font-size:2.0em;
-    color:#333;
-   
+h1 {
+  font-size: 3.3em;
+  color: #333;
+  font-weight: 600;
 }
 
-span{
-    font-size:1.5em;
-    
-   
-}
-#nomd{
-    color: green;
+/* Game-specific styles - don't use generic selectors */
+#wm {
+  font-size: 2em;
+  color: #333;
 }
 
-#nowt{
-    color: red; 
-}
-p{
-    font-size:1.3em;
-    color:#333;
-    padding:0px;
-    margin:0px;
+#wm span,
+#nomd,
+#nowt {
+  font-size: 1.5em;
 }
 
-center{
-    margin: 10px auto;
-    width:90vw;
-    height:90%;
+#nomd {
+  color: green;
+}
+
+#nowt {
+  color: red;
+}
+
+center {
+  margin: 10px auto;
+  width: 90vw;
+  height: 90%;
 }
 
 .header-divider {
-    content:"";
-    width: 60%;
-    height: 3px;
-    background-color: goldenrod;
-    margin: 10px auto 25px;
+  content: "";
+  width: 60%;
+  height: 3px;
+  background-color: goldenrod;
+  margin: 10px auto 25px;
 }
 
-#tbl{
-    background-color: white;
-    padding:10px;
-    box-shadow: 1px 2px 5px black;
-    font-size:1.1em;
-    font-weight:600;
+#tbl {
+  background-color: white;
+  padding: 10px;
+  box-shadow: 1px 2px 5px black;
+  font-size: 1.1em;
+  font-weight: 600;
 }
 
-#tbl tr td{
-    padding:15px;
+#tbl tr td {
+  padding: 15px;
+}
+
+#tbl p {
+  font-size: 1.3em;
+  color: #333;
+  padding: 0px;
+  margin: 0px;
+}
+
+/* CRITICAL: Force header styles on mmk page */
+.auth-buttons,
+#header-placeholder {
+  all: revert !important;
+}
+
+.auth-buttons {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: hsl(210, 36%, 96%) !important;
+  padding: 15px 20px !important;
+}
+
+.auth-buttons img.logo {
+  width: 100px !important;
+  height: auto !important;
+  cursor: pointer !important;
+}
+
+.auth-buttons .fa-user-circle {
+  font-size: 2rem !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.auth-buttons button {
+  font-size: 1rem !important;
+  padding: 0.375rem 0.75rem !important;
 }
