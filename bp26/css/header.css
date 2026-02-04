@@ -350,3 +350,64 @@
 #profile-dropdown * {
   box-sizing: border-box !important;
 }
+
+/* FORCE header styles to override page-specific CSS */
+.auth-buttons .fa-user-circle,
+#profile-btn .fa-user-circle,
+#profile-btn i.fa-user-circle {
+  font-size: 2rem !important;
+  width: 40px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  display: inline-block !important;
+}
+
+#dropdown-profile-icon .fa-user-circle,
+#dropdown-profile-icon i.fa-user-circle {
+  font-size: 3rem !important;
+  width: 60px !important;
+  height: 60px !important;
+  line-height: 60px !important;
+  display: inline-block !important;
+}
+
+#profile-btn {
+  min-width: 40px !important;
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#profile-btn,
+#profile-btn *,
+.profile-icon,
+.profile-image {
+  font-size: initial !important;
+}
+
+.auth-buttons button {
+  font-size: 1rem !important;
+}
+
+/* Force logo size - nuclear option */
+img.logo,
+a img.logo,
+.auth-buttons a img,
+.auth-buttons > a > img {
+  width: 100px !important;
+  max-width: 100px !important;
+  min-width: 80px !important;
+  height: auto !important;
+  display: block !important;
+}
+
+@media screen and (max-width: 768px) {
+  img.logo,
+  a img.logo,
+  .auth-buttons a img,
+  .auth-buttons > a > img {
+    width: 60px !important;
+    min-width: 60px !important;
+  }
+}
