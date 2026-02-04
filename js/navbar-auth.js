@@ -43,6 +43,12 @@ const updateBilingualButton = () => {
 
 // Check if user is logged in
 onAuthStateChanged(auth, (user) => {
+  // Show auth buttons as soon as we know the auth state
+  const authBtn = document.querySelector(".auth-btn");
+  if (authBtn) {
+    authBtn.style.visibility = "visible";
+  }
+
   if (user) {
     loggedOut.classList.add("hidden");
     loggedIn.classList.remove("hidden");
@@ -177,13 +183,25 @@ document.addEventListener("click", (e) => {
 });
 
 // Logout
+// Logout
 if (dropdownLogout) {
   dropdownLogout.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
       await signOut(auth);
       dropdown.classList.add("hidden");
-      alert("Logged out successfully!");
+
+      // Check if we're on a protected page
+      const currentPath = window.location.pathname;
+      if (currentPath.includes("/bp26/")) {
+        // Redirect to login instead of showing alert
+        window.location.href = "../auth/login.html";
+      } else {
+        // On public pages, just show confirmation
+        alert("Logged out successfully!");
+        // Optionally reload to update UI
+        window.location.reload();
+      }
     } catch (error) {
       alert("Error logging out");
       console.error(error);
@@ -203,7 +221,9 @@ if (bilingualBtn) {
 
     // Require a preferred language before turning bilingual mode ON
     if (turningOn && !preferredLang) {
-      alert("Please set your preferred language in the Preferences page first.");
+      alert(
+        "Please set your preferred language in the Preferences page first.",
+      );
       return;
     }
 
@@ -223,5 +243,16 @@ if (bilingualBtn) {
     if (typeof window.zatSyncBilingualQueryParam === "function") {
       window.zatSyncBilingualQueryParam();
     }
+  });
+}
+
+// Set profile link with origin parameter
+const profileLinkDropdown = document.getElementById("profile-link-dropdown");
+if (profileLinkDropdown) {
+  profileLinkDropdown.addEventListener("click", (e) => {
+    e.preventDefault();
+    const currentPath = window.location.pathname;
+    const origin = currentPath.includes("/bp26/") ? "bp26" : "home";
+    window.location.href = `../auth/profile.html?from=${origin}`;
   });
 }

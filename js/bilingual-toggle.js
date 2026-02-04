@@ -63,8 +63,7 @@ function initBilingualToggle() {
           var newQuery = currentParams.toString();
           var newUrl =
             window.location.pathname + (newQuery ? "?" + newQuery : "");
-          var currentUrl =
-            window.location.pathname + window.location.search;
+          var currentUrl = window.location.pathname + window.location.search;
 
           if (newUrl !== currentUrl) {
             window.location.href = newUrl;

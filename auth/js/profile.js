@@ -323,3 +323,18 @@ logoutBtn.addEventListener("click", async () => {
     console.error(error);
   }
 });
+
+// Handle Back to Games link based on origin
+const backLink = document.getElementById("back-link");
+if (backLink) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const origin = urlParams.get("from");
+
+  if (origin === "bp26") {
+    backLink.href = "../bp26/index.html";
+    backLink.textContent = "Back to Competition";
+  } else {
+    backLink.href = "../index24.html";
+    backLink.textContent = "Back to Games";
+  }
+}

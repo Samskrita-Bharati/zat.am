@@ -53,6 +53,17 @@ if (isProtectedGame()) {
     });
 }
 
+// Listen for auth state changes and redirect if logged out on protected pages
+onAuthStateChanged(auth, (user) => {
+  const currentPath = window.location.pathname;
+  const isProtectedPage = currentPath.includes("/bp26/");
+
+  if (!user && isProtectedPage) {
+    // User logged out on a protected page - redirect to login
+    window.location.href = "../auth/login.html";
+  }
+});
+
 /*
   Usage: Add this line at the top of game's index.html (right after <body> tag) to make it protected:
   <script type="module" src="../auth/api/middleware.js"></script>
