@@ -5,6 +5,11 @@ html {
   -o-background-size: cover;
   background-size: cover;
 }
+
+
+body{
+    background: #f0f0f0;
+}
 .pos1 {
     position: absolute;
     top: 0%;
@@ -21,6 +26,61 @@ html {
 	
 }
 td{
-	border: 1px solid blue;
+	border: 3px solid #ca9e0d;
 	cursor:pointer;
+}
+h1{
+    font-size:3.3em;
+    color:#333;
+    font-weight: 600;
+}
+#wm{
+    font-size:2.0em;
+    color:#333;
+   
+}
+
+span{
+    font-size:1.5em;
+    
+   
+}
+#nomd{
+    color: green;
+}
+
+#nowt{
+    color: red; 
+}
+p{
+    font-size:1.3em;
+    color:#333;
+    padding:0px;
+    margin:0px;
+}
+
+center{
+    margin: 10px auto;
+    width:90vw;
+    height:90%;
+}
+
+.header-divider {
+    content:"";
+    width: 60%;
+    height: 3px;
+    background-color: goldenrod;
+    margin: 10px auto 25px;
+}
+
+#tbl{
+    background-color: white;
+    padding:10px;
+    box-shadow: 1px 2px 5px black;
+    font-size:1.1em;
+    font-weight:600;
+}
+
+#tbl tr td{
+    padding:15px;
 }

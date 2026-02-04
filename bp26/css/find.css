@@ -2,17 +2,26 @@ body {
     height: 90vh;
     width: 90vw;
     /* background-color: rgba(255, 165, 0, 0.75); */
+    background-color: #f0f0f0;
+    margin: 16px auto;
+    line-height: 1.4;
+  
+    
 }
 .mangalam {
     text-align: center;
+   
 }
 #lead {
     text-align: center;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
+    font-size : 1.4em;
+    line-height: 1.5;
 }
 #statusMessage {
     text-align: center;
     display: none;
+    margin: 6px 0;
 }
 #finishMessage {
     display: none;
@@ -20,28 +29,49 @@ body {
     color: #ff5555;
     font-size: 2em;
     font-weight: bold;
+    margin: 8px 0;
 }
 
 #level {
     position: absolute;
-    right: 2%;
+    right: 4%;
     top: 35%;
+    padding: 8px 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 
 }
 .leveltext{
-    font-size: large;
+    font-size: 1.3em;
+}
+#nFound{
+    font-size: 1.3em;
 }
 
 #refreshLink{
+    text-align: center;
     position: absolute;
-    bottom: 10%;
-    left: 2%;
+    bottom: 15%;
+    left: 3%;
+    font-size:1.2em;
+    font-weight: 700;
+    padding: 8px 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 #hintLink {
     position: absolute;
     left: 2%;
-    top: 10%;
+    top: 30%;
+    font-size:1.2em;
+    font-weight: 700;
+    padding: 8px 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 #hintPopup {
     display: none;
@@ -65,12 +95,13 @@ body {
 }
 #gridParent {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #grid {
-    position: absolute;
-    top: 10%;
-    left: 55%;
-    transform: translateX(-50%);
+    position: relative;
+    margin: 0 auto;
     background-color: #eef5f8;
     z-index: 1;
 }
@@ -90,6 +121,7 @@ body {
     font-size: 2em;
     align-self: stretch; 
     position: relative;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 span{
@@ -175,3 +207,32 @@ span{
 .dropdown{
  margin: 10px;
 }
+
+.gameTitle{
+    text-align: center;
+        margin: 12px 0 6px;
+}
+.header-divider {
+    content:"";
+    width: 90%;
+    height: 4px;
+    background-color: #ca9e0d;
+        margin: 0 auto 16px auto;
+    
+}
+#hintLink a {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+#hintLink a:hover {
+    color: #2b6cb0;
+    text-decoration: underline;
+}
+
+#grid td:hover {
+    background-color: rgba(255,215,0,0.6);
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.06);
+}
+
+

@@ -14,13 +14,28 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background: #f0f0f0;
             margin: 0;
             padding: 100px 20px 20px 20px; /* push content below fixed profile bar */
         }
         h1 {
             text-align: center;
             margin-bottom: 20px;
+            color:#333;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 10px;
+            color:#666;
+            font-size:0.9em;
+            font-style: italic;
+        }
+        .head-divider {
+            content:"";
+            width: 80%;
+            height: 4px;
+            background: #ca9e0d;
+            margin: 20px auto;
         }
         .grid {
             width: 80vw;
@@ -29,7 +44,10 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
+
+            
         }
+        
 
         .card {
             background: white;
