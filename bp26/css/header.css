@@ -29,7 +29,7 @@
 }
 
 .auth-buttons .logo {
-  width: 10%;
+  width: 5%;
   max-width: 100px;
 }
 
@@ -199,7 +199,7 @@
     padding: 10px 15px;
   }
   .auth-buttons .logo {
-    width: 60px;
+    width: 30px;
   }
   .auth-buttons button {
     font-size: 0.85rem;
@@ -397,9 +397,9 @@ img.logo,
 a img.logo,
 .auth-buttons a img,
 .auth-buttons > a > img {
-  width: 100px !important;
-  max-width: 100px !important;
-  min-width: 80px !important;
+  width: 50px !important;
+  max-width: 90px !important;
+  min-width: 70px !important;
   height: auto !important;
   display: block !important;
 }
@@ -409,7 +409,7 @@ a img.logo,
   a img.logo,
   .auth-buttons a img,
   .auth-buttons > a > img {
-    width: 60px !important;
+    width: 50px !important;
     min-width: 60px !important;
   }
 }
