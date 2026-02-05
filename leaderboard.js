@@ -29,10 +29,15 @@ const applyTimeBtn = document.getElementById("applyTimeBtn");
 // Apply button only available when 
 // seasonDate and timeFilter are both valued
 function validateApplyButton() {
+    const mode = timeSelect.value;
     const hasDate = seasonDate.value.trim() !== "";
     const hasFilter = timeSelect.value.trim() !== "";
 
-    applyTimeBtn.disabled = !(hasDate && hasFilter);
+    if (mode === "allDates") {
+        applyTimeBtn.disabled = !hasFilter;
+    } else {
+        applyTimeBtn.disabled = !(hasDate && hasFilter);
+    }
 }
 seasonDate.addEventListener("input", validateApplyButton);
 timeSelect.addEventListener("change", validateApplyButton);
@@ -45,11 +50,11 @@ function getFilterRange(mode, pickedDate) {
 
   if (mode === "allDates") {
     //console.log("%c Range Filtered: ALL DATES", "color: blue; font-weight: bold;");
-    return { start: 0, end: pickedStart + 86400000 - 1 };
+    return { start: Date.now() - (3 * 365 * 24 * 60 * 60 * 1000), end: date };
   }
 
-  let start = 0;
-  let end = Infinity;
+  let start = pickedStart;
+  let end = pickedStart;
 
   switch (mode) {
     case "daily":
@@ -80,7 +85,7 @@ function getFilterRange(mode, pickedDate) {
   const sDate = new Date(start).toLocaleString();
   const eDate = new Date(end).toLocaleString();
 
-  //console.log(`%c Range Filtered [${mode}]:`, "color: green; font-weight: bold;", `\nStart: ${sDate}\nEnd:   ${eDate}`);
+  console.log(`%c Range Filtered [${mode}]:`, "color: green; font-weight: bold;", `\nStart: ${sDate}\nEnd:   ${eDate}`);
   return { start, end };
 }
 
@@ -95,7 +100,7 @@ applyTimeBtn.addEventListener("click", async () => {
     // Display filter range in HTML
     const displayEl = document.getElementById("filterRangeDisplay");
     if (mode === "allDates") {
-        displayEl.innerText = "Showing: All Time Records";
+        displayEl.innerText = "Showing: All Records within 3 Years";
     } else {
         const sStr = new Date(start).toLocaleDateString();
         const eStr = new Date(end).toLocaleDateString();
@@ -126,7 +131,7 @@ function getMonthsInRange(start, end) {
     current.setDate(1);
   }
 
-  //console.log("Months to be fetched:", months)
+  console.log("Months to be fetched:", months)
   return months;
 }
 
@@ -134,7 +139,6 @@ function getMonthsInRange(start, end) {
 // fetch all game histories for selected game and the current month
 async function fetchGameHistories(selectedGame, start, end) {
   const monthsList = getMonthsInRange(start, end);
-  //console.log("Planned fetch months:", monthsList);
   
   const fetchPromises = monthsList.map(async (monthStr) => {
     const docRef = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", monthStr);
@@ -143,7 +147,7 @@ async function fetchGameHistories(selectedGame, start, end) {
   });
 
   const allData = await Promise.all(fetchPromises);
-  //console.log("Fetched allData:", allData)
+  console.log("Fetched allData:", allData)
 
   const formattedData = [];
   allData.forEach(monthEntries => {
@@ -227,7 +231,7 @@ async function generateLeaderboardData(gameHistories, start, end) {
     };
   }));
 
-  //console.log("dataWithUserProfile:", dataWithUserProfile);
+  console.log("dataWithUserProfile:", dataWithUserProfile);
   return dataWithUserProfile;
 }
 
