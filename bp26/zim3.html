@@ -62,8 +62,8 @@ function ready() {
 
 	// see https://zimjs.com/docs.html for info on any of these commands
 
-	new Label("नमस्ते", 80, "Tourney", yellow).pos(0,70,CENTER);
-
+	new Label("पुनरुक्ति 🤔", 80, "Tourney", "tomato").pos(0,70,CENTER);
+new Label("What repeats?", 50, "Tourney", "tomato").pos(0,180,CENTER);
 
 
 	// the tile has an items array with all its items 
@@ -80,10 +80,10 @@ function ready() {
 //		})
 		special = rand(wpp); // index starts at 0
         wintmp = mywords[special]
-        if (t) wintmp+= "\n-"+Sanscript.t(String(wintmp), 'devanagari',tlang[t]);
+        if (t) wintmp+= "\n"+Sanscript.t(String(wintmp), 'devanagari',tlang[t]);
         for (var j = 0; j < wpp; j++) {
                     var wrd = mywords.pop();
-                    if (t) wrd+= "\n-"+Sanscript.t(String(wrd), 'devanagari',tlang[t])
+                    if (t) wrd+= "\n"+Sanscript.t(String(wrd), 'devanagari',tlang[t])
                     tillabs.push(new Label(wrd, 15, "Tourney", yellow));
                 }
         //zog(wintmp); // reveals the secret
