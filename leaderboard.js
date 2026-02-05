@@ -44,7 +44,7 @@ function getFilterRange(mode, pickedDate) {
   const pickedStart = new Date(base).setHours(0, 0, 0, 0);
 
   if (mode === "allDates") {
-    console.log("%c Range Filtered: ALL DATES", "color: blue; font-weight: bold;");
+    //console.log("%c Range Filtered: ALL DATES", "color: blue; font-weight: bold;");
     return { start: 0, end: pickedStart + 86400000 - 1 };
   }
 
@@ -80,13 +80,14 @@ function getFilterRange(mode, pickedDate) {
   const sDate = new Date(start).toLocaleString();
   const eDate = new Date(end).toLocaleString();
 
-  console.log(`%c Range Filtered [${mode}]:`, "color: green; font-weight: bold;", `\nStart: ${sDate}\nEnd:   ${eDate}`);
+  //console.log(`%c Range Filtered [${mode}]:`, "color: green; font-weight: bold;", `\nStart: ${sDate}\nEnd:   ${eDate}`);
   return { start, end };
 }
 
 applyTimeBtn.addEventListener("click", async () => {
     const mode = timeSelect.value;
     const dateValue = seasonDate.value;
+    const selectedGame = gameSelect.value;
 
     // Get start and end date
     const { start, end } = getFilterRange(mode, dateValue);
@@ -102,6 +103,7 @@ applyTimeBtn.addEventListener("click", async () => {
     }
 
     // Generate leaderboard data with selected time range
+    gameHistories = await fetchGameHistories(selectedGame, start, end);
     leaderboardData = await generateLeaderboardData(gameHistories, start, end);
 
     currentPage = 1;
@@ -109,28 +111,56 @@ applyTimeBtn.addEventListener("click", async () => {
     
 });
 
-// fetch all game histories for selected game and the current month
-async function fetchGameHistories(selectedGame) {
-  const gameHistories = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", formattedDate);
-  const snapshot = await getDoc(gameHistories);
-  const data = snapshot.data()
+// Get the months list(YYYY-MM) of selected time range
+function getMonthsInRange(start, end) {
+  const months = [];
+  const current = new Date(start);
+  const last = new Date(end);
 
-  if (data) {
-    const formattedData = Object.entries(data.entries).map(([key, score]) => {
-      const [timestamp, uid] = key.split("_");
-
-      return {
-        uid,
-        timestamp: Number(timestamp),
-        score,
-      };
-    });
-    console.log("rawData:", formattedData)
-    return formattedData
+  while (current <= last) {
+    const y = current.getFullYear();
+    const m = String(current.getMonth() + 1).padStart(2, "0");
+    months.push(`${y}-${m}`);
+    
+    current.setMonth(current.getMonth() + 1);
+    current.setDate(1);
   }
 
-  console.log("rawData:", [])
-  return [];
+  //console.log("Months to be fetched:", months)
+  return months;
+}
+
+
+// fetch all game histories for selected game and the current month
+async function fetchGameHistories(selectedGame, start, end) {
+  const monthsList = getMonthsInRange(start, end);
+  //console.log("Planned fetch months:", monthsList);
+  
+  const fetchPromises = monthsList.map(async (monthStr) => {
+    const docRef = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", monthStr);
+    const snapshot = await getDoc(docRef);
+    return snapshot.exists() ? snapshot.data().entries : null;
+  });
+
+  const allData = await Promise.all(fetchPromises);
+  //console.log("Fetched allData:", allData)
+
+  const formattedData = [];
+  allData.forEach(monthEntries => {
+    if (monthEntries) {
+      Object.entries(monthEntries).forEach(([key, score]) => {
+        const [timestamp, uid] = key.split("_");
+        formattedData.push({
+          uid,
+          timestamp: Number(timestamp),
+          score,
+        });
+      });
+    }
+  });
+
+  //console.log("rawData:", formattedData)
+  return formattedData
 }
 
 async function getUserProfile(uid) {
@@ -202,7 +232,7 @@ async function generateLeaderboardData(gameHistories, start, end) {
 }
 
 // default leaderboard settings
-let gameHistories = await fetchGameHistories("Global");
+let gameHistories = await fetchGameHistories("Global", date, date );
 // empty time range means today's daily
 const initialRange = getFilterRange("daily", ""); 
 let leaderboardData = await generateLeaderboardData(gameHistories, initialRange.start, initialRange.end);
@@ -211,8 +241,8 @@ let leaderboardData = await generateLeaderboardData(gameHistories, initialRange.
 // generate new leaderboard array,
 // re-render leaderboard and change to 1st page
 gameSelect.addEventListener("change", async (e) => {
-  gameHistories = await fetchGameHistories(e.target.value);
   const { start, end } = getFilterRange(timeSelect.value, seasonDate.value);
+  gameHistories = await fetchGameHistories(e.target.value, start, end);
   leaderboardData = await generateLeaderboardData(gameHistories, start, end);
   render();
   changePage(1);
