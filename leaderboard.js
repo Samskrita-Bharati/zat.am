@@ -1,155 +1,131 @@
 import {
-  query,
   collection,
   getDocs,
-  doc, 
-  getDoc, 
-  writeBatch, 
-  setDoc
+  doc,
+  getDoc,
+  writeBatch,
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+import { onAuthStateChanged } from "firebase/auth";
+import {
+  auth,
+  db as roleCheckDb,
+  leaderboardDb,
+} from "./auth/api/firebase-config.js";
+import { checkFetchRequirements, getRawData } from "./leaderboard-utils.js";
 
-import { onAuthStateChanged } from "firebase/auth"
-import { auth, db as roleCheckDb, leaderboardDb } from "./auth/api/firebase-config.js";
-
-const timestamp = Date.now();
-const date = new Date(timestamp);
-const year = date.getFullYear();
-const month = String(date.getMonth() + 1).padStart(2, "0");
-// used for getting document for current month
-const formattedDate = `${year}-${month}` // YYYY-MM
+// local start, end, and game variables for comparing with newly selected start, end and game
+// used for detecting if leaderboard needs to fetch new db documents or not
+let startDate;
+let endDate;
+let currentGame;
 
 // filters
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
 const seasonDate = document.getElementById("seasonDate");
-const applyTimeBtn = document.getElementById("applyTimeBtn");
-
-//let myChart = null;
-
-// Apply button only available when 
-// seasonDate and timeFilter are both valued
-function validateApplyButton() {
-    const hasDate = seasonDate.value.trim() !== "";
-    const hasFilter = timeSelect.value.trim() !== "";
-
-    applyTimeBtn.disabled = !(hasDate && hasFilter);
-}
-seasonDate.addEventListener("input", validateApplyButton);
-timeSelect.addEventListener("change", validateApplyButton);
 
 // Get the date range selected from HTML
 function getFilterRange(mode, pickedDate) {
-
   const base = pickedDate ? new Date(pickedDate + "T00:00:00") : new Date();
   const pickedStart = new Date(base).setHours(0, 0, 0, 0);
 
   if (mode === "allDates") {
-    console.log("%c Range Filtered: ALL DATES", "color: blue; font-weight: bold;");
-    return { start: 0, end: pickedStart + 86400000 - 1 };
+    console.log(
+      "%c Range Filtered: ALL DATES",
+      "color: blue; font-weight: bold;",
+    );
+    return { newStart: 0, newEnd: Date.now() };
   }
 
-  let start = 0;
-  let end = Infinity;
+  let newStart = 0;
+  let newEnd = Infinity;
 
   switch (mode) {
     case "daily":
-      start = pickedStart;
-      end = pickedStart + 86400000 - 1; // 24小时
+      newStart = pickedStart;
+      newEnd = pickedStart + 86400000 - 1; // 24小时
       break;
     case "weekly":
       // Get the day in week of selected day
-      const day = base.getDay(); 
-      
+      const day = base.getDay();
+
       // Get the monday date of selected week
       const sunday = new Date(base);
-      sunday.setDate(base.getDate() - day); 
-      start = sunday.setHours(0, 0, 0, 0);
-      
+      sunday.setDate(base.getDate() - day);
+      newStart = sunday.setHours(0, 0, 0, 0);
+
       // Get the sunday date of selected week
       const saturday = new Date(sunday);
       saturday.setDate(sunday.getDate() + 6);
-      end = saturday.setHours(23, 59, 59, 999);
+      newEnd = saturday.setHours(23, 59, 59, 999);
       break;
     case "monthly":
       // The 1st day to the last daye of selected month
-      start = new Date(base.getFullYear(), base.getMonth(), 1).getTime();
-      end = new Date(base.getFullYear(), base.getMonth() + 1, 1).getTime() - 1;
+      newStart = new Date(base.getFullYear(), base.getMonth(), 1).getTime();
+      newEnd =
+        new Date(base.getFullYear(), base.getMonth() + 1, 1).getTime() - 1;
       break;
   }
 
-  const sDate = new Date(start).toLocaleString();
-  const eDate = new Date(end).toLocaleString();
+  const sDate = new Date(newStart).toLocaleString();
+  const eDate = new Date(newEnd).toLocaleString();
 
-  console.log(`%c Range Filtered [${mode}]:`, "color: green; font-weight: bold;", `\nStart: ${sDate}\nEnd:   ${eDate}`);
-  return { start, end };
+  console.log(
+    `%c Range Filtered [${mode}]:`,
+    "color: green; font-weight: bold;",
+    `\nStart: ${sDate}\nEnd:   ${eDate}`,
+  );
+  return { newStart, newEnd };
 }
-
-applyTimeBtn.addEventListener("click", async () => {
-    const mode = timeSelect.value;
-    const dateValue = seasonDate.value;
-
-    // Get start and end date
-    const { start, end } = getFilterRange(mode, dateValue);
-
-    // Display filter range in HTML
-    const displayEl = document.getElementById("filterRangeDisplay");
-    if (mode === "allDates") {
-        displayEl.innerText = "Showing: All Time Records";
-    } else {
-        const sStr = new Date(start).toLocaleDateString();
-        const eStr = new Date(end).toLocaleDateString();
-        displayEl.innerText = `Showing: ${sStr} — ${eStr}`;
-    }
-
-    // Generate leaderboard data with selected time range
-    leaderboardData = await generateLeaderboardData(gameHistories, start, end);
-
-    currentPage = 1;
-    render();
-    
-});
 
 // fetch all game histories for selected game and the current month
 async function fetchGameHistories(selectedGame) {
-  const gameHistories = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", formattedDate);
-  const snapshot = await getDoc(gameHistories);
-  const data = snapshot.data()
-
-  if (data) {
-    const formattedData = Object.entries(data.entries).map(([key, score]) => {
-      const [timestamp, uid] = key.split("_");
-
-      return {
-        uid,
-        timestamp: Number(timestamp),
-        score,
-      };
-    });
-    console.log("rawData:", formattedData)
-    return formattedData
+  let fetchNeeded = true; //true by default
+  let rawData;
+  const { newStart, newEnd } = getFilterRange(
+    timeSelect.value,
+    seasonDate.value,
+  );
+  fetchNeeded = checkFetchRequirements(
+    startDate,
+    endDate,
+    newStart,
+    newEnd,
+    currentGame,
+    selectedGame,
+  );
+  console.log("document fetch needed?", fetchNeeded);
+  startDate = newStart;
+  endDate = newEnd;
+  currentGame = selectedGame;
+  if (fetchNeeded) {
+    rawData = await getRawData(newStart, newEnd, selectedGame);
+    return rawData;
   }
-
-  console.log("rawData:", [])
-  return [];
+  return;
 }
 
 async function getUserProfile(uid) {
-    const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
-    const userSnap = await getDoc(userDocRef);
-    
-    if (userSnap.exists()) {
-        const data = userSnap.data();
-        const location = (data.location || "").split(/[，,]/);
-        return {
-            name: data.name || "Unknown Player",
-            location: location[location.length - 1].trim() || "Unknown"
-        };
-    }
-    return { name: "Unknown Player", location: "Unknown" };
+  const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
+  const userSnap = await getDoc(userDocRef);
+
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    const location = (data.location || "").split(/[，,]/);
+    return {
+      name: data.name || "Unknown Player",
+      location: location[location.length - 1].trim() || "Unknown",
+    };
+  }
+  return { name: "Unknown Player", location: "Unknown" };
 }
 
 // generates usable leaderboard data from game histories
-async function generateLeaderboardData(gameHistories, start, end) {
+async function generateLeaderboardData(gameHistories) {
+  const start = startDate;
+  const end = endDate;
+
   const leaderboardData = Object.values(
     gameHistories.reduce((acc, { score, timestamp, uid }) => {
       // time filtering
@@ -157,9 +133,9 @@ async function generateLeaderboardData(gameHistories, start, end) {
         return acc;
       }
 
-      // use playerUID as key 
+      // use playerUID as key
       const key = uid;
-      if (!key) return acc; 
+      if (!key) return acc;
 
       if (!acc[key]) {
         acc[key] = {
@@ -170,6 +146,7 @@ async function generateLeaderboardData(gameHistories, start, end) {
       }
 
       acc[key].totalScore += score;
+
       if (timestamp >= acc[key].latestTimestamp) {
         acc[key].latestTimestamp = timestamp;
       }
@@ -181,21 +158,24 @@ async function generateLeaderboardData(gameHistories, start, end) {
 
   // associate names and locations with each uid
   const userCache = {};
-  const dataWithUserProfile = await Promise.all(leaderboardData.map(async (record) => {
-    const uid = record.uid;
-    if (!uid) return { ...record, username: "Unknown Player", location: "Unknown" };
+  const dataWithUserProfile = await Promise.all(
+    leaderboardData.map(async (record) => {
+      const uid = record.uid;
+      if (!uid)
+        return { ...record, username: "Unknown Player", location: "Unknown" };
 
-    if (!userCache[uid]) {
-      const profile = await getUserProfile(uid);
-      userCache[uid] = profile;
-    }
+      if (!userCache[uid]) {
+        const profile = await getUserProfile(uid);
+        userCache[uid] = profile;
+      }
 
-    return {
-      ...record,
-      username: userCache[uid].name,
-      location: userCache[uid].location
-    };
-  }));
+      return {
+        ...record,
+        username: userCache[uid].name,
+        location: userCache[uid].location,
+      };
+    }),
+  );
 
   //console.log("dataWithUserProfile:", dataWithUserProfile);
   return dataWithUserProfile;
@@ -204,23 +184,74 @@ async function generateLeaderboardData(gameHistories, start, end) {
 // default leaderboard settings
 let gameHistories = await fetchGameHistories("Global");
 // empty time range means today's daily
-const initialRange = getFilterRange("daily", ""); 
-let leaderboardData = await generateLeaderboardData(gameHistories, initialRange.start, initialRange.end);
+let leaderboardData = await generateLeaderboardData(gameHistories);
 
 // upon game selection change, fetch game history for selected game,
 // generate new leaderboard array,
 // re-render leaderboard and change to 1st page
 gameSelect.addEventListener("change", async (e) => {
-  gameHistories = await fetchGameHistories(e.target.value);
-  const { start, end } = getFilterRange(timeSelect.value, seasonDate.value);
-  leaderboardData = await generateLeaderboardData(gameHistories, start, end);
+  const rawData = await fetchGameHistories(e.target.value);
+  if (rawData !== undefined) {
+    gameHistories = rawData;
+  }
+  leaderboardData = await generateLeaderboardData(gameHistories);
   render();
   changePage(1);
-
   // check reset button status
-  checkResetEligibility(); 
+  checkResetEligibility();
   // sync toggle status
   syncToggleStatus(gameSelect.value);
+});
+
+// upon date selection change, fetch game history for selected date range,
+// generate new leaderboard array,
+// re-render leaderboard and change to 1st page
+seasonDate.addEventListener("input", async (e) => {
+  const rawData = await fetchGameHistories(gameSelect.value);
+  if (rawData !== undefined) {
+    gameHistories = rawData;
+  }
+  leaderboardData = await generateLeaderboardData(gameHistories);
+  render();
+  changePage(1);
+  // check reset button status
+  checkResetEligibility();
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
+  // Display filter range in HTML
+  const displayRange = document.getElementById("filterRangeDisplay");
+  if (timeSelect.value === "allDates") {
+    displayRange.innerText = "Showing: All Time Records";
+  } else {
+    const sStr = new Date(startDate).toLocaleDateString();
+    const eStr = new Date(endDate).toLocaleDateString();
+    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
+  }
+});
+
+// upon time filter selection change, fetch game history for selected range,
+// generate new leaderboard array,
+// re-render leaderboard and change to 1st page
+timeSelect.addEventListener("change", async (e) => {
+  const rawData = await fetchGameHistories(gameSelect.value);
+  if (rawData !== undefined) {
+    gameHistories = rawData;
+  }
+  leaderboardData = await generateLeaderboardData(gameHistories);
+  render();
+  changePage(1);
+  // check reset button status
+  checkResetEligibility();
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
+  const displayRange = document.getElementById("filterRangeDisplay");
+  if (e.target.value === "allDates") {
+    displayRange.innerText = "Showing: All Time Records";
+  } else {
+    const sStr = new Date(startDate).toLocaleDateString();
+    const eStr = new Date(endDate).toLocaleDateString();
+    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
+  }
 });
 
 let currentPage = 1;
@@ -237,10 +268,10 @@ function render() {
 
     if (username) {
       username.textContent = player ? player.username : "---";
-    } 
+    }
     if (location) {
       location.textContent = player ? `📍 ${player.location}` : "---";
-    } 
+    }
     if (score) {
       score.textContent = player ? player.totalScore.toLocaleString() : "---";
     }
@@ -295,7 +326,7 @@ document
 
 render();
 // check reset button status
-checkResetEligibility(); 
+checkResetEligibility();
 // sync toggle status
 syncToggleStatus(gameSelect.value);
 
@@ -306,9 +337,8 @@ syncToggleStatus(gameSelect.value);
 // // For demo use, false for production
 // const mockIsAdmin = true;
 
-// Visibility logic for adminPanel 
+// Visibility logic for adminPanel
 onAuthStateChanged(auth, async (user) => {
-
   //console.log("DEBUG - roleCheckDb:", roleCheckDb);
 
   const adminPanel = document.getElementById("adminPanel");
@@ -319,15 +349,20 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     //console.log("UID:", user.uid);
     try {
-      const userDocRef = doc(roleCheckDb, "users", user.uid, "private", "account");
+      const userDocRef = doc(
+        roleCheckDb,
+        "users",
+        user.uid,
+        "private",
+        "account",
+      );
       const userSnap = await getDoc(userDocRef);
 
       if (userSnap.exists()) {
         const userData = userSnap.data();
         isAdmin = userData.isAdmin === true;
         //console.log("isAdmin:", isAdmin);
-      }
-      else {
+      } else {
         console.warn("User document not found in Firestore");
       }
     } catch (error) {
@@ -351,22 +386,28 @@ const statusToggle = document.getElementById("statusToggle");
 async function syncToggleStatus(game) {
   const statusToggle = document.getElementById("statusToggle");
   if (!game || game === "Global") {
-    statusToggle.disabled = true; statusToggle.checked = false;
+    statusToggle.disabled = true;
+    statusToggle.checked = false;
     return;
   }
   statusToggle.disabled = false;
   const gameSnap = await getDoc(doc(leaderboardDb, "zat-am", game));
-  statusToggle.checked = gameSnap.exists() 
-                      ? (gameSnap.data().competitionIsActive === true) : false;
+  statusToggle.checked = gameSnap.exists()
+    ? gameSnap.data().competitionIsActive === true
+    : false;
 }
 
-document.getElementById("statusToggle").addEventListener("change", async (e) => {
-  const gameId = document.getElementById("gameSelect").value;
-  await setDoc(doc(leaderboardDb, "zat-am", gameId), 
-                  { competitionIsActive: e.target.checked }, { merge: true });
-  checkResetEligibility();
-});
-
+document
+  .getElementById("statusToggle")
+  .addEventListener("change", async (e) => {
+    const gameId = document.getElementById("gameSelect").value;
+    await setDoc(
+      doc(leaderboardDb, "zat-am", gameId),
+      { competitionIsActive: e.target.checked },
+      { merge: true },
+    );
+    checkResetEligibility();
+  });
 
 // Check reset button eligibility
 async function checkResetEligibility() {
@@ -375,8 +416,8 @@ async function checkResetEligibility() {
   const resetHint = document.getElementById("resetHint");
 
   if (!game || game === "Global") {
-    resetBtn.disabled = false; 
-    resetBtn.style.background = ""; 
+    resetBtn.disabled = false;
+    resetBtn.style.background = "";
     resetHint.textContent = "";
     return;
   }
@@ -395,27 +436,40 @@ async function checkResetEligibility() {
 }
 
 statusToggle.addEventListener("change", async () => {
-    const gameId = document.getElementById("gameSelect").value;
-    if (gameId === "Global") return;
+  const gameId = document.getElementById("gameSelect").value;
+  if (gameId === "Global") return;
 
-    const newState = statusToggle.checked;
-    try {
-        const gameDocRef = doc(leaderboardDb, "zat-am", gameId);
-        await setDoc(gameDocRef, { competitionIsActive: newState }, { merge: true });
-        await checkResetEligibility();
-    } catch (error) {
-        console.error("Update failed:", error);
-        statusToggle.checked = !newState;
-        alert("Database update failed.");
-    }
+  const newState = statusToggle.checked;
+  try {
+    const gameDocRef = doc(leaderboardDb, "zat-am", gameId);
+    await setDoc(
+      gameDocRef,
+      { competitionIsActive: newState },
+      { merge: true },
+    );
+    await checkResetEligibility();
+  } catch (error) {
+    console.error("Update failed:", error);
+    statusToggle.checked = !newState;
+    alert("Database update failed.");
+  }
 });
-
 
 // Logic for leaderboard reset
 async function performReset(game) {
-  if (!confirm(`Are you sure you want to clear all the score histories for ${game} ?`)) return;
+  if (
+    !confirm(
+      `Are you sure you want to clear all the score histories for ${game} ?`,
+    )
+  )
+    return;
 
-  const historyColRef = collection(leaderboardDb, "zat-am", game, "gameHistory");
+  const historyColRef = collection(
+    leaderboardDb,
+    "zat-am",
+    game,
+    "gameHistory",
+  );
   const historySnapshot = await getDocs(historyColRef);
 
   if (historySnapshot.empty) {
@@ -433,8 +487,7 @@ async function performReset(game) {
     await batch.commit();
     alert(`Successfully reset ${game} histories.`);
     gameHistories = [];
-    const { start, end } = getFilterRange(timeSelect.value, seasonDate.value);
-    leaderboardData = await generateLeaderboardData(gameHistories, start, end);
+    leaderboardData = await generateLeaderboardData(gameHistories);
     render();
   } catch (error) {
     console.error("Reset failed: ", error);
@@ -443,80 +496,79 @@ async function performReset(game) {
 }
 
 document.getElementById("resetBtn").addEventListener("click", () => {
-    const game = document.getElementById("gameSelect").value;
-    performReset(game);
+  const game = document.getElementById("gameSelect").value;
+  performReset(game);
 });
-
 
 // ============================================
 // ====== SPARKLE PARTICLE SYSTEM ======
 // ============================================
-const canvas = document.getElementById('sparkleCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("sparkleCanvas");
+const ctx = canvas.getContext("2d");
 let particles = [];
 let hoveredCard = null;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 });
 
 class Particle {
-    constructor(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.size = Math.random() * 15 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
-        this.speedX = (Math.random() - 0.5) * 5;
-        this.speedY = (Math.random() - 0.5) * 5;
-        this.alpha = 1;
-        this.decay = Math.random() * 0.02 + 0.01;
-        this.angle = Math.random() * Math.PI * 2;
-        this.spin = (Math.random() - 0.5) * 0.2;
-    }
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.alpha -= this.decay;
-        this.angle += this.spin;
-    }
-    draw() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        ctx.fillStyle = this.color || '#3B82F6';
-        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
-        ctx.restore();
-    }
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.size = Math.random() * 15 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
+    this.speedX = (Math.random() - 0.5) * 5;
+    this.speedY = (Math.random() - 0.5) * 5;
+    this.alpha = 1;
+    this.decay = Math.random() * 0.02 + 0.01;
+    this.angle = Math.random() * Math.PI * 2;
+    this.spin = (Math.random() - 0.5) * 0.2;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.alpha -= this.decay;
+    this.angle += this.spin;
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+    ctx.fillStyle = this.color || "#3B82F6";
+    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+    ctx.restore();
+  }
 }
 
-[1, 2, 3].forEach(rank => {
-    const el = document.getElementById(`card-${rank}`);
-    if(el) {
-        el.addEventListener('mouseenter', () => hoveredCard = el);
-        el.addEventListener('mouseleave', () => hoveredCard = null);
-    }
+[1, 2, 3].forEach((rank) => {
+  const el = document.getElementById(`card-${rank}`);
+  if (el) {
+    el.addEventListener("mouseenter", () => (hoveredCard = el));
+    el.addEventListener("mouseleave", () => (hoveredCard = null));
+  }
 });
 
 function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (hoveredCard) {
-        const rect = hoveredCard.getBoundingClientRect();
-        const color = hoveredCard.getAttribute('data-color');
-        for (let i = 0; i < 2; i++) {
-            const x = rect.left + Math.random() * rect.width;
-            const y = rect.top + Math.random() * rect.height;
-            particles.push(new Particle(x, y, color));
-        }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (hoveredCard) {
+    const rect = hoveredCard.getBoundingClientRect();
+    const color = hoveredCard.getAttribute("data-color");
+    for (let i = 0; i < 2; i++) {
+      const x = rect.left + Math.random() * rect.width;
+      const y = rect.top + Math.random() * rect.height;
+      particles.push(new Particle(x, y, color));
     }
-    particles = particles.filter(p => {
-        p.update();
-        p.draw();
-        return p.alpha > 0;
-    });
-    requestAnimationFrame(animate);
+  }
+  particles = particles.filter((p) => {
+    p.update();
+    p.draw();
+    return p.alpha > 0;
+  });
+  requestAnimationFrame(animate);
 }
 animate();
