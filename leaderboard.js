@@ -154,7 +154,6 @@ async function generateLeaderboardData(gameHistories) {
       return acc;
     }, {}),
   ).sort((a, b) => b.totalScore - a.totalScore);
-  //console.log("dataWithoutNames:", leaderboardData);
 
   // associate names and locations with each uid
   const userCache = {};

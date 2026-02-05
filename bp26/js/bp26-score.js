@@ -15,6 +15,8 @@ import { onAuthStateChanged } from "firebase/auth"
 import { auth, db as playerCheckDb, leaderboardDb } from "../../auth/api/firebase-config.js";
 
 const timestamp = Date.now();
+// For testing record entry
+// const timestamp = Date.now() - (24 * 60 * 60 * 1000) * 36;
 const date = new Date(timestamp);
 const year = date.getFullYear();
 const month = String(date.getMonth() + 1).padStart(2, "0");
