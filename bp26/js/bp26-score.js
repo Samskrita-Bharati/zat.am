@@ -6,13 +6,11 @@ import {
   updateDoc, 
   increment, 
   serverTimestamp, 
-  collection, 
-  addDoc,
   writeBatch
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-import { onAuthStateChanged } from "firebase/auth"
-import { auth, db as playerCheckDb, leaderboardDb } from "../../auth/api/firebase-config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js"
+import { auth, db } from "../../auth/api/firebase-config.js";
 
 const timestamp = Date.now();
 // For testing record entry
@@ -22,8 +20,7 @@ const year = date.getFullYear();
 const month = String(date.getMonth() + 1).padStart(2, "0");
 const formattedDate = `${year}-${month}`
 
-console.log("✅ Firebase connected to projectId:", leaderboardDb.app.options.projectId);
-console.log("✅ Firebase connected to projectId:", playerCheckDb.app.options.projectId);
+console.log("✅ Firebase connected to projectId:", db.app.options.projectId);
 
 //let CURRENT_USER = "";
 let CURRENT_UID = ""; 
@@ -46,12 +43,11 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Create parent docs so they show in Firestore left panel (zat-am collection)
+// Create parent docs so they show in Firestore left panel (leaderboards collection)
 async function ensureParentsUnderZatAm() {
   await Promise.all([
-    setDoc(doc(leaderboardDb, "zat-am", "Global"), { label: "Global", updatedAt: serverTimestamp() }, { merge: true }),
-    setDoc(doc(leaderboardDb, "zat-am", "bp26"), { label: "bp26", updatedAt: serverTimestamp() }, { merge: true }),
-    setDoc(doc(leaderboardDb, "zat-am", BP26_GAME), { label: BP26_GAME, updatedAt: serverTimestamp() }, { merge: true })
+    setDoc(doc(db, "leaderboards", "Global"), { label: "Global" }, { merge: true }),
+    setDoc(doc(db, "leaderboards", BP26_GAME), { label: BP26_GAME }, { merge: true })
   ]);
 }
 
@@ -60,49 +56,16 @@ export function bp26Init({ game } = {}) {
   console.log("✅ BP26 INIT:", {game: BP26_GAME });
 }
 
-// Upsert (and increment) player doc
-// Update player's uid instead of name into the record
-async function upsertIncrement(ref, uid, delta) {
-  const snap = await getDoc(ref);
-
-  if (snap.exists()) {
-    await updateDoc(ref, {
-      //name,
-      //uid,
-      //playerName: name,
-      playerUID: uid,
-      score: increment(delta),      // leaderboard uses score
-      lastScore: delta,
-      updatedAt: serverTimestamp()  // leaderboard reads this for lastPlayed
-    });
-  } else {
-    await setDoc(ref, {
-      //name,
-      //uid,
-      //playerName: name,
-      playerUID: uid,
-      score: delta,                 // can be 0 ✅
-      lastScore: delta,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    });
-  }
-}
-
 // Add a history record (like your screenshot: score, timestamp, uid)
 async function addHistory(gameId, uid, score) {
   const entryKey = `${timestamp}_${uid}`
   const scoreNum = Number(score);
   console.log(entryKey)
 
-  const batch = writeBatch(leaderboardDb);
+  const batch = writeBatch(db);
 
-  const dayId = dayIdFromDate(new Date());
-
-  const historyDoc = doc(leaderboardDb, "zat-am", gameId, "gameHistory", formattedDate);
-  const gameSeasonDoc = doc(leaderboardDb, "zat-am", gameId, "seasons", formattedDate);
-  const globalHistoryDoc = doc(leaderboardDb, "zat-am", "Global", "gameHistory", formattedDate);
-  const globalSeasonDoc = doc(leaderboardDb, "zat-am", "Global", "seasons", formattedDate);
+  const historyDoc = doc(db, "leaderboards", gameId, "gameHistory", formattedDate);
+  const globalHistoryDoc = doc(db, "leaderboards", "Global", "gameHistory", formattedDate);
 
   const updateData = {
     entries: {
@@ -112,9 +75,7 @@ async function addHistory(gameId, uid, score) {
   const options = { merge: true };
 
   batch.set(historyDoc, updateData, options);
-  batch.set(gameSeasonDoc, updateData, options);
   batch.set(globalHistoryDoc, updateData, options);
-  batch.set(globalSeasonDoc, updateData, options);
 
   try {
     await batch.commit();

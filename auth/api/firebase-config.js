@@ -25,21 +25,12 @@ import {
 
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
-
-const leaderboardConfig = {
-  apiKey: import.meta.env.VITE_LEADERBOARD_API_KEY,
-  authDomain: import.meta.env.VITE_LEADERBOARD_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_LEADERBOARD_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_LEADERBOARD_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_LEADERBOARD_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_LEADERBOARD_APP_ID,
+  apiKey: "AIzaSyC8nm8zQR6fiC_3mTQ3hURXNJPR6faKYOU",
+  authDomain: "zat-am-main.firebaseapp.com",
+  projectId: "zat-am-main",
+  storageBucket: "zat-am-main.firebasestorage.app",
+  messagingSenderId: "1071341524876",
+  appId: "1:1071341524876:web:1908319951cd8f50b2e8a9",
 };
 
 // Initialize Firebase
@@ -47,9 +38,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Initialize Leaderboard Database
-const leaderboardApp = initializeApp(leaderboardConfig, "leaderboardApp");
-const leaderboardDb = getFirestore(leaderboardApp);
 
 export {
   auth,
@@ -70,5 +58,4 @@ export {
   setDoc,
   updateDoc,
   serverTimestamp,
-  leaderboardDb
 };

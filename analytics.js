@@ -3,7 +3,7 @@ import {
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-import { leaderboardDb } from "./auth/api/firebase-config.js";
+import { db } from "./auth/api/firebase-config.js";
 
 const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
@@ -38,8 +38,8 @@ async function fetchGameHistories(selectedGame) {
     const [prevKey, currKey] = getMonthKeys();
     
     // Define document references
-    const prevDocRef = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", prevKey);
-    const currDocRef = doc(leaderboardDb, "zat-am", selectedGame, "gameHistory", currKey);
+    const prevDocRef = doc(db, "leaderboards", selectedGame, "gameHistory", prevKey);
+    const currDocRef = doc(db, "leaderboards", selectedGame, "gameHistory", currKey);
 
     // Fetch both in parallel for speed
     const [prevSnap, currSnap] = await Promise.all([

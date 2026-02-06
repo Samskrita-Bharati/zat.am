@@ -1,18 +1,12 @@
 import {
-  query,
   collection,
   getDocs,
   doc,
   getDoc,
-  writeBatch,
-  setDoc,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-import { onAuthStateChanged } from "firebase/auth";
 import {
-  auth,
-  db as roleCheckDb,
-  leaderboardDb,
+  db,
 } from "./auth/api/firebase-config.js";
 
 // const timestamp = Date.now();
@@ -52,8 +46,8 @@ export async function getRawData(start, end, selectedGame) {
 
   if (start === 0) {
     const gameHistoryRef = collection(
-      leaderboardDb,
-      "zat-am",
+      db,
+      "leaderboards",
       selectedGame,
       "gameHistory",
     );
@@ -92,8 +86,8 @@ export async function getRawData(start, end, selectedGame) {
 
     for (const formattedDate of result) {
       const gameHistories = doc(
-        leaderboardDb,
-        "zat-am",
+        db,
+        "leaderboards",
         selectedGame,
         "gameHistory",
         formattedDate,

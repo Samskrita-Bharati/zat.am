@@ -6,11 +6,10 @@ import {
   writeBatch,
   setDoc,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 import {
   auth,
-  db as roleCheckDb,
-  leaderboardDb,
+  db,
 } from "./auth/api/firebase-config.js";
 import { checkFetchRequirements, getRawData } from "./leaderboard-utils.js";
 
@@ -107,7 +106,7 @@ async function fetchGameHistories(selectedGame) {
 }
 
 async function getUserProfile(uid) {
-  const userDocRef = doc(roleCheckDb, "users", uid, "public", "profile");
+  const userDocRef = doc(db, "users", uid, "public", "profile");
   const userSnap = await getDoc(userDocRef);
 
   if (userSnap.exists()) {
@@ -338,7 +337,6 @@ syncToggleStatus(gameSelect.value);
 
 // Visibility logic for adminPanel
 onAuthStateChanged(auth, async (user) => {
-  //console.log("DEBUG - roleCheckDb:", roleCheckDb);
 
   const adminPanel = document.getElementById("adminPanel");
   if (!adminPanel) return;
@@ -349,7 +347,7 @@ onAuthStateChanged(auth, async (user) => {
     //console.log("UID:", user.uid);
     try {
       const userDocRef = doc(
-        roleCheckDb,
+        db,
         "users",
         user.uid,
         "private",
@@ -390,7 +388,7 @@ async function syncToggleStatus(game) {
     return;
   }
   statusToggle.disabled = false;
-  const gameSnap = await getDoc(doc(leaderboardDb, "zat-am", game));
+  const gameSnap = await getDoc(doc(db, "leaderboards", game));
   statusToggle.checked = gameSnap.exists()
     ? gameSnap.data().competitionIsActive === true
     : false;
@@ -401,7 +399,7 @@ document
   .addEventListener("change", async (e) => {
     const gameId = document.getElementById("gameSelect").value;
     await setDoc(
-      doc(leaderboardDb, "zat-am", gameId),
+      doc(db, "leaderboards", gameId),
       { competitionIsActive: e.target.checked },
       { merge: true },
     );
@@ -421,7 +419,7 @@ async function checkResetEligibility() {
     return;
   }
 
-  const gameDoc = await getDoc(doc(leaderboardDb, "zat-am", game));
+  const gameDoc = await getDoc(doc(db, "leaderboards", game));
   if (gameDoc.exists() && gameDoc.data().competitionIsActive) {
     resetBtn.disabled = true;
     resetBtn.style.background = "#ccc";
@@ -440,7 +438,7 @@ statusToggle.addEventListener("change", async () => {
 
   const newState = statusToggle.checked;
   try {
-    const gameDocRef = doc(leaderboardDb, "zat-am", gameId);
+    const gameDocRef = doc(db, "leaderboards", gameId);
     await setDoc(
       gameDocRef,
       { competitionIsActive: newState },
@@ -464,8 +462,8 @@ async function performReset(game) {
     return;
 
   const historyColRef = collection(
-    leaderboardDb,
-    "zat-am",
+    db,
+    "leaderboards",
     game,
     "gameHistory",
   );
@@ -476,7 +474,7 @@ async function performReset(game) {
     return;
   }
 
-  const batch = writeBatch(leaderboardDb);
+  const batch = writeBatch(db);
 
   historySnapshot.forEach((document) => {
     batch.delete(document.ref);

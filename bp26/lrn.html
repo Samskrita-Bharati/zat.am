@@ -283,8 +283,8 @@
   <script type="module">
     import { bp26Init, reportScore } from "./js/bp26-score.js"; 
 
-    // ✅ writes to: zat-am / bp26-Game1 / players / {userId}
-    // ✅ also increments: zat-am / bp26 / players / {userId}  (aggregate)
+    // ✅ writes to: leaderboards / bp26-Game1 / players / {userId}
+    // ✅ also increments: leaderboards / bp26 / players / {userId}  (aggregate)
     window.bp26Init({ game: "bp26-Game1", day: 1 });
 
     const submitBtn = document.getElementById("submitScoreBtn");
