@@ -109,12 +109,13 @@ export async function getRawData(start, end, selectedGame) {
 
 function formatRawData(data) {
   const formattedData = Object.entries(data[0]).map(([key, score]) => {
-    const [timestamp, uid] = key.split("_");
+    const [timestamp, uid, timePlayed] = key.split("_");
 
     return {
       uid,
       timestamp: Number(timestamp),
       score,
+      timePlayed: Number(timePlayed)
     };
   });
   return formattedData;

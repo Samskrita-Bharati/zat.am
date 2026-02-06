@@ -67,6 +67,7 @@ select {
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 /* ✅ All dropdowns consistent */
@@ -214,8 +215,6 @@ select {
 }
 
 .score {
-    width: 120px;
-    text-align: right;
     font-weight: bold;
 }
 

@@ -36,8 +36,13 @@
             <option value="allDates">All Dates</option>
         </select>
         
-        <!-- Optional helper button -->
-        <!-- <button id="clearDateBtn" type="button">All Dates</button> -->
+        <div id="scoring">
+            <input type="radio" id="score" value="totalScore" name="scoringSystem" checked/>
+            <label for="score">Score</label><br>
+            <input type="radio" id="timePlayed" value="totalTimePlayed" name="scoringSystem"/>
+            <label for="timePlayed">Time Played</label>
+        </div>
+        
         <div style="flex-basis: 100%; height: 0;"></div>
         <div id="filterRangeDisplay" style="color: #3B82F6; font-size: 14px;"> </div>
     </div>

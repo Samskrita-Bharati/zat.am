@@ -24,6 +24,12 @@ const gameSelect = document.getElementById("gameSelect");
 const timeSelect = document.getElementById("timeFilter");
 const seasonDate = document.getElementById("seasonDate");
 
+function getScoringSystem() {
+  return document.querySelector(
+    'input[name="scoringSystem"]:checked'
+  )?.value;
+}
+
 // Get the date range selected from HTML
 function getFilterRange(mode, pickedDate) {
   const base = pickedDate ? new Date(pickedDate + "T00:00:00") : new Date();
@@ -120,13 +126,24 @@ async function getUserProfile(uid) {
   return { name: "Unknown Player", location: "Unknown" };
 }
 
+function formatSeconds(totalSeconds) {
+  const seconds = Math.floor(totalSeconds);
+
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return `${hrs}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
 // generates usable leaderboard data from game histories
 async function generateLeaderboardData(gameHistories) {
+  const scoringSystem = getScoringSystem();
   const start = startDate;
   const end = endDate;
 
   const leaderboardData = Object.values(
-    gameHistories.reduce((acc, { score, timestamp, uid }) => {
+    gameHistories.reduce((acc, { score, timePlayed, timestamp, uid }) => {
       // time filtering
       if (!timestamp || timestamp < start || timestamp > end) {
         return acc;
@@ -140,11 +157,13 @@ async function generateLeaderboardData(gameHistories) {
         acc[key] = {
           uid: key,
           totalScore: 0,
+          totalTimePlayed: 0,
           latestTimestamp: timestamp,
         };
       }
 
       acc[key].totalScore += score;
+      acc[key].totalTimePlayed += timePlayed;
 
       if (timestamp >= acc[key].latestTimestamp) {
         acc[key].latestTimestamp = timestamp;
@@ -152,7 +171,17 @@ async function generateLeaderboardData(gameHistories) {
 
       return acc;
     }, {}),
-  ).sort((a, b) => b.totalScore - a.totalScore);
+  ).sort((a, b) => {
+    if (scoringSystem === "totalTimePlayed") {
+      return b.totalTimePlayed - a.totalTimePlayed;
+    }
+    return b.totalScore - a.totalScore;
+  });
+
+  // reformat totalTimePlayed into readable format
+  leaderboardData.map((player) => {
+    player.totalTimePlayed = formatSeconds(player.totalTimePlayed);
+  });
 
   // associate names and locations with each uid
   const userCache = {};
@@ -252,10 +281,32 @@ timeSelect.addEventListener("change", async (e) => {
   }
 });
 
+// upon scoring system change, generate new leaderboard data,
+// re-render leaderboard and change to 1st page
+document.getElementById("scoring").addEventListener("change", async (e) => {
+  leaderboardData = await generateLeaderboardData(gameHistories);
+  render();
+  changePage(1);
+  // check reset button status
+  checkResetEligibility();
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
+  const displayRange = document.getElementById("filterRangeDisplay");
+  if (e.target.value === "allDates") {
+    displayRange.innerText = "Showing: All Time Records";
+  } else {
+    const sStr = new Date(startDate).toLocaleDateString();
+    const eStr = new Date(endDate).toLocaleDateString();
+    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
+  }
+});
+
 let currentPage = 1;
 const perPage = 10;
 
 function render() {
+  const scoringSystem = getScoringSystem();
+
   // Podium
   for (let i = 0; i < 3; i++) {
     const player = leaderboardData[i];
@@ -271,7 +322,7 @@ function render() {
       location.textContent = player ? `📍 ${player.location}` : "---";
     }
     if (score) {
-      score.textContent = player ? player.totalScore.toLocaleString() : "---";
+      score.textContent = player ? player[scoringSystem].toLocaleString() : "---";
     }
   }
 
@@ -294,7 +345,7 @@ function render() {
                                         white-space: nowrap; width: 200px;">${p.username}</span>
                             <span>📍 ${p.location}</span>
                         </div>
-                        <div class="score">${p.totalScore.toLocaleString()}</div>
+                        <div class="score">${p[scoringSystem].toLocaleString()}</div>
                     </div>`,
     )
     .join("");

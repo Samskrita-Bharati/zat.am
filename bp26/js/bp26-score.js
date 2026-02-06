@@ -58,9 +58,8 @@ export function bp26Init({ game } = {}) {
 
 // Add a history record (like your screenshot: score, timestamp, uid)
 async function addHistory(gameId, uid, score) {
-  const entryKey = `${timestamp}_${uid}`
-  const scoreNum = Number(score);
-  console.log(entryKey)
+  const timePlayed = Math.floor((Date.now() - timestamp)/1000)
+  const entryKey = `${timestamp}_${uid}_${timePlayed}`
 
   const batch = writeBatch(db);
 
@@ -69,7 +68,7 @@ async function addHistory(gameId, uid, score) {
 
   const updateData = {
     entries: {
-      [entryKey]: scoreNum
+      [entryKey]: Number(score)
     }
   };
   const options = { merge: true };
