@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>ODD - Casual Games - with ZIM Code Creativity</title>
-
-<!-- zimjs.com - JavaScript Canvas Framework -->
+    <meta charset="utf-8" />
+    <title>ODD - Casual Games - with ZIM Code Creativity</title>
+    <!-- zimjs.com - JavaScript Canvas Framework -->
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
-
-<script type="module">
-
-import zim from "https://zimjs.org/cdn/019/zim_game";
-
-// See Docs under Frame for FIT, FILL, FULL, and TAG
-// 768 x 1024 good for tablets, laptops, desktops 
-// 500 x 1000 good for phones
-new Frame(FIT, 768, 1024, black, dark, ready, "gf_Tourney");
-function ready() {
+    <script type="module">
+        import zim from "https://zimjs.org/cdn/019/zim_game";
+        // See Docs under Frame for FIT, FILL, FULL, and TAG
+        // 768 x 1024 good for tablets, laptops, desktops 
+        // 500 x 1000 good for phones
+        new Frame(FIT, 768, 1024, black, dark, ready, "gf_Tourney", "gf_Sarala");
+        function ready() {
             let tile;
-	        var wintmp;
+            var wintmp;
             var wpp = 15; // words per page
             var fullist = "";
             var tlang = [];
@@ -32,7 +28,7 @@ function ready() {
             const urlParams = new URLSearchParams(window.location.search);
             var t = urlParams.get('t');
             //if (!t)
-              //  t = 1;
+            //  t = 1;
             var set = urlParams.get('s');
             if (!set || isNaN(set))
                 set = 0;
@@ -57,117 +53,78 @@ function ready() {
                     aud.push(fullist[(set * wpp) + i]["alnk"]);
                 }
                 var tillabs = [];
-	// given F (Frame), S (Stage), W (width), H (height)
-	// put code here
-
-	// see https://zimjs.com/docs.html for info on any of these commands
-
-	new Label("पुनरुक्ति 🤔", 80, "Tourney", "tomato").pos(0,70,CENTER);
-new Label("What repeats?", 50, "Tourney", "tomato").pos(0,180,CENTER);
-
-
-	// the tile has an items array with all its items 
-	// we will make one of these different
-	let special;
-	function setSpecial() {
-        //S.clear();
-        tillabs=[];
-        var mywords = words.slice();
-       // zog(mywords);
-//		tile.loop(t=>{
-//			t.sides = rand(5,6);
-//			t.color = white;
-//		})
-		special = rand(wpp); // index starts at 0
-        wintmp = mywords[special]
-        if (t) wintmp+= "\n"+Sanscript.t(String(wintmp), 'devanagari',tlang[t]);
-        for (var j = 0; j < wpp; j++) {
-                    var wrd = mywords.pop();
-                    if (t) wrd+= "\n"+Sanscript.t(String(wrd), 'devanagari',tlang[t])
-                    tillabs.push(new Label(wrd, 15, "Tourney", yellow));
+                // given F (Frame), S (Stage), W (width), H (height)
+                // put code here
+                // see https://zimjs.com/docs.html for info on any of these commands
+                new Label("पुनरुक्ति 🤔", 80, "Tourney", "tomato").pos(0, 70, CENTER);
+                new Label("What repeats?", 50, "Tourney", "tomato").pos(0, 180, CENTER);
+                let special;
+                function setSpecial() {
+                    //S.clear();
+                    tillabs = [];
+                    var mywords = words.slice();
+                    special = rand(wpp); // index starts at 0
+                    wintmp = mywords[special]
+                    if (t) wintmp += "\n" + Sanscript.t(String(wintmp), 'devanagari', tlang[t]);
+                    for (var j = 0; j < wpp; j++) {
+                        var wrd = mywords.pop();
+                        if (t) wrd += "\n" + Sanscript.t(String(wrd), 'devanagari', tlang[t])
+                        tillabs.push(new Label(wrd, 15, "Sarala", yellow));
+                    }
+                    //zog(wintmp); // reveals the secret
+                    var wlab = new Label(wintmp, 15, "Sarala", yellow);
+                    wlab.win = true;
+                    tillabs.push(wlab);
+                    shuffle(tillabs);
+                    STYLE = {
+                        align: CENTER,
+                        once: true
+                    }
+                    tile = new Tile(tillabs, 4, 4, 30, 30, true)
+                        .scaleTo(S, 75)
+                        .cur() // adds a finger or use .cur("crosshair"), etc.
+                        .center();
+                    S.update();
                 }
-        //zog(wintmp); // reveals the secret
-        var wlab = new Label(wintmp, 15, "Tourney", yellow);
-        wlab.win=true;
-        tillabs.push(wlab);    
-        shuffle(tillabs);
-//		tile.items[special].sides = odds()?7:4;
-STYLE={
-                    align:CENTER,
-                    once:true
-                }
-	tile = new Tile(tillabs, 4, 4, 30, 30,true)
-		.scaleTo(S,75)
-		.cur() // adds a finger or use .cur("crosshair"), etc.
-		.center();
-        S.update();
-	}
-	setSpecial();	
-
-	const emitter = new Emitter({		
-		startPaused:true
-	});
-
-	tile.on("mousedown", e=>{
-		const pick = e.target; // this gets what caused the event
-		if (wintmp== pick.text){
-			emitter.loc(pick).spurt(25);
-            tile.noMouse(); // do not let player press on tile
-		    end.noMouse(); // do not let player close the pane right away
-		//timeout(1, ()=>{ // wait for 1 second then let player close pane
-			//end.mouse();	
-		//});
-            timeout(5, ()=>{ // wait for 1 second then let player close pane
-			window.location.reload();
-		})
-        timeout(1, ()=>{ // wait for 1 second then let player close pane
-			end.show();
-		});
-//			setSpecial();
-//			right.score++;
-//            timer.start(timer.time + 3);
-		} else {
-			wrong.score++;
-			pick.color = grey;
-			S.update()
-		}
-	})
-
-	const right = new Scorer({backgroundColor:green}).pos(100,80,RIGHT,BOTTOM);
-	const wrong = new Scorer({color:white, backgroundColor:red}).pos(100,80,LEFT,BOTTOM);
-	const timer = new Timer(20).pos(0,80,CENTER,BOTTOM);
-
-	STYLE = {font:"Tourney", backdropColor:black.toAlpha(.8)}
-	const end = new Pane("समाप्तम् ", yellow);
-
-	// the Pane will restart the game when closed 
-	// but the player is pressing tile and may close the pane before reading it 
-	// so we put a delay on letting them close the pane
-	// we do this by turning the mouse off on the pane 
-	// and waiting 1 second and then turning the mouse on again
-
-	timer.on("complete", ()=>{
-		end.show(restart); // show end, when closes will call restart
-		tile.noMouse(); // do not let player press on tile
-		end.noMouse(); // do not let player close the pane right away
-		timeout(1, ()=>{ // wait for 1 second then let player close pane
-			end.mouse();	
-		});
-	});
-
-	function restart() {		
-		tile.mouse(); // let player press on tile		
-		setSpecial();
-		right.score = 0; // reset scores
-		wrong.score = 0;
-		timer.start(20); // restart the timer
-	}
-}
-		
-}
-
-</script>
-<meta name="viewport" content="width=device-width, user-scalable=no" />
+                setSpecial();
+                const emitter = new Emitter({
+                    startPaused: true
+                });
+                tile.on("mousedown", e => {
+                    const pick = e.target; // this gets what caused the event
+                    if (wintmp == pick.text) {
+                        emitter.loc(pick).spurt(25);
+                        tile.noMouse(); // do not let player press on tile
+                        end.noMouse(); // do not let player close the pane right away
+                        timeout(5, () => { // wait for 1 second then let player close pane
+                            window.location.reload();
+                        })
+                        timeout(1, () => { // wait for 1 second then let player close pane
+                            end.show();
+                        });
+                    } else {
+                        wrong.score++;
+                        pick.color = grey;
+                        S.update()
+                    }
+                })
+                const right = new Scorer({ backgroundColor: green }).pos(100, 80, RIGHT, BOTTOM);
+                const wrong = new Scorer({ color: white, backgroundColor: red }).pos(100, 80, LEFT, BOTTOM);
+                const timer = new Timer(20).pos(0, 80, CENTER, BOTTOM);
+                STYLE = { font: "Tourney", backdropColor: black.toAlpha(.8) }
+                const end = new Pane("समाप्तम्", yellow);
+                timer.on("complete", () => {
+                    end.show(); // show end
+                    tile.noMouse(); // do not let player press on tile
+                    end.noMouse(); // do not let player close the pane right away
+                    timeout(1, () => { // wait for 1 second then let player close pane
+                        end.mouse();
+                    });
+                });
+            }
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
 </head>
 <body></body>
 </html>
