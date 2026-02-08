@@ -1,5 +1,6 @@
 import { auth } from "/auth/api/firebase-config.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import { updateStreak } from "../auth/api/streak.js";
 
 const loggedOut = document.getElementById("logged-out");
 const loggedIn = document.getElementById("logged-in");
@@ -7,10 +8,11 @@ const profileBtn = document.getElementById("profile-btn");
 const dropdown = document.getElementById("profile-dropdown");
 const userEmailDropdown = document.getElementById("user-email-dropdown");
 const usernameDisplay = document.getElementById("username");
+const streakDisplay = document.getElementById("streak")
 const dropdownLogout = document.getElementById("dropdown-logout");
 
 // Check if user is logged in
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     loggedOut.classList.add("hidden");
     loggedIn.classList.remove("hidden");
@@ -30,6 +32,10 @@ onAuthStateChanged(auth, (user) => {
     }
 
     usernameDisplay.textContent = `Hi, ${displayName}!`;
+
+    const streak = await updateStreak(user.uid);
+    streakDisplay.textContent = `🔥 Streak: ${streak}`;
+
   } else {
     loggedOut.classList.remove("hidden");
     loggedIn.classList.add("hidden");

@@ -102,6 +102,7 @@ export const ensureUserDocument = async (user, extraData = {}) => {
       region: safeExtraData.region || "",
       location: safeExtraData.location || "",
       createdAt: serverTimestamp(),
+      streak: 1,
     });
   }
 };
