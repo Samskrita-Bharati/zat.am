@@ -109,21 +109,38 @@
     import { db } from "./auth/api/firebase-config.js";
 
     async function getTop3(selectedGame) {
-      const historyColRef = collection(db, "leaderboards", selectedGame, "gameHistory");
-      const snapshot = await getDocs(historyColRef);
-      const summary = {};
+      const timestamp = Date.now();
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      // used for getting document for current month
+      const formattedDate = `${year}-${month}` // YYYY-MM
 
-      snapshot.forEach((doc) => { 
-        const data = doc.data();
-        if (data && data.entries) {
-          Object.entries(data.entries).forEach(([key, score]) => {
-            const uid = key.split("_")[1];
-            if (uid) {
-              summary[uid] = (summary[uid] || 0) + score;
-            }
-          });
-        }
+      const docRef = doc(db, "leaderboards", selectedGame, "gameHistory", formattedDate);
+      const snapshot = await getDoc(docRef);
+      let data;
+      if (snapshot.data()) {
+        data = snapshot.data();
+      }
+      else {
+        data = []
+      }
+      const formattedData = Object.entries(data.entries).map(([key, score]) => {
+        const [timestamp, uid] = key.split("_");
+
+        return {
+          uid,
+          timestamp: Number(timestamp),
+          score,
+        };
       });
+      
+      const summary = formattedData.reduce((acc, data) => {
+        const { uid, score } = data;
+        if (!uid) return acc;
+        acc[uid] = (acc[uid] || 0) + score;
+        return acc;
+      }, {});
 
       const top3Ids = Object.entries(summary)
         .sort((a, b) => b[1] - a[1])
