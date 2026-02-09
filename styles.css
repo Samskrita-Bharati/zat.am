@@ -421,3 +421,32 @@ Menu
     min-width: 180px;
   }
 }
+
+/* Profile images */
+.profile-image,
+.dropdown-profile-image,
+.profile-avatar-img {
+  width: auto !important;
+}
+
+.profile-image {
+  width: 40px !important;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.1);
+}
+
+.dropdown-profile-image {
+  width: 60px !important;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px auto;
+  display: block;
+}

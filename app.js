@@ -403,12 +403,30 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 
 function diplayMenuItems(menuItems) {
+  // Read bilingual mode and preferred language from shared state/localStorage
+  const bilingualOn =
+    window.zatBilingualOn === true ||
+    localStorage.getItem("zatBilingualOn") === "1";
+  const preferredLanguageCode =
+    window.zatPreferredLang ||
+    localStorage.getItem("zatPreferredLang") ||
+    "1";
+
   let displayMenu = menuItems.map(function (item) {
+    let href = `${item.dir}/`;
+
+    // For now, only bp26 (BodhaPlay competition) gets the
+    // bilingual "t" parameter automatically from user prefs.
+    if (bilingualOn && item.dir === "bp26") {
+      const sep = href.includes("?") ? "&" : "?";
+      href += `${sep}t=${encodeURIComponent(preferredLanguageCode)}`;
+    }
+
     return `<article class="menu-item">
           <img src=${item.dir}/cover.jpg alt="${item.title}" class="photo" />
           <div class="item-info">
             <header>
-              <a href=${item.dir}/ target="zat.am">${item.title}</a>
+              <a href="${href}" target="zat.am">${item.title}</a>
               <h4 class="price">${item.category}</h4>
             </header>
             <p class="item-text">
@@ -421,6 +439,14 @@ function diplayMenuItems(menuItems) {
   // console.log(displayMenu);
 
   sectionCenter.innerHTML = displayMenu;
+}
+
+// Expose a simple hook so other scripts (like navbar-auth)
+// can force the menu to rebuild when bilingual mode changes.
+if (typeof window !== "undefined") {
+  window.zatRefreshMenu = function () {
+    diplayMenuItems(menu);
+  };
 }
 function displayMenuButtons() {
   const categories = menu.reduce(

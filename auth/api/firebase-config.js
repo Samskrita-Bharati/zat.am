@@ -1,5 +1,5 @@
-// Firebase Configuration for zat.am project
-import { initializeApp } from "firebase/app";
+// Import Firebase from CDN
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -13,16 +13,24 @@ import {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
-} from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+  sendEmailVerification,
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyC8nm8zQR6fiC_3mTQ3hURXNJPR6faKYOU",
+  authDomain: "zat-am-main.firebaseapp.com",
+  projectId: "zat-am-main",
+  storageBucket: "zat-am-main.firebasestorage.app",
+  messagingSenderId: "1071341524876",
+  appId: "1:1071341524876:web:1908319951cd8f50b2e8a9",
 };
 
 // Initialize Firebase
@@ -44,4 +52,10 @@ export {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  sendEmailVerification,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
 };

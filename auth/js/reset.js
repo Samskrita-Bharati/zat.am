@@ -1,4 +1,4 @@
-import { resetPassword } from "../api/auth-api";
+import { resetPassword } from "../api/auth-api.js";
 
 const resetForm = document.getElementById("reset-form");
 const emailInput = document.getElementById("reset-email");

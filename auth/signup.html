@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
   <body>
     <div class="container">
       <div class="form-box">
-        <h2 >Create Account</h2>
+        <h2>Create Account</h2>
         <div class="header-divider"></div>
         <form id="signup-form">
           <input
@@ -17,10 +17,14 @@
             id="signup-name"
             data-cy="signup-name"
             placeholder="Full Name"
-            required
-            
           />
-          <input type="email" id="signup-email" data-cy="signin-email" placeholder="Email" required />
+          <input
+            type="email"
+            id="signup-email"
+            data-cy="signin-email"
+            placeholder="Email"
+            required
+          />
           <input
             type="password"
             id="signup-password"
@@ -35,13 +39,17 @@
             placeholder="Confirm Password"
             required
           />
-          <button type="submit" class="create-btn" data-cy="create-btn">CREATE ACCOUNT</button>
+          <button type="submit" class="create-btn" data-cy="create-btn">
+            CREATE ACCOUNT
+          </button>
         </form>
         <div class="divider"></div>
-        <p>Already have an account? <a href="login.html" data-cy="login-link">Login</a></p>
+        <p>
+          Already have an account?
+          <a href="login.html" data-cy="login-link">Login</a>
+        </p>
         <div id="message" data-cy="message"></div>
       </div>
-      
     </div>
     <script type="module" src="./js/signup.js"></script>
   </body>
