@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
   <meta charset="UTF-8" />
@@ -14,13 +15,13 @@
       padding-bottom: 20px;
       font-size: 1.4em;
     }
-  
+
     h1 {
       text-align: center;
       margin-bottom: 20px;
       color: #333;
     }
-  
+
     .instructions {
       text-align: center;
       margin-bottom: 10px;
@@ -28,7 +29,7 @@
       font-size: 0.9em;
       font-style: italic;
     }
-  
+
     .head-divider {
       content: "";
       width: 80%;
@@ -36,20 +37,20 @@
       background: #ca9e0d;
       margin: 20px auto;
     }
-  
+
     .grid {
       width: 80vw;
       height: 80vh;
-  
+
       /* Center the grid in the page */
       margin: auto;
-  
+
       /* Optional: scroll if content overflows vertically */
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
     }
-  
+
     .card {
       background: white;
       padding: 15px;
@@ -57,28 +58,28 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s;
     }
-  
+
     .card:hover {
       transform: scale(1.03);
     }
-  
+
     .word {
       font-size: 1.2em;
       font-weight: bold;
       margin-bottom: 8px;
       color: #333;
     }
-  
+
     .definition {
       font-size: 0.95em;
       color: #555;
     }
-  
+
     .speaker-icon {
       font-size: 24px;
       cursor: pointer;
     }
-  
+
     .playBtn {
       margin-top: 10px;
       padding: 8px 12px;
@@ -88,11 +89,11 @@
       background: #fff;
       font-size: 16px;
     }
-  
+
     .playBtn:hover {
       background: #f0f0f0;
     }
-  
+
     #submitScoreBtn {
       position: fixed;
       right: 20px;
@@ -107,12 +108,12 @@
       z-index: 9999;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     }
-  
+
     #submitScoreBtn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
-  
+
     #scoreBadge {
       position: fixed;
       left: 20px;
@@ -126,7 +127,7 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
       border: 1px solid #e5e7eb;
     }
-  
+
     /* ✅ Celebration UI (inline, no external JS) */
     #bp26CelebrateOverlay {
       position: fixed;
@@ -138,7 +139,7 @@
       z-index: 10000;
       padding: 20px;
     }
-  
+
     .bp26CelebrateBox {
       position: relative;
       width: min(460px, 92vw);
@@ -149,26 +150,26 @@
       text-align: center;
       font-family: system-ui, Arial, sans-serif;
     }
-  
+
     .bp26Sparkles {
       font-size: 54px;
       line-height: 1.1;
       margin: 8px 0 6px;
       animation: bp26Pop 600ms ease-out both;
     }
-  
+
     @keyframes bp26Pop {
       0% {
         transform: scale(0.6);
         opacity: 0;
       }
-  
+
       100% {
         transform: scale(1);
         opacity: 1;
       }
     }
-  
+
     .bp26Btn {
       margin-top: 12px;
       padding: 10px 14px;
@@ -177,7 +178,7 @@
       background: #f9fafb;
       cursor: pointer;
     }
-  
+
     .bp26Confetti {
       position: fixed;
       top: -12px;
@@ -189,31 +190,31 @@
       animation: bp26Fall 950ms linear forwards;
       pointer-events: none;
     }
-  
+
     @keyframes bp26Fall {
       to {
         transform: translateY(110vh) rotate(540deg);
         opacity: 0.9;
       }
     }
-  
+
     @media print {
       .k {
         border-left: 4px ridge green;
       }
-  
+
       .p {
         border-left: 3px groove blue;
       }
-  
+
       .s {
         border-left: 3px groove red;
       }
-  
+
       .n {
         border-left: 3px groove black;
       }
-  
+
       button {
         display: none !important;
       }
@@ -232,10 +233,10 @@
   <!-- Load Header -->
   <script src="js/load-header.js"></script>
   <style>
-      body {
-        padding-top: 7%;
-      }
-    </style>
+    body {
+      padding-top: 7%;
+    }
+  </style>
   <h1>शब्दावली</h1>
   <p class="instructions">Click the button to hear the pronunciation</p>
   <div id="head-divider" class="head-divider"></div>
@@ -288,7 +289,7 @@
         if (imgm === "u") {
           try {
             return `<span style="font-size:120px; line-height:150px;">${String.fromCodePoint(parseInt(u, 16))}</span>`;
-          } catch(e) {}
+          } catch (e) { }
         }
         if (imgm === "e") {
           return `<img style="max-width:150px;" src="https://openmoji.org/data/color/svg/${u}.svg" onerror="this.style.display='none'">`;
@@ -318,6 +319,10 @@
 
       let t = urlParams.get("t");
       if (!t) t = 0;
+      if (!tlang[t])
+        document.getElementsByTagName("h1")[0].innerHTML += " " + Sanscript.t(`${set}`, "itrans", "devanagari");
+      else
+        document.getElementsByTagName("h1")[0].innerHTML += " " + Sanscript.t(`${set}`, "itrans", tlang[t]);
 
       let imgm = urlParams.get("m");
       if (!imgm) imgm = "b";
@@ -336,12 +341,13 @@
 
         let wrdtxt = `${word}`;
         if (t != 0 && tlang[t]) {
-          try { wrdtxt += " - " + Sanscript.t(`${word}`, "devanagari", tlang[t]); } catch(e) {}
+          try { wrdtxt += " - " + Sanscript.t(`${word}`, "devanagari", tlang[t]); } catch (e) { }
         }
 
         const txtimg = buildImageHTML({ imgm, unicodeHex, imgUrl });
 
         const card = document.createElement("div");
+        card.classList.add(row.linga || "");
         card.className = "card";
         card.innerHTML = `
           <div class="word">${wrdtxt}</div>
@@ -359,12 +365,12 @@
           const idx = btn.getAttribute("data-idx");
 
           for (let k = 0; k < musicelements.length; k++) {
-            try { musicelements[k].pause(); } catch(e) {}
+            try { musicelements[k].pause(); } catch (e) { }
           }
 
           const audio = document.getElementById("a" + idx);
           if (audio) {
-            try { audio.currentTime = 0; audio.play(); } catch(e) {}
+            try { audio.currentTime = 0; audio.play(); } catch (e) { }
           }
 
           played.add(String(idx));
@@ -374,9 +380,9 @@
 
       updateScoreBadge();
     }
-    
+
     // ✅ Celebration functions (inline)
-    function bp26Celebrate({ title="Submitted ✅", subtitle="Nice work!", score=null } = {}) {
+    function bp26Celebrate({ title = "Submitted ✅", subtitle = "Nice work!", score = null } = {}) {
       const overlay = document.getElementById("bp26CelebrateOverlay");
       const t = document.getElementById("bp26CelebrateTitle");
       const s = document.getElementById("bp26CelebrateSub");
@@ -390,7 +396,7 @@
       setTimeout(() => { overlay.style.display = "none"; }, 3000);
     }
 
-    function bp26BurstConfetti(count=60) {
+    function bp26BurstConfetti(count = 60) {
       for (let i = 0; i < count; i++) {
         const c = document.createElement("div");
         c.className = "bp26Confetti";
@@ -416,7 +422,7 @@
 
   <!-- Firebase + submit button -->
   <script type="module">
-    import { bp26Init, reportScore } from "./js/bp26-score.js"; 
+    import { bp26Init, reportScore } from "./js/bp26-score.js";
 
     // ✅ writes to: leaderboards / bp26-Game1 / players / {userId}
     // ✅ also increments: leaderboards / bp26 / players / {userId}  (aggregate)
@@ -457,4 +463,5 @@
   <!-- Auth Middleware-->
   <script type="module" src="/auth/api/middleware.js"></script>
 </body>
+
 </html>
