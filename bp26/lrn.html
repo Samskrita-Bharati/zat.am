@@ -1,325 +1,233 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>शब्दावली</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>शब्दावली</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+        margin: 0;
+        padding-bottom: 20px;
+        font-size: 1.4em;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+      }
+      .instructions {
+        text-align: center;
+        margin-bottom: 10px;
+        color: #666;
+        font-size: 0.9em;
+        font-style: italic;
+      }
+      .head-divider {
+        content: "";
+        width: 80%;
+        height: 4px;
+        background: #ca9e0d;
+        margin: 20px auto;
+      }
+      .grid {
+        width: 80vw;
+        height: 80vh;
 
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
-    h1 { text-align: center; margin-bottom: 20px; }
+        /* Center the grid in the page */
+        margin: auto;
 
-    .grid{
-      width: 80vw; height: 80vh; margin: auto;
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 15px; overflow-y: auto; padding-bottom: 140px;
-    }
-
-    .card{
-      background: white; padding: 15px; border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.2s; text-align: center;
-    }
-    .card:hover{ transform: scale(1.03); }
-
-    .word{ font-size: 1.2em; font-weight: bold; margin-bottom: 8px; color: #333; }
-    .definition{ font-size: 0.95em; color: #555; min-height: 160px; display:flex; align-items:center; justify-content:center; }
-
-    .playBtn{
-      margin-top: 10px; padding: 8px 12px;
-      border-radius: 10px; border: 1px solid #ccc;
-      cursor: pointer; background: #fff; font-size: 16px;
-    }
-    .playBtn:hover{ background:#f0f0f0; }
-
-    #submitScoreBtn{
-      position: fixed; right: 20px; bottom: 20px;
-      padding: 12px 16px; border: none; border-radius: 12px;
-      background: #1f2937; color: #fff; font-size: 14px;
-      cursor: pointer; z-index: 9999;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-    #submitScoreBtn:disabled{ opacity: 0.6; cursor: not-allowed; }
-
-    #scoreBadge{
-      position: fixed; left: 20px; bottom: 24px;
-      padding: 10px 14px; border-radius: 12px;
-      background: #ffffff; color: #111827; font-size: 14px;
-      z-index: 9999; box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-      border: 1px solid #e5e7eb;
-    }
-
-    /* ✅ Celebration UI (inline, no external JS) */
-    #bp26CelebrateOverlay{
-      position: fixed; inset: 0;
-      display:none; align-items:center; justify-content:center;
-      background: rgba(0,0,0,0.35);
-      z-index: 10000;
-      padding: 20px;
-    }
-    .bp26CelebrateBox{
-      position: relative;
-      width: min(460px, 92vw);
-      background: #fff;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-      text-align: center;
-      font-family: system-ui, Arial, sans-serif;
-    }
-    .bp26Sparkles{
-      font-size: 54px;
-      line-height: 1.1;
-      margin: 8px 0 6px;
-      animation: bp26Pop 600ms ease-out both;
-    }
-    @keyframes bp26Pop{
-      0%{ transform: scale(0.6); opacity: 0; }
-      100%{ transform: scale(1); opacity: 1; }
-    }
-    .bp26Btn{
-      margin-top: 12px; padding: 10px 14px;
-      border-radius: 12px; border: 1px solid #ddd;
-      background: #f9fafb; cursor: pointer;
-    }
-    .bp26Confetti{
-      position: fixed;
-      top: -12px;
-      width: 10px; height: 10px;
-      border-radius: 3px;
-      z-index: 10001;
-      opacity: .95;
-      animation: bp26Fall 950ms linear forwards;
-      pointer-events: none;
-    }
-    @keyframes bp26Fall{
-      to{ transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
-</head>
-
-<body>
-  <h1>शब्दावली</h1>
-
-  <div class="grid" id="dictionaryGrid"></div>
-
-  <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
-  <button id="submitScoreBtn">Submit Score (Day 1)</button>
-
-  <!-- ✅ Celebration overlay (inline) -->
-  <div id="bp26CelebrateOverlay">
-    <div class="bp26CelebrateBox">
-      <div class="bp26Sparkles">✨🎉✨</div>
-      <div id="bp26CelebrateTitle" style="font-weight:700;font-size:18px;margin-bottom:6px;">
-        Submitted ✅
-      </div>
-      <div id="bp26CelebrateSub" style="font-size:14px;color:#374151;">
-        Nice work!
-      </div>
-      <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
-    </div>
-  </div>
-
-  <script>
-    const wpp = 15;
-    const tlang = [];
-    tlang[1] = "itrans";
-    tlang["gu"] = "gujarati";
-    tlang["ka"] = "kannada";
-    tlang["be"] = "bengali";
-    tlang["ml"] = "malayalam";
-    tlang["te"] = "telugu";
-    tlang["ta"] = "tamil";
-    tlang["ia"] = "iast";
-
-    let fullist = [];
-    let musicelements = [];
-    const played = new Set();
-    let submitted = false;
-
-    function updateScoreBadge() {
-      document.getElementById("scoreValue").textContent = String(played.size);
-    }
-
-    // ALWAYS show something
-    function buildImageHTML({ imgm, unicodeHex, imgUrl }) {
-      const u = (unicodeHex || "").trim();
-      const img = (imgUrl || "").trim();
-
-      if (u && u.length < 12) {
-        if (imgm === "u") {
-          try {
-            return `<span style="font-size:120px; line-height:150px;">${String.fromCodePoint(parseInt(u, 16))}</span>`;
-          } catch(e) {}
-        }
-        if (imgm === "e") {
-          return `<img style="max-width:150px;" src="https://openmoji.org/data/color/svg/${u}.svg" onerror="this.style.display='none'">`;
-        }
+        /* Optional: scroll if content overflows vertically */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
       }
 
-      if (img) {
-        return `<img style="max-width:150px;" src="${img}" onerror="this.style.display='none'">`;
+      .card {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
       }
 
-      return `<div style="opacity:.6;font-size:14px;">(no image)</div>`;
-    }
+      .card:hover {
+        transform: scale(1.03);
+      }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const lnk =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+      .word {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+      }
 
-      Papa.parse(lnk, { download: true, header: true, complete: populateWlist });
-    });
+      .definition {
+        font-size: 0.95em;
+        color: #555;
+      }
 
-    function populateWlist(fildat) {
-      fullist = fildat.data || [];
+      .speaker-icon {
+        font-size: 24px;
+        cursor: pointer;
+      }
 
-      const urlParams = new URLSearchParams(window.location.search);
-      let set = urlParams.get("s");
-      if (!set || isNaN(set) || (set >= fullist.length)) set = 0;
-
-      let t = urlParams.get("t");
-      if (!t) t = 0;
-
-      let imgm = urlParams.get("m");
-      if (!imgm) imgm = "b";
-
-      const grid = document.getElementById("dictionaryGrid");
-      grid.innerHTML = "";
-
-      for (let i = 0; i < wpp; i++) {
-        const row = fullist[(set * wpp) + i];
-        if (!row) continue;
-
-        const word = row.padam || "";
-        const unicodeHex = row.unicode || "";
-        const imgUrl = row["Imaage link"] || "";
-        const alnk = row["alnk"] || "";
-
-        let wrdtxt = `${word}`;
-        if (t != 0 && tlang[t]) {
-          try { wrdtxt += " - " + Sanscript.t(`${word}`, "devanagari", tlang[t]); } catch(e) {}
+      @media print {
+        .k {
+          border-left: 4px ridge green;
+        }
+        .p {
+          border-left: 3px groove blue;
+        }
+        .s {
+          border-left: 3px groove red;
+        }
+        .n {
+          border-left: 3px groove black;
         }
 
-        const txtimg = buildImageHTML({ imgm, unicodeHex, imgUrl });
-
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <div class="word">${wrdtxt}</div>
-          <div class="definition">${txtimg}</div>
-          <audio id="a${i}" src="${alnk}"></audio>
-          <button class="playBtn" data-idx="${i}">🔊</button>
-        `;
-        grid.appendChild(card);
+        button {
+          display: none !important;
+        }
       }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/papaparse@latest/papaparse.min.js"
+    ></script>
+    <!-- Header CSS -->
+    <link rel="stylesheet" href="css/header.css" />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+    <script type="module" src="../js/bilingual-toggle.js"></script>
+    <!-- Load Header -->
+    <script src="js/load-header.js"></script>
 
-      musicelements = document.getElementsByTagName("audio");
+    <style>
+      body {
+        padding-top: 7%;
+      }
+    </style>
+    <h1>शब्दावली</h1>
+    <p class="instructions">Click the button to hear the pronunciation</p>
+    <div id="head-divider" class="head-divider"></div>
+    <div class="grid" id="dictionaryGrid"></div>
+    <script>
+      var wpp = 15; //words per page
+      var tlang = [];
+      tlang[1] = "itrans";
+      tlang["gu"] = "gujarati";
+      tlang["ka"] = "kannada";
+      tlang["be"] = "bengali";
+      tlang["ml"] = "malayalam";
+      tlang["te"] = "telugu";
+      tlang["ta"] = "tamil";
+      tlang["ia"] = "iast";
 
-      document.querySelectorAll(".playBtn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const idx = btn.getAttribute("data-idx");
-
-          for (let k = 0; k < musicelements.length; k++) {
-            try { musicelements[k].pause(); } catch(e) {}
-          }
-
-          const audio = document.getElementById("a" + idx);
-          if (audio) {
-            try { audio.currentTime = 0; audio.play(); } catch(e) {}
-          }
-
-          played.add(String(idx));
-          updateScoreBadge();
+      document.addEventListener("DOMContentLoaded", function () {
+        var lnk =
+          "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+        Papa.parse(lnk, {
+          download: true,
+          header: true,
+          complete: populateWlist,
         });
       });
-
-      updateScoreBadge();
-    }
-    
-    // ✅ Celebration functions (inline)
-    function bp26Celebrate({ title="Submitted ✅", subtitle="Nice work!", score=null } = {}) {
-      const overlay = document.getElementById("bp26CelebrateOverlay");
-      const t = document.getElementById("bp26CelebrateTitle");
-      const s = document.getElementById("bp26CelebrateSub");
-
-      t.textContent = title;
-      s.textContent = score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
-
-      overlay.style.display = "flex";
-      bp26BurstConfetti(70);
-
-      setTimeout(() => { overlay.style.display = "none"; }, 3000);
-    }
-
-    function bp26BurstConfetti(count=60) {
-      for (let i = 0; i < count; i++) {
-        const c = document.createElement("div");
-        c.className = "bp26Confetti";
-        c.style.left = Math.random() * 100 + "vw";
-        c.style.width = (6 + Math.random() * 8) + "px";
-        c.style.height = (6 + Math.random() * 8) + "px";
-        c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
-        c.style.transform = `translateY(0) rotate(${Math.random() * 180}deg)`;
-        c.style.animationDuration = (800 + Math.random() * 600) + "ms";
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 2000);
-      }
-    }
-
-    // close button
-    document.addEventListener("DOMContentLoaded", () => {
-      const overlay = document.getElementById("bp26CelebrateOverlay");
-      const closeBtn = document.getElementById("bp26CelebrateClose");
-      closeBtn.addEventListener("click", () => { overlay.style.display = "none"; });
-      overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.style.display = "none"; });
-    });
-  </script>
-
-  <!-- Firebase + submit button -->
-  <script type="module">
-    import { bp26Init, reportScore } from "./js/bp26-score.js"; 
-
-    // ✅ writes to: leaderboards / bp26-Game1 / players / {userId}
-    // ✅ also increments: leaderboards / bp26 / players / {userId}  (aggregate)
-    window.bp26Init({ game: "bp26-Game1", day: 1 });
-
-    const submitBtn = document.getElementById("submitScoreBtn");
-
-    submitBtn.addEventListener("click", async () => {
-      if (submitted) return;
-
-      // ✅ allow 0
-      const score = Number(played.size) || 0;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting...";
-
-      try {
-        const result = await window.reportScore(score);
-        if (result && result.ok) {
-          submitted = true;
-          submitBtn.textContent = `Submitted ✅ (Score: ${score})`;
-
-          // ✅ celebration ONLY after successful submit
-          bp26Celebrate({
-            title: "Score Submitted ✅",
-            subtitle: `Great job! `,
-            score
-          });
+      function populateWlist(fildat) {
+        fullist = fildat.data;
+        var secs = 0;
+        var numberOfWrongTries = 0;
+        matchesdone = 0;
+        var timer;
+        triesElement = document.getElementById("nowt");
+        const urlParams = new URLSearchParams(window.location.search);
+        var set = urlParams.get("s");
+        if (!set || isNaN(set) || set >= fullist.length) set = 0;
+        var t = urlParams.get("t"); // transliterate mode - 1 is true
+        if (!t) {
+          t = 0;
         }
+        if (!tlang[t])
+          document.getElementsByTagName("h1")[0].innerHTML +=
+            " " + Sanscript.t(`${set}`, "itrans", "devanagari");
+        else
+          document.getElementsByTagName("h1")[0].innerHTML +=
+            " " + Sanscript.t(`${set}`, "itrans", tlang[t]);
+        var imgm = urlParams.get("m");
+        if (!imgm) imgm = "b";
+        var image = [];
+        var words = [];
+        var uc = [];
+        var aud = [];
+        var linga = [];
+        for (i = 0; i < wpp; i++) {
+          words.push(fullist[set * wpp + i].padam);
+          uc.push(fullist[set * wpp + i].unicode);
+          image.push(fullist[set * wpp + i]["Imaage link"]);
+          aud.push(fullist[set * wpp + i]["alnk"]);
+          linga.push(fullist[set * wpp + i]["linga"]);
+        }
+        while (!words[words.length - 1]) {
+          words.pop();
+        }
+        while (!image[image.length - 1]) {
+          image.pop();
+        }
+        const grid = document.getElementById("dictionaryGrid");
 
-      } catch (e) {
-        console.error("❌ submit failed", e);
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Score (Day 1)";
+        // Create card for each word
+        async function createDictionary() {
+          for (const [i, word] of words.entries()) {
+            var txtimg = "";
+            var alnk = aud[`${i}`];
+            var lnk = uc[`${i}`];
+            // if (lnk.length == 4 || lnk.length == 5)
+            //lnk= String.fromCodePoint(parseInt(lnk, 16));
+            // lnk = "https://openmoji.org/data/color/svg/" + lnk + ".svg";
+            var wrdtxt = `${word}`;
+            if (t != 0 && tlang[t])
+              wrdtxt += " - " + Sanscript.t(`${word}`, "devanagari", tlang[t]);
+
+            const card = document.createElement("div");
+
+            card.className = "card";
+            card.classList.add(linga[`${i}`]);
+            if (lnk && lnk.length < 12) {
+              if (imgm == "u")
+                txtimg =
+                  '<span style="font-size: 120px; line-height:150px;">' +
+                  String.fromCodePoint(parseInt(lnk, 16)) +
+                  "</span>";
+              else if (imgm == "e")
+                txtimg =
+                  '<img style="max-width: 150px;"  src="https://openmoji.org/data/color/svg/' +
+                  lnk +
+                  '.svg">';
+              else
+                txtimg =
+                  '<img style="max-width: 150px;"  src="' +
+                  image[`${i}`] +
+                  '">';
+            } else
+              txtimg =
+                '<img style="max-width: 150px;"  src="' + image[`${i}`] + '">';
+            card.innerHTML = `<center><div class="word">${wrdtxt}</div>
+<div class="definition">${txtimg}</div><audio id=a${i} src=${alnk} ></audio>
+<button id=${i} onclick="for (i=0;i<wpp;i++) musicelements[i].pause();musicelements[this.id].play()";>
+    <!-- Use a speaker icon here (e.g., a Font Awesome icon or an image) -->
+    <span class="speaker-icon">🔊</span>
+</button>
+        </center>`;
+            grid.appendChild(card);
+          }
+        }
+        createDictionary();
+        musicelements = document.getElementsByTagName("audio");
       }
-    });
-  </script>
-  <!-- Auth Middleware-->
-  <script type="module" src="/auth/api/middleware.js"></script>
-</body>
+    </script>
+  </body>
 </html>
