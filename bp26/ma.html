@@ -6,11 +6,14 @@
   <title>Audio Match – Learn Words</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+  <link rel="stylesheet" href="./css/mastyle.css" />
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="css/header.css" />
 
   <style>
-    body { margin:0; font-family: system-ui, Arial, sans-serif; background:#f7f9fc; }
+    /* body { margin:0; font-family: system-ui, Arial, sans-serif; background:#f7f9fc; }
     header { padding:1rem; background:white; border-bottom:1px solid #ddd; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
     button { padding:8px 14px; border-radius:8px; border:1px solid #ccc; cursor:pointer; }
     .accent { background:#16a34a; color:white; }
@@ -24,7 +27,7 @@
     .incorrect { border-color:#dc2626; }
     .tiles { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
     .tile { background:#edf2f7; padding:6px 10px; border-radius:8px; border:1px solid #ccc; cursor:grab; user-select:none; }
-    
+     */
     /* ✅ Celebration UI (inline - no external file) */
     #bp26CelebrateOverlay{
       position: fixed; inset: 0;
@@ -73,13 +76,20 @@
     }
   </style>
 </head>
-
 <body>
-<header>
-  <h2 style="margin:0;">Audio Match</h2>
-  <button id="checkBtn" class="accent">Check Answers</button>
-  <button id="resetBtn" class="warn">Reset</button>
-</header>
+  <!-- Header Placeholder -->
+  <div id="header-placeholder"></div>
+  <script type="module" src="../js/bilingual-toggle.js"></script>
+  <!-- Load Header -->
+  <script src="js/load-header.js"></script>
+  <style>
+    body {
+      padding-top: 7%;
+    }
+  </style>
+  <header>
+    <h1 id="appTitle">Audio Match (wip)</h1>
+  </header>
 
 <main>
   <section class="grid" id="cards"></section>
@@ -89,6 +99,31 @@
 
   <p><b>Score:</b> <span id="score">0</span>/<span id="total">0</span></p>
 </main>
+
+<div class="controls" role="group" aria-label="Controls">
+        <button id="checkBtn" class="accent">Check Answers</button>
+        <button id="resetBtn" class="warn">Reset</button>
+        <button id="playAllBtn" title="Play all sounds in order">
+          Play All ▶
+        </button>
+      </div>
+      <p class="hint" id="headingHint">
+        Drag or click a word from the bank onto the matching sound card. On
+        touch devices, tap a word, then tap a card.
+      </p>
+
+      <section class="grid" id="cards" aria-label="Sound cards">ff</section>
+
+      <section class="wordbank" aria-label="Word bank">
+        <h2 style="margin: 5px">Word Bank</h2>
+        <div class="tiles" id="tiles"></div>
+        <div class="status" aria-live="polite">
+          <div id="statusText">Ready.</div>
+          <div class="score">
+            Score: <span id="score">0</span>/<span id="total">0</span>
+          </div>
+        </div>
+      </section>
 
 <!-- ✅ Celebration overlay (inline) -->
 <div id="bp26CelebrateOverlay">
@@ -146,7 +181,7 @@
   });
 
   /* -------------------------------
-     Game logic (UNCHANGED behavior)
+     Game logic
   -------------------------------- */
   const state = { items: [], assigned: new Map() };
   const els = {
