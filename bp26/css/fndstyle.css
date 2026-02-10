@@ -1,0 +1,121 @@
+body {
+  background: #f0f0f0;
+  font-family: Arial, sans-serif;
+  font-size: 2em;
+}
+
+#svgdiv img {
+  padding: 5px;
+  width: 12%;
+}
+
+#svgimg {
+}
+
+img:hover {
+  filter: brightness(90%);
+  opacity: 0.6;
+  x-background: #e2e2e2;
+  cursor: pointer;
+}
+
+#tofind button {
+  font-size: 1em;
+
+  min-width: 1em;
+  min-height: 1em;
+}
+
+#tofind button:hover {
+  background-color: #e2e2e2;
+  cursor: pointer;
+}
+
+div:not(.auth-buttons):not(.auth-btn):not(.profile-container):not(
+    .dropdown
+  ):not(.dropdown-header):not(#header-placeholder) {
+  margin: auto;
+  width: 90%;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #ca9e0d;
+  padding: 20px;
+  height: auto;
+}
+
+svg:hover {
+  x-width: 30%;
+}
+
+.st0:hover {
+  fill: red;
+}
+
+.st1:hover {
+  fill: yellow;
+}
+
+.st2:hover {
+  fill: blue;
+}
+
+*[class^="st"]:hover {
+  stroke: green;
+}
+
+img[id$="1"] {
+  transform: rotate(10deg);
+}
+
+img[id$="2"] {
+  transform: rotate(20deg);
+}
+
+img[id$="3"] {
+  transform: rotate(30deg);
+}
+
+img[id$="4"] {
+  transform: rotate(40deg);
+}
+
+img[id$="5"] {
+  transform: rotate(50deg);
+}
+
+img[id$="6"] {
+  transform: rotate(60deg);
+}
+
+img[id$="7"] {
+  transform: rotate(70deg);
+}
+
+img[id$="8"] {
+  transform: rotate(80deg);
+}
+
+img[id$="9"] {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 400px) {
+  body {
+    font-size: 1.5em;
+  }
+
+  #svgdiv img {
+    width: 20%;
+  }
+
+  div:not(.auth-buttons):not(.auth-btn):not(.profile-container):not(
+      .dropdown
+    ):not(.dropdown-header):not(#header-placeholder) {
+    border: 1px solid red;
+  }
+
+  img:hover {
+    filter: brightness(90%);
+    opacity: 0.6;
+  }
+}

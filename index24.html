@@ -17,6 +17,11 @@
 
     <!-- Show when logged out -->
     <div class="auth-btn">
+      <!-- Bilingual mode toggle (shown only when logged in via navbar-auth.js) -->
+      <button id="bilingual-toggle" class="hidden" style="display: none">
+        Bilingual: Off
+      </button>
+
       <span id="logged-out">
         <button onclick="window.location.href = '/auth/login.html'">
           Login
@@ -39,6 +44,7 @@
             </p>
             <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
             <span id="username">Hi, username!</span>
+            <span id="user-language" class="user-language-row"></span>
             <p id="streak">🔥 Streak: 0</p>
           </div>
           <hr />
@@ -51,27 +57,21 @@
   </div>
   
   <section class="menu">
-      <!-- title -->
-        <div class="title">
-            <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  -->  </h2>
-            <div class="underline"></div>
-        </div>
-      <!-- filter buttons -->
-      <div class="btn-container">
-        <!-- <button type="button" class="filter-btn" data-id="all">all</button>
-        <button type="button" class="filter-btn" data-id="breakfast">
-          breakfast
-        </button>
-        <button type="button" class="filter-btn" data-id="lunch">lunch</button>
-        <button type="button" class="filter-btn" data-id="shakes">
-          shakes
-        </button> -->
+    <!-- title -->
+      <div class="title">
+          <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  -->  </h2>
+          <div class="underline"></div>
       </div>
-      <!-- menu items -->
-      <div class="section-center">
-        
-      </div>
-    </section>
+
+    <!-- filter buttons -->
+    <div class="btn-container">
+    </div>
+
+    <!-- menu items -->
+    <div class="section-center">
+      
+    </div>
+  </section>
 
   <div class="leaderboard-container">
     <a class="leaderboard-btn" href="leaderboard.html">🏆 Leaderboard</a>
@@ -188,8 +188,7 @@
           btnContainer.appendChild(a);
         }
 
-        addTab("scoring", "🎯 Scoring Games", "scoring.html");
-        addTab("contest", "🏆 Contest ", "contest.html");
+        addTab("contest", "🏆 Contest ", "/bp26/index.html");
       }, 0);
     });
   </script>

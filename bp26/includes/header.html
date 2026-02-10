@@ -1,0 +1,54 @@
+<!-- Load Font Awesome -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+/>
+
+<div class="auth-buttons">
+  <!-- If wanna use old logo -->
+  <!-- src="../शत.म्.png" -->
+  <img
+    src="./bp26c.png"
+    alt="Logo"
+    class="logo"
+    onclick="window.location.href = './'"
+    style="cursor: pointer"
+  />
+
+  <div class="auth-btn" style="visibility: hidden">
+    <button id="bilingual-toggle" class="hidden" style="display: none">
+      Bilingual: Off
+    </button>
+    <span id="logged-out">
+      <button onclick="window.location.href = '../auth/login.html'">
+        Login
+      </button>
+      <button onclick="window.location.href = '../auth/signup.html'">
+        Sign Up
+      </button>
+    </span>
+    <div id="logged-in" class="hidden profile-container">
+      <span id="profile-btn">
+        <i
+          id="userProfileIcon"
+          class="fas fa-user-circle fa-3x profile-icon"
+        ></i>
+      </span>
+      <div id="profile-dropdown" class="dropdown hidden">
+        <div class="dropdown-header">
+          <p class="user-email" id="user-email-dropdown">user@example.com</p>
+          <span id="dropdown-profile-icon">
+            <i class="fas fa-user-circle fa-3x profile-icon"></i>
+          </span>
+          <span id="username">Hi, username!</span>
+          <span id="user-language" class="user-language-row"></span>
+          <span id="streak">🔥 Streak: 0</span>
+        </div>
+        <hr />
+        <a href="/leaderboard.html">Leaderboard</a>
+        <a href="#" id="profile-link-dropdown">Profile</a>
+        <a href="#" id="dropdown-logout">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>

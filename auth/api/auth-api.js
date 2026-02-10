@@ -59,8 +59,6 @@ export const updateUserProfile = async (user, data) => {
 // Sign in with Google and ensure Firestore user document exists
 export const signInWithGoogle = async () => {
   const cred = await signInWithPopup(auth, googleProvider);
-  // Ensure a Firestore user document exists for this account
-  await ensureUserDocument(cred.user);
   return cred;
 };
 
@@ -86,6 +84,9 @@ export const ensureUserDocument = async (user, extraData = {}) => {
   // Never allow callers to override isAdmin from the client
   const { isAdmin, ...safeExtraData } = extraData || {};
 
+  // Track if this is a new user
+  const isNewUser = !accountSnap.exists() && !profileSnap.exists();
+
   if (!accountSnap.exists()) {
     await setDoc(accountRef, {
       email: email || "",
@@ -101,10 +102,13 @@ export const ensureUserDocument = async (user, extraData = {}) => {
       country: safeExtraData.country || "",
       region: safeExtraData.region || "",
       location: safeExtraData.location || "",
+      preferencesSet: false, // Default preferences set to False
       createdAt: serverTimestamp(),
-      streak: 1,
+      streak: 1
     });
   }
+
+  return isNewUser;
 };
 
 // Fetch the current user's profile data from the new structure
@@ -159,11 +163,11 @@ export const updateUserPreferences = async (user, preferences) => {
 
   // Add default values for language, country, and region if not provided
   const preferencesWithDefaults = {
+    ...preferences,
     language: preferences.language || "1",
     country: preferences.country || "",
     region: preferences.region || "",
     location: preferences.location || "",
-    ...preferences,
   };
 
   return await setDoc(profileRef, preferencesWithDefaults, { merge: true });

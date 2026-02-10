@@ -13,6 +13,7 @@ import {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  sendEmailVerification,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 import {
   getFirestore,
@@ -22,7 +23,6 @@ import {
   updateDoc,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyC8nm8zQR6fiC_3mTQ3hURXNJPR6faKYOU",
@@ -38,7 +38,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-
 export {
   auth,
   db,
@@ -53,6 +52,7 @@ export {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  sendEmailVerification,
   doc,
   getDoc,
   setDoc,

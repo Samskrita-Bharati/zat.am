@@ -1,4 +1,5 @@
 import { checkAuth } from "./auth-api.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 // List of games that require authentication
 const protectedGames = [
@@ -52,6 +53,17 @@ if (isProtectedGame()) {
       window.location.href = `${basePath}/auth/login.html?redirect=${redirectUrl}`;
     });
 }
+
+// Listen for auth state changes and redirect if logged out on protected pages
+onAuthStateChanged(auth, (user) => {
+  const currentPath = window.location.pathname;
+  const isProtectedPage = currentPath.includes("/bp26/");
+
+  if (!user && isProtectedPage) {
+    // User logged out on a protected page - redirect to login
+    window.location.href = "../auth/login.html";
+  }
+});
 
 /*
   Usage: Add this line at the top of game's index.html (right after <body> tag) to make it protected:
