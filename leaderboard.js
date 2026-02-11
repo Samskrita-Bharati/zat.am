@@ -390,6 +390,8 @@ syncToggleStatus(gameSelect.value);
 onAuthStateChanged(auth, async (user) => {
 
   const adminPanel = document.getElementById("adminPanel");
+  const analyticsBtn = document.getElementById("analyticsBtn");
+  
   if (!adminPanel) return;
 
   let isAdmin = false;
@@ -421,10 +423,12 @@ onAuthStateChanged(auth, async (user) => {
   // if (mockIsAdmin || isAdmin) {
   if (isAdmin) {
     adminPanel.style.display = "block";
+    if (analyticsBtn) analyticsBtn.style.display = "block";
     checkResetEligibility();
     //console.log("Admin Panel Shown");
   } else {
     adminPanel.style.display = "none";
+    if (analyticsBtn) analyticsBtn.style.display = "none";
     //console.log("Admin Panel Hidden");
   }
 });
