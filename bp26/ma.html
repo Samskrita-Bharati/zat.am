@@ -566,6 +566,9 @@
           //state.items = data.items;
           els.appTitle.textContent = "Audio Match";
           renderCards(state.items);
+          // below logic is for audio shuffle
+          // const shuffledItems = shuffle(state.items);
+          // renderCards(shuffledItems);
           renderTiles(state.items);
           els.total.textContent = state.items.length;
           speakStatus("Loaded. Drag words onto sound cards or tap to assign.");
