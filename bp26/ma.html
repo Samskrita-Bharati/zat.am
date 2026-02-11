@@ -92,29 +92,21 @@
   </header>
 
 <main>
-  <section class="grid" id="cards"></section>
+  <div class="controls" role="group" aria-label="Controls">
+    <button id="checkBtn" class="accent">Check Answers</button>
+    <button id="resetBtn" class="warn">Reset</button>
+    <button id="playAllBtn" title="Play all sounds in order">
+      Play All ▶
+    </button>
+  </div>
+  <p class="hint" id="headingHint">
+    Drag or click a word from the bank onto the matching sound card. On
+    touch devices, tap a word, then tap a card.
+  </p>
 
-  <h3>Word Bank</h3>
-  <div class="tiles" id="tiles"></div>
+  <section class="grid" id="cards" aria-label="Sound cards">ff</section>
 
-  <p><b>Score:</b> <span id="score">0</span>/<span id="total">0</span></p>
-</main>
-
-<div class="controls" role="group" aria-label="Controls">
-        <button id="checkBtn" class="accent">Check Answers</button>
-        <button id="resetBtn" class="warn">Reset</button>
-        <button id="playAllBtn" title="Play all sounds in order">
-          Play All ▶
-        </button>
-      </div>
-      <p class="hint" id="headingHint">
-        Drag or click a word from the bank onto the matching sound card. On
-        touch devices, tap a word, then tap a card.
-      </p>
-
-      <section class="grid" id="cards" aria-label="Sound cards">ff</section>
-
-      <section class="wordbank" aria-label="Word bank">
+  <section class="wordbank" aria-label="Word bank">
         <h2 style="margin: 5px">Word Bank</h2>
         <div class="tiles" id="tiles"></div>
         <div class="status" aria-live="polite">
@@ -124,6 +116,7 @@
           </div>
         </div>
       </section>
+</main>
 
 <!-- ✅ Celebration overlay (inline) -->
 <div id="bp26CelebrateOverlay">
@@ -183,90 +176,248 @@
   /* -------------------------------
      Game logic
   -------------------------------- */
-  const state = { items: [], assigned: new Map() };
-  const els = {
-    cards: document.getElementById("cards"),
-    tiles: document.getElementById("tiles"),
-    score: document.getElementById("score"),
-    total: document.getElementById("total"),
-    checkBtn: document.getElementById("checkBtn"),
-    resetBtn: document.getElementById("resetBtn")
-  };
-
-  function render(items) {
-    els.cards.innerHTML = "";
-    els.tiles.innerHTML = "";
-    state.assigned.clear();
-
-    items.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      const btn = document.createElement("button");
-      btn.className = "play";
-      btn.textContent = "▶";
-      const audio = new Audio(item.audio);
-      btn.onclick = () => { audio.currentTime = 0; audio.play(); };
-
-      const drop = document.createElement("div");
-      drop.className = "dropzone";
-      drop.dataset.id = item.id;
-      drop.textContent = "Drop word here";
-
-      drop.ondragover = e => e.preventDefault();
-      drop.ondrop = e => {
-        e.preventDefault();
-        const draggedId = e.dataTransfer.getData("text");
-        assign(draggedId, drop);
+  const urlParams = new URLSearchParams(window.location.search);
+      var t = urlParams.get("t");
+      if (!t)
+        // open mode - 1 is true - not flipped
+        t = 0;
+      var tlang = [];
+      tlang[1] = "itrans";
+      tlang["gu"] = "gujarati";
+      tlang["ka"] = "kannada";
+      tlang["be"] = "bengali";
+      tlang["ml"] = "malayalam";
+      tlang["te"] = "telugu";
+      tlang["ta"] = "tamil";
+      const state = {
+        items: [],
+        assigned: new Map(), // dropzoneId -> itemId (word)
+        selectedTileId: null, // touch/keyboard selection
+        lastCheck: null,
       };
 
-      card.append(btn, drop);
-      els.cards.appendChild(card);
+      const els = {
+        appTitle: document.getElementById("appTitle"),
+        cards: document.getElementById("cards"),
+        tiles: document.getElementById("tiles"),
 
-      const tile = document.createElement("div");
-      tile.className = "tile";
-      tile.textContent = item.word;
-      tile.draggable = true;
-      tile.dataset.id = item.id;
-      tile.ondragstart = e => e.dataTransfer.setData("text", item.id);
+        checkBtn: document.getElementById("checkBtn"),
+        resetBtn: document.getElementById("resetBtn"),
+        playAllBtn: document.getElementById("playAllBtn"),
 
-      els.tiles.appendChild(tile);
-    });
+        statusText: document.getElementById("statusText"),
+        score: document.getElementById("score"),
+        total: document.getElementById("total"),
+      };
 
-    els.total.textContent = items.length;
-    els.score.textContent = "0";
-  }
+      // --- Utilities ---
+      const shuffle = (arr) => {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      };
 
-  function assign(id, drop) {
-    const tile = document.querySelector(`.tile[data-id="${id}"]`);
-    if (!tile) return;
+      const speakStatus = (text) => {
+        els.statusText.textContent = text;
+      };
 
-    drop.textContent = tile.textContent;
-    state.assigned.set(drop.dataset.id, id);
-  }
+      const buildAudio = (src) => {
+        const audio = new Audio();
+        audio.src = src;
+        audio.preload = "metadata";
+        return audio;
+      };
+
+  // --- Rendering ---
+      const renderCards = (items) => {
+        els.cards.innerHTML = "";
+        items.forEach((item, idx) => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.setAttribute("role", "group");
+          card.setAttribute("aria-label", `Sound card ${idx + 1}`);
+
+          const playBtn = document.createElement("button");
+          playBtn.className = "play";
+          playBtn.setAttribute("aria-label", `Play sound ${item.word}`);
+          playBtn.textContent = "▶";
+          const audio = buildAudio(item.audio);
+          playBtn.addEventListener("click", () => {
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+          });
+
+          const label = document.createElement("div");
+          label.className = "label";
+          label.innerHTML = `<span class="sr-only">Card ID:</span><code>${item.id}</code>`;
+          label.style.display = "none";
+
+          const drop = document.createElement("div");
+          drop.className = "dropzone";
+          drop.setAttribute("role", "button");
+          drop.setAttribute("tabindex", "0");
+          drop.setAttribute(
+            "aria-label",
+            `Drop matching word here for ${item.word} sound`,
+          );
+          drop.dataset.dropFor = item.id;
+          drop.textContent = "---Drop or click here to add word----";
+
+          // Drag-over / drop handlers
+          drop.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            drop.classList.add("filled");
+          });
+          drop.addEventListener("dragleave", () => {
+            drop.classList.remove("filled");
+          });
+          drop.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const tileId = e.dataTransfer.getData("text/plain");
+            assignTileToDrop(tileId, drop);
+          });
+
+          // Keyboard/touch: tap card assigns selected tile
+          drop.addEventListener("click", () => {
+            if (state.selectedTileId)
+              assignTileToDrop(state.selectedTileId, drop);
+          });
+          drop.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              if (state.selectedTileId)
+                assignTileToDrop(state.selectedTileId, drop);
+            }
+          });
+
+          card.appendChild(playBtn);
+          card.appendChild(label);
+          card.appendChild(drop);
+          els.cards.appendChild(card);
+        });
+      };
+
+      const renderTiles = (items) => {
+        els.tiles.innerHTML = "";
+        const order = shuffle(items.map((i) => ({ id: i.id, word: i.word })));
+        order.forEach(({ id, word }) => {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+          tile.textContent = word;
+          if (t != 0 && tlang[t])
+            tile.textContent +=
+              " - " + Sanscript.t(word, "devanagari", tlang[t]);
+          tile.setAttribute("draggable", "true");
+          tile.setAttribute("role", "button");
+          tile.setAttribute("tabindex", "0");
+          tile.dataset.tileId = id;
+
+          tile.addEventListener("dragstart", (e) => {
+            tile.classList.add("dragging");
+            e.dataTransfer.setData("text/plain", id);
+          });
+          tile.addEventListener("dragend", () =>
+            tile.classList.remove("dragging"),
+          );
+
+          // Touch/keyboard selection
+          tile.addEventListener("click", () => selectTile(tile));
+          tile.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              selectTile(tile);
+            }
+          });
+
+          els.tiles.appendChild(tile);
+        });
+      };
+
+      const selectTile = (tile) => {
+        // Toggle selection
+        const id = tile.dataset.tileId;
+        const already = state.selectedTileId === id;
+        Array.from(document.querySelectorAll(".tile")).forEach((t) =>
+          t.classList.remove("dragging"),
+        );
+        if (already) {
+          state.selectedTileId = null;
+          tile.classList.remove("dragging");
+          speakStatus("Selection cleared.");
+        } else {
+          state.selectedTileId = id;
+          tile.classList.add("dragging");
+          speakStatus(`Selected: ${tile.textContent}. Tap a card to assign.`);
+        }
+      };
+
+      const assignTileToDrop = (tileId, dropEl) => {
+        const tile = document.querySelector(`.tile[data-tile-id="${tileId}"]`);
+        if (!tile) return;
+        const dropForId = dropEl.dataset.dropFor;
+
+        // If this drop had a previous assignment, unassign that tile
+        const prev = state.assigned.get(dropForId);
+        if (prev && prev !== tileId) {
+          const prevTile = document.querySelector(
+            `.tile[data-tile-id="${prev}"]`,
+          );
+          if (prevTile) prevTile.classList.remove("assigned");
+        }
+
+        // Assign
+        state.assigned.set(dropForId, tileId);
+        dropEl.textContent = tile.textContent;
+        dropEl.classList.add("filled");
+        tile.classList.add("assigned");
+
+        // Clear selection feedback
+        Array.from(document.querySelectorAll(".dropzone")).forEach((d) =>
+          d.classList.remove("incorrect", "correct"),
+        );
+
+        // Update score preview (without check)
+        updateScorePreview();
+        speakStatus(`Assigned "${tile.textContent}" to card ${dropForId}.`);
+      };
+      
+      const updateScorePreview = () => {
+        const { items, assigned } = state;
+        let correct = 0;
+        items.forEach((item) => {
+          const a = assigned.get(item.id);
+          if (a && a === item.id) correct++;
+        });
+        els.score.textContent = correct;
+        els.total.textContent = items.length;
+      };
 
   async function checkAnswers() {
     let correct = 0;
-
-    state.items.forEach(item => {
-      const drop = document.querySelector(`.dropzone[data-id="${item.id}"]`);
-      drop.classList.remove("correct","incorrect");
-
-      const chosen = state.assigned.get(item.id);
-
-      if (chosen) {
-        if (chosen === item.id) {
-          drop.classList.add("correct");
-          correct++;
-        } else {
-          drop.classList.add("incorrect");
-        }
-      } else {
-        drop.classList.add("incorrect");
-      }
-    });
-
-    els.score.textContent = correct;
+        state.items.forEach((item) => {
+          const drop = document.querySelector(
+            `.dropzone[data-drop-for="${item.id}"]`,
+          );
+          const assignedId = state.assigned.get(item.id);
+          drop.classList.remove("incorrect", "correct");
+          if (assignedId) {
+            if (assignedId === item.id) {
+              drop.classList.add("correct");
+              correct++;
+            } else {
+              drop.classList.add("incorrect");
+            }
+          }
+        });
+        state.lastCheck = Date.now();
+        els.score.textContent = correct;
+        els.total.textContent = state.items.length;
+        speakStatus(
+          `You have ${correct} correct out of ${state.items.length}.`,
+        );
 
     // ✅ Always submit (even if correct = 0)
     try {
@@ -291,26 +442,144 @@
     }
   }
 
-  els.checkBtn.onclick = checkAnswers;
-  els.resetBtn.onclick = () => location.reload();
+  const resetAll = () => {
+        state.assigned.clear();
+        state.selectedTileId = null;
+        Array.from(document.querySelectorAll(".dropzone")).forEach((d) => {
+          d.textContent = "";
+          d.classList.remove("filled", "incorrect", "correct");
+        });
+        Array.from(document.querySelectorAll(".tile")).forEach((t) => {
+          t.classList.remove("assigned", "dragging");
+        });
+        els.score.textContent = "0";
+        els.total.textContent = state.items.length;
+        speakStatus("Reset. Try again!");
+      };
 
-  // LOAD WORDS (12)
-  Papa.parse(
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv",
-    {
-      download: true,
-      header: true,
-      complete: (res) => {
-        const rows = (res.data || []).filter(r => r && r.padam && r.alnk).slice(0, 12);
-        state.items = rows.map((r, i) => ({
-          id: String(i + 1),
-          word: r.padam,
-          audio: r.alnk
-        }));
-        render(state.items);
-      }
-    }
-  );
+  const shuffleAll = () => {
+        // Re-render tiles in random order
+        renderTiles(state.items);
+        // Shuffle cards display order for extra variation
+        const shuffledItems = shuffle(state.items);
+        renderCards(shuffledItems);
+        // Clear assignments
+        state.assigned.clear();
+        els.score.textContent = "0";
+        els.total.textContent = state.items.length;
+        speakStatus("Shuffled.");
+      };
+
+  const playAll = async () => {
+        speakStatus("Playing all sounds in order...");
+        for (const item of state.items) {
+          const audio = buildAudio(item.audio);
+          try {
+            await audio.play();
+          } catch (e) {}
+          // Wait for ~1.2s or audio end (whichever is earlier)
+          await new Promise((res) => {
+            const timer = setTimeout(res, 1200);
+            audio.addEventListener(
+              "ended",
+              () => {
+                clearTimeout(timer);
+                res();
+              },
+              { once: true },
+            );
+          });
+        }
+        speakStatus("Done playing all.");
+      };
+
+      const applyHintVisibility = () => {
+        const show = document.getElementById("hintToggle").checked;
+        Array.from(document.querySelectorAll(".card .label")).forEach((el) => {
+          el.style.display = show ? "block" : "none";
+        });
+      };
+
+      // --- Init ---
+      const init = async () => {
+        //      try {
+        //        const res = await fetch('sounds.json');
+        //        if (!res.ok) throw new Error('Failed to fetch sounds.json');
+        //        const data = await res.json();
+
+        document.addEventListener("DOMContentLoaded", function () {
+          var lnk =
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+          Papa.parse(lnk, {
+            download: true,
+            header: true,
+            complete: populateWlist,
+          });
+        });
+
+        function populateWlist(fildat) {
+          var wpp = 15; // words per page
+
+          fullist = fildat.data;
+          var openmojibase = "https://openmoji.org/data/color/svg/";
+
+          var timer;
+
+          const urlParams = new URLSearchParams(window.location.search);
+          var o = urlParams.get("o");
+          if (!o)
+            // open mode - 1 is true - not flipped
+            o = 0;
+          var set = urlParams.get("s");
+          if (!set || isNaN(set) || set >= fullist.length) set = 0;
+          var image = [];
+          var words = [];
+          var aud = [];
+          var imglnk = "";
+          for (i = 0; i < wpp; i++) {
+            words.push(fullist[set * wpp + i].padam);
+            if (
+              fullist[set * wpp + i]["Imaage link"].length == 4 ||
+              fullist[set * wpp + i]["Imaage link"].length == 5
+            )
+              imglnk =
+                openmojibase + fullist[set * wpp + i]["Imaage link"] + ".svg";
+            else imglnk = fullist[set * wpp + i]["Imaage link"];
+            aud.push(fullist[set * wpp + i].alnk);
+            image.push(imglnk);
+          }
+          while (!words[words.length - 1]) {
+            words.pop();
+          }
+          while (!image[image.length - 1]) {
+            image.pop();
+          }
+
+          state.items = [];
+          for (let i = 0; i < words.length; i++) {
+            state.items.push({
+              id: (i + 1).toString(),
+              word: words[i],
+              audio: aud[i],
+            });
+          }
+          //state.items = data.items;
+          els.appTitle.textContent = "Audio Match";
+          renderCards(state.items);
+          renderTiles(state.items);
+          els.total.textContent = state.items.length;
+          speakStatus("Loaded. Drag words onto sound cards or tap to assign.");
+        }
+      };
+      // --- Wire controls ---
+
+      els.checkBtn.addEventListener("click", checkAnswers);
+      els.resetBtn.addEventListener("click", resetAll);
+      els.playAllBtn.addEventListener("click", playAll);
+
+      // Start
+      init();
+
 </script>
 
 <!-- ✅ module loads first, then init runs -->
