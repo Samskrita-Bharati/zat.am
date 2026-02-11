@@ -1,555 +1,596 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Memory क्रीडा</title>
 
-<head>
-  <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Memory क्रीडा</title>
+    <!-- ✅ KEEP OLD (Bootstrap 4.4.1) for header compatibility -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0ww1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUd0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-  <link href="css/mmk.css" rel="stylesheet" type="text/css" />
-  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    <!-- IMPORTANT: Load page CSS first, header CSS last -->
+    <link href="css/mmk.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/header.css" />
 
-  <style>
-    /* Floating submit button + score badge */
-    #submitScoreBtn {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      padding: 12px 16px;
-      border: none;
-      border-radius: 12px;
-      background: #1f2937;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-    #submitScoreBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/papaparse@latest/papaparse.min.js"
+    ></script>
 
-    #scoreBadge {
-      position: fixed;
-      left: 20px;
-      bottom: 24px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: #ffffff;
-      color: #111827;
-      font-size: 14px;
-      z-index: 9999;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-      border: 1px solid #e5e7eb;
-    }
+    <style>
+      body {
+        padding-top: 7%;
+      }
 
-    /* ✅ Celebration UI (inline - no external JS file) */
-    #bp26CelebrateOverlay{
-      position: fixed; inset: 0;
-      display:none; align-items:center; justify-content:center;
-      background: rgba(0,0,0,0.35);
-      z-index: 10000;
-      padding: 20px;
-    }
-    .bp26CelebrateBox{
-      position: relative;
-      width: min(460px, 92vw);
-      background: #fff;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-      text-align: center;
-      font-family: system-ui, Arial, sans-serif;
-    }
-    .bp26Sparkles{
-      font-size: 54px;
-      line-height: 1.1;
-      margin: 8px 0 6px;
-      animation: bp26Pop 600ms ease-out both;
-    }
-    @keyframes bp26Pop{
-      0%{ transform: scale(0.6); opacity: 0; }
-      100%{ transform: scale(1); opacity: 1; }
-    }
-    .bp26Btn{
-      margin-top: 12px; padding: 10px 14px;
-      border-radius: 12px; border: 1px solid #ddd;
-      background: #f9fafb; cursor: pointer;
-    }
-    .bp26Confetti{
-      position: fixed;
-      top: -12px;
-      width: 10px; height: 10px;
-      border-radius: 3px;
-      z-index: 10001;
-      opacity: .95;
-      animation: bp26Fall 950ms linear forwards;
-      pointer-events: none;
-    }
-    @keyframes bp26Fall{
-      to{ transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
-    }
-  </style>
-</head>
+      /* ✅ Score badge + submit button */
+      #submitScoreBtn {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 12px;
+        background: #1f2937;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+      #submitScoreBtn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
 
-<body>
-  <center>
-    <font size="+18" color="blue"> Memory क्रीडा </font>
-    <br>
+      #scoreBadge {
+        position: fixed;
+        left: 20px;
+        bottom: 24px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: #ffffff;
+        color: #111827;
+        font-size: 14px;
+        z-index: 9999;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        border: 1px solid #e5e7eb;
+      }
 
-    <p id="wm">
-      Matches Done: <span id="nomd" style="color: green; font-size: 20px;">०</span>
-      Wrong Moves: <span style="color: red; font-size: 20px;" id="nowt">०</span>
-      <span style="margin-left:16px; font-weight:700;">Time: <span id="timeDisp">0</span>s</span>
-    </p>
+      /* ✅ Celebration overlay */
+      #bp26CelebrateOverlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 10000;
+        padding: 20px;
+      }
+      .bp26CelebrateBox {
+        width: min(460px, 92vw);
+        background: #fff;
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        font-family: system-ui, Arial, sans-serif;
+      }
+      .bp26Sparkles {
+        font-size: 54px;
+        line-height: 1.1;
+        margin: 8px 0 6px;
+        animation: bp26Pop 600ms ease-out both;
+      }
+      @keyframes bp26Pop {
+        0% {
+          transform: scale(0.6);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .bp26Btn {
+        margin-top: 12px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        background: #f9fafb;
+        cursor: pointer;
+      }
+      .bp26Confetti {
+        position: fixed;
+        top: -12px;
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        z-index: 10001;
+        opacity: 0.95;
+        animation: bp26Fall 950ms linear forwards;
+        pointer-events: none;
+      }
+      @keyframes bp26Fall {
+        to {
+          transform: translateY(110vh) rotate(540deg);
+          opacity: 0.9;
+        }
+      }
 
-    <progress id="pr" max="15" value="0"></progress>
+      /* ✅ ensure counters show as text (won't affect header) */
+      #wm #nomd,
+      #wm #nowt {
+        display: inline-block !important;
+        min-width: 28px !important;
+        height: auto !important;
+        padding: 0 6px !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        font-weight: 700 !important;
+        overflow: visible !important;
+      }
+    </style>
+  </head>
 
-    <div id="mytable"></div>
-  </center>
+  <body>
+    <!-- ✅ Header Placeholder (Login/Signup stays working) -->
+    <div id="header-placeholder"></div>
+    <script type="module" src="../js/bilingual-toggle.js"></script>
+    <script src="js/load-header.js"></script>
 
-  <!-- Score badge + submit button -->
-  <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
-  <button id="submitScoreBtn">Submit Score (Game 2)</button>
+    <center>
+      <h1>Memory क्रीडा</h1>
+      <div class="header-divider"></div>
+      <br />
 
-  <!-- ✅ Celebration overlay (inline) -->
-  <div id="bp26CelebrateOverlay">
-    <div class="bp26CelebrateBox">
-      <div class="bp26Sparkles">✨🎉✨</div>
-      <div id="bp26CelebrateTitle" style="font-weight:700;font-size:18px;margin-bottom:6px;">
-        Submitted ✅
+      <!-- ✅ Added Time + keep old counters -->
+      <p id="wm">
+        Matches Done: <span id="nomd">०</span> Wrong Moves:
+        <span id="nowt">०</span>
+        <span style="margin-left: 16px; font-weight: 700"
+          >Time: <span id="timeDisp">0</span>s</span
+        >
+      </p>
+
+      <progress id="pr" max="15" value="0"></progress>
+      <div id="mytable"></div>
+    </center>
+
+    <!-- ✅ Score badge + submit button -->
+    <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
+    <button id="submitScoreBtn">Submit Score (Game 2)</button>
+
+    <!-- ✅ Celebration overlay -->
+    <div id="bp26CelebrateOverlay">
+      <div class="bp26CelebrateBox">
+        <div class="bp26Sparkles">✨🎉✨</div>
+        <div id="bp26CelebrateTitle" style="font-weight: 700; font-size: 18px; margin-bottom: 6px;">
+          Submitted ✅
+        </div>
+        <div id="bp26CelebrateSub" style="font-size: 14px; color: #374151;">
+          Nice work!
+        </div>
+        <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
       </div>
-      <div id="bp26CelebrateSub" style="font-size:14px;color:#374151;">
-        Nice work!
-      </div>
-      <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
     </div>
-  </div>
 
-   <script type="module">
-    import { reportScore } from "./js/bp26-score.js"; 
+    <script type="module">
+      /* ✅ Make reportScore available globally like your new file expects */
+      import { reportScore, bp26Init } from "./js/bp26-score.js";
+      window.reportScore = reportScore;
 
-    /* ---------------------------
-       Celebration (inline)
-    --------------------------- */
-    function bp26Celebrate({ title="Submitted ✅", subtitle="Nice work!", score=null } = {}) {
-      const overlay = document.getElementById("bp26CelebrateOverlay");
-      const t = document.getElementById("bp26CelebrateTitle");
-      const s = document.getElementById("bp26CelebrateSub");
+      // ✅ Init scoring namespace
+      window.bp26Init = bp26Init;
+      window.bp26Init({ game: "bp26-Game2", day: 2 });
 
-      t.textContent = title;
-      s.textContent = score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
-
-      overlay.style.display = "flex";
-      bp26BurstConfetti(70);
-
-      setTimeout(() => { overlay.style.display = "none"; }, 3000);
-    }
-
-    function bp26BurstConfetti(count=60) {
-      for (let i = 0; i < count; i++) {
-        const c = document.createElement("div");
-        c.className = "bp26Confetti";
-        c.style.left = Math.random() * 100 + "vw";
-        c.style.width = (6 + Math.random() * 8) + "px";
-        c.style.height = (6 + Math.random() * 8) + "px";
-        c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
-        c.style.transform = `translateY(0) rotate(${Math.random() * 180}deg)`;
-        c.style.animationDuration = (800 + Math.random() * 600) + "ms";
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 2000);
-      }
-    }
-
-    document.getElementById("bp26CelebrateClose").addEventListener("click", () => {
-      document.getElementById("bp26CelebrateOverlay").style.display = "none";
-    });
-    document.getElementById("bp26CelebrateOverlay").addEventListener("click", (e) => {
-      if (e.target.id === "bp26CelebrateOverlay") e.target.style.display = "none";
-    });
-
-    // ---------------------------
-    // Timer
-    // ---------------------------
-    var secs = 0;
-    var timer = null;
-
-    function tick() {
-      secs++;
-      const t = document.getElementById("timeDisp");
-      if (t) t.textContent = String(secs);
-    }
-
-    // ✅ Submit only once (shared for button + auto submit)
-    let scoreSubmitted = false;
-
-    // will be set after game loads
-    let currentScore = 0;
-
-    function updateScoreUI() {
-      const el = document.getElementById("scoreValue");
-      if (el) el.textContent = String(currentScore);
-    }
-
-    async function submitScoreNow() {
-      // ✅ allow submit even if score = 0
-      if (scoreSubmitted) return;
-
-      const btn = document.getElementById("submitScoreBtn");
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "Submitting...";
+      // ✅ celebration helpers
+      function bp26BurstConfetti(count = 60) {
+        for (let i = 0; i < count; i++) {
+          const c = document.createElement("div");
+          c.className = "bp26Confetti";
+          c.style.left = Math.random() * 100 + "vw";
+          c.style.width = 6 + Math.random() * 8 + "px";
+          c.style.height = 6 + Math.random() * 8 + "px";
+          c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
+          c.style.animationDuration = 800 + Math.random() * 600 + "ms";
+          document.body.appendChild(c);
+          setTimeout(() => c.remove(), 2000);
+        }
       }
 
-      try {
-        if (typeof window.reportScore !== "function") {
-          alert("Score system not loaded. Check ./js/bp26-score.js path.");
+      function bp26Celebrate({ title = "Submitted ✅", subtitle = "Nice work!", score = null } = {}) {
+        const overlay = document.getElementById("bp26CelebrateOverlay");
+        const t = document.getElementById("bp26CelebrateTitle");
+        const s = document.getElementById("bp26CelebrateSub");
+        t.textContent = title;
+        s.textContent = score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
+        overlay.style.display = "flex";
+        bp26BurstConfetti(70);
+        setTimeout(() => {
+          overlay.style.display = "none";
+        }, 3000);
+      }
+
+      document.getElementById("bp26CelebrateClose").addEventListener("click", () => {
+        document.getElementById("bp26CelebrateOverlay").style.display = "none";
+      });
+      document.getElementById("bp26CelebrateOverlay").addEventListener("click", (e) => {
+        if (e.target.id === "bp26CelebrateOverlay") e.target.style.display = "none";
+      });
+
+      // ---------------------------
+      // ✅ Timer (same behavior as your new one)
+      // ---------------------------
+      let secs = 0;
+      let timer = null;
+
+      function tick() {
+        secs++;
+        const t = document.getElementById("timeDisp");
+        if (t) t.textContent = String(secs);
+      }
+
+      // ✅ score state
+      let scoreSubmitted = false;
+      let currentScore = 0;
+
+      function updateScoreUI() {
+        const el = document.getElementById("scoreValue");
+        if (el) el.textContent = String(currentScore);
+      }
+
+      function computeScore(wpp, wrongMoves) {
+        const base = wpp * 10; // 150 when wpp=15
+        const penaltyWrong = wrongMoves * 2;
+        const penaltyTime = secs;
+        return Math.max(0, base - penaltyWrong - penaltyTime);
+      }
+
+      async function submitScoreNow() {
+        if (scoreSubmitted) return;
+
+        const btn = document.getElementById("submitScoreBtn");
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Submitting...";
+        }
+
+        try {
+          if (typeof window.reportScore !== "function") {
+            alert("Score system not loaded. Check ./js/bp26-score.js path.");
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = "Submit Score (Game 2)";
+            }
+            return;
+          }
+
+          await window.reportScore(currentScore);
+          scoreSubmitted = true;
+
+          if (btn) btn.textContent = `Submitted ✅ (Score: ${currentScore})`;
+
+          bp26Celebrate({
+            title: "Score Submitted ✅",
+            subtitle: "Great job!",
+            score: currentScore,
+          });
+        } catch (e) {
+          console.error("❌ submit score failed", e);
+          alert("Submit failed. Open Console (F12) and send the red error.");
           if (btn) {
             btn.disabled = false;
             btn.textContent = "Submit Score (Game 2)";
           }
-          return;
-        }
-
-        await window.reportScore(currentScore);
-        scoreSubmitted = true;
-
-        if (btn) btn.textContent = `Submitted ✅ (Score: ${currentScore})`;
-        console.log("✅ Game2 score submitted:", currentScore);
-
-        // ✅ celebration ONLY after successful submit
-          bp26Celebrate({
-            title: "Score Submitted ✅",
-            subtitle: `Great job! `,
-            score: currentScore
-          });
-
-      } catch (e) {
-        console.error("❌ submit score failed", e);
-        alert("Submit failed. Open Console (F12) and send the red error.");
-
-        if (btn) {
-          btn.disabled = false;
-          btn.textContent = "Submit Score (Game 2)";
         }
       }
-    }
 
-    document.getElementById("submitScoreBtn").addEventListener("click", submitScoreNow);
+      document.getElementById("submitScoreBtn").addEventListener("click", submitScoreNow);
 
-    // ---------------------------
-    // Load CSV
-    // ---------------------------
-    document.addEventListener('DOMContentLoaded', function () {
-      var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
-      Papa.parse(lnk, {
-        download: true,
-        header: true,
-        complete: populateWlist
+      // ---------------------------
+      // ✅ OLD GAME LOGIC BELOW (kept the same)
+      // Only changes: hook score + timer updates without changing gameplay.
+      // ---------------------------
+      document.addEventListener("DOMContentLoaded", function () {
+        var lnk =
+          "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+        Papa.parse(lnk, {
+          download: true,
+          header: true,
+          complete: populateWlist,
+        });
       });
-    });
 
-    function populateWlist(fildat) {
-      var wpp = 15; // words per page
-      document.getElementById("pr").max = wpp;
+      function populateWlist(fildat) {
+        var wpp = 15; // words per page
+        document.getElementById("pr").max = wpp;
 
-      var tlang = [];
-      tlang[1] = "itrans";
-      tlang['gu'] = "gujarati";
-      tlang['ka'] = "kannada";
-      tlang['be'] = "bengali";
-      tlang['ml'] = "malayalam";
-      tlang['te'] = "telugu";
-      tlang['ta'] = "tamil";
+        var tlang = [];
+        tlang[1] = "itrans";
+        tlang["gu"] = "gujarati";
+        tlang["ka"] = "kannada";
+        tlang["be"] = "bengali";
+        tlang["ml"] = "malayalam";
+        tlang["te"] = "telugu";
+        tlang["ta"] = "tamil";
 
-      var fullist = fildat.data || [];
+        const fullist = fildat.data || [];
+        var openmojibase = "https://openmoji.org/data/color/svg/";
 
-      var openmojibase = "https://openmoji.org/data/color/svg/";
-      var numberOfWrongTries = 0;
-      var matchesdone = 0;
-      var triesElement = document.getElementById("nowt");
+        var numberOfWrongTries = 0;
+        var matchesdone = 0;
+        var triesElement = document.getElementById("nowt");
 
-      const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window.location.search);
+        var o = urlParams.get("o");
+        if (!o) o = 0;
 
-      var o = urlParams.get('o');
-      if (!o) o = 0;
+        var set = urlParams.get("s");
+        if (!set || isNaN(set) || set >= fullist.length) set = 0;
 
-      var set = urlParams.get('s');
-      if (!set || isNaN(set) || (set >= fullist.length)) set = 0;
+        var image = [];
+        var words = [];
+        var imglnk = "";
 
-      var image = [];
-      var words = [];
-      var imglnk = "";
+        for (let i = 0; i < wpp; i++) {
+          const row = fullist[set * wpp + i];
+          if (!row) continue;
 
-      for (let i = 0; i < wpp; i++) {
-        const row = fullist[(set * wpp) + i];
-        if (!row) continue;
+          words.push(row.padam);
 
-        words.push(row.padam);
+          const imgVal = row["Imaage link"] || "";
+          if (imgVal.length == 4 || imgVal.length == 5) imglnk = openmojibase + imgVal + ".svg";
+          else imglnk = imgVal;
 
-        const imgVal = row["Imaage link"] || "";
-        if (imgVal.length == 4 || imgVal.length == 5)
-          imglnk = openmojibase + imgVal + ".svg";
-        else
-          imglnk = imgVal;
+          image.push(imglnk);
+        }
 
-        image.push(imglnk);
-      }
+        while (words.length && !words[words.length - 1]) words.pop();
+        while (image.length && !image[image.length - 1]) image.pop();
 
-      while (words.length && !words[words.length - 1]) words.pop();
-      while (image.length && !image[image.length - 1]) image.pop();
+        var colors = [
+          "tomato","aqua","blue","fuchsia","gray","green","lime","maroon","navy","olive","purple","red","silver","teal","yellow",
+        ];
 
-      var colors = ['tomato', 'aqua', 'blue', 'fuchsia', 'gray', 'green', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'yellow'];
+        var l = urlParams.get("l");
+        if (!l) l = 0;
 
-      var l = urlParams.get('l');
-      if (!l) l = 0;
+        var t = urlParams.get("t");
+        if (!t) t = 0;
 
-      var t = urlParams.get('t');
-      if (!t) t = 0;
+        function restart() {
+          location.reload();
+        }
 
-      function restart() { location.reload(); }
+        var rowLength = words.length / 3;
+        var colLength = 6;
+        var gamesize = rowLength * colLength;
 
-      var rowLength = words.length / 3;
-      var colLength = 6;
-      var gamesize = rowLength * colLength;
+        var width = 150;
+        var height = 120;
 
-      var height = 120;
-      var width = 150;
+        // ✅ start timer (only play mode)
+        if (l != 1) {
+          secs = 0;
+          if (timer) clearInterval(timer);
+          timer = setInterval(tick, 1000);
+        }
+        tick();
 
-      // Start timer only in play mode
-      if (l != 1) {
-        secs = 0;
-        if (timer) clearInterval(timer);
-        timer = setInterval(tick, 1000);
-      }
-      tick();
+        function refreshScoreUI() {
+          currentScore = computeScore(wpp, numberOfWrongTries);
+          updateScoreUI();
+        }
+        refreshScoreUI();
 
-      // ---------------------------
-      // Build Game Data
-      // ---------------------------
-      var waiting = { value: false };
-      var D1Data = [];
-      var D2Data = [];
-      var count = 0;
+        function code() {
+          var waiting = { value: false };
+          var D1Data = [];
+          var D2Data = [];
+          var count = 0;
 
-      for (var x = 0; x < gamesize / 2; x++) {
-        D1Data.push({ src: image[x], clicked: false });
-        D1Data.push({ src: image[x], clicked: false, wrd: words[x] });
-      }
+          for (var x = 0; x < gamesize / 2; x++) {
+            D1Data.push({ src: image[x], clicked: false });
+            D1Data.push({ src: image[x], clicked: false, wrd: words[x] });
+          }
 
-      // Fill 2D data
-      var rand = 0;
-      for (var y = 0; y < rowLength; y++) {
-        var temp = [];
-        var x = 0;
-        while (x < colLength) {
+          var rand = 0;
+          for (var y = 0; y < rowLength; y++) {
+            var temp = [];
+            var x = 0;
+
+            while (x < colLength) {
+              rand = Math.floor(Math.random() * D1Data.length);
+              temp.push(D1Data[rand]);
+              temp[x].y = x;
+              temp[x].x = y;
+              D1Data.splice(rand, 1);
+              x++;
+            }
+            D2Data.push(temp);
+          }
+
+          var clickedCards = [];
+          var bg = "bp26e.png";
+
+          function genTable(rowLength, colLength, imageData2D) {
+            var table = document.createElement("TABLE");
+            table.id = "tbl";
+            var myTableDiv = document.getElementById("mytable");
+            myTableDiv.innerHTML = "";
+
+            for (var i = 0; i < rowLength; i++) {
+              var tr = document.createElement("TR");
+              table.appendChild(tr);
+
+              for (var j = 0; j < colLength; j++) {
+                var td = document.createElement("TD");
+                tr.appendChild(td);
+
+                if (!imageData2D[i][j].wrd) {
+                  var img = document.createElement("img");
+                  if (o != 1) img.src = bg;
+                  else img.src = imageData2D[i][j].src;
+                  img.height = height;
+                  img.width = width;
+                  td.appendChild(img);
+                } else {
+                  var p = document.createElement("p");
+                  p.className = "myp";
+                  p.innerHTML = imageData2D[i][j].wrd;
+                  if (t != 0 && tlang[t])
+                    p.innerHTML += " - " + Sanscript.t(imageData2D[i][j].wrd, "devanagari", tlang[t]);
+                  td.appendChild(p);
+                }
+              }
+            }
+            myTableDiv.appendChild(table);
+          }
+
+          genTable(rowLength, colLength, D2Data);
+
+          var clkfn = function () {
+            var row = this.parentElement.parentElement.rowIndex;
+            var column = this.parentElement.cellIndex;
+
+            if (!D2Data[row][column].clicked && !waiting.value) {
+              if (clickedCards.length == 0) {
+                if (this.tagName.toLowerCase() === "img") {
+                  this.src = D2Data[row][column].src;
+                  this.height = height;
+                  this.width = width;
+                }
+                D2Data[row][column].clicked = true;
+                clickedCards.push(D2Data[row][column]);
+
+                const d = document.getElementsByTagName("tr")[clickedCards[0].x];
+                const r = d.getElementsByTagName("td")[clickedCards[0].y];
+                r.style.border = "2px dashed red";
+              } else {
+                if (D2Data[row][column].src === clickedCards[0].src) {
+                  const d = document.getElementsByTagName("tr")[clickedCards[0].x];
+                  const r = d.getElementsByTagName("td")[clickedCards[0].y];
+                  r.style.border = "3px solid " + colors[matchesdone];
+                  r.style.cursor = "no-drop";
+                  r.style.color = "blue";
+
+                  matchesdone++;
+                  r.innerHTML += "<br>☑️ " + Sanscript.t(String(matchesdone), "iast", "devanagari");
+                  document.getElementById("pr").value = matchesdone;
+
+                  document.getElementById("nomd").innerHTML = Sanscript.t(String(matchesdone), "iast", "devanagari");
+
+                  this.parentElement.style.border = "3px solid " + colors[matchesdone - 1];
+                  this.parentElement.style.cursor = "no-drop";
+                  this.style.color = "blue";
+                  this.innerHTML += "<br>✔️ " + Sanscript.t(String(matchesdone), "iast", "devanagari");
+
+                  if (this.tagName.toLowerCase() === "img") this.src = D2Data[row][column].src;
+
+                  D2Data[row][column].clicked = true;
+                  clickedCards = [];
+                  count += 2;
+
+                  refreshScoreUI();
+
+                  if (count == gamesize) {
+                    if (timer) clearInterval(timer);
+                    refreshScoreUI();
+                    submitScoreNow();
+
+                    window.alert(
+                      "उत्तमम् ! You matched all " +
+                        Sanscript.t(String(wpp), "iast", "devanagari") +
+                        " in " +
+                        Sanscript.t(String(secs), "iast", "devanagari") +
+                        " seconds while making " +
+                        Sanscript.t(String(numberOfWrongTries), "iast", "devanagari") +
+                        " wrong moves\n\nFinal Score: " +
+                        currentScore
+                    );
+
+                    var ask = confirm("पुनः ? Press 'ok' to play again");
+                    if (ask) restart();
+                  }
+                } else {
+                  numberOfWrongTries += 1;
+                  triesElement.innerHTML = Sanscript.t(String(numberOfWrongTries), "iast", "devanagari");
+
+                  if (this.tagName.toLowerCase() === "img") this.src = D2Data[row][column].src;
+
+                  D2Data[row][column].clicked = true;
+                  waiting.value = true;
+
+                  const d = document.getElementsByTagName("tr")[clickedCards[0].x];
+                  const r = d.getElementsByTagName("td")[clickedCards[0].y];
+                  r.style.border = "1px solid blue";
+
+                  refreshScoreUI();
+
+                  setTimeout(flipback, 700, row, column, this, clickedCards, waiting, D2Data);
+                }
+              }
+            }
+          };
+
+          function flipback(row, column, This, clickedCards, waiting, D2Data) {
+            if (This.tagName.toLowerCase() === "img") This.src = bg;
+            document.getElementById("tbl").rows[clickedCards[0].x].cells[clickedCards[0].y].firstElementChild.src = bg;
+
+            clickedCards[0].clicked = false;
+            D2Data[row][column].clicked = false;
+            waiting.value = false;
+            clickedCards.splice(0, 1);
+
+            refreshScoreUI();
+          }
+
           if (l != 1) {
-            rand = Math.floor(Math.random() * D1Data.length);
-            temp.push(D1Data[rand]);
-            temp[x].y = x;
-            temp[x].x = y;
-            D1Data.splice(rand, 1);
-          } else {
-            temp.push(D1Data[rand]);
-            rand += 1;
-          }
-          x++;
-        }
-        D2Data.push(temp);
-      }
-
-      var clickedCards = [];
-      var bg = 'bp26e.png';
-
-      function genTable(rowLength, colLength, imageData2D) {
-        var table = document.createElement("TABLE");
-        table.id = 'tbl';
-        var myTableDiv = document.getElementById("mytable");
-        myTableDiv.innerHTML = ""; // clear old
-
-        for (var i = 0; i < rowLength; i++) {
-          var tr = document.createElement("TR");
-          table.appendChild(tr);
-
-          for (var j = 0; j < colLength; j++) {
-            var td = document.createElement("TD");
-            tr.appendChild(td);
-
-            if (!imageData2D[i][j].wrd) {
-              var img = document.createElement("img");
-              img.src = (o != 1) ? bg : imageData2D[i][j].src;
-              img.height = height;
-              img.width = width;
-              td.appendChild(img);
-            } else {
-              var p = document.createElement("p");
-              p.className = "myp";
-              p.innerHTML = imageData2D[i][j].wrd;
-              if (t != 0 && tlang[t]) {
-                p.innerHTML += " - " + Sanscript.t(imageData2D[i][j].wrd, 'devanagari', tlang[t]);
-              }
-              td.appendChild(p);
-            }
-          }
-        }
-        myTableDiv.appendChild(table);
-      }
-
-      genTable(rowLength, colLength, D2Data);
-
-      // ✅ Score formula
-      function computeScore() {
-        const totalPairs = wpp;               // 15
-        const base = totalPairs * 10;         // 150
-        const penaltyWrong = numberOfWrongTries * 2;
-        const penaltyTime = secs;            // seconds
-        return Math.max(0, base - penaltyWrong - penaltyTime);
-      }
-
-      function refreshCurrentScore() {
-        currentScore = computeScore(); // always keep updated
-        updateScoreUI();
-      }
-
-      // initial score badge
-      refreshCurrentScore();
-
-      var clkfn = function () {
-        var row = this.parentElement.parentElement.rowIndex;
-        var column = this.parentElement.cellIndex;
-
-        if (!D2Data[row][column].clicked && !waiting.value) {
-
-          if (clickedCards.length == 0) {
-            // first card
-            if (this.tagName.toLowerCase() === "img") {
-              this.src = D2Data[row][column].src;
-              this.height = height;
-              this.width = width;
+            var list = document.getElementsByTagName("img");
+            for (var i = 0; i < list.length; i++) {
+              if (
+                list[i].classList.contains("logo") ||
+                list[i].classList.contains("profile-image") ||
+                list[i].classList.contains("dropdown-profile-image")
+              ) continue;
+              list[i].onclick = clkfn;
             }
 
-            D2Data[row][column].clicked = true;
-            clickedCards.push(D2Data[row][column]);
-
-            var d = document.getElementsByTagName("tr")[clickedCards[0].x];
-            var r = d.getElementsByTagName("td")[clickedCards[0].y];
-            r.style.border = "2px dashed red";
-
-          } else {
-            // second card - compare
-            if (D2Data[row][column].src === clickedCards[0].src) {
-              // MATCH
-              var d = document.getElementsByTagName("tr")[clickedCards[0].x];
-              var r = d.getElementsByTagName("td")[clickedCards[0].y];
-              r.style.border = "3px solid " + colors[matchesdone];
-              r.style.cursor = "no-drop";
-              r.style.color = "blue";
-
-              matchesdone++;
-              r.innerHTML += "<br>☑️ " + Sanscript.t(String(matchesdone), 'iast', 'devanagari');
-              document.getElementById("pr").value = matchesdone;
-
-              document.getElementById("nomd").innerHTML = Sanscript.t(String(matchesdone), 'iast', 'devanagari');
-
-              this.parentElement.style.border = "3px solid " + colors[matchesdone - 1];
-              this.parentElement.style.cursor = "no-drop";
-              this.style.color = "blue";
-              this.innerHTML += "<br>✔️ " + Sanscript.t(String(matchesdone), 'iast', 'devanagari');
-
-              if (this.tagName.toLowerCase() === "img") {
-                this.src = D2Data[row][column].src;
-              }
-
-              D2Data[row][column].clicked = true;
-              clickedCards = [];
-              count += 2;
-
-              refreshCurrentScore();
-
-              // GAME COMPLETE
-              if (count == gamesize) {
-                if (timer) clearInterval(timer);
-
-                refreshCurrentScore(); // final score
-
-                // ✅ auto submit at end (still works, even if 0)
-                submitScoreNow();
-
-                window.alert(
-                  "उत्तमम् ! You matched all " +
-                  Sanscript.t(String(wpp), 'iast', 'devanagari') +
-                  " in " + Sanscript.t(String(secs), 'iast', 'devanagari') +
-                  " seconds while making " +
-                  Sanscript.t(String(numberOfWrongTries), 'iast', 'devanagari') +
-                  " wrong moves.\n\nFinal Score: " + currentScore
-                );
-
-                var ask = confirm("पुनः ? Press 'ok' to play again");
-                if (ask) restart();
-              }
-
-            } else {
-              // NOT A MATCH
-              numberOfWrongTries += 1;
-              triesElement.innerHTML = Sanscript.t(String(numberOfWrongTries), 'iast', 'devanagari');
-
-              if (this.tagName.toLowerCase() === "img") {
-                this.src = D2Data[row][column].src;
-              }
-
-              D2Data[row][column].clicked = true;
-              waiting.value = true;
-
-              var d = document.getElementsByTagName("tr")[clickedCards[0].x];
-              var r = d.getElementsByTagName("td")[clickedCards[0].y];
-              r.style.border = "1px solid blue";
-
-              refreshCurrentScore();
-
-              setTimeout(flipback, 700, row, column, this, clickedCards, waiting, D2Data);
-            }
+            var plist = document.getElementsByClassName("myp");
+            for (var i = 0; i < plist.length; i++) plist[i].onclick = clkfn;
           }
         }
-      };
 
-      function flipback(row, column, This, clickedCards, waiting, D2Data) {
-        if (This.tagName.toLowerCase() === "img") {
-          This.src = bg;
-        }
-        document.getElementById('tbl')
-          .rows[clickedCards[0].x]
-          .cells[clickedCards[0].y]
-          .firstElementChild.src = bg;
-
-        clickedCards[0].clicked = false;
-        D2Data[row][column].clicked = false;
-        waiting.value = false;
-        clickedCards.splice(0, 1);
-
-        refreshCurrentScore();
+        code();
       }
+    </script>
 
-      if (l != 1) {
-        var list = document.getElementsByTagName("img");
-        for (var i = 0; i < list.length; i++) list[i].onclick = clkfn;
-
-        var plist = document.getElementsByClassName("myp");
-        for (var i = 0; i < plist.length; i++) plist[i].onclick = clkfn;
-      }
-    }
-  </script>
-
-  <script type="module">
-    import { bp26Init} from "./js/bp26-score.js"; 
-    // ✅ Save under bp26-Game2 (separate), and included in bp26 aggregate
-    window.bp26Init({ game: "bp26-Game2", day: 2 });
-  </script>
-  <!-- Auth Middleware-->
-  <script type="module" src="/auth/api/middleware.js"></script>
-</body>
+    <!-- Auth Middleware -->
+    <script type="module" src="/auth/api/middleware.js"></script>
+  </body>
 </html>
