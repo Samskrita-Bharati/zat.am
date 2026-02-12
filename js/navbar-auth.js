@@ -260,3 +260,20 @@ if (profileLinkDropdown) {
     window.location.href = `../auth/profile.html?from=${origin}`;
   });
 }
+
+// Fix leaderboard link path based on current location
+const leaderboardLink = document.querySelector("#leaderboard-link");
+if (leaderboardLink) {
+  const currentPath = window.location.pathname;
+
+  // Calculate correct relative path to leaderboard.html
+  if (currentPath.includes("/bp26/")) {
+    // We're in a bp26 subdirectory
+    const depth = currentPath.split("/bp26/")[1].split("/").length - 1;
+    const prefix = "../".repeat(depth + 1);
+    leaderboardLink.href = `${prefix}leaderboard.html`;
+  } else {
+    // We're at root level
+    leaderboardLink.href = "./leaderboard.html";
+  }
+}
