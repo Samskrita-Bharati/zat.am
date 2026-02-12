@@ -100,7 +100,7 @@
                             window.location.reload();
                         })
                         timeout(1, () => { // wait for 1 second then let player close pane
-                            end.show();
+                            new Pane(wintmp,yellow).show();
                         });
                     } else {
                         wrong.score++;
@@ -112,7 +112,7 @@
                 const wrong = new Scorer({ color: white, backgroundColor: red }).pos(100, 80, LEFT, BOTTOM);
                 const timer = new Timer(20).pos(0, 80, CENTER, BOTTOM);
                 STYLE = { font: "Tourney", backdropColor: black.toAlpha(.8) }
-                const end = new Pane("समाप्तम्", yellow);
+                const end = new Pane("समाप्तम्" + "\nIt was " + wintmp, yellow);
                 timer.on("complete", () => {
                     end.show(); // show end
                     tile.noMouse(); // do not let player press on tile
