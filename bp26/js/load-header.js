@@ -8,11 +8,6 @@
     .then((html) => {
       document.getElementById("header-placeholder").innerHTML = html;
 
-      const leaderboardLink = document.getElementById("leaderboard-link");
-      if (leaderboardLink) {
-        leaderboardLink.href = window.location.origin + "/leaderboard.html";
-      }
-
       // Load navbar auth script after header is loaded
       const script = document.createElement("script");
       script.type = "module";
