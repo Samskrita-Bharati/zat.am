@@ -13,7 +13,6 @@ body {
   min-height: 100vh;
 }
 
-
 .container {
   width: 100%;
   max-width: 430px;
@@ -121,7 +120,6 @@ h2 {
 .hidden {
   display: none;
 }
-
 
 @media (max-width: 500px) {
   .button-group {

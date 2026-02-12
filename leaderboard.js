@@ -1,0 +1,626 @@
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  writeBatch,
+  setDoc,
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import {
+  auth,
+  db,
+} from "./auth/api/firebase-config.js";
+import { checkFetchRequirements, getRawData } from "./leaderboard-utils.js";
+
+// local start, end, and game variables for comparing with newly selected start, end and game
+// used for detecting if leaderboard needs to fetch new db documents or not
+let startDate;
+let endDate;
+let currentGame;
+
+// filters
+const gameSelect = document.getElementById("gameSelect");
+const timeSelect = document.getElementById("timeFilter");
+const seasonDate = document.getElementById("seasonDate");
+
+function getScoringSystem() {
+  return document.querySelector(
+    'input[name="scoringSystem"]:checked'
+  )?.value;
+}
+
+// Get the date range selected from HTML
+function getFilterRange(mode, pickedDate) {
+  const base = pickedDate ? new Date(pickedDate + "T00:00:00") : new Date();
+  const pickedStart = new Date(base).setHours(0, 0, 0, 0);
+
+  if (mode === "allDates") {
+    console.log(
+      "%c Range Filtered: ALL DATES",
+      "color: blue; font-weight: bold;",
+    );
+    return { newStart: 0, newEnd: Date.now() };
+  }
+
+  let newStart = 0;
+  let newEnd = Infinity;
+
+  switch (mode) {
+    case "daily":
+      newStart = pickedStart;
+      newEnd = pickedStart + 86400000 - 1; // 24小时
+      break;
+    case "weekly":
+      // Get the day in week of selected day
+      const day = base.getDay();
+
+      // Get the monday date of selected week
+      const sunday = new Date(base);
+      sunday.setDate(base.getDate() - day);
+      newStart = sunday.setHours(0, 0, 0, 0);
+
+      // Get the sunday date of selected week
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+      newEnd = saturday.setHours(23, 59, 59, 999);
+      break;
+    case "monthly":
+      // The 1st day to the last daye of selected month
+      newStart = new Date(base.getFullYear(), base.getMonth(), 1).getTime();
+      newEnd =
+        new Date(base.getFullYear(), base.getMonth() + 1, 1).getTime() - 1;
+      break;
+  }
+
+  const sDate = new Date(newStart).toLocaleString();
+  const eDate = new Date(newEnd).toLocaleString();
+
+  console.log(
+    `%c Range Filtered [${mode}]:`,
+    "color: green; font-weight: bold;",
+    `\nStart: ${sDate}\nEnd:   ${eDate}`,
+  );
+  return { newStart, newEnd };
+}
+
+// fetch all game histories for selected game and the current month
+async function fetchGameHistories(selectedGame) {
+  let fetchNeeded = true; //true by default
+  let rawData;
+  const { newStart, newEnd } = getFilterRange(
+    timeSelect.value,
+    seasonDate.value,
+  );
+  fetchNeeded = checkFetchRequirements(
+    startDate,
+    endDate,
+    newStart,
+    newEnd,
+    currentGame,
+    selectedGame,
+  );
+  console.log("document fetch needed?", fetchNeeded);
+  startDate = newStart;
+  endDate = newEnd;
+  currentGame = selectedGame;
+  if (fetchNeeded) {
+    rawData = await getRawData(newStart, newEnd, selectedGame);
+    return rawData;
+  }
+  return;
+}
+
+async function getUserProfile(uid) {
+  const userDocRef = doc(db, "users", uid, "public", "profile");
+  const userSnap = await getDoc(userDocRef);
+
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    const location = (data.location || "").split(/[，,]/);
+    return {
+      name: data.name || "Unknown Player",
+      location: location[location.length - 1].trim() || "Unknown",
+    };
+  }
+  return { name: "Unknown Player", location: "Unknown" };
+}
+
+function formatSeconds(totalSeconds) {
+  const seconds = Math.floor(totalSeconds);
+
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return `${hrs}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+// generates usable leaderboard data from game histories
+async function generateLeaderboardData(gameHistories) {
+  const scoringSystem = getScoringSystem();
+  const start = startDate;
+  const end = endDate;
+
+  const leaderboardData = Object.values(
+    gameHistories.reduce((acc, { score, timePlayed, timestamp, uid }) => {
+      // time filtering
+      if (!timestamp || timestamp < start || timestamp > end) {
+        return acc;
+      }
+
+      // use playerUID as key
+      const key = uid;
+      if (!key) return acc;
+
+      if (!acc[key]) {
+        acc[key] = {
+          uid: key,
+          totalScore: 0,
+          totalTimePlayed: 0,
+          latestTimestamp: timestamp,
+        };
+      }
+
+      acc[key].totalScore += score;
+      acc[key].totalTimePlayed += timePlayed;
+
+      if (timestamp >= acc[key].latestTimestamp) {
+        acc[key].latestTimestamp = timestamp;
+      }
+
+      return acc;
+    }, {}),
+  ).sort((a, b) => {
+    if (scoringSystem === "totalTimePlayed") {
+      return b.totalTimePlayed - a.totalTimePlayed;
+    }
+    return b.totalScore - a.totalScore;
+  });
+
+  // reformat totalTimePlayed into readable format
+  leaderboardData.map((player) => {
+    player.totalTimePlayed = formatSeconds(player.totalTimePlayed);
+  });
+
+  // associate names and locations with each uid
+  const userCache = {};
+  const dataWithUserProfile = await Promise.all(
+    leaderboardData.map(async (record) => {
+      const uid = record.uid;
+      if (!uid)
+        return { ...record, username: "Unknown Player", location: "Unknown" };
+
+      if (!userCache[uid]) {
+        const profile = await getUserProfile(uid);
+        userCache[uid] = profile;
+      }
+
+      return {
+        ...record,
+        username: userCache[uid].name,
+        location: userCache[uid].location,
+      };
+    }),
+  );
+
+  //console.log("dataWithUserProfile:", dataWithUserProfile);
+  return dataWithUserProfile;
+}
+
+// default leaderboard settings
+let gameHistories = await fetchGameHistories("Global");
+// empty time range means today's daily
+let leaderboardData = await generateLeaderboardData(gameHistories);
+
+// upon game selection change, fetch game history for selected game,
+// generate new leaderboard array,
+// re-render leaderboard and change to 1st page
+gameSelect.addEventListener("change", async (e) => {
+  const rawData = await fetchGameHistories(e.target.value);
+  if (rawData !== undefined) {
+    gameHistories = rawData;
+  }
+  leaderboardData = await generateLeaderboardData(gameHistories);
+  render();
+  changePage(1);
+  // check reset button status
+  checkResetEligibility();
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
+});
+
+// upon date selection change, fetch game history for selected date range,
+// generate new leaderboard array,
+// re-render leaderboard and change to 1st page
+seasonDate.addEventListener("input", async (e) => {
+  const rawData = await fetchGameHistories(gameSelect.value);
+  if (rawData !== undefined) {
+    gameHistories = rawData;
+  }
+  leaderboardData = await generateLeaderboardData(gameHistories);
+  render();
+  changePage(1);
+  // check reset button status
+  checkResetEligibility();
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
+  // Display filter range in HTML
+  const displayRange = document.getElementById("filterRangeDisplay");
+  if (timeSelect.value === "allDates") {
+    displayRange.innerText = "Showing: All Time Records";
+  } else {
+    const sStr = new Date(startDate).toLocaleDateString();
+    const eStr = new Date(endDate).toLocaleDateString();
+    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
+  }
+});
+
+// upon time filter selection change, fetch game history for selected range,
+// generate new leaderboard array,
+// re-render leaderboard and change to 1st page
+timeSelect.addEventListener("change", async (e) => {
+  const rawData = await fetchGameHistories(gameSelect.value);
+  if (rawData !== undefined) {
+    gameHistories = rawData;
+  }
+  leaderboardData = await generateLeaderboardData(gameHistories);
+  render();
+  changePage(1);
+  // check reset button status
+  checkResetEligibility();
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
+  const displayRange = document.getElementById("filterRangeDisplay");
+  if (e.target.value === "allDates") {
+    displayRange.innerText = "Showing: All Time Records";
+  } else {
+    const sStr = new Date(startDate).toLocaleDateString();
+    const eStr = new Date(endDate).toLocaleDateString();
+    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
+  }
+});
+
+// upon scoring system change, generate new leaderboard data,
+// re-render leaderboard and change to 1st page
+document.getElementById("scoring").addEventListener("change", async (e) => {
+  leaderboardData = await generateLeaderboardData(gameHistories);
+  render();
+  changePage(1);
+  // check reset button status
+  checkResetEligibility();
+  // sync toggle status
+  syncToggleStatus(gameSelect.value);
+  const displayRange = document.getElementById("filterRangeDisplay");
+  if (e.target.value === "allDates") {
+    displayRange.innerText = "Showing: All Time Records";
+  } else {
+    const sStr = new Date(startDate).toLocaleDateString();
+    const eStr = new Date(endDate).toLocaleDateString();
+    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
+  }
+});
+
+let currentPage = 1;
+const perPage = 10;
+
+function render() {
+  const scoringSystem = getScoringSystem();
+
+  // Podium
+  for (let i = 0; i < 3; i++) {
+    const player = leaderboardData[i];
+
+    const username = document.getElementById("name-" + (i + 1));
+    const location = document.getElementById("location-" + (i + 1));
+    const score = document.getElementById("score-" + (i + 1));
+
+    if (username) {
+      username.textContent = player ? player.username : "---";
+    }
+    if (location) {
+      location.textContent = player ? `📍 ${player.location}` : "---";
+    }
+    if (score) {
+      score.textContent = player ? player[scoringSystem].toLocaleString() : "---";
+    }
+  }
+
+  // List
+  const listData = leaderboardData.slice(3);
+  const totalPages = Math.max(1, Math.ceil(listData.length / perPage));
+
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * perPage;
+
+  document.getElementById("leaderboard").innerHTML = listData
+    .slice(start, start + perPage)
+    .map(
+      (p, i) => `
+                    <div class="row">
+                        <div class="rank">${start + i + 4}</div>
+                        <div class="name" style="display: flex; align-items: center; gap: 3em;">
+                            <span style="overflow: hidden; text-overflow: ellipsis; 
+                                        white-space: nowrap; width: 200px;">${p.username}</span>
+                            <span>📍 ${p.location}</span>
+                        </div>
+                        <div class="score">${p[scoringSystem].toLocaleString()}</div>
+                    </div>`,
+    )
+    .join("");
+
+  document.getElementById("pageNum").textContent = currentPage;
+  document.getElementById("totalPages").textContent = totalPages;
+
+  document.getElementById("prevBtn").disabled = currentPage === 1;
+  document.getElementById("nextBtn").disabled = currentPage === totalPages;
+}
+
+// change page
+function changePage(page) {
+  const totalPages = Math.ceil(leaderboardData.length / perPage);
+
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  render();
+}
+
+document
+  .getElementById("nextBtn")
+  .addEventListener("click", () => changePage(currentPage + 1));
+document
+  .getElementById("prevBtn")
+  .addEventListener("click", () => changePage(currentPage - 1));
+
+render();
+// check reset button status
+checkResetEligibility();
+// sync toggle status
+syncToggleStatus(gameSelect.value);
+
+// ============================================
+// ====== Reset and Competition Controls ======
+// ============================================
+
+// // For demo use, false for production
+// const mockIsAdmin = true;
+
+// Visibility logic for adminPanel
+onAuthStateChanged(auth, async (user) => {
+
+  const adminPanel = document.getElementById("adminPanel");
+  const analyticsBtn = document.getElementById("analyticsBtn");
+  
+  if (!adminPanel) return;
+
+  let isAdmin = false;
+
+  if (user) {
+    //console.log("UID:", user.uid);
+    try {
+      const userDocRef = doc(
+        db,
+        "users",
+        user.uid,
+        "private",
+        "account",
+      );
+      const userSnap = await getDoc(userDocRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        isAdmin = userData.isAdmin === true;
+        //console.log("isAdmin:", isAdmin);
+      } else {
+        console.warn("User document not found in Firestore");
+      }
+    } catch (error) {
+      console.error("unable to get user role:", error);
+    }
+  }
+
+  // if (mockIsAdmin || isAdmin) {
+  if (isAdmin) {
+    adminPanel.style.display = "block";
+    if (analyticsBtn) analyticsBtn.style.display = "block";
+    checkResetEligibility();
+    //console.log("Admin Panel Shown");
+  } else {
+    adminPanel.style.display = "none";
+    if (analyticsBtn) analyticsBtn.style.display = "none";
+    //console.log("Admin Panel Hidden");
+  }
+});
+
+// Check Competition status
+const statusToggle = document.getElementById("statusToggle");
+async function syncToggleStatus(game) {
+  const statusToggle = document.getElementById("statusToggle");
+  if (!game || game === "Global") {
+    statusToggle.disabled = true;
+    statusToggle.checked = false;
+    return;
+  }
+  statusToggle.disabled = false;
+  const gameSnap = await getDoc(doc(db, "leaderboards", game));
+  statusToggle.checked = gameSnap.exists()
+    ? gameSnap.data().competitionIsActive === true
+    : false;
+}
+
+document
+  .getElementById("statusToggle")
+  .addEventListener("change", async (e) => {
+    const gameId = document.getElementById("gameSelect").value;
+    await setDoc(
+      doc(db, "leaderboards", gameId),
+      { competitionIsActive: e.target.checked },
+      { merge: true },
+    );
+    checkResetEligibility();
+  });
+
+// Check reset button eligibility
+async function checkResetEligibility() {
+  const game = document.getElementById("gameSelect").value;
+  const resetBtn = document.getElementById("resetBtn");
+  const resetHint = document.getElementById("resetHint");
+
+  if (!game || game === "Global") {
+    resetBtn.disabled = false;
+    resetBtn.style.background = "";
+    resetHint.textContent = "";
+    return;
+  }
+
+  const gameDoc = await getDoc(doc(db, "leaderboards", game));
+  if (gameDoc.exists() && gameDoc.data().competitionIsActive) {
+    resetBtn.disabled = true;
+    resetBtn.style.background = "#ccc";
+    resetHint.style.color = "#d30000";
+    resetHint.textContent = "Competition active. Reset locked.";
+  } else {
+    resetBtn.disabled = false;
+    resetBtn.style.background = "";
+    resetHint.textContent = "";
+  }
+}
+
+statusToggle.addEventListener("change", async () => {
+  const gameId = document.getElementById("gameSelect").value;
+  if (gameId === "Global") return;
+
+  const newState = statusToggle.checked;
+  try {
+    const gameDocRef = doc(db, "leaderboards", gameId);
+    await setDoc(
+      gameDocRef,
+      { competitionIsActive: newState },
+      { merge: true },
+    );
+    await checkResetEligibility();
+  } catch (error) {
+    console.error("Update failed:", error);
+    statusToggle.checked = !newState;
+    alert("Database update failed.");
+  }
+});
+
+// Logic for leaderboard reset
+async function performReset(game) {
+  if (
+    !confirm(
+      `Are you sure you want to clear all the score histories for ${game} ?`,
+    )
+  )
+    return;
+
+  const historyColRef = collection(
+    db,
+    "leaderboards",
+    game,
+    "gameHistory",
+  );
+  const historySnapshot = await getDocs(historyColRef);
+
+  if (historySnapshot.empty) {
+    alert(`Score histories for ${game} are cleared.`);
+    return;
+  }
+
+  const batch = writeBatch(db);
+
+  historySnapshot.forEach((document) => {
+    batch.delete(document.ref);
+  });
+
+  try {
+    await batch.commit();
+    alert(`Successfully reset ${game} histories.`);
+    gameHistories = [];
+    leaderboardData = await generateLeaderboardData(gameHistories);
+    render();
+  } catch (error) {
+    console.error("Reset failed: ", error);
+    alert("Error resetting leaderboard. Check console.");
+  }
+}
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  const game = document.getElementById("gameSelect").value;
+  performReset(game);
+});
+
+// ============================================
+// ====== SPARKLE PARTICLE SYSTEM ======
+// ============================================
+const canvas = document.getElementById("sparkleCanvas");
+const ctx = canvas.getContext("2d");
+let particles = [];
+let hoveredCard = null;
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+class Particle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.size = Math.random() * 10 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
+    this.speedX = (Math.random() - 0.5) * 5;
+    this.speedY = (Math.random() - 0.5) * 5;
+    this.alpha = 1;
+    this.decay = Math.random() * 0.02 + 0.01;
+    this.angle = Math.random() * Math.PI * 2;
+    this.spin = (Math.random() - 0.5) * 0.2;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.alpha -= this.decay;
+    this.angle += this.spin;
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+    ctx.fillStyle = this.color || "#3B82F6";
+    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+    ctx.restore();
+  }
+}
+
+[1, 2, 3].forEach((rank) => {
+  const el = document.getElementById(`card-${rank}`);
+  if (el) {
+    el.addEventListener("mouseenter", () => (hoveredCard = el));
+    el.addEventListener("mouseleave", () => (hoveredCard = null));
+  }
+});
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (hoveredCard) {
+    const rect = hoveredCard.getBoundingClientRect();
+    const color = hoveredCard.getAttribute("data-color");
+    for (let i = 0; i < 2; i++) {
+      const x = rect.left + Math.random() * rect.width;
+      const y = rect.top + Math.random() * rect.height;
+      particles.push(new Particle(x, y, color));
+    }
+  }
+  particles = particles.filter((p) => {
+    p.update();
+    p.draw();
+    return p.alpha > 0;
+  });
+  requestAnimationFrame(animate);
+}
+animate();

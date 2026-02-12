@@ -1,4 +1,5 @@
 import { checkAuth } from "./auth-api.js";
+import { auth, onAuthStateChanged } from "./firebase-config.js";
 
 // List of games that require authentication
 const protectedGames = [

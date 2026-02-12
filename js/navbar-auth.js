@@ -1,9 +1,10 @@
-import { auth } from "../auth/api/firebase-config.js";
-import { getCurrentUserProfile } from "../auth/api/auth-api.js";
 import {
+  auth,
   onAuthStateChanged,
   signOut,
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+} from "/auth/api/firebase-config.js";
+import { getCurrentUserProfile } from "../auth/api/auth-api.js";
+import { updateStreak } from "../auth/api/streak.js";
 
 const loggedOut = document.getElementById("logged-out");
 const loggedIn = document.getElementById("logged-in");
@@ -11,6 +12,7 @@ const profileBtn = document.getElementById("profile-btn");
 const dropdown = document.getElementById("profile-dropdown");
 const userEmailDropdown = document.getElementById("user-email-dropdown");
 const usernameDisplay = document.getElementById("username");
+const streakDisplay = document.getElementById("streak");
 const userLanguageRow = document.getElementById("user-language");
 const dropdownLogout = document.getElementById("dropdown-logout");
 const bilingualBtn = document.getElementById("bilingual-toggle");
@@ -42,8 +44,7 @@ const updateBilingualButton = () => {
 };
 
 // Check if user is logged in
-onAuthStateChanged(auth, (user) => {
-  // Show auth buttons as soon as we know the auth state
+onAuthStateChanged(auth, async (user) => {
   const authBtn = document.querySelector(".auth-btn");
   if (authBtn) {
     authBtn.style.visibility = "visible";
@@ -66,8 +67,10 @@ onAuthStateChanged(auth, (user) => {
     let displayName;
 
     if (user.displayName) {
+      // Get first name only
       displayName = user.displayName.split(" ")[0];
     } else {
+      // Get email username before '@' symbol
       displayName = user.email.split("@")[0];
     }
 
@@ -155,6 +158,9 @@ onAuthStateChanged(auth, (user) => {
 
         updateBilingualButton();
       });
+
+    const streak = await updateStreak(user.uid);
+    streakDisplay.textContent = `🔥 Streak: ${streak}`;
   } else {
     loggedOut.classList.remove("hidden");
     loggedIn.classList.add("hidden");
@@ -164,25 +170,23 @@ onAuthStateChanged(auth, (user) => {
       bilingualBtn.classList.add("hidden");
       bilingualBtn.style.display = "none";
     }
+
     updateBilingualButton();
   }
 });
 
 // Toggle dropdown on profile icon click
-if (profileBtn) {
-  profileBtn.addEventListener("click", () => {
-    dropdown.classList.toggle("hidden");
-  });
-}
+profileBtn.addEventListener("click", () => {
+  dropdown.classList.toggle("hidden");
+});
 
 // Close dropdown when clicking outside
 document.addEventListener("click", (e) => {
-  if (loggedIn && !loggedIn.contains(e.target)) {
+  if (!loggedIn.contains(e.target)) {
     dropdown.classList.add("hidden");
   }
 });
 
-// Logout
 // Logout
 if (dropdownLogout) {
   dropdownLogout.addEventListener("click", async (e) => {

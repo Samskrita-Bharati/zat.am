@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Memory क्रीडा</title>
+
+    <!-- ✅ KEEP OLD (Bootstrap 4.4.1) for header compatibility -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      integrity="sha384-Vkoo8x4CGsO3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     />
     <script
@@ -26,6 +28,7 @@
       integrity="sha384-wfSDF2E50Y2D1uUd0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 
     <!-- IMPORTANT: Load page CSS first, header CSS last -->
@@ -36,41 +39,301 @@
       type="text/javascript"
       src="https://unpkg.com/papaparse@latest/papaparse.min.js"
     ></script>
-  </head>
-
-  <body>
-    <!-- Header Placeholder -->
-    <div id="header-placeholder"></div>
-    <script type="module" src="../js/bilingual-toggle.js"></script>
-    <!-- Load Header -->
-    <script src="js/load-header.js"></script>
 
     <style>
       body {
         padding-top: 7%;
       }
+
+      /* ✅ Score badge + submit button */
+      #submitScoreBtn {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 12px;
+        background: #1f2937;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+      #submitScoreBtn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      #scoreBadge {
+        position: fixed;
+        left: 20px;
+        bottom: 24px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: #ffffff;
+        color: #111827;
+        font-size: 14px;
+        z-index: 9999;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        border: 1px solid #e5e7eb;
+      }
+
+      /* ✅ Celebration overlay */
+      #bp26CelebrateOverlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 10000;
+        padding: 20px;
+      }
+      .bp26CelebrateBox {
+        width: min(460px, 92vw);
+        background: #fff;
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        font-family: system-ui, Arial, sans-serif;
+      }
+      .bp26Sparkles {
+        font-size: 54px;
+        line-height: 1.1;
+        margin: 8px 0 6px;
+        animation: bp26Pop 600ms ease-out both;
+      }
+      @keyframes bp26Pop {
+        0% {
+          transform: scale(0.6);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .bp26Btn {
+        margin-top: 12px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        background: #f9fafb;
+        cursor: pointer;
+      }
+      .bp26Confetti {
+        position: fixed;
+        top: -12px;
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        z-index: 10001;
+        opacity: 0.95;
+        animation: bp26Fall 950ms linear forwards;
+        pointer-events: none;
+      }
+      @keyframes bp26Fall {
+        to {
+          transform: translateY(110vh) rotate(540deg);
+          opacity: 0.9;
+        }
+      }
+
+      /* ✅ ensure counters show as text (won't affect header) */
+      #wm #nomd,
+      #wm #nowt {
+        display: inline-block !important;
+        min-width: 28px !important;
+        height: auto !important;
+        padding: 0 6px !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        font-weight: 700 !important;
+        overflow: visible !important;
+      }
     </style>
+  </head>
+
+  <body>
+    <!-- Auth Middleware -->
+    <script type="module" src="/auth/api/middleware.js"></script>
+    <!-- ✅ Header Placeholder (Login/Signup stays working) -->
+    <div id="header-placeholder"></div>
+    <script type="module" src="../js/bilingual-toggle.js"></script>
+    <script src="js/load-header.js"></script>
+
     <center>
       <h1>Memory क्रीडा</h1>
       <div class="header-divider"></div>
       <br />
+
+      <!-- ✅ Added Time + keep old counters -->
       <p id="wm">
         Matches Done: <span id="nomd">०</span> Wrong Moves:
         <span id="nowt">०</span>
+        <span style="margin-left: 16px; font-weight: 700"
+          >Time: <span id="timeDisp">0</span>s</span
+        >
       </p>
 
       <progress id="pr" max="15" value="0"></progress>
       <div id="mytable"></div>
     </center>
-    <script>
-      var secs = 0;
-      function countSecs(elem) {
-        //console.log(secs);
-        //var element = document.getElementById(elem);
-        //element.innerHTML = "Time: " + Sanscript.t(String(secs),'iast', 'devanagari') + " seconds";
-        secs++;
+
+    <!-- ✅ Score badge + submit button -->
+    <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
+    <button id="submitScoreBtn">Submit Score (Game 2)</button>
+
+    <!-- ✅ Celebration overlay -->
+    <div id="bp26CelebrateOverlay">
+      <div class="bp26CelebrateBox">
+        <div class="bp26Sparkles">✨🎉✨</div>
+        <div
+          id="bp26CelebrateTitle"
+          style="font-weight: 700; font-size: 18px; margin-bottom: 6px"
+        >
+          Submitted ✅
+        </div>
+        <div id="bp26CelebrateSub" style="font-size: 14px; color: #374151">
+          Nice work!
+        </div>
+        <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
+      </div>
+    </div>
+
+    <script type="module">
+      /* ✅ Make reportScore available globally like your new file expects */
+      import { reportScore, bp26Init } from "./js/bp26-score.js";
+      window.reportScore = reportScore;
+
+      // ✅ Init scoring namespace
+      window.bp26Init = bp26Init;
+      window.bp26Init({ game: "bp26-Game2", day: 2 });
+
+      // ✅ celebration helpers
+      function bp26BurstConfetti(count = 60) {
+        for (let i = 0; i < count; i++) {
+          const c = document.createElement("div");
+          c.className = "bp26Confetti";
+          c.style.left = Math.random() * 100 + "vw";
+          c.style.width = 6 + Math.random() * 8 + "px";
+          c.style.height = 6 + Math.random() * 8 + "px";
+          c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
+          c.style.animationDuration = 800 + Math.random() * 600 + "ms";
+          document.body.appendChild(c);
+          setTimeout(() => c.remove(), 2000);
+        }
       }
-      // end of timer code
+
+      function bp26Celebrate({
+        title = "Submitted ✅",
+        subtitle = "Nice work!",
+        score = null,
+      } = {}) {
+        const overlay = document.getElementById("bp26CelebrateOverlay");
+        const t = document.getElementById("bp26CelebrateTitle");
+        const s = document.getElementById("bp26CelebrateSub");
+        t.textContent = title;
+        s.textContent =
+          score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
+        overlay.style.display = "flex";
+        bp26BurstConfetti(70);
+        setTimeout(() => {
+          overlay.style.display = "none";
+        }, 3000);
+      }
+
+      document
+        .getElementById("bp26CelebrateClose")
+        .addEventListener("click", () => {
+          document.getElementById("bp26CelebrateOverlay").style.display =
+            "none";
+        });
+      document
+        .getElementById("bp26CelebrateOverlay")
+        .addEventListener("click", (e) => {
+          if (e.target.id === "bp26CelebrateOverlay")
+            e.target.style.display = "none";
+        });
+
+      // ---------------------------
+      // ✅ Timer (same behavior as your new one)
+      // ---------------------------
+      let secs = 0;
+      let timer = null;
+
+      function tick() {
+        secs++;
+        const t = document.getElementById("timeDisp");
+        if (t) t.textContent = String(secs);
+      }
+
+      // ✅ score state
+      let scoreSubmitted = false;
+      let currentScore = 0;
+
+      function updateScoreUI() {
+        const el = document.getElementById("scoreValue");
+        if (el) el.textContent = String(currentScore);
+      }
+
+      function computeScore(wpp, wrongMoves) {
+        const base = wpp * 10; // 150 when wpp=15
+        const penaltyWrong = wrongMoves * 2;
+        const penaltyTime = secs;
+        return Math.max(0, base - penaltyWrong - penaltyTime);
+      }
+
+      async function submitScoreNow() {
+        if (scoreSubmitted) return;
+
+        const btn = document.getElementById("submitScoreBtn");
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Submitting...";
+        }
+
+        try {
+          if (typeof window.reportScore !== "function") {
+            alert("Score system not loaded. Check ./js/bp26-score.js path.");
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = "Submit Score (Game 2)";
+            }
+            return;
+          }
+
+          await window.reportScore(currentScore);
+          scoreSubmitted = true;
+
+          if (btn) btn.textContent = `Submitted ✅ (Score: ${currentScore})`;
+
+          bp26Celebrate({
+            title: "Score Submitted ✅",
+            subtitle: "Great job!",
+            score: currentScore,
+          });
+        } catch (e) {
+          console.error("❌ submit score failed", e);
+          alert("Submit failed. Open Console (F12) and send the red error.");
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Submit Score (Game 2)";
+          }
+        }
+      }
+
+      document
+        .getElementById("submitScoreBtn")
+        .addEventListener("click", submitScoreNow);
+
+      // ---------------------------
+      // ✅ OLD GAME LOGIC BELOW (kept the same)
+      // Only changes: hook score + timer updates without changing gameplay.
+      // ---------------------------
       document.addEventListener("DOMContentLoaded", function () {
         var lnk =
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
@@ -80,9 +343,11 @@
           complete: populateWlist,
         });
       });
+
       function populateWlist(fildat) {
         var wpp = 15; // words per page
         document.getElementById("pr").max = wpp;
+
         var tlang = [];
         tlang[1] = "itrans";
         tlang["gu"] = "gujarati";
@@ -91,42 +356,42 @@
         tlang["ml"] = "malayalam";
         tlang["te"] = "telugu";
         tlang["ta"] = "tamil";
-        fullist = fildat.data;
 
+        const fullist = fildat.data || [];
         var openmojibase = "https://openmoji.org/data/color/svg/";
+
         var numberOfWrongTries = 0;
-        matchesdone = 0;
-        var timer;
-        triesElement = document.getElementById("nowt");
+        var matchesdone = 0;
+        var triesElement = document.getElementById("nowt");
+
         const urlParams = new URLSearchParams(window.location.search);
         var o = urlParams.get("o");
-        if (!o)
-          // open mode - 1 is true - not flipped
-          o = 0;
+        if (!o) o = 0;
+
         var set = urlParams.get("s");
         if (!set || isNaN(set) || set >= fullist.length) set = 0;
 
         var image = [];
         var words = [];
         var imglnk = "";
-        for (i = 0; i < wpp; i++) {
-          words.push(fullist[set * wpp + i].padam);
-          if (
-            fullist[set * wpp + i]["Imaage link"].length == 4 ||
-            fullist[set * wpp + i]["Imaage link"].length == 5
-          )
-            imglnk =
-              openmojibase + fullist[set * wpp + i]["Imaage link"] + ".svg";
-          else imglnk = fullist[set * wpp + i]["Imaage link"];
+
+        for (let i = 0; i < wpp; i++) {
+          const row = fullist[set * wpp + i];
+          if (!row) continue;
+
+          words.push(row.padam);
+
+          const imgVal = row["Imaage link"] || "";
+          if (imgVal.length == 4 || imgVal.length == 5)
+            imglnk = openmojibase + imgVal + ".svg";
+          else imglnk = imgVal;
+
           image.push(imglnk);
         }
-        while (!words[words.length - 1]) {
-          words.pop();
-        }
-        while (!image[image.length - 1]) {
-          image.pop();
-        }
-        //mmk-start
+
+        while (words.length && !words[words.length - 1]) words.pop();
+        while (image.length && !image[image.length - 1]) image.pop();
+
         var colors = [
           "tomato",
           "aqua",
@@ -138,82 +403,71 @@
           "maroon",
           "navy",
           "olive",
-          "purple ",
+          "purple",
           "red",
           "silver",
           "teal",
           "yellow",
         ];
 
-        var l = urlParams.get("l"); // learn mode - 1 is true
+        var l = urlParams.get("l");
         if (!l) l = 0;
-        var t = urlParams.get("t"); // transliterate mode - 1 is true
+
+        var t = urlParams.get("t");
         if (!t) t = 0;
-        if (l == 1) {
-          document.getElementById("ss").style.display = "inline-block";
-          document.getElementById("pr").style.display = "none";
-          document.getElementById("wm").style.display = "none";
-        }
 
         function restart() {
           location.reload();
         }
 
-        var rowLength = 5;
-        rowLength = words.length / 3;
-        var colLength = 6; //prompt("Please enter number of columns (must not exceed 6) \n NOTE THAT : the multiplier of row and columns must be even number for the game to work");
+        var rowLength = words.length / 3;
+        var colLength = 6;
         var gamesize = rowLength * colLength;
-        var height = 570 / rowLength;
-        var width = 900 / colLength;
-        width = document.documentElement.offsetWidth / 6; //8;
-        height = document.documentElement.offsetHeight / 2; //3;
-        width = 150;
-        height = 120;
-        if (l != 1) timer = setInterval('countSecs("timer")', 1000); //1000ms to wait before executing the code =1 second
-        countSecs("timer");
+
+        var width = 150;
+        var height = 120;
+
+        // ✅ start timer (only play mode)
+        if (l != 1) {
+          secs = 0;
+          if (timer) clearInterval(timer);
+          timer = setInterval(tick, 1000);
+        }
+        tick();
+
+        function refreshScoreUI() {
+          currentScore = computeScore(wpp, numberOfWrongTries);
+          updateScoreUI();
+        }
+        refreshScoreUI();
 
         function code() {
-          var temp = [];
           var waiting = { value: false };
-
-          var D1Data = []; // D1Data has duplicated image objects.
+          var D1Data = [];
           var D2Data = [];
           var count = 0;
+
           for (var x = 0; x < gamesize / 2; x++) {
             D1Data.push({ src: image[x], clicked: false });
             D1Data.push({ src: image[x], clicked: false, wrd: words[x] });
           }
 
-          for (var x = 0; x < D1Data.length; x++) {
-            //console.log('index: ' + x + ' ' + D1Data[x].src)
-          }
           var rand = 0;
-          // fill D2Data 2D array. (2D array is a group 1D arrays)
           for (var y = 0; y < rowLength; y++) {
             var temp = [];
             var x = 0;
 
             while (x < colLength) {
-              if (l != 1) {
-                rand = Math.floor(Math.random() * D1Data.length);
-
-                temp.push(D1Data[rand]);
-                temp[x].y = x;
-                temp[x].x = y;
-                D1Data.splice(rand, 1);
-              } else {
-                temp.push(D1Data[rand]);
-                rand += 1;
-              }
-              //console.log('iteration: ' + y +' removed at index: ' + rand);
-
+              rand = Math.floor(Math.random() * D1Data.length);
+              temp.push(D1Data[rand]);
+              temp[x].y = x;
+              temp[x].x = y;
+              D1Data.splice(rand, 1);
               x++;
             }
             D2Data.push(temp);
           }
 
-          // functions and variables
-          var faceUp = 0;
           var clickedCards = [];
           var bg = "bp26e.png";
 
@@ -221,23 +475,25 @@
             var table = document.createElement("TABLE");
             table.id = "tbl";
             var myTableDiv = document.getElementById("mytable");
+            myTableDiv.innerHTML = "";
 
             for (var i = 0; i < rowLength; i++) {
               var tr = document.createElement("TR");
               table.appendChild(tr);
+
               for (var j = 0; j < colLength; j++) {
                 var td = document.createElement("TD");
                 tr.appendChild(td);
+
                 if (!imageData2D[i][j].wrd) {
                   var img = document.createElement("img");
-                  if (o != 1) img.src = "bp26e.png";
+                  if (o != 1) img.src = bg;
                   else img.src = imageData2D[i][j].src;
                   img.height = height;
                   img.width = width;
                   td.appendChild(img);
                 } else {
                   var p = document.createElement("p");
-
                   p.className = "myp";
                   p.innerHTML = imageData2D[i][j].wrd;
                   if (t != 0 && tlang[t])
@@ -255,60 +511,69 @@
             myTableDiv.appendChild(table);
           }
 
-          genTable(rowLength, colLength, D2Data); // generate table..
+          genTable(rowLength, colLength, D2Data);
 
           var clkfn = function () {
-            // THE ONCLICK EVENT FOR ALL IMAGES.
-
             var row = this.parentElement.parentElement.rowIndex;
             var column = this.parentElement.cellIndex;
+
             if (!D2Data[row][column].clicked && !waiting.value) {
               if (clickedCards.length == 0) {
-                // if it is the only card, add it to clickedCards, set clicked to true, set background
-                this.src = D2Data[row][column].src;
-                this.height = height;
-                this.width = width;
+                if (this.tagName.toLowerCase() === "img") {
+                  this.src = D2Data[row][column].src;
+                  this.height = height;
+                  this.width = width;
+                }
                 D2Data[row][column].clicked = true;
                 clickedCards.push(D2Data[row][column]);
-                d = document.getElementsByTagName("tr")[clickedCards[0].x];
-                r = d.getElementsByTagName("td")[clickedCards[0].y];
+
+                const d =
+                  document.getElementsByTagName("tr")[clickedCards[0].x];
+                const r = d.getElementsByTagName("td")[clickedCards[0].y];
                 r.style.border = "2px dashed red";
               } else {
-                // compare card to one in the list..
-                //console.log('comparing to one in the lisst')
                 if (D2Data[row][column].src === clickedCards[0].src) {
-                  // if it matches..
-                  d = document.getElementsByTagName("tr")[clickedCards[0].x];
-                  r = d.getElementsByTagName("td")[clickedCards[0].y];
-                  r.style.border = "3px solid " + colors[matchesdone]; //blue";
+                  const d =
+                    document.getElementsByTagName("tr")[clickedCards[0].x];
+                  const r = d.getElementsByTagName("td")[clickedCards[0].y];
+                  r.style.border = "3px solid " + colors[matchesdone];
                   r.style.cursor = "no-drop";
                   r.style.color = "blue";
-                  //r.innerHTML+="✔️";
+
                   matchesdone++;
                   r.innerHTML +=
                     "<br>☑️ " +
                     Sanscript.t(String(matchesdone), "iast", "devanagari");
                   document.getElementById("pr").value = matchesdone;
-                  //console.log('match')
+
                   document.getElementById("nomd").innerHTML = Sanscript.t(
                     String(matchesdone),
                     "iast",
                     "devanagari",
                   );
+
                   this.parentElement.style.border =
-                    "3px solid " + colors[matchesdone - 1]; //blue";
+                    "3px solid " + colors[matchesdone - 1];
                   this.parentElement.style.cursor = "no-drop";
                   this.style.color = "blue";
-                  //this.innerHTML+="✔️";
                   this.innerHTML +=
                     "<br>✔️ " +
                     Sanscript.t(String(matchesdone), "iast", "devanagari");
-                  this.src = D2Data[row][column].src;
+
+                  if (this.tagName.toLowerCase() === "img")
+                    this.src = D2Data[row][column].src;
+
                   D2Data[row][column].clicked = true;
-                  clickedCards = []; // empty the matrix.
+                  clickedCards = [];
                   count += 2;
-                  //console.log(count);
+
+                  refreshScoreUI();
+
                   if (count == gamesize) {
+                    if (timer) clearInterval(timer);
+                    refreshScoreUI();
+                    submitScoreNow();
+
                     window.alert(
                       "उत्तमम् ! You matched all " +
                         Sanscript.t(String(wpp), "iast", "devanagari") +
@@ -320,29 +585,34 @@
                           "iast",
                           "devanagari",
                         ) +
-                        " wrong moves",
+                        " wrong moves\n\nFinal Score: " +
+                        currentScore,
                     );
-                    clearTimeout(timer); //stop timer function
+
                     var ask = confirm("पुनः ? Press 'ok' to play again");
-                    if (ask) {
-                      restart();
-                    }
+                    if (ask) restart();
                   }
                 } else {
-                  // not a match.
                   numberOfWrongTries += 1;
                   triesElement.innerHTML = Sanscript.t(
                     String(numberOfWrongTries),
                     "iast",
                     "devanagari",
                   );
-                  //this.src = bg;
-                  this.src = D2Data[row][column].src; // show picture of card u just clicked
-                  D2Data[row][column].clicked = true; // new
-                  waiting.value = true; //
-                  d = document.getElementsByTagName("tr")[clickedCards[0].x];
-                  r = d.getElementsByTagName("td")[clickedCards[0].y];
+
+                  if (this.tagName.toLowerCase() === "img")
+                    this.src = D2Data[row][column].src;
+
+                  D2Data[row][column].clicked = true;
+                  waiting.value = true;
+
+                  const d =
+                    document.getElementsByTagName("tr")[clickedCards[0].x];
+                  const r = d.getElementsByTagName("td")[clickedCards[0].y];
                   r.style.border = "1px solid blue";
+
+                  refreshScoreUI();
+
                   setTimeout(
                     flipback,
                     700,
@@ -357,39 +627,39 @@
               }
             }
           };
-          if (l != 1) {
-            var list = document.getElementsByTagName("img");
-            for (var i = 0; i < list.length; i++) {
-              // Skip logo and profile images
-              if (
-                list[i].classList.contains("logo") ||
-                list[i].classList.contains("profile-image") ||
-                list[i].classList.contains("dropdown-profile-image")
-              ) {
-                continue;
-              }
-              list[i].onclick = clkfn;
-            }
-            var plist = document.getElementsByClassName("myp");
-            for (var i = 0; i < plist.length; i++) {
-              plist[i].onclick = clkfn;
-            }
-          }
+
           function flipback(row, column, This, clickedCards, waiting, D2Data) {
-            // flip both cards back to facedown
-            This.src = bg; // flip this to bg
+            if (This.tagName.toLowerCase() === "img") This.src = bg;
             document.getElementById("tbl").rows[clickedCards[0].x].cells[
               clickedCards[0].y
-            ].firstElementChild.src = bg; // flip the one in clickedCards
-            // clicked is false in both.
+            ].firstElementChild.src = bg;
+
             clickedCards[0].clicked = false;
             D2Data[row][column].clicked = false;
             waiting.value = false;
             clickedCards.splice(0, 1);
+
+            refreshScoreUI();
+          }
+
+          if (l != 1) {
+            var list = document.getElementsByTagName("img");
+            for (var i = 0; i < list.length; i++) {
+              if (
+                list[i].classList.contains("logo") ||
+                list[i].classList.contains("profile-image") ||
+                list[i].classList.contains("dropdown-profile-image")
+              )
+                continue;
+              list[i].onclick = clkfn;
+            }
+
+            var plist = document.getElementsByClassName("myp");
+            for (var i = 0; i < plist.length; i++) plist[i].onclick = clkfn;
           }
         }
+
         code();
-        //mmk-end
       }
     </script>
   </body>

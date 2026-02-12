@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- NOTE THIS DOES NOT WORK WITH .htm ONLY .html -->
     <meta charset="utf-8" />
     <title>Audio Match – Learn Words</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <script
       type="text/javascript"
       src="https://unpkg.com/papaparse@latest/papaparse.min.js"
@@ -13,103 +15,94 @@
     <!-- Header CSS -->
     <link rel="stylesheet" href="css/header.css" />
 
-    <!--
-  <style>
-    :root {
-      --primary: #2b6cb0;
-      --accent: #38a169;
-      --warn: #e53e3e;
-      --text: #1a202c;
-      --muted: #718096;
-      --tile: #edf2f7;
-      --tile-border: #cbd5e0;
-    }
-    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
-    header { padding: 1rem 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; border-bottom: 1px solid #e2e8f0; background: #fff; position: sticky; top: 0; z-index: 5; }
-    header h1 { font-size: 1.25rem; margin: 0; }
-    header .controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    button { cursor: pointer; border: 1px solid #cbd5e0; background: #fff; color: var(--text); border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.95rem; }
-    button.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-    button.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
-    button.warn { background: var(--warn); color: #fff; border-color: var(--warn); }
-    button:focus { outline: 3px solid #90cdf4; outline-offset: 2px; }
-
-    main { max-width: 1150px; margin: 0 auto; padding: 1rem; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
-    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
-
-    .card {
-      background: var(--card);
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
-      padding: 0.75rem;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-template-rows: auto auto;
-      align-items: center;
-      gap: 0.5rem 0.75rem;
-    }
-    .play {
-      grid-row: span 2;
-      border-radius: 50%;
-      width: 42px; height: 42px;
-      display: grid; place-items: center;
-      border: 2px solid var(--primary);
-      background: #fff;
-      color: var(--primary);
-      font-weight: 700;
-    }
-    .play:active { transform: scale(0.98); }
-    .label {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .dropzone {
-      border: 2px dashed var(--tile-border);
-      border-radius: 0.6rem;
-      background: var(--tile);
-      padding: 0.5rem 0.6rem;
-      min-height: 2.4rem;
-    }
-    .dropzone.filled { border-style: solid; background: #fff; }
-    .dropzone.correct { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2); }
-    .dropzone.incorrect { border-color: var(--warn); box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2); }
-
-    .wordbank {
-      margin-top: 1rem;
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
-      padding: 0.75rem;
-    }
-    .tiles { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .tile {
-      background: var(--tile);
-      border: 1px solid var(--tile-border);
-      border-radius: 0.6rem;
-      padding: 0.45rem 0.65rem;
-      font-size: 1rem;
-      user-select: none;
-      touch-action: none;
-    }
-    .tile[draggable="true"] { cursor: grab; }
-    .tile.dragging { opacity: 0.6; }
-    .tile.assigned { opacity: 0.4; text-decoration: line-through; }
-    .hint { font-size: 0.85rem; color: var(--muted); }
-
-    .status { margin-top: 0.75rem; display: flex; gap: 0.75rem; align-items: center; }
-    .status .score { font-weight: 700; }
-    .sr-only { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
-  </style>-->
+    <style>
+      /* body { margin:0; font-family: system-ui, Arial, sans-serif; background:#f7f9fc; }
+    header { padding:1rem; background:white; border-bottom:1px solid #ddd; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    button { padding:8px 14px; border-radius:8px; border:1px solid #ccc; cursor:pointer; }
+    .accent { background:#16a34a; color:white; }
+    .warn { background:#dc2626; color:white; }
+    main { max-width:1100px; margin:auto; padding:1rem; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .card { background:white; border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px; }
+    .play { border-radius:50%; width:42px; height:42px; }
+    .dropzone { flex:1; border:2px dashed #ccc; padding:10px; border-radius:8px; min-height:28px; }
+    .correct { border-color:#16a34a; }
+    .incorrect { border-color:#dc2626; }
+    .tiles { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .tile { background:#edf2f7; padding:6px 10px; border-radius:8px; border:1px solid #ccc; cursor:grab; user-select:none; }
+     */
+      /* ✅ Celebration UI (inline - no external file) */
+      #bp26CelebrateOverlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 10000;
+        padding: 20px;
+      }
+      .bp26CelebrateBox {
+        position: relative;
+        width: min(460px, 92vw);
+        background: #fff;
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        font-family: system-ui, Arial, sans-serif;
+      }
+      .bp26Sparkles {
+        font-size: 54px;
+        line-height: 1.1;
+        margin: 8px 0 6px;
+        animation: bp26Pop 600ms ease-out both;
+      }
+      @keyframes bp26Pop {
+        0% {
+          transform: scale(0.6);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .bp26Btn {
+        margin-top: 12px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        background: #f9fafb;
+        cursor: pointer;
+      }
+      .bp26Confetti {
+        position: fixed;
+        top: -12px;
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        z-index: 10001;
+        opacity: 0.95;
+        animation: bp26Fall 950ms linear forwards;
+        pointer-events: none;
+      }
+      @keyframes bp26Fall {
+        to {
+          transform: translateY(110vh) rotate(540deg);
+          opacity: 0.9;
+        }
+      }
+    </style>
   </head>
   <body>
+    <!-- Auth Middleware-->
+    <script type="module" src="/auth/api/middleware.js"></script>
     <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
     <script type="module" src="../js/bilingual-toggle.js"></script>
     <!-- Load Header -->
     <script src="js/load-header.js"></script>
-
     <style>
       body {
         padding-top: 7%;
@@ -146,7 +139,80 @@
       </section>
     </main>
 
+    <!-- ✅ Celebration overlay (inline) -->
+    <div id="bp26CelebrateOverlay">
+      <div class="bp26CelebrateBox">
+        <div class="bp26Sparkles">✨🎉✨</div>
+        <div
+          id="bp26CelebrateTitle"
+          style="font-weight: 700; font-size: 18px; margin-bottom: 6px"
+        >
+          Submitted ✅
+        </div>
+        <div id="bp26CelebrateSub" style="font-size: 14px; color: #374151">
+          Nice work!
+        </div>
+        <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
+      </div>
+    </div>
+
     <script>
+      /* -------------------------------
+     Celebration (inline)
+  -------------------------------- */
+      function bp26Celebrate({
+        title = "Submitted ✅",
+        subtitle = "Nice work!",
+        score = null,
+      } = {}) {
+        const overlay = document.getElementById("bp26CelebrateOverlay");
+        const t = document.getElementById("bp26CelebrateTitle");
+        const s = document.getElementById("bp26CelebrateSub");
+
+        t.textContent = title;
+        s.textContent =
+          score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
+
+        overlay.style.display = "flex";
+        bp26BurstConfetti(70);
+
+        setTimeout(() => {
+          overlay.style.display = "none";
+        }, 2200);
+      }
+
+      function bp26BurstConfetti(count = 60) {
+        for (let i = 0; i < count; i++) {
+          const c = document.createElement("div");
+          c.className = "bp26Confetti";
+          c.style.left = Math.random() * 100 + "vw";
+          c.style.width = 6 + Math.random() * 8 + "px";
+          c.style.height = 6 + Math.random() * 8 + "px";
+          c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
+          c.style.transform = `translateY(0) rotate(${Math.random() * 180}deg)`;
+          c.style.animationDuration = 800 + Math.random() * 600 + "ms";
+          document.body.appendChild(c);
+          setTimeout(() => c.remove(), 1600);
+        }
+      }
+
+      // close handlers
+      document
+        .getElementById("bp26CelebrateClose")
+        .addEventListener("click", () => {
+          document.getElementById("bp26CelebrateOverlay").style.display =
+            "none";
+        });
+      document
+        .getElementById("bp26CelebrateOverlay")
+        .addEventListener("click", (e) => {
+          if (e.target.id === "bp26CelebrateOverlay")
+            e.target.style.display = "none";
+        });
+
+      /* -------------------------------
+     Game logic
+  -------------------------------- */
       const urlParams = new URLSearchParams(window.location.search);
       var t = urlParams.get("t");
       if (!t)
@@ -366,7 +432,7 @@
         els.total.textContent = items.length;
       };
 
-      const checkAnswers = () => {
+      async function checkAnswers() {
         let correct = 0;
         state.items.forEach((item) => {
           const drop = document.querySelector(
@@ -389,7 +455,31 @@
         speakStatus(
           `You have ${correct} correct out of ${state.items.length}.`,
         );
-      };
+
+        // ✅ Always submit (even if correct = 0)
+        try {
+          if (typeof window.reportScore !== "function") {
+            alert("Score system not loaded. Check js/bp26-score.js path.");
+            return;
+          }
+          console.log("Submitting score:", correct);
+          await window.reportScore(correct);
+
+          // ✅ Celebration ONLY after submit success
+          bp26Celebrate({
+            title: "Score Submitted ✅",
+            subtitle: `Great job! `,
+            score: correct,
+          });
+
+          //alert("Score submitted: " + correct);
+        } catch (e) {
+          console.error("Submit error:", e);
+          alert(
+            "Firebase submit failed. Open Console (F12) and send the red error.",
+          );
+        }
+      }
 
       const resetAll = () => {
         state.assigned.clear();
@@ -514,6 +604,9 @@
           //state.items = data.items;
           els.appTitle.textContent = "Audio Match";
           renderCards(state.items);
+          // below logic is for audio shuffle
+          // const shuffledItems = shuffle(state.items);
+          // renderCards(shuffledItems);
           renderTiles(state.items);
           els.total.textContent = state.items.length;
           speakStatus("Loaded. Drag words onto sound cards or tap to assign.");
@@ -527,6 +620,17 @@
 
       // Start
       init();
+    </script>
+
+    <!-- ✅ module loads first, then init runs -->
+    <script type="module">
+      import { bp26Init, reportScore } from "./js/bp26-score.js";
+
+      // keep compatibility
+      window.reportScore = reportScore;
+
+      // init this game
+      bp26Init({ game: "bp26-Game5" });
     </script>
   </body>
 </html>
