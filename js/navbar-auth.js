@@ -2,7 +2,7 @@ import {
   auth,
   onAuthStateChanged,
   signOut,
-} from "/auth/api/firebase-config.js";
+} from "../auth/api/firebase-config.js";
 import { getCurrentUserProfile } from "../auth/api/auth-api.js";
 import { updateStreak } from "../auth/api/streak.js";
 
