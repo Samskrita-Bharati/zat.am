@@ -260,6 +260,3 @@ if (profileLinkDropdown) {
     window.location.href = `../auth/profile.html?from=${origin}`;
   });
 }
-
-document.getElementById("leaderboard-link").href =
-  window.location.origin + "/leaderboard.html";
