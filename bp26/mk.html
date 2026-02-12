@@ -280,11 +280,13 @@
         if (el) el.textContent = String(currentScore);
       }
 
-      function computeScore(wpp, wrongMoves) {
-        const base = wpp * 10; // 150 when wpp=15
-        const penaltyWrong = wrongMoves * 2;
-        const penaltyTime = secs;
-        return Math.max(0, base - penaltyWrong - penaltyTime);
+      function computeScore(matchesdone) {
+        // computeScore(wpp, wrongMoves) OLD FORMULA
+        // const base = wpp * 10; // 150 when wpp=15
+        // const penaltyWrong = wrongMoves * 2;
+        // const penaltyTime = secs;
+        // return Math.max(0, base - penaltyWrong - penaltyTime);
+        return matchesdone*10;
       }
 
       async function submitScoreNow() {
@@ -436,7 +438,7 @@
         tick();
 
         function refreshScoreUI() {
-          currentScore = computeScore(wpp, numberOfWrongTries);
+          currentScore = computeScore(matchesdone);
           updateScoreUI();
         }
         refreshScoreUI();
