@@ -260,24 +260,3 @@ if (profileLinkDropdown) {
     window.location.href = `../auth/profile.html?from=${origin}`;
   });
 }
-
-// Fix leaderboard link path based on current location
-const leaderboardLink = document.querySelector('a[href*="leaderboard"]');
-if (leaderboardLink) {
-  const currentPath = window.location.pathname;
-  console.log("working");
-
-  // If we're in bp26 folder or subfolders
-  if (currentPath.includes("/bp26/")) {
-    // Count how deep we are in bp26
-    const afterBp26 = currentPath.split("/bp26/")[1];
-    const depth = afterBp26.split("/").filter((p) => p).length - 1;
-
-    // Go up the right number of levels
-    const prefix = "../".repeat(depth + 1);
-    leaderboardLink.href = `${prefix}leaderboard.html`;
-  } else {
-    // We're at root level (index24.html level)
-    leaderboardLink.href = "./leaderboard.html";
-  }
-}
