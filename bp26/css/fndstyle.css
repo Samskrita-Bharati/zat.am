@@ -33,7 +33,9 @@ img:hover {
 
 div:not(.auth-buttons):not(.auth-btn):not(.profile-container):not(
     .dropdown
-  ):not(.dropdown-header):not(#header-placeholder) {
+  ):not(.dropdown-header):not(#header-placeholder):not(#bp26CelebrateOverlay)
+  :not(.bp26CelebrateBox):not(#bp26CelebrateTitle):not(#bp26CelebrateSub)
+  :not(#bp26CelebrateClose) {
   margin: auto;
   width: 90%;
   align-items: center;
