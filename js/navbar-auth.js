@@ -262,18 +262,22 @@ if (profileLinkDropdown) {
 }
 
 // Fix leaderboard link path based on current location
-const leaderboardLink = document.querySelector("#leaderboard-link");
+const leaderboardLink = document.querySelector('a[href*="leaderboard"]');
 if (leaderboardLink) {
   const currentPath = window.location.pathname;
+  console.log("working");
 
-  // Calculate correct relative path to leaderboard.html
+  // If we're in bp26 folder or subfolders
   if (currentPath.includes("/bp26/")) {
-    // We're in a bp26 subdirectory
-    const depth = currentPath.split("/bp26/")[1].split("/").length - 1;
+    // Count how deep we are in bp26
+    const afterBp26 = currentPath.split("/bp26/")[1];
+    const depth = afterBp26.split("/").filter((p) => p).length - 1;
+
+    // Go up the right number of levels
     const prefix = "../".repeat(depth + 1);
     leaderboardLink.href = `${prefix}leaderboard.html`;
   } else {
-    // We're at root level
+    // We're at root level (index24.html level)
     leaderboardLink.href = "./leaderboard.html";
   }
 }
