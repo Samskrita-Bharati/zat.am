@@ -572,7 +572,7 @@ class Particle {
     this.x = x;
     this.y = y;
     this.color = color;
-    this.size = Math.random() * 15 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
+    this.size = Math.random() * 10 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
     this.speedX = (Math.random() - 0.5) * 5;
     this.speedY = (Math.random() - 0.5) * 5;
     this.alpha = 1;

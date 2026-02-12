@@ -212,6 +212,7 @@ select {
 
 .name {
     flex: 1;
+    min-width: 0;
 }
 
 .score {
@@ -267,3 +268,67 @@ input:checked + .slider { background-color: #3B82F6; }
 input:checked + .slider:before { transform: translateX(24px); }
 
 input:disabled + .slider { background-color: #f0f0f0; cursor: not-allowed;}
+
+@media (max-width: 640px) {
+    .podium {
+        flex-direction: column; 
+        align-items: center;
+        gap: 20px;
+    }
+
+    .podium-card {
+        width: 100%;
+        max-width: 100%;
+        transform: none; /* Remove #1 scale-up on mobile */
+    }
+
+    .podium-card.rank-1 { order: 1; }
+    .podium-card.rank-2 { order: 2; }
+    .podium-card.rank-3 { order: 3; }
+
+    .controls { flex-direction: column; align-items: stretch; }
+    .controls select, .controls input { width: 100%; }
+}
+
+@media (max-width: 375px) {
+    body { padding: 8px; margin: 5px auto; }
+    
+    .header-container { margin-bottom: 15px; }
+    h1 { font-size: 15px !important; }
+    
+    .back-btn, .analytics-btn { 
+        padding: 4px 6px; 
+        font-size: 10px;
+        border-radius: 4px;
+    }
+
+    .podium-card { padding: 12px; }
+    .podium-card .rank { font-size: 20px; }
+    .podium-card .name { font-size: 14px; }
+    .podium-card .score { font-size: 16px; }
+    .podium-card .location { font-size: 11px; }
+
+    .row { 
+        padding: 8px; 
+        gap: 6px;
+        grid-template-columns: 20px 1fr auto;
+    }
+    
+    .row .rank { font-size: 12px; }
+    .row .name span:first-child { font-size: 12px; }
+    .row .name span:last-child { font-size: 10px; }
+    .row .score { font-size: 12px; min-width: 45px; }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    h1 { font-size: 1.2rem; }
+    .back-btn, .analytics-btn { padding: 6px 10px; font-size: 12px; }
+    
+    .podium-card .name { font-size: 16px; }
+    .podium-card .score { font-size: 20px; }
+}
