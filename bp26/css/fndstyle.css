@@ -2,11 +2,26 @@ body {
   background: #f0f0f0;
   font-family: Arial, sans-serif;
   font-size: 2em;
+  padding-top: 5%;
+}
+
+#svgdiv {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  padding: 30px;
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 #svgdiv img {
-  padding: 5px;
-  width: 12%;
+  padding: 8px;
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  justify-self: center;
+  box-sizing: border-box;
 }
 
 #svgimg {
@@ -21,7 +36,6 @@ img:hover {
 
 #tofind button {
   font-size: 1em;
-
   min-width: 1em;
   min-height: 1em;
 }
@@ -33,9 +47,11 @@ img:hover {
 
 div:not(.auth-buttons):not(.auth-btn):not(.profile-container):not(
     .dropdown
-  ):not(.dropdown-header):not(#header-placeholder):not(#bp26CelebrateOverlay)
-  :not(.bp26CelebrateBox):not(#bp26CelebrateTitle):not(#bp26CelebrateSub)
-  :not(#bp26CelebrateClose) {
+  ):not(.dropdown-header):not(#header-placeholder):not(
+    #bp26CelebrateOverlay
+  ):not(.bp26CelebrateBox):not(#bp26CelebrateTitle):not(#bp26CelebrateSub):not(
+    #bp26CelebrateClose
+  ):not(#svgdiv) {
   margin: auto;
   width: 90%;
   align-items: center;
@@ -52,11 +68,9 @@ svg:hover {
 .st0:hover {
   fill: red;
 }
-
 .st1:hover {
   fill: yellow;
 }
-
 .st2:hover {
   fill: blue;
 }
@@ -68,56 +82,203 @@ svg:hover {
 img[id$="1"] {
   transform: rotate(10deg);
 }
-
 img[id$="2"] {
   transform: rotate(20deg);
 }
-
 img[id$="3"] {
   transform: rotate(30deg);
 }
-
 img[id$="4"] {
   transform: rotate(40deg);
 }
-
 img[id$="5"] {
   transform: rotate(50deg);
 }
-
 img[id$="6"] {
   transform: rotate(60deg);
 }
-
 img[id$="7"] {
   transform: rotate(70deg);
 }
-
 img[id$="8"] {
   transform: rotate(80deg);
 }
-
 img[id$="9"] {
   transform: rotate(90deg);
 }
 
-@media (max-width: 400px) {
-  body {
-    font-size: 1.5em;
+/* Large screens */
+@media (min-width: 1600px) {
+  #svgdiv {
+    max-width: 1600px;
+    gap: 25px;
   }
 
   #svgdiv img {
-    width: 20%;
+    max-width: 280px;
+  }
+}
+
+/* Tablets - 4 images per row */
+@media (max-width: 1024px) {
+  body {
+    font-size: 1.8em;
+    padding-top: 8%;
   }
 
-  div:not(.auth-buttons):not(.auth-btn):not(.profile-container):not(
-      .dropdown
-    ):not(.dropdown-header):not(#header-placeholder) {
-    border: 1px solid red;
+  #svgdiv {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    padding: 25px;
+  }
+
+  #svgdiv img {
+    max-width: none;
+  }
+}
+
+/* Small Tablets - 3 images per row */
+@media (max-width: 768px) {
+  body {
+    font-size: 1.6em;
+    padding-top: 9%;
+  }
+
+  #svgdiv {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 20px;
+  }
+
+  #svgdiv img {
+    padding: 6px;
+  }
+}
+
+/* Mobile - 3 images per row */
+@media (max-width: 600px) {
+  body {
+    font-size: 1.5em;
+    padding-top: 10%;
+  }
+
+  #svgdiv {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 15px;
+  }
+
+  #svgdiv img {
+    padding: 5px;
+  }
+}
+
+/* Small Mobile - 2 images per row */
+@media (max-width: 400px) {
+  body {
+    font-size: 1.4em;
+    padding-top: 11%;
+  }
+
+  #svgdiv {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 12px;
+  }
+
+  #svgdiv img {
+    padding: 4px;
   }
 
   img:hover {
     filter: brightness(90%);
     opacity: 0.6;
+  }
+}
+
+/* Celebration UI */
+#bp26CelebrateOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 10000;
+  padding: 20px;
+}
+
+.bp26CelebrateBox {
+  position: relative;
+  width: min(460px, 92vw);
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  font-family: system-ui, Arial, sans-serif;
+}
+
+.bp26Sparkles {
+  font-size: 54px;
+  line-height: 1.1;
+  margin: 8px 0 6px;
+  animation: bp26Pop 600ms ease-out both;
+}
+
+@keyframes bp26Pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.bp26Btn {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.bp26Confetti {
+  position: fixed;
+  top: -12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  z-index: 10001;
+  opacity: 0.95;
+  animation: bp26Fall 950ms linear forwards;
+  pointer-events: none;
+}
+
+@keyframes bp26Fall {
+  to {
+    transform: translateY(110vh) rotate(540deg);
+    opacity: 0.9;
+  }
+}
+
+@media print {
+  .k {
+    border-left: 4px ridge green;
+  }
+  .p {
+    border-left: 3px groove blue;
+  }
+  .s {
+    border-left: 3px groove red;
+  }
+  .n {
+    border-left: 3px groove black;
+  }
+  button {
+    display: none !important;
   }
 }

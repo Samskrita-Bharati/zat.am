@@ -14,99 +14,6 @@
     <link rel="stylesheet" href="./css/fndstyle.css" />
     <!-- Header CSS -->
     <link rel="stylesheet" href="./css/header.css" />
-    <style>
-      /* ✅ Celebration UI (inline, no external JS) */
-      #bp26CelebrateOverlay {
-        position: fixed;
-        inset: 0;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.35);
-        z-index: 10000;
-        padding: 20px;
-      }
-
-      .bp26CelebrateBox {
-        position: relative;
-        width: min(460px, 92vw);
-        background: #fff;
-        border-radius: 18px;
-        padding: 18px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-        text-align: center;
-        font-family: system-ui, Arial, sans-serif;
-      }
-
-      .bp26Sparkles {
-        font-size: 54px;
-        line-height: 1.1;
-        margin: 8px 0 6px;
-        animation: bp26Pop 600ms ease-out both;
-      }
-
-      @keyframes bp26Pop {
-        0% {
-          transform: scale(0.6);
-          opacity: 0;
-        }
-
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      .bp26Btn {
-        margin-top: 12px;
-        padding: 10px 14px;
-        border-radius: 12px;
-        border: 1px solid #ddd;
-        background: #f9fafb;
-        cursor: pointer;
-      }
-
-      .bp26Confetti {
-        position: fixed;
-        top: -12px;
-        width: 10px;
-        height: 10px;
-        border-radius: 3px;
-        z-index: 10001;
-        opacity: .95;
-        animation: bp26Fall 950ms linear forwards;
-        pointer-events: none;
-      }
-
-      @keyframes bp26Fall {
-        to {
-          transform: translateY(110vh) rotate(540deg);
-          opacity: 0.9;
-        }
-      }
-
-      @media print {
-        .k {
-          border-left: 4px ridge green;
-        }
-
-        .p {
-          border-left: 3px groove blue;
-        }
-
-        .s {
-          border-left: 3px groove red;
-        }
-
-        .n {
-          border-left: 3px groove black;
-        }
-
-        button {
-          display: none !important;
-        }
-      }
-    </style>
   </head>
 
 <body>
@@ -116,11 +23,6 @@
   <script type="module" src="../js/bilingual-toggle.js"></script>
   <!-- Load Header -->
   <script src="js/load-header.js"></script>
-  <style>
-    body {
-      padding-top: 7%;
-    }
-  </style>
   <center>
     <h3>Find <span style="position:relative;color:tomato;z-index:99" id="tofind"></span> ... ❌ = <span id="wt">०</span>
     </h3>

@@ -260,3 +260,20 @@ if (profileLinkDropdown) {
     window.location.href = `../auth/profile.html?from=${origin}`;
   });
 }
+
+// Set leaderboard link with origin parameter
+document.addEventListener("DOMContentLoaded", () => {
+  const leaderboardLinks = document.querySelectorAll(
+    'a[href*="leaderboard.html"]',
+  );
+  const currentPath = window.location.pathname;
+  const origin = currentPath.includes("/bp26/") ? "bp26" : "home";
+
+  leaderboardLinks.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (href && !href.includes("?from=")) {
+      const separator = href.includes("?") ? "&" : "?";
+      link.setAttribute("href", `${href}${separator}from=${origin}`);
+    }
+  });
+});

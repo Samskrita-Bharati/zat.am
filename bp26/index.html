@@ -44,11 +44,6 @@
     <!-- Load Header -->
     <script src="js/load-header.js"></script>
 
-    <style>
-      body {
-        padding-top: 5%;
-      }
-    </style>
     <!-- <img src="bp26c.png" style="float: left" width="5%" /> -->
     <h1>
       vishwa <span style="color: Tomato">संस्कृतम् </span
@@ -81,6 +76,40 @@
         $("table").css("display", "table");
         $("#cal-controls").css("display", "none");
       });
+
+      // Add Sanskrit day names to mobile view
+      function addDayNames() {
+        if (window.innerWidth <= 768) {
+          // Sanskrit day names matching the header order
+          const dayNames = [
+            "सोमवासरः", // Monday (Mon)
+            "मङ्गलवासरः", // Tuesday (Tue)
+            "बुधवासरः", // Wednesday (Wed)
+            "गुरुवासरः", // Thursday (Thu)
+            "शुक्रवासरः", // Friday (Fri)
+            "शनिवासरः", // Saturday (Sat)
+            "रविवासरः", // Sunday (Sun)
+          ];
+
+          const rows = document.querySelectorAll(".days");
+
+          rows.forEach((row) => {
+            const cells = row.querySelectorAll("td");
+            cells.forEach((cell, index) => {
+              const dayNumber = cell.querySelector(".day");
+              if (dayNumber && dayNumber.textContent.trim()) {
+                const sanskritDay = dayNames[index % 7];
+                const date = dayNumber.textContent.trim();
+                cell.setAttribute("data-day-name", `${sanskritDay} - ${date}`);
+              }
+            });
+          });
+        }
+      }
+
+      // Run on load and resize
+      window.addEventListener("load", addDayNames);
+      window.addEventListener("resize", addDayNames);
     </script>
   </body>
 </html>
