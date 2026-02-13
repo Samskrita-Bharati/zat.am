@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>ODD - Casual Games - with ZIM Code Creativity</title>
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    <script type="module">
+        import zim from "https://zimjs.org/cdn/019/zim_game";
+        // See Docs under Frame for FIT, FILL, FULL, and TAG
+        // 768 x 1024 good for tablets, laptops, desktops 
+        // 500 x 1000 good for phones
+        new Frame(FIT, 768, 1024, black, dark, ready, "gf_Tourney");
+        function ready() {
+            let tile;
+            var pnmsg = "समाप्तम् ...";
+            var winmsg = ":(";
+            var wintmp;
+            var wpp = 15; // words per page
+            var fullist = "";
+            var tlang = [];
+            tlang[1] = "itrans";
+            tlang['gu'] = "gujarati";
+            tlang['ka'] = "kannada";
+            tlang['be'] = "bengali";
+            tlang['ml'] = "malayalam";
+            tlang['te'] = "telugu";
+            tlang['ta'] = "tamil";
+            const urlParams = new URLSearchParams(window.location.search);
+            var t = urlParams.get('t');
+            //if (!t)
+            //  t = 1;
+            var set = urlParams.get('s');
+            if (!set || isNaN(set))
+                set = 0;
+            var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+            Papa.parse(lnk, {
+                download: true,
+                header: true,
+                complete: populateWlist
+            })
+            function populateWlist(fildat) {
+                fullist = fildat.data;
+                if (set > fildat.data.length / wpp) set = 0;
+                var openmojibase = "https://openmoji.org/data/color/svg/";
+                var image = [];
+                var words = [];
+                var aud = [];
+                var imglnk = "";
+                for (var i = 0; i < wpp; i++) {
+                    words.push(fullist[(set * wpp) + i].padam);
+                    imglnk = fullist[(set * wpp) + i]["Imaage link"];
+                    zog(imglnk);
+                    image.push(imglnk);
+                    aud.push(fullist[(set * wpp) + i]["alnk"]);
+                }
+                var tilpics = [];
+                new Label("पुनरावर्तनम् 🤔", 80, "Tourney", "tomato").pos(0, 70, CENTER);
+                new Label("What repeats?", 50, "Tourney", "tomato").pos(0, 180, CENTER);
+                let special;
+                function setSpecial() {
+                    tilpics = [];
+                    var mywords = image.slice();
+
+                    special = rand(wpp); // index starts at 0
+                    wintmp = mywords[special];
+                    winmsg = words[special];
+                    if (t) winmsg+= "\n"+Sanscript.t(String(winmsg), 'devanagari',tlang[t])
+                    //if (t) wintmp += "\n" + Sanscript.t(String(wintmp), 'devanagari', tlang[t]);
+                    for (var j = 0; j < wpp; j++) {
+                        var wrd = mywords.pop();
+                        //if (t) wrd += "\n" + Sanscript.t(String(wrd), 'devanagari', tlang[t])
+
+                    }
+                    var wlab;
+zog(special);
+
+                    const load = F.loadAssets(image);
+                    load.on("complete", () => {
+                        loop(image, myimg => {
+                            if (myimg.match(/png/))
+                                tilpics.push(new Pic(myimg).siz(90));
+                            else
+                                tilpics.push(new SVG(myimg).siz(90));
+                        })
+                        if (wintmp.match(/png/))
+                            wlab = new Pic(wintmp).siz(90);
+                        else
+                            wlab = new SVG(wintmp).siz(90);
+
+                        tilpics.push(wlab);
+                    shuffle(tilpics);
+                        tile = new Tile(tilpics, 4, 4, 30, 30, true).cur().center();
+                        S.update();
+
+                        tile.on("mousedown", e => {
+                            const pick = e.target; // this gets what caused the event
+                            if (wintmp == pick.bitmap.file) {
+                                pnmsg = winmsg;
+                                emitter.loc(pick).spurt(25);
+                                tile.noMouse(); // do not let player press on tile
+                                end.noMouse(); // do not let player close the pane right away
+                                //timeout(1, ()=>{ // wait for 1 second then let player close pane
+                                //end.mouse();	
+                                //});
+                                timeout(5, () => { // wait for 1 second then let player close pane
+                                    window.location.reload();
+                                })
+                                timeout(1, () => { // wait for 1 second then let player close pane
+                                    new Pane(pnmsg, yellow).show();
+                                });
+                            }
+                            else {
+                                wrong.score++;
+                                pick.alpha = .2;
+                                S.update()
+                            }
+                        })
+                    }
+                    )
+                };
+
+
+
+
+                setSpecial();
+
+                const emitter = new Emitter({
+                    startPaused: true
+                });
+
+                const right = new Scorer({ backgroundColor: green }).pos(100, 80, RIGHT, BOTTOM);
+                const wrong = new Scorer({ color: white, backgroundColor: red }).pos(100, 80, LEFT, BOTTOM);
+                const timer = new Timer(20).pos(0, 80, CENTER, BOTTOM);
+
+                STYLE = { font: "Tourney", backdropColor: black.toAlpha(.8) }
+                const end = new Pane(pnmsg, yellow);
+
+                timer.on("complete", () => {
+                    end.show(); // show end, when closes will call restart
+                    tile.noMouse(); // do not let player press on tile
+                    end.noMouse(); // do not let player close the pane right away
+                    timeout(1, () => { // wait for 1 second then let player close pane
+                        end.mouse();
+                    });
+                });
+
+                function restart() {
+                    tile.mouse(); // let player press on tile		
+                    setSpecial();
+                    right.score = 0; // reset scores
+                    wrong.score = 0;
+                    timer.start(20); // restart the timer
+                }
+            }
+
+        }
+
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+
+<body></body>
+
+</html>
