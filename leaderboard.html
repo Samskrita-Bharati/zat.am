@@ -113,6 +113,26 @@
       // set default date to today's date
       const input = document.getElementById("seasonDate");
       input.value = new Date().toISOString().split("T")[0];
+
+      // Dynamic Back Button
+      document.addEventListener("DOMContentLoaded", () => {
+        const backBtn = document.querySelector(".back-btn");
+        if (!backBtn) return;
+
+        // Get 'from' parameter from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const origin = urlParams.get("from");
+
+        if (origin === "bp26") {
+          // Coming from bp26/index.html
+          backBtn.textContent = "Back to Competition";
+          backBtn.href = "./bp26/index.html";
+        } else {
+          // Coming from index24.html (home) or default
+          backBtn.textContent = "Back to Games";
+          backBtn.href = "./index24.html";
+        }
+      });
     </script>
   </body>
 </html>

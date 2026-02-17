@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>ODD - Casual Games - with ZIM Code Creativity</title>
+    <title>BodhaPlay पुनरावर्तनम् - made with ZIM</title>
     <!-- zimjs.com - JavaScript Canvas Framework -->
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
@@ -58,7 +58,7 @@ function padz(num) {
                 for (var i = 0; i < wpp; i++) {
                     words.push(fullist[(set * wpp) + i].padam);
                     imglnk = setp + padz(i+1)+".png";
-                    zog(imglnk);
+                    //zog(imglnk);
                     image.push(imglnk);
                 }
                 var tilpics = [];
@@ -120,7 +120,7 @@ zog(special);
                 const emitter = new Emitter({
                     startPaused: true
                 });
-                const right = new Scorer({ backgroundColor: green }).pos(100, 80, RIGHT, BOTTOM);
+                //const right = new Scorer({ backgroundColor: green }).pos(100, 80, RIGHT, BOTTOM);
                 const wrong = new Scorer({ color: white, backgroundColor: red }).pos(100, 80, LEFT, BOTTOM);
                 const timer = new Timer(20).pos(0, 80, CENTER, BOTTOM);
                 STYLE = { font: "Tourney", backdropColor: black.toAlpha(.8) }

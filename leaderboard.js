@@ -7,10 +7,7 @@ import {
   setDoc,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-import {
-  auth,
-  db,
-} from "./auth/api/firebase-config.js";
+import { auth, db } from "./auth/api/firebase-config.js";
 import { checkFetchRequirements, getRawData } from "./leaderboard-utils.js";
 
 // local start, end, and game variables for comparing with newly selected start, end and game
@@ -25,9 +22,7 @@ const timeSelect = document.getElementById("timeFilter");
 const seasonDate = document.getElementById("seasonDate");
 
 function getScoringSystem() {
-  return document.querySelector(
-    'input[name="scoringSystem"]:checked'
-  )?.value;
+  return document.querySelector('input[name="scoringSystem"]:checked')?.value;
 }
 
 // Get the date range selected from HTML
@@ -322,7 +317,9 @@ function render() {
       location.textContent = player ? `📍 ${player.location}` : "---";
     }
     if (score) {
-      score.textContent = player ? player[scoringSystem].toLocaleString() : "---";
+      score.textContent = player
+        ? player[scoringSystem].toLocaleString()
+        : "---";
     }
   }
 
@@ -388,10 +385,9 @@ syncToggleStatus(gameSelect.value);
 
 // Visibility logic for adminPanel
 onAuthStateChanged(auth, async (user) => {
-
   const adminPanel = document.getElementById("adminPanel");
   const analyticsBtn = document.getElementById("analyticsBtn");
-  
+
   if (!adminPanel) return;
 
   let isAdmin = false;
@@ -399,13 +395,7 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     //console.log("UID:", user.uid);
     try {
-      const userDocRef = doc(
-        db,
-        "users",
-        user.uid,
-        "private",
-        "account",
-      );
+      const userDocRef = doc(db, "users", user.uid, "private", "account");
       const userSnap = await getDoc(userDocRef);
 
       if (userSnap.exists()) {
@@ -516,12 +506,7 @@ async function performReset(game) {
   )
     return;
 
-  const historyColRef = collection(
-    db,
-    "leaderboards",
-    game,
-    "gameHistory",
-  );
+  const historyColRef = collection(db, "leaderboards", game, "gameHistory");
   const historySnapshot = await getDocs(historyColRef);
 
   if (historySnapshot.empty) {

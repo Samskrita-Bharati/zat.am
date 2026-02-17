@@ -2,28 +2,30 @@ body {
   height: 100%;
   
   width: 90vw;
-  /* background-color: rgba(255, 165, 0, 0.75); */
   background-color: #f0f0f0;
   margin: 16px auto;
   line-height: 1.4;
+  max-width: 1600px;
+  padding-top: 7%;
 }
-h1{
-  margin-top:80px;
-}
+
 .mangalam {
   text-align: center;
 }
+
 #lead {
   text-align: center;
   padding-bottom: 8px;
   font-size: 1.4em;
   line-height: 1.5;
 }
+
 #statusMessage {
   text-align: center;
   display: none;
   margin: 6px 0;
 }
+
 #finishMessage {
   display: none;
   text-align: center;
@@ -42,9 +44,11 @@ h1{
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
 .leveltext {
   font-size: 1.3em;
 }
+
 #nFound {
   font-size: 1.3em;
 }
@@ -73,6 +77,7 @@ h1{
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
 #hintPopup {
   display: none;
   z-index: 1000;
@@ -83,28 +88,32 @@ h1{
   left: 0;
   background-color: rgba(64, 64, 64, 0.8);
 }
+
 #hintPopup .content {
   background-color: rgba(77, 185, 228, 0.986);
   transform: translateX(25%) translateY(25%);
   width: 50%;
-
   padding: 10px;
 }
+
 #finishMessage {
   text-align: center;
 }
+
 #gridParent {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 #grid {
   position: relative;
   margin: 0 auto;
   background-color: #eef5f8;
   z-index: 1;
 }
+
 #grid table {
   position: absolute;
   top: 0;
@@ -114,6 +123,7 @@ h1{
   width: 100%;
   height: 100%;
 }
+
 #grid td {
   background-color: rgb(173, 210, 252);
   text-align: center;
@@ -138,15 +148,18 @@ span:not(#profile-btn) {
   display: inline;
   border: none;
 }
+
 #nFound {
   display: inline;
   border: none;
 }
+
 #lead2,
 .nob {
   display: inline;
   border: none;
 }
+
 #grid td span {
   position: absolute;
   top: 0;
@@ -154,6 +167,7 @@ span:not(#profile-btn) {
   width: 100%;
   height: 100%;
 }
+
 #grid td.selectedCell {
   background-color: #aa7777;
 }
@@ -162,9 +176,9 @@ span:not(#profile-btn) {
   position: relative;
   width: 100%;
   height: 100%;
-  /*top: -100%; */
   z-index: 10;
 }
+
 .marker {
   width: 100%;
   height: 100%;
@@ -173,6 +187,7 @@ span:not(#profile-btn) {
   left: 0;
   display: block;
 }
+
 .marker0 {
   background-color: rgba(255, 0, 0, 0.2);
   z-index: 20;
@@ -205,11 +220,13 @@ span:not(#profile-btn) {
   background-color: rgba(128, 128, 128, 0.2);
   z-index: 90;
 }
+
 .dropdown-menu {
   height: 400px;
   overflow-y: scroll;
   scroll-behavior: auto;
 }
+
 .dropdown {
   margin: 10px;
 }
@@ -218,6 +235,7 @@ span:not(#profile-btn) {
   text-align: center;
   margin: 12px 0 6px;
 }
+
 .header-divider {
   content: "";
   width: 90%;
@@ -225,6 +243,7 @@ span:not(#profile-btn) {
   background-color: #ca9e0d;
   margin: 0 auto 16px auto;
 }
+
 #hintLink a {
   display: block;
   margin-bottom: 0.5rem;
@@ -240,251 +259,310 @@ span:not(#profile-btn) {
   box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.06);
 }
 
- /* The switch - the box around the slider */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-
-    /* Hide default HTML checkbox */
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    /* The slider */
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      -webkit-transition: .4s;
-      transition: .4s;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      -webkit-transition: .4s;
-      transition: .4s;
-    }
-
-    input:checked+.slider {
-      background-color: #2196F3;
-    }
-
-    input:focus+.slider {
-      box-shadow: 0 0 1px #2196F3;
-    }
-
-    input:checked+.slider:before {
-      -webkit-transform: translateX(26px);
-      -ms-transform: translateX(26px);
-      transform: translateX(26px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-      border-radius: 34px;
-    }
-
-    .slider.round:before {
-      border-radius: 50%;
-    }
-
-    /* ✅ Celebration UI (inline) */
-    #bp26CelebrateOverlay{
-      position: fixed; inset: 0;
-      display:none; align-items:center; justify-content:center;
-      background: rgba(0,0,0,0.35);
-      z-index: 10000;
-      padding: 20px;
-      border: none;
-    }
-    .bp26CelebrateBox{
-      position: relative;
-      width: min(460px, 92vw);
-      background: #fff;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-      text-align: center;
-      font-family: system-ui, Arial, sans-serif;
-      border: 1px solid #eee;
-    }
-    .bp26Sparkles{
-      font-size: 54px;
-      line-height: 1.1;
-      margin: 8px 0 6px;
-      animation: bp26Pop 600ms ease-out both;
-    }
-    @keyframes bp26Pop{
-      0%{ transform: scale(0.6); opacity: 0; }
-      100%{ transform: scale(1); opacity: 1; }
-    }
-    .bp26Btn{
-      margin-top: 12px; padding: 10px 14px;
-      border-radius: 12px; border: 1px solid #ddd;
-      background: #f9fafb; cursor: pointer;
-    }
-    .bp26Confetti{
-      position: fixed;
-      top: -12px;
-      width: 10px; height: 10px;
-      border-radius: 3px;
-      z-index: 10001;
-      opacity: .95;
-      animation: bp26Fall 950ms linear forwards;
-      pointer-events: none;
-    }
-    @keyframes bp26Fall{
-      to{ transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
-    }
-
-#liveScore{
-  text-align:center;
-    font-weight:bold;
-    margin:6px 0;
-    font-size:18px;
-}
-
-@media (max-width: 1190px) {
-  #footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin: 10px;
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  body {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 10% 5px 20px;
+    overflow-x: hidden;
   }
-  .gameTitle{
-    margin-top:60px;
-   }
+
+  #lead {
+    font-size: 1.2em;
+    padding: 8px 10px;
+  }
 
   #level {
-    text-align:left ;
     position: static;
-    right: auto;
-    top: auto;
-    padding: 4px 5px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin: 10px;
-    font-size:0.8em;
-    height: 50%;
-    width:20%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+    width: 95%;
+    margin: 10px auto;
+    padding: 8px 15px;
+  }
+
+  #level ul {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #level ul li {
+    margin: 0;
   }
 
   .leveltext {
-    font-size: 1.2em;
-    
-  }
-
-  #nFound {
-    font-size: 1.3em;
-  }
-  img{
-    width: 50px;
-    height: 70px;
-  }
-
-  #refreshLink {
-    position: static;
-    bottom: auto;
-    left: auto;
-    text-align: center;
-    font-size: 1.0em;
-    font-weight: 600;
-    padding: 4px 5px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin: 10px 0;
-    height: 50%;
-    width:20%;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   #hintLink {
     position: static;
-    left: auto;
-    top: auto;
-    font-size: 1.0em;
-    font-weight: 500;
-    padding: 4px 5px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin: 10px 0;
-    height: 40%;
-    width:25%;
-  }
-
-  #hintLink img{
-    width: 30px;
-    height: 3%;
-    vertical-align: middle;
-    margin-right: 6px;
-  }
-
-  #hintPopup .content {
-    background-color: rgba(77, 185, 228, 0.986);
-    transform: translateX(25%) translateY(25%);
-    width: 50%;
-    padding: 10px;
-  }
-
-  @media (max-width: 500px) {
-    #footer {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin: 10px;
+    gap: 15px;
+    justify-content: center;
+    width: 95%;
+    margin: 10px auto;
+    padding: 8px 15px;
   }
-   .gameTitle{
-    margin-top:60px;
-   }
 
-    #level {
-      width: 50%;
-    }
+  #hintLink > div:first-child {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
-    #refreshLink {
-      width: 50%;
-    }
+  #hintLink a {
+    display: inline-block;
+    margin-bottom: 0;
+  }
 
-    #hintLink {
-      width: 50%;
-    }
+  #refreshLink {
+    position: static;
+    display: flex;
+    justify-content: center;
+    width: 95%;
+    margin: 10px auto;
+    padding: 8px 15px;
+  }
 
-    #hintPopup .content {
-      width: 90%;
-    }
+  #gridParent {
+    width: 100%;
+    padding: 10px 0;
+  }
 
-    img{
-    width: 30px;
-    height: 60px;
+  #grid {
+    width: 80vw !important;
+    height: 80vw !important;
   }
 
   #grid td {
-  background-color: rgb(173, 210, 252);
-  text-align: center;
-  font-size: 1.1em;
-  align-self: stretch;
-  position: relative;
-  transition:
-    background-color 0.15s ease,
-    box-shadow 0.15s ease;
+    font-size: 1.6em;
+  }
+
+  #hintPopup .content {
+    transform: translateX(10%) translateY(15%);
+    width: 80%;
+    padding: 15px;
+  }
 }
-   
+
+/* Mobile */
+@media (max-width: 768px) {
+  body {
+    padding: 14% 0px 20px;
+  }
+
+  #lead {
+    font-size: 1em;
+    padding: 6px 5px;
+  }
+
+  #liveScore {
+    font-size: 14px;
+  }
+
+  #level {
+    width: 100%;
+    margin: 8px 0;
+  }
+
+  #hintLink {
+    width: 100%;
+    margin: 8px 0;
+    font-size: 1em;
+  }
+
+  #refreshLink {
+    width: 100%;
+    margin: 8px 0;
+    font-size: 1em;
+  }
+
+  #grid {
+    width: 98vw !important;
+    height: 98vw !important;
+  }
+
+  #grid td {
+    font-size: 1.1em;
+  }
+
+  #hintPopup .content {
+    transform: translateX(5%) translateY(10%);
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 16%;
+  }
+
+  #lead {
+    font-size: 0.95em;
+  }
+
+  #grid {
+    width: 99vw !important;
+    height: 99vw !important;
+  }
+
+  #grid td {
+    font-size: 1em;
+  }
+
+  .leveltext {
+    font-size: 0.9em;
+  }
+
+  #finishMessage {
+    font-size: 1.4em;
+  }
+}
+
+@media (max-width: 360px) {
+  body {
+    padding-top: 18%;
+  }
+
+  #grid td {
+    font-size: 0.9em;
+  }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Celebration UI */
+#bp26CelebrateOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 10000;
+  padding: 20px;
+  border: none;
+}
+.bp26CelebrateBox {
+  position: relative;
+  width: min(460px, 92vw);
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  font-family: system-ui, Arial, sans-serif;
+  border: 1px solid #eee;
+}
+.bp26Sparkles {
+  font-size: 54px;
+  line-height: 1.1;
+  margin: 8px 0 6px;
+  animation: bp26Pop 600ms ease-out both;
+}
+@keyframes bp26Pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.bp26Btn {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
+  cursor: pointer;
+}
+.bp26Confetti {
+  position: fixed;
+  top: -12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  z-index: 10001;
+  opacity: 0.95;
+  animation: bp26Fall 950ms linear forwards;
+  pointer-events: none;
+}
+@keyframes bp26Fall {
+  to {
+    transform: translateY(110vh) rotate(540deg);
+    opacity: 0.9;
   }
 }
