@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preferences - zat.am</title>
+
+    <link rel="stylesheet" href="./css/preferences.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-box">
+        <h2 id="heading">Select Your Preferences</h2>
+        <div class="header-divider"></div>
+
+        <form id="preferences-form">
+          <!-- Language -->
+          <div class="form-group">
+            <label for="language">Choose Second Language</label>
+            <select id="language" class="form-input">
+              <option value="">Select Language</option>
+              <option value="be">Bengali (বাংলা)</option>
+              <option value="gu">Gujarati (ગુજરાતી)</option>
+              <option value="ka">Kannada (ಕನ್ನಡ)</option>
+              <option value="ml">Malayalam (മലയാളം)</option>
+              <option value="te">Telugu (తెలుగు)</option>
+              <option value="ta">Tamil (தமிழ்)</option>
+            </select>
+          </div>
+
+        <!-- Country -->
+        <div class="form-group">
+          <label for="country">Choose Your Country</label>
+          <select id="country" class="form-input">
+            <optgroup label="Popular Countries">
+            <option value="">Select Country</option>
+            <option value="United States">United States</option>
+            <option value="Canada">Canada</option>
+            </optgroup>
+            <optgroup label="All Countries" id="all-countries" class="all-countries">
+              
+            </optgroup>
+          </select>
+          
+        </div>
+
+          <!-- Province/State -->
+          <div class="form-group hidden" id="province-group">
+            <label for="province">Select Province / State</label>
+            <select id="province" class="form-input"></select>
+          </div>
+
+
+        <!-- Other Country -->
+         
+        <div class="form-group hidden" id="other-country-group">
+          <label for="other-country">Enter Your Country</label>
+          <input type="text" id="other-country" class="form-input" />
+        </div>
+
+          <!-- Buttons -->
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Continue</button>
+            <button type="button" class="btn btn-secondary" id="skip-btn">
+              Skip for Now
+            </button>
+          </div>
+        </form>
+
+        <div id="message"></div>
+      </div>
+    </div>
+
+    <script type="module" src="./js/preferences.js"></script>
+  </body>
+</html>

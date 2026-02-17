@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard</title>
+    <link rel="stylesheet" href="leaderboardStyles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+  </head>
+  <body>
+    <canvas id="sparkleCanvas"></canvas>
+
+    <div class="header-container">
+      <a href="index24.html" class="back-btn">Back to Menu</a>
+      <h1>Leaderboard</h1>
+      <a href="analytics.html" id="analyticsBtn" class="analytics-btn"
+        >Analytics</a
+      >
+    </div>
+
+    <div class="controls">
+      <select id="gameSelect">
+        <option value="Global">Global</option>
+        <option value="bp26-Game1">bp26-Game1</option>
+        <option value="bp26-Game2">bp26-Game2</option>
+        <option value="bp26-Game3">bp26-Game3</option>
+        <option value="bp26-Game4">bp26-Game4</option>
+        <option value="bp26-Game5">bp26-Game5</option>
+      </select>
+      <!-- ✅ NEW: Date picker (empty = all dates). Pick a date = show that date only -->
+      <input id="seasonDate" type="date" />
+
+      <select id="timeFilter">
+        <!-- <option value="" selected>Select</option> -->
+        <option value="daily" selected>Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="allDates">All Dates</option>
+      </select>
+
+      <div id="scoring">
+        <input
+          type="radio"
+          id="score"
+          value="totalScore"
+          name="scoringSystem"
+          checked
+        />
+        <label for="score">Score</label><br />
+        <input
+          type="radio"
+          id="timePlayed"
+          value="totalTimePlayed"
+          name="scoringSystem"
+        />
+        <label for="timePlayed">Time Played</label>
+      </div>
+
+      <div style="flex-basis: 100%; height: 0"></div>
+      <div
+        id="filterRangeDisplay"
+        style="color: #3b82f6; font-size: 14px"
+      ></div>
+    </div>
+
+    <div class="podium">
+      <div class="podium-card rank-2" id="card-2" data-color="#C0C0C0">
+        <div class="rank">#2</div>
+        <div class="name" id="name-2">---</div>
+        <div class="location" id="location-2">---</div>
+        <div class="score" id="score-2">---</div>
+      </div>
+      <div class="podium-card rank-1" id="card-1" data-color="#FFD700">
+        <div class="rank">#1</div>
+        <div class="name" id="name-1">---</div>
+        <div class="location" id="location-1">---</div>
+        <div class="score" id="score-1">---</div>
+      </div>
+      <div class="podium-card rank-3" id="card-3" data-color="#CD7F32">
+        <div class="rank">#3</div>
+        <div class="name" id="name-3">---</div>
+        <div class="location" id="location-3">---</div>
+        <div class="score" id="score-3">---</div>
+      </div>
+    </div>
+
+    <div id="leaderboard"></div>
+    <div class="pagination">
+      <button id="prevBtn">Previous</button>
+      <span class="page-info"
+        >Page <span id="pageNum">1</span> of
+        <span id="totalPages">2</span></span
+      >
+      <button id="nextBtn">Next</button>
+    </div>
+    <!-- <div><canvas id="line-graph"></canvas></div> -->
+
+    <div id="adminPanel" style="display: none; text-align: center">
+      <br />
+      <span style="font-size: 14px; color: #444">Competition Active:</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="statusToggle" />
+        <span class="slider round"></span>
+      </label>
+      <button id="resetBtn" style="margin-left: 20px">
+        Reset Current Leaderboard
+      </button>
+      <p id="resetHint" style="font-size: 13px; margin-top: 10px"></p>
+    </div>
+
+    <script type="module" src="leaderboard.js"></script>
+    <script>
+      // set default date to today's date
+      const input = document.getElementById("seasonDate");
+      input.value = new Date().toISOString().split("T")[0];
+
+      // Dynamic Back Button
+      document.addEventListener("DOMContentLoaded", () => {
+        const backBtn = document.querySelector(".back-btn");
+        if (!backBtn) return;
+
+        // Get 'from' parameter from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const origin = urlParams.get("from");
+
+        if (origin === "bp26") {
+          // Coming from bp26/index.html
+          backBtn.textContent = "Back to Competition";
+          backBtn.href = "./bp26/index.html";
+        } else {
+          // Coming from index24.html (home) or default
+          backBtn.textContent = "Back to Games";
+          backBtn.href = "./index24.html";
+        }
+      });
+    </script>
+  </body>
+</html>

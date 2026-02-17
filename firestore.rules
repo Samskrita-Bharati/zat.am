@@ -1,0 +1,111 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ========================
+    // Helper functions
+    // ========================
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Look up admin flag from the user's private/account doc
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)/private/account)
+             .data.isAdmin == true;
+    }
+
+    // ========================
+    // Users Collection
+    // users/{userId}/private/account   -> email, isAdmin, createdAt
+    // users/{userId}/public/profile    -> name, language, location, etc.
+    // ========================
+    match /users/{userId} {
+
+      // We currently don't store anything on the base user doc,
+      // but allow owners (and admins) to read it if it exists.
+      allow create: if isOwner(userId);
+      allow read: if isOwner(userId) || isAdmin();
+      allow update, delete: if false;
+
+      // ---------- Private data ----------
+      // Contains sensitive account info: email, isAdmin, createdAt.
+      match /private/{docId} {
+
+        // Owners and admins can read private docs.
+        allow read: if isOwner(userId) || isAdmin();
+
+        // Owners can create their own private/account doc, but
+        // they are not allowed to set isAdmin to true themselves.
+        allow create: if isOwner(userId)
+          && (
+            !('isAdmin' in request.resource.data)
+            || request.resource.data.isAdmin == false
+          );
+
+        // Owners can update their private doc, but cannot change isAdmin.
+        allow update: if isOwner(userId)
+          && !( 'isAdmin' in request.resource.data
+                && request.resource.data.isAdmin != resource.data.isAdmin );
+
+        // Admins can change ONLY the isAdmin flag on other users.
+        allow update: if !isOwner(userId)
+          && isAdmin()
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['isAdmin']);
+
+        // No deletes for private docs from client.
+        allow delete: if false;
+      }
+
+      // ---------- Public data ----------
+      // Contains leaderboard-safe, non-sensitive profile info.
+      match /public/{docId} {
+
+        // Anyone can read public profile data (e.g., for leaderboards).
+        allow read: if true;
+
+        // Only the owner can create or update their public profile.
+        allow create: if isOwner(userId);
+        allow update: if isOwner(userId);
+
+        // Public docs are not deletable from the client.
+        allow delete: if false;
+      }
+    }
+
+    // ========================
+    // Leaderboards Collection (TODO: Leaderboard team)
+    // Public read; writes can be tightened later as needed.
+    // ========================
+    match /leaderboards/{document=**} {
+      // Anyone can read leaderboard scores (public leaderboards).
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ========================
+    // Admin Logs Collection
+    // Stores audit trail for admin actions (if implemented in future)
+    // ========================
+    match /admin-logs/{document=**} {
+
+      // Only admins can read admin logs
+      allow read: if isAdmin();
+
+      // No writes allowed currently (no Cloud Functions/Admin SDK)
+      allow write: if false;
+    }
+
+    // ========================
+    // Catch-all rule: Deny access to everything else
+    // ========================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

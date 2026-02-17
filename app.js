@@ -132,13 +132,13 @@ const menu = [
     dir: "019-cs",
     desc: ` Jigsaw puzzle for a <pre>chitram</pre>`,
   },
-  {
-    id: 20,
-    title: "कथा game",
-    category: "RG",
-    dir: "020-kk",
-    desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
-  },
+  // {
+  //   id: 20,
+  //   title: "कथा game",
+  //   category: "RG",
+  //   dir: "020-kk",
+  //   desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
+  // },
   {
     id: 21,
     title: "अन्वेषणम् ",
@@ -385,6 +385,13 @@ const menu = [
     dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
+  {
+    id: 31,
+    title: "vishwa संस्कृतम्  ",
+    category: "ET",
+    dir: "bp26",
+    desc: `BodhaPlay संस्कृतम् competition 2026 coming soon - <pre>shiighram aagamiShyati... </pre>`,
+  },
 ];
 // get parent element
 const sectionCenter = document.querySelector(".section-center");
@@ -396,12 +403,30 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 
 function diplayMenuItems(menuItems) {
+  // Read bilingual mode and preferred language from shared state/localStorage
+  const bilingualOn =
+    window.zatBilingualOn === true ||
+    localStorage.getItem("zatBilingualOn") === "1";
+  const preferredLanguageCode =
+    window.zatPreferredLang ||
+    localStorage.getItem("zatPreferredLang") ||
+    "1";
+
   let displayMenu = menuItems.map(function (item) {
+    let href = `${item.dir}/`;
+
+    // For now, only bp26 (BodhaPlay competition) gets the
+    // bilingual "t" parameter automatically from user prefs.
+    if (bilingualOn && item.dir === "bp26") {
+      const sep = href.includes("?") ? "&" : "?";
+      href += `${sep}t=${encodeURIComponent(preferredLanguageCode)}`;
+    }
+
     return `<article class="menu-item">
           <img src=${item.dir}/cover.jpg alt="${item.title}" class="photo" />
           <div class="item-info">
             <header>
-              <a href=${item.dir}/ target="zat.am">${item.title}</a>
+              <a href="${href}" target="zat.am">${item.title}</a>
               <h4 class="price">${item.category}</h4>
             </header>
             <p class="item-text">
@@ -415,6 +440,14 @@ function diplayMenuItems(menuItems) {
 
   sectionCenter.innerHTML = displayMenu;
 }
+
+// Expose a simple hook so other scripts (like navbar-auth)
+// can force the menu to rebuild when bilingual mode changes.
+if (typeof window !== "undefined") {
+  window.zatRefreshMenu = function () {
+    diplayMenuItems(menu);
+  };
+}
 function displayMenuButtons() {
   const categories = menu.reduce(
     function (values, item) {
@@ -423,7 +456,7 @@ function displayMenuButtons() {
       }
       return values;
     },
-    ["all"]
+    ["all"],
   );
   const categoryBtns = categories
     .map(function (category) {
