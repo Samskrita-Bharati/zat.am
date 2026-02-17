@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="css/find.css" />
       <!-- Header CSS -->
     <link rel="stylesheet" href="css/header.css" />
+    
   <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+ <!--
   <style>
     /* The switch - the box around the slider */
     .switch {
@@ -122,7 +124,7 @@
     @keyframes bp26Fall{
       to{ transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
     }
-  </style>
+  </style>-->
   <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 </head>
 
@@ -141,16 +143,12 @@
       }
     </style>
   <h1 class="gameTitle">Word Search </h1>
+ 
   <div class="header-divider"></div>
   <div id="lead">अस्मिन् अक्षरसमूहे अद्यतन-कथा-तः पदानि सन्ति । कति ? <span style="font-weight:bold"
       id="nPresent">५</span> । करोतु अन्वेषणम् । <br><span id="lead2"></span> </div>
   <div id="statusMessage"> पदानि अन्वेषितानि</div>
-  <div id="liveScore" style="
-    text-align:center;
-    font-weight:bold;
-    margin:6px 0;
-    font-size:18px;
-  ">
+  <div id="liveScore">
     Score: 100
   </div>
   <div id="finishMessage">।। शुभमस्तु ।। </div>
@@ -158,7 +156,7 @@
     <div id="grid"></div>
 
   </div>
-
+<div id="footer">
   <div id="level">
     <div class="leveltext">
       ✔️ = <span id="nFound"></span>
@@ -174,7 +172,7 @@
 
     </div>
   </div>
-  </div>
+  
   <div id="hintLink">
     <div>
       <a onclick="showHint1()" href="#"><img src="imgs/hint.png" alt="help">नामपदानि ..</a>
@@ -196,6 +194,7 @@
       </a>
     </div>
   </div>
+</div>
 
   <!-- ✅ Celebration overlay (inline) -->
   <div id="bp26CelebrateOverlay">
@@ -210,6 +209,7 @@
       <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
     </div>
   </div>
+
 
   <script>
     /* ---------------------------
@@ -870,15 +870,22 @@
         }
         return akshara;
       };
+      
       var resizeGrid = function () {
         var width = $(window).width();
         var height = $(window).height();
         var minDim = width;
+        
         if (minDim > height) {
           minDim = height;
         }
-        $("#grid").width(minDim * 0.85);
-        $("#grid").height(minDim * 0.85);
+        $("#grid").width(minDim * 0.70);
+        $("#grid").height(minDim * 0.70);
+
+        if ($(window).width() < 600) {
+          $("#grid").width(minDim * 0.90);
+          $("#grid").height(minDim * 0.90);
+        }
       };
       $(window).resize(resizeGrid);
       //$(document).ready(main);

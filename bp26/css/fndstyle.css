@@ -101,10 +101,14 @@ img[id$="9"] {
   transform: rotate(90deg);
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   body {
     font-size: 1.5em;
   }
+  center{
+    margin-top:80px;
+  }
+
 
   #svgdiv img {
     width: 20%;

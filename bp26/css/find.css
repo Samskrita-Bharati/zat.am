@@ -1,10 +1,14 @@
 body {
-  height: 90vh;
+  height: 100%;
+  
   width: 90vw;
   /* background-color: rgba(255, 165, 0, 0.75); */
   background-color: #f0f0f0;
   margin: 16px auto;
   line-height: 1.4;
+}
+h1{
+  margin-top:80px;
 }
 .mangalam {
   text-align: center;
@@ -234,4 +238,253 @@ span:not(#profile-btn) {
 #grid td:hover {
   background-color: rgba(255, 215, 0, 0.6);
   box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.06);
+}
+
+ /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked+.slider {
+      background-color: #2196F3;
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    /* ✅ Celebration UI (inline) */
+    #bp26CelebrateOverlay{
+      position: fixed; inset: 0;
+      display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,0.35);
+      z-index: 10000;
+      padding: 20px;
+      border: none;
+    }
+    .bp26CelebrateBox{
+      position: relative;
+      width: min(460px, 92vw);
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      text-align: center;
+      font-family: system-ui, Arial, sans-serif;
+      border: 1px solid #eee;
+    }
+    .bp26Sparkles{
+      font-size: 54px;
+      line-height: 1.1;
+      margin: 8px 0 6px;
+      animation: bp26Pop 600ms ease-out both;
+    }
+    @keyframes bp26Pop{
+      0%{ transform: scale(0.6); opacity: 0; }
+      100%{ transform: scale(1); opacity: 1; }
+    }
+    .bp26Btn{
+      margin-top: 12px; padding: 10px 14px;
+      border-radius: 12px; border: 1px solid #ddd;
+      background: #f9fafb; cursor: pointer;
+    }
+    .bp26Confetti{
+      position: fixed;
+      top: -12px;
+      width: 10px; height: 10px;
+      border-radius: 3px;
+      z-index: 10001;
+      opacity: .95;
+      animation: bp26Fall 950ms linear forwards;
+      pointer-events: none;
+    }
+    @keyframes bp26Fall{
+      to{ transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
+    }
+
+#liveScore{
+  text-align:center;
+    font-weight:bold;
+    margin:6px 0;
+    font-size:18px;
+}
+
+@media (max-width: 1190px) {
+  #footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 10px;
+  }
+  .gameTitle{
+    margin-top:60px;
+   }
+
+  #level {
+    text-align:left ;
+    position: static;
+    right: auto;
+    top: auto;
+    padding: 4px 5px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 10px;
+    font-size:0.8em;
+    height: 50%;
+    width:20%;
+  }
+
+  .leveltext {
+    font-size: 1.2em;
+    
+  }
+
+  #nFound {
+    font-size: 1.3em;
+  }
+  img{
+    width: 50px;
+    height: 70px;
+  }
+
+  #refreshLink {
+    position: static;
+    bottom: auto;
+    left: auto;
+    text-align: center;
+    font-size: 1.0em;
+    font-weight: 600;
+    padding: 4px 5px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 10px 0;
+    height: 50%;
+    width:20%;
+  }
+
+  #hintLink {
+    position: static;
+    left: auto;
+    top: auto;
+    font-size: 1.0em;
+    font-weight: 500;
+    padding: 4px 5px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 10px 0;
+    height: 40%;
+    width:25%;
+  }
+
+  #hintLink img{
+    width: 30px;
+    height: 3%;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  #hintPopup .content {
+    background-color: rgba(77, 185, 228, 0.986);
+    transform: translateX(25%) translateY(25%);
+    width: 50%;
+    padding: 10px;
+  }
+
+  @media (max-width: 500px) {
+    #footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 10px;
+  }
+   .gameTitle{
+    margin-top:60px;
+   }
+
+    #level {
+      width: 50%;
+    }
+
+    #refreshLink {
+      width: 50%;
+    }
+
+    #hintLink {
+      width: 50%;
+    }
+
+    #hintPopup .content {
+      width: 90%;
+    }
+
+    img{
+    width: 30px;
+    height: 60px;
+  }
+
+  #grid td {
+  background-color: rgb(173, 210, 252);
+  text-align: center;
+  font-size: 1.1em;
+  align-self: stretch;
+  position: relative;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+   
+  }
 }
