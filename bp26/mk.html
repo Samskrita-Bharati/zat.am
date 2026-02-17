@@ -39,7 +39,7 @@
       type="text/javascript"
       src="https://unpkg.com/papaparse@latest/papaparse.min.js"
     ></script>
-
+    <!--
     <style>
       body {
         padding-top: 7%;
@@ -174,18 +174,21 @@
       <p id="wm">
         Matches Done: <span id="nomd">०</span> Wrong Moves:
         <span id="nowt">०</span>
-        <span style="margin-left: 16px; font-weight: 700"
+        <span style="margin-left: 16px; font-weight: 500"
           >Time: <span id="timeDisp">0</span>s</span
         >
       </p>
 
       <progress id="pr" max="15" value="0"></progress>
       <div id="mytable"></div>
-    </center>
 
-    <!-- ✅ Score badge + submit button -->
+       <!-- ✅ Score badge + submit button -->
     <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
     <button id="submitScoreBtn">Submit Score (Game 2)</button>
+     
+    </center>
+
+    
 
     <!-- ✅ Celebration overlay -->
     <div id="bp26CelebrateOverlay">
@@ -422,12 +425,40 @@
           location.reload();
         }
 
-        var rowLength = words.length / 3;
-        var colLength = 6;
-        var gamesize = rowLength * colLength;
+        
 
-        var width = 150;
+        /*var rowLength = words.length / 3;
+        var colLength = 6;
+        var gamesize = rowLength * colLength;*/
+
+        var rowLength, colLength;
+        
+       var width = 150;
         var height = 120;
+
+
+        if (window.innerWidth <= 450) {
+        // Mobile → 4 columns × 6 rows
+            colLength = 4;
+            rowLength = 6;
+            width = 50;
+            height = 50;
+
+          }else {
+              // All larger screens → 6 columns × 4 rows
+              colLength = 6;
+              rowLength = 4;
+
+        if (window.innerWidth <= 700) {
+          width = 90;
+          height = 90;
+        } else{
+          width = 150;
+          height = 120;
+        }
+      }
+         
+       var gamesize = rowLength * colLength;
 
         // ✅ start timer (only play mode)
         if (l != 1) {
@@ -491,8 +522,8 @@
                   var img = document.createElement("img");
                   if (o != 1) img.src = bg;
                   else img.src = imageData2D[i][j].src;
-                  img.height = height;
-                  img.width = width;
+                  //img.height = height; 
+                  //img.width = width; 
                   td.appendChild(img);
                 } else {
                   var p = document.createElement("p");
@@ -523,8 +554,8 @@
               if (clickedCards.length == 0) {
                 if (this.tagName.toLowerCase() === "img") {
                   this.src = D2Data[row][column].src;
-                  this.height = height;
-                  this.width = width;
+                  //this.height = height;
+                  //this.width = width;
                 }
                 D2Data[row][column].clicked = true;
                 clickedCards.push(D2Data[row][column]);

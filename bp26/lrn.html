@@ -16,6 +16,9 @@
       }
 
       h1 {
+        position: relative;
+        font-size: clamp(1.5em, 5vw, 2.5em);
+        margin-top: 30px;
         text-align: center;
         margin-bottom: 20px;
         color: #333;
@@ -217,6 +220,23 @@
         button {
           display: none !important;
         }
+        
+      }
+
+      @media (max-width: 600px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        h1{
+          margin-top:60px;
+        }
+
+        @media(max-width:480px){
+          h1{
+            margin-top:55px;
+          }
+        }
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
@@ -359,8 +379,8 @@
           const txtimg = buildImageHTML({ imgm, unicodeHex, imgUrl });
 
           const card = document.createElement("div");
-          card.classList.add(row.linga || "");
           card.className = "card";
+          if (row.linga) card.classList.add(row.linga);// this was added to troubleshoot locally
           card.innerHTML = `
           <div class="word">${wrdtxt}</div>
           <div class="definition">${txtimg}</div>

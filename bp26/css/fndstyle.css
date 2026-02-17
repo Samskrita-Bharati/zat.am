@@ -167,6 +167,10 @@ img[id$="9"] {
     gap: 12px;
     padding: 15px;
   }
+  center{
+    margin-top:80px;
+  }
+
 
   #svgdiv img {
     padding: 5px;
