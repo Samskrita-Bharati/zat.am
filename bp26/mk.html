@@ -30,6 +30,7 @@
     ></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+  <script src="./js/transliteration.js"></script>
 
     <!-- IMPORTANT: Load page CSS first, header CSS last -->
     <link href="css/mmk.css" rel="stylesheet" type="text/css" />
@@ -211,6 +212,7 @@
       /* ✅ Make reportScore available globally like your new file expects */
       import { reportScore, bp26Init } from "./js/bp26-score.js";
       window.reportScore = reportScore;
+      const translit = window.bp26Translit;
 
       // ✅ Init scoring namespace
       window.bp26Init = bp26Init;
@@ -353,15 +355,6 @@
         var wpp = 15; // words per page
         document.getElementById("pr").max = wpp;
 
-        var tlang = [];
-        tlang[1] = "itrans";
-        tlang["gu"] = "gujarati";
-        tlang["ka"] = "kannada";
-        tlang["be"] = "bengali";
-        tlang["ml"] = "malayalam";
-        tlang["te"] = "telugu";
-        tlang["ta"] = "tamil";
-
         const fullist = fildat.data || [];
         var openmojibase = "https://openmoji.org/data/color/svg/";
 
@@ -418,8 +411,7 @@
         var l = urlParams.get("l");
         if (!l) l = 0;
 
-        var t = urlParams.get("t");
-        if (!t) t = 0;
+        const tScript = translit.getTargetScript();
 
         function restart() {
           location.reload();
@@ -529,14 +521,10 @@
                   var p = document.createElement("p");
                   p.className = "myp";
                   p.innerHTML = imageData2D[i][j].wrd;
-                  if (t != 0 && tlang[t])
+                  if (tScript)
                     p.innerHTML +=
                       " - " +
-                      Sanscript.t(
-                        imageData2D[i][j].wrd,
-                        "devanagari",
-                        tlang[t],
-                      );
+                      translit.transliterate(imageData2D[i][j].wrd, "devanagari");
                   td.appendChild(p);
                 }
               }
@@ -576,14 +564,10 @@
                   matchesdone++;
                   r.innerHTML +=
                     "<br>☑️ " +
-                    Sanscript.t(String(matchesdone), "iast", "devanagari");
+                    translit.numberToDevanagari(matchesdone);
                   document.getElementById("pr").value = matchesdone;
 
-                  document.getElementById("nomd").innerHTML = Sanscript.t(
-                    String(matchesdone),
-                    "iast",
-                    "devanagari",
-                  );
+                  document.getElementById("nomd").innerHTML = translit.numberToDevanagari(matchesdone);
 
                   this.parentElement.style.border =
                     "3px solid " + colors[matchesdone - 1];
@@ -591,7 +575,7 @@
                   this.style.color = "blue";
                   this.innerHTML +=
                     "<br>✔️ " +
-                    Sanscript.t(String(matchesdone), "iast", "devanagari");
+                    translit.numberToDevanagari(matchesdone);
 
                   if (this.tagName.toLowerCase() === "img")
                     this.src = D2Data[row][column].src;
@@ -609,15 +593,11 @@
 
                     window.alert(
                       "उत्तमम् ! You matched all " +
-                        Sanscript.t(String(wpp), "iast", "devanagari") +
+                        translit.numberToDevanagari(wpp) +
                         " in " +
-                        Sanscript.t(String(secs), "iast", "devanagari") +
+                        translit.numberToDevanagari(secs) +
                         " seconds while making " +
-                        Sanscript.t(
-                          String(numberOfWrongTries),
-                          "iast",
-                          "devanagari",
-                        ) +
+                        translit.numberToDevanagari(numberOfWrongTries) +
                         " wrong moves\n\nFinal Score: " +
                         currentScore,
                     );
@@ -627,11 +607,7 @@
                   }
                 } else {
                   numberOfWrongTries += 1;
-                  triesElement.innerHTML = Sanscript.t(
-                    String(numberOfWrongTries),
-                    "iast",
-                    "devanagari",
-                  );
+                  triesElement.innerHTML = translit.numberToDevanagari(numberOfWrongTries);
 
                   if (this.tagName.toLowerCase() === "img")
                     this.src = D2Data[row][column].src;

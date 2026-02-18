@@ -240,6 +240,7 @@
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script src="./js/transliteration.js"></script>
     <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
     <!-- Header CSS -->
     <link rel="stylesheet" href="css/header.css" />
@@ -285,15 +286,7 @@
 
     <script>
       const wpp = 15;
-      const tlang = [];
-      tlang[1] = "itrans";
-      tlang["gu"] = "gujarati";
-      tlang["ka"] = "kannada";
-      tlang["be"] = "bengali";
-      tlang["ml"] = "malayalam";
-      tlang["te"] = "telugu";
-      tlang["ta"] = "tamil";
-      tlang["ia"] = "iast";
+      const translit = window.bp26Translit;
 
       let fullist = [];
       let musicelements = [];
@@ -345,14 +338,13 @@
         let set = urlParams.get("s");
         if (!set || isNaN(set) || set >= fullist.length) set = 0;
 
-        let t = urlParams.get("t");
-        if (!t) t = 0;
-        if (!tlang[t])
+        const tScript = translit.getTargetScript();
+        if (!tScript)
           document.getElementsByTagName("h1")[0].innerHTML +=
-            " " + Sanscript.t(`${set}`, "itrans", "devanagari");
+            " " + translit.numberToDevanagari(set);
         else
           document.getElementsByTagName("h1")[0].innerHTML +=
-            " " + Sanscript.t(`${set}`, "itrans", tlang[t]);
+            " " + translit.transliterate(`${set}`, "itrans");
 
         let imgm = urlParams.get("m");
         if (!imgm) imgm = "b";
@@ -370,9 +362,9 @@
           const alnk = row["alnk"] || "";
 
           let wrdtxt = `${word}`;
-          if (t != 0 && tlang[t]) {
+          if (tScript) {
             try {
-              wrdtxt += " - " + Sanscript.t(`${word}`, "devanagari", tlang[t]);
+              wrdtxt += " - " + translit.transliterate(`${word}`, "devanagari");
             } catch (e) {}
           }
 
