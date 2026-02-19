@@ -3,8 +3,26 @@
 <head>
     <meta charset="utf-8" />
     <title>BodhaPlay पुनरुक्ति - made with ZIM</title>
+    <link rel="stylesheet" href="css/header.css" />
+    <style>
+        #bp26-z-tooltip {
+            position: fixed;
+            z-index: 10001;
+            display: none;
+            pointer-events: none;
+            background: rgba(17, 24, 39, 0.92);
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.25;
+            padding: 6px 8px;
+            border-radius: 8px;
+            max-width: min(75vw, 320px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        }
+    </style>
     <!-- zimjs.com - JavaScript Canvas Framework -->
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script src="./js/transliteration.js"></script>
     <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
     <script type="module">
         import zim from "https://zimjs.org/cdn/019/zim_game";
@@ -17,18 +35,9 @@
             var wintmp;
             var wpp = 15; // words per page
             var fullist = "";
-            var tlang = [];
-            tlang[1] = "itrans";
-            tlang['gu'] = "gujarati";
-            tlang['ka'] = "kannada";
-            tlang['be'] = "bengali";
-            tlang['ml'] = "malayalam";
-            tlang['te'] = "telugu";
-            tlang['ta'] = "tamil";
             const urlParams = new URLSearchParams(window.location.search);
-            var t = urlParams.get('t');
-            //if (!t)
-            //  t = 1;
+            const translit = window.bp26Translit;
+            const tScript = translit.getTargetScript();
             var set = urlParams.get('s');
             if (!set || isNaN(set))
                 set = 0;
@@ -65,10 +74,10 @@
                     var mywords = words.slice();
                     special = rand(wpp); // index starts at 0
                     wintmp = mywords[special]
-                    if (t) wintmp += "\n" + Sanscript.t(String(wintmp), 'devanagari', tlang[t]);
+                    if (tScript) wintmp += "\n" + translit.transliterate(String(wintmp), 'devanagari');
                     for (var j = 0; j < wpp; j++) {
                         var wrd = mywords.pop();
-                        if (t) wrd += "\n" + Sanscript.t(String(wrd), 'devanagari', tlang[t])
+                        if (tScript) wrd += "\n" + translit.transliterate(String(wrd), 'devanagari')
                         tillabs.push(new Label(wrd, 15, "Sarala", yellow));
                     }
                     //zog(wintmp); // reveals the secret
@@ -126,5 +135,32 @@
     </script>
     <meta name="viewport" content="width=device-width, user-scalable=no" />
 </head>
-<body></body>
+    <body>
+        <script type="module" src="/auth/api/middleware.js"></script>
+        <div id="header-placeholder"></div>
+        <script type="module" src="../js/bilingual-toggle.js"></script>
+        <script src="js/load-header.js"></script>
+        <div id="bp26-z-tooltip"></div>
+        <script>
+            function bp26OffsetZimCanvas() {
+                const placeholder = document.getElementById("header-placeholder");
+                const offset = Math.max(64, placeholder ? placeholder.offsetHeight : 0);
+                document.querySelectorAll("canvas").forEach((canvas) => {
+                    canvas.style.marginTop = offset + "px";
+                    canvas.style.height = `calc(100vh - ${offset}px)`;
+                });
+            }
+
+            window.addEventListener("load", () => {
+                bp26OffsetZimCanvas();
+                let tries = 0;
+                const i = setInterval(() => {
+                    bp26OffsetZimCanvas();
+                    tries += 1;
+                    if (tries > 20) clearInterval(i);
+                }, 150);
+            });
+            window.addEventListener("resize", bp26OffsetZimCanvas);
+        </script>
+    </body>
 </html>

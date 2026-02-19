@@ -12,6 +12,7 @@
     
   <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+  <script src="./js/transliteration.js"></script>
 </head>
 
 <body>
@@ -158,26 +159,14 @@
     let score = 0;
     let scoreInterval = null;
     const liveScoreEl = document.getElementById("liveScore");
+    const translit = window.bp26Translit;
+    const tScript = translit.getTargetScript();
     const urlParams = new URLSearchParams(window.location.search);
     var data = urlParams.get('d');
     if (!data)
       data = "अक्षरसमूहे अद्यतन-कथा पदानि सन्ति करोतु अन्वेषणम्";
 
-  // Bilingual support: read transliteration target from `t` param
-  // (e.g., t=gu, t=ka). When missing or unsupported, fall back to
-  // IAST for tooltips/overlays.
-  var t = urlParams.get('t');
-  if (!t) t = 0;
-  var tlang = [];
-  tlang[1] = "itrans";
-  tlang['gu'] = "gujarati";
-  tlang['ka'] = "kannada";
-  tlang['be'] = "bengali";
-  tlang['ml'] = "malayalam";
-  tlang['te'] = "telugu";
-  tlang['ta'] = "tamil";
-
-  var wordList = Sanscript.t(data, 'iast', 'devanagari').split(" ");
+  var wordList = translit.transliterate(data, 'iast', { target: 'devanagari' }).split(" ");
     document.addEventListener('DOMContentLoaded', function () {
       //	timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
       //       countSecs("timer");
@@ -622,9 +611,7 @@
                     (slotColIdx + wordIdx);
                 default:
               }
-              var ttChar = (t && tlang[t])
-                ? Sanscript.t(String(charToPut), 'devanagari', tlang[t])
-                : Sanscript.t(String(charToPut), 'devanagari', 'iast');
+              var ttChar = translit.transliterate(String(charToPut), 'devanagari', { fallback: 'iast' });
               $(targetCell).html("<span title='" + ttChar + "'>" + charToPut + "</span>");
             }
             //placed the word
@@ -701,9 +688,7 @@
         $("#grid td").each(function (idx, cell) {
           if ($(cell).text().trim().length == 0) {
             ra = getRandomAkshara();
-            var ttRa = (t && tlang[t])
-              ? Sanscript.t(String(ra), 'devanagari', tlang[t])
-              : Sanscript.t(String(ra), 'devanagari', 'itrans');
+            var ttRa = translit.transliterate(String(ra), 'devanagari', { fallback: 'itrans' });
             $(cell).html("<span title='" + ttRa + "'>" + ra + "</span>");
           }
         });
@@ -785,9 +770,7 @@
     function showHint1() {
       $("#lead2").html("");
       for (var i = 0; i < wordList.length; i++) {
-        var ttWord = (t && tlang[t])
-          ? Sanscript.t(wordList[i], 'devanagari', tlang[t])
-          : Sanscript.t(wordList[i], 'devanagari', 'iast');
+        var ttWord = translit.transliterate(wordList[i], 'devanagari', { fallback: 'iast' });
         $("#lead2").append("<span class=nob title='" + ttWord + "'>" + wordList[i] + " </span>");
       }
 
@@ -798,9 +781,7 @@
         if (answers.includes(wordList[i]))
           $("#lead2").append("<strong>" + wordList[i] + "</strong> ");
         else
-          $("#lead2").append("<span class=nob title='" + ((t && tlang[t])
-            ? Sanscript.t(wordList[i], 'devanagari', tlang[t])
-            : Sanscript.t(wordList[i], 'devanagari', 'iast')) + "'>" + wordList[i] + " </span>");
+          $("#lead2").append("<span class=nob title='" + translit.transliterate(wordList[i], 'devanagari', { fallback: 'iast' }) + "'>" + wordList[i] + " </span>");
       }
 
     };</script>
