@@ -1,0 +1,334 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f5f5f5;
+    color: #333;
+    overflow-x: hidden;
+}
+
+.header-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 16px;
+    background: white;
+    color: #3B82F6;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.analytics-btn{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 16px;
+    background: white;
+    color: #3B82F6;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+h1 {
+    text-align: center;
+    color: #3B82F6;
+}
+
+select {
+    margin: 20px 5px;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ✅ All dropdowns consistent */
+.controls select {
+  margin: 10px 0;
+  padding: 8px 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+/* ✅ Season dropdown (optional highlight) */
+#seasonSelect {
+  min-width: 160px;
+}
+
+.podium {
+    display: flex;
+    gap: 20px;
+    margin: 40px 0;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.podium-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    flex: 1;
+    max-width: 250px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.podium-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+    transform: rotate(30deg);
+    pointer-events: none;
+}
+
+.podium-card:hover::after {
+    left: 150%;
+    transition: all 0.7s ease-in-out;
+}
+
+.podium-card.rank-1 {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), white);
+    border: 3px solid #FFD700;
+    transform: scale(1.1);
+}
+
+.podium-card.rank-2 {
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.05), white);
+    border: 2px solid #C0C0C0;
+}
+
+.podium-card.rank-3 {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.05), white);
+    border: 2px solid #CD7F32;
+}
+
+.podium-card.rank-1:hover {
+    transform: scale(1.15);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+    z-index: 10;
+}
+
+.podium-card.rank-2:hover, .podium-card.rank-3:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    z-index: 9;
+}
+
+.podium-card .rank {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.rank-1 .rank {
+    color: #FFD700;
+}
+
+.rank-2 .rank {
+    color: #C0C0C0;
+}
+
+.rank-3 .rank {
+    color: #CD7F32;
+}
+
+.podium-card .name {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.podium-card .score {
+    font-size: 28px;
+    font-weight: bold;
+    color: #3B82F6;
+    margin-top: 10px;
+}
+
+#leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.row {
+    display: flex;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.row:hover {
+    background: #fdfdfd;
+    transform: translateX(5px);
+}
+
+.rank {
+    width: 60px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.name {
+    flex: 1;
+    min-width: 0;
+}
+
+.score {
+    font-weight: bold;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    cursor: pointer;
+    background: #3B82F6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.page-info {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+#sparkleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* competition status toggle */
+.toggle-switch { position: relative; display: inline-block; width: 46px; height: 22px; }
+
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+
+.slider:before { position: absolute;content: ""; height: 16px;width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+
+input:checked + .slider { background-color: #3B82F6; }
+
+input:checked + .slider:before { transform: translateX(24px); }
+
+input:disabled + .slider { background-color: #f0f0f0; cursor: not-allowed;}
+
+@media (max-width: 640px) {
+    .podium {
+        flex-direction: column; 
+        align-items: center;
+        gap: 20px;
+    }
+
+    .podium-card {
+        width: 100%;
+        max-width: 100%;
+        transform: none; /* Remove #1 scale-up on mobile */
+    }
+
+    .podium-card.rank-1 { order: 1; }
+    .podium-card.rank-2 { order: 2; }
+    .podium-card.rank-3 { order: 3; }
+
+    .controls { flex-direction: column; align-items: stretch; }
+    .controls select, .controls input { width: 100%; }
+}
+
+@media (max-width: 375px) {
+    body { padding: 8px; margin: 5px auto; }
+    
+    .header-container { margin-bottom: 15px; }
+    h1 { font-size: 15px !important; }
+    
+    .back-btn, .analytics-btn { 
+        padding: 4px 6px; 
+        font-size: 10px;
+        border-radius: 4px;
+    }
+
+    .podium-card { padding: 12px; }
+    .podium-card .rank { font-size: 20px; }
+    .podium-card .name { font-size: 14px; }
+    .podium-card .score { font-size: 16px; }
+    .podium-card .location { font-size: 11px; }
+
+    .row { 
+        padding: 8px; 
+        gap: 6px;
+        grid-template-columns: 20px 1fr auto;
+    }
+    
+    .row .rank { font-size: 12px; }
+    .row .name span:first-child { font-size: 12px; }
+    .row .name span:last-child { font-size: 10px; }
+    .row .score { font-size: 12px; min-width: 45px; }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    h1 { font-size: 1.2rem; }
+    .back-btn, .analytics-btn { padding: 6px 10px; font-size: 12px; }
+    
+    .podium-card .name { font-size: 16px; }
+    .podium-card .score { font-size: 20px; }
+}

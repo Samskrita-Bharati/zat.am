@@ -104,6 +104,7 @@ export const ensureUserDocument = async (user, extraData = {}) => {
       location: safeExtraData.location || "",
       preferencesSet: false, // Default preferences set to False
       createdAt: serverTimestamp(),
+      streak: 1,
     });
   }
 

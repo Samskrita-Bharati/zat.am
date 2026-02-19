@@ -288,39 +288,6 @@ body {
   box-shadow: none;
 }
 
-@media screen and (max-width: 768px) {
-  body {
-    padding: 20px 5%;
-  }
-
-  .profile-card {
-    padding: 25px;
-  }
-
-  .left-section {
-    padding: 25px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .profile-avatar {
-    width: 100px;
-    height: 100px;
-  }
-
-  .profile-avatar i {
-    font-size: 60px;
-  }
-
-  .left-section h2 {
-    font-size: 1.25rem;
-  }
-
-  .profile-card h2 {
-    font-size: 1.25rem;
-  }
-}
-
 /* Profile image */
 .profile-avatar-img {
   width: 90px;
@@ -331,4 +298,199 @@ body {
 
 .profile-icon {
   display: inline-block;
+}
+
+/*  Tablets */
+@media screen and (max-width: 1024px) {
+  .profile-container {
+    grid-template-columns: 350px 1fr;
+    gap: 25px;
+  }
+
+  body {
+    padding: 30px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .left-section {
+    max-width: 100%;
+  }
+
+  body {
+    padding: 25px;
+  }
+}
+
+/* Phones */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 20px 15px;
+  }
+
+  .profile-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .left-section {
+    padding: 25px 20px;
+  }
+
+  .profile-card {
+    padding: 25px 20px;
+  }
+
+  .profile-card h2 {
+    font-size: 1.35rem;
+  }
+
+  .profile-icon i {
+    font-size: 80px;
+  }
+
+  .profile-avatar-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-card input,
+  .profile-card select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 0;
+  }
+
+  .detail-label,
+  .detail-value {
+    text-align: left;
+  }
+}
+
+/* Mobile Phones */
+@media screen and (max-width: 480px) {
+  body {
+    padding: 15px 10px;
+  }
+
+  .profile-container {
+    gap: 15px;
+  }
+
+  .left-section {
+    padding: 20px 15px;
+  }
+
+  .left-section h2 {
+    font-size: 1.25rem;
+  }
+
+  .left-section p {
+    font-size: 13px;
+  }
+
+  .profile-icon i {
+    font-size: 70px;
+  }
+
+  .profile-avatar-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .profile-card {
+    padding: 20px 15px;
+  }
+
+  .profile-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .profile-card label {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  .profile-card input,
+  .profile-card select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .profile-card button {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .logout-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .back-link {
+    font-size: 14px;
+  }
+
+  .detail-label {
+    font-size: 12px;
+  }
+
+  .detail-value {
+    font-size: 13px;
+  }
+
+  #name-message,
+  #password-message {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+}
+
+/* Small Devices */
+@media screen and (max-width: 360px) {
+  body {
+    padding: 10px 8px;
+  }
+
+  .left-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .profile-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .profile-icon i {
+    font-size: 60px;
+  }
+
+  .profile-avatar-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .profile-card input,
+  .profile-card select {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .profile-card button {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
 }

@@ -251,6 +251,90 @@ Menu
   padding-top: 1rem;
 }
 
+/* 
+===============
+Leaderboard Styles
+===============
+*/
+
+.leaderboard-container {
+  position: fixed;
+  top: auto;
+  right: 25px;
+  bottom: 20px;
+  z-index: 9999;
+  font-family: Arial, sans-serif;
+}
+
+.leaderboard-btn {
+  background: white;
+  color: #c48b2c;
+  border: 2px solid #c48b2c;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 10px;
+}
+
+.leaderboard-panel {
+  width: 230px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  padding: 14px;
+}
+
+.lb-title {
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.lb-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.gold {
+  background: #fff3c4;
+  color: #9c7a00;
+}
+.silver {
+  background: #f1f1f1;
+  color: #555;
+}
+.bronze {
+  background: #f3e0d2;
+  color: #8b4a10;
+}
+
+.lb-link {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  color: #c48b2c;
+}
+
+.lb-link:hover {
+  text-decoration: underline;
+}
+
+/* 
+
+===============
+  media 
+
+*/
+
 @media screen and (min-width: 768px) {
   .menu-item {
     grid-template-columns: 225px 1fr;
@@ -449,4 +533,56 @@ Menu
   object-fit: cover;
   margin: 10px auto;
   display: block;
+}
+
+/* Scoring panel uses same look as leaderboard panel */
+.scoring-panel {
+  margin-top: 12px;
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.scoring-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* link row like lb-item */
+.scoring-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.scoring-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.scoring-code {
+  opacity: 0.7;
+  font-weight: 700;
+  margin-right: 10px;
+  min-width: 64px;
+  display: inline-block;
+}
+
+.scoring-arrow {
+  opacity: 0.7;
+  font-weight: 800;
+}
+
+.filter-btn {
+  border: solid;
+  border-color: var(--clr-gold);
+  color: var(--clr-gold);
 }

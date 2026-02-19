@@ -101,7 +101,7 @@
 
 /* More specific targeting for dropdown when it has the ID */
 #profile-dropdown.dropdown {
-  all: unset; /* Reset all inherited styles */
+  all: unset;
   position: absolute !important;
   top: 35px !important;
   right: 0 !important;
@@ -211,7 +211,6 @@
   }
 }
 
-/* Force Font Awesome icons to proper size */
 #profile-btn .fa-user-circle {
   font-size: 2.5rem !important;
   width: 40px !important;
@@ -226,7 +225,6 @@
   line-height: 60px !important;
 }
 
-/* Ensure the span containers don't shrink */
 #profile-btn {
   min-width: 40px;
   min-height: 40px;
@@ -348,12 +346,10 @@
   background: transparent !important;
 }
 
-/* Ensure dropdown content doesn't get border from page styles */
 #profile-dropdown * {
   box-sizing: border-box !important;
 }
 
-/* FORCE header styles to override page-specific CSS */
 .auth-buttons .fa-user-circle,
 #profile-btn .fa-user-circle,
 #profile-btn i.fa-user-circle {
@@ -392,7 +388,6 @@
   font-size: 1rem !important;
 }
 
-/* Force logo size */
 img.logo,
 a img.logo,
 .auth-buttons a img,

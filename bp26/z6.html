@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>BodhaPlay पुनरावर्तनम् - made with ZIM</title>
+    <link rel="stylesheet" href="css/header.css" />
+    <style>
+        #bp26-z-tooltip {
+            position: fixed;
+            z-index: 10001;
+            display: none;
+            pointer-events: none;
+            background: rgba(17, 24, 39, 0.92);
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.25;
+            padding: 6px 8px;
+            border-radius: 8px;
+            max-width: min(75vw, 320px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        }
+    </style>
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script src="./js/transliteration.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    <script type="module">
+        import zim from "https://zimjs.org/cdn/019/zim_game";
+        // See Docs under Frame for FIT, FILL, FULL, and TAG
+        // 768 x 1024 good for tablets, laptops, desktops 
+        // 500 x 1000 good for phones
+        new Frame(FIT, 768, 1024, black, dark, ready, "gf_Tourney");
+        var setp="";
+function padz(num) {
+    num = num.toString();
+    if (num.length < 2) num = "0" + num;
+    return num;
+}
+        function ready() {
+            let tile;
+            var pnmsg = "समाप्तम् ...";
+            var winmsg = ":(";
+            var wintmp;
+            var wpp = 15; // words per page
+            var fullist = "";
+            const urlParams = new URLSearchParams(window.location.search);
+            const translit = window.bp26Translit;
+            const tScript = translit.getTargetScript();
+            const tooltipEl = document.getElementById("bp26-z-tooltip");
+            var set = urlParams.get('s');
+            if (!set || isNaN(set))
+                set = 0;
+            setp="img/p"+padz(set)+"c";
+            var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+            Papa.parse(lnk, {
+                download: true,
+                header: true,
+                complete: populateWlist
+            })
+            function populateWlist(fildat) {
+                fullist = fildat.data;
+                if (set > fildat.data.length / wpp) set = 0;
+                var image = [];
+                var words = [];
+                var imageWordMap = {};
+                var aud = [];
+                var imglnk = "";
+                for (var i = 0; i < wpp; i++) {
+                    words.push(fullist[(set * wpp) + i].padam);
+                    imglnk = setp + padz(i+1)+".png";
+                    //zog(imglnk);
+                    image.push(imglnk);
+                    imageWordMap[imglnk] = fullist[(set * wpp) + i].padam || "";
+                }
+                var tilpics = [];
+                new Label("पुनरावर्तनम् 🤔", 80, "Tourney", "tomato").pos(0, 70, CENTER);
+                new Label("What repeats?", 50, "Tourney", "tomato").pos(0, 180, CENTER);
+                let special;
+                function setSpecial() {
+                    tilpics = [];
+                    var mywords = image.slice();
+                    special = rand(wpp); // index starts at 0
+                    wintmp = mywords[special];
+                    winmsg = words[special];
+                    if (tScript) winmsg+= "\n" + translit.transliterate(String(winmsg), 'devanagari')
+                    //if (t) wintmp += "\n" + Sanscript.t(String(wintmp), 'devanagari', tlang[t]);
+                    for (var j = 0; j < wpp; j++) {
+                        var wrd = mywords.pop();
+                        //if (t) wrd += "\n" + Sanscript.t(String(wrd), 'devanagari', tlang[t])
+
+                    }
+                    var wlab;
+zog(special);
+                    const load = F.loadAssets(image);
+                    load.on("complete", () => {
+                        loop(image, myimg => {
+                                tilpics.push(new Pic(myimg).siz(90));
+                        })
+                            wlab = new Pic(wintmp).siz(90);
+                        tilpics.push(wlab);
+                    shuffle(tilpics);
+                        tile = new Tile(tilpics, 4, 4, 30, 30, true).cur().center();
+                        S.update();
+
+                        const getHoverText = (bitmapFile) => {
+                            if (!bitmapFile) return "";
+                            let matchedWord = imageWordMap[bitmapFile] || "";
+                            if (!matchedWord) {
+                                const key = Object.keys(imageWordMap).find((k) => String(bitmapFile).endsWith(k));
+                                matchedWord = key ? imageWordMap[key] : "";
+                            }
+                            if (!matchedWord) return "";
+                            const popupTarget = tScript || "itrans";
+                            return matchedWord + " - " + translit.transliterate(matchedWord, "devanagari", { target: popupTarget });
+                        };
+
+                        tile.on("mouseover", e => {
+                            const pick = e && e.target;
+                            if (!pick || !pick.bitmap || !tooltipEl) return;
+                            const txt = getHoverText(pick.bitmap.file);
+                            if (!txt) return;
+                            tooltipEl.textContent = txt;
+                            tooltipEl.style.display = "block";
+                        });
+
+                        tile.on("mousemove", e => {
+                            if (!tooltipEl || tooltipEl.style.display !== "block") return;
+                            const ev = e.rawEvent || e;
+                            const x = ev.pageX || ev.clientX || 0;
+                            const y = ev.pageY || ev.clientY || 0;
+                            tooltipEl.style.left = (x + 12) + "px";
+                            tooltipEl.style.top = (y + 12) + "px";
+                        });
+
+                        tile.on("mouseout", () => {
+                            if (tooltipEl) tooltipEl.style.display = "none";
+                        });
+
+                        tile.on("mousedown", e => {
+                            const pick = e.target; // this gets what caused the event
+                            if (wintmp == pick.bitmap.file) {
+                                pnmsg = winmsg;
+                                emitter.loc(pick).spurt(25);
+                                tile.noMouse(); // do not let player press on tile
+                                end.noMouse(); // do not let player close the pane right away
+                                //timeout(1, ()=>{ // wait for 1 second then let player close pane
+                                //end.mouse();	
+                                //});
+                                timeout(5, () => { // wait for 1 second then let player close pane
+                                    window.location.reload();
+                                })
+                                timeout(1, () => { // wait for 1 second then let player close pane
+                                    new Pane(pnmsg, yellow).show();
+                                });
+                            }
+                            else {
+                                wrong.score++;
+                                pick.alpha = .2;
+                                S.update()
+                            }
+                        })
+                    }
+                    )
+                };
+                setSpecial();
+                const emitter = new Emitter({
+                    startPaused: true
+                });
+                //const right = new Scorer({ backgroundColor: green }).pos(100, 80, RIGHT, BOTTOM);
+                const wrong = new Scorer({ color: white, backgroundColor: red }).pos(100, 80, LEFT, BOTTOM);
+                const timer = new Timer(20).pos(0, 80, CENTER, BOTTOM);
+                STYLE = { font: "Tourney", backdropColor: black.toAlpha(.8) }
+                const end = new Pane("समाप्तम्" + "\nउत्तरम्: " + winmsg, yellow);
+                timer.on("complete", () => {
+                    end.show(); // show end, when closes will call restart
+                    tile.noMouse(); // do not let player press on tile
+                    end.noMouse(); // do not let player close the pane right away
+                    timeout(1, () => { // wait for 1 second then let player close pane
+                        end.mouse();
+                    });
+                });
+            }
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body>
+    <script type="module" src="/auth/api/middleware.js"></script>
+    <div id="header-placeholder"></div>
+    <script type="module" src="../js/bilingual-toggle.js"></script>
+    <script src="js/load-header.js"></script>
+    <div id="bp26-z-tooltip"></div>
+    <script>
+        function bp26OffsetZimCanvas() {
+            const placeholder = document.getElementById("header-placeholder");
+            const offset = Math.max(64, placeholder ? placeholder.offsetHeight : 0);
+            document.querySelectorAll("canvas").forEach((canvas) => {
+                canvas.style.marginTop = offset + "px";
+                canvas.style.height = `calc(100vh - ${offset}px)`;
+            });
+        }
+
+        window.addEventListener("load", () => {
+            bp26OffsetZimCanvas();
+            let tries = 0;
+            const i = setInterval(() => {
+                bp26OffsetZimCanvas();
+                tries += 1;
+                if (tries > 20) clearInterval(i);
+            }, 150);
+        });
+        window.addEventListener("resize", bp26OffsetZimCanvas);
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+    <!-- Chart.js 2.9.4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="analyticsStyles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <a href="leaderboard.html" class="back-btn">Back to MAIN page</a>
+            <h1>Analytics</h1>
+            <div style="width: 100px;"></div>
+        </div>
+
+        <div class="controls">
+            <select id="gameSelect">
+                <option value="Global">Global</option>
+                <option value="bp26-Game1">bp26-Game1</option>
+                <option value="bp26-Game2">bp26-Game2</option>
+                <option value="bp26-Game3">bp26-Game3</option>
+                <option value="bp26-Game4">bp26-Game4</option>
+                <option value="bp26-Game5">bp26-Game5</option>
+            </select>
+            <select id="timeFilter">
+                <option value="daily">Daily View (24 hours)</option>
+                <option value="weekly" selected>Weekly View (7 days)</option>
+                <option value="monthly">Monthly View (30 days)</option>
+            </select>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Game Sessions</div>
+                <div class="stat-value" id="stat-total">-</div>
+                <div class="stat-footer">Across the selected time period</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Peak Concurrent</div>
+                <div class="stat-value" id="stat-peak">-</div>
+                <div class="stat-footer" id="stat-peak-time">N/A</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Players</div>
+                <div class="stat-value" id="stat-players">-</div>
+                <div class="stat-footer">How many unique players played our games</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <p class="chart-title">Activity Frequency</p>
+                <i data-lucide="trending-up" style="color: var(--primary)"></i>
+            </div>
+            <canvas id="line-graph"></canvas>
+        </div>
+    </div>
+
+    <script type="module" src="analytics.js"></script>
+</body>
+</html>

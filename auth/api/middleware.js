@@ -1,4 +1,5 @@
 import { checkAuth } from "./auth-api.js";
+import { auth, onAuthStateChanged } from "./firebase-config.js";
 
 // List of games that require authentication
 const protectedGames = [
@@ -43,7 +44,7 @@ const getBasePath = () => {
 if (isProtectedGame()) {
   checkAuth()
     .then((user) => {
-      console.log("User authenticated:", user.email);
+      console.log("User authenticated:");
     })
     .catch(() => {
       const redirectUrl = encodeURIComponent(window.location.href);
@@ -66,5 +67,5 @@ onAuthStateChanged(auth, (user) => {
 
 /*
   Usage: Add this line at the top of game's index.html (right after <body> tag) to make it protected:
-  <script type="module" src="../auth/api/middleware.js"></script>
+  <script type="module" src="/auth/api/middleware.js"></script>
 */
