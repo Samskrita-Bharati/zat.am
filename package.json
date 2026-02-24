@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-  "devDependencies": {
-    "cypress": "^15.9.0"
-=======
   "name": "auth",
   "version": "1.0.0",
   "description": "",
@@ -23,7 +19,7 @@
     "i18n-iso-countries": "^7.14.0"
   },
   "devDependencies": {
+    "cypress": "^15.10.0",
     "vite": "^7.3.1"
->>>>>>> main
   }
 }
