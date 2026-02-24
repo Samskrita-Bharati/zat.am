@@ -5,22 +5,389 @@ html {
   -o-background-size: cover;
   background-size: cover;
 }
+body {
+  background: #f0f0f0;
+  padding-top: 7%;
+  
+  
+}
 .pos1 {
-    position: absolute;
-    top: 0%;
-    right: 2%;
+  position: absolute;
+  top: 0%;
+  right: 2%;
 }
 .pos2 {
-    position: absolute;
-    top: 20%;
-    left: 2%;
+  position: absolute;
+  top: 20%;
+  left: 2%;
+}
+.myp {
+  text-align: center;
+}
+td {
+  border: 3px solid #ca9e0d;
+  cursor: pointer;
+}
+h1 {
+  font-size: clamp(1.3em, 4vw, 3.1em);
+  color: #333;
+  font-weight: 600;
+  margin-top:20px;
+  
+}
 
+/* Game-specific styles - don't use generic selectors */
+#wm {
+  font-size: 2em;
+  color: #333;
+  margin: 5px;
 }
-.myp{
-	text-align:center;
-	
+
+#wm span,
+#nomd,
+#nowt {
+  font-size: 1.5em;
 }
-td{
-	border: 1px solid blue;
-	cursor:pointer;
+
+#tbl img{
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+#nomd {
+  color: green;
+}
+
+#nowt {
+  color: red;
+}
+
+center {
+  margin: 10px auto;
+  width: 90vw;
+}
+
+.header-divider {
+  content: "";
+  width: 60%;
+  height: 3px;
+  background-color: goldenrod;
+  margin: 5px auto 15px;
+}
+/* style for table */
+#mytable {
+  width: 80%;
+  overflow-x: auto;
+ 
+  
+}
+
+
+#tbl {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background-color: white;
+  padding: 10px;
+  box-shadow: 1px 2px 5px black;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+
+#tbl tr td {
+  padding: 15px;
+}
+
+/* for table data */
+#tbl td{
+  /*
+  min-width: 0;
+  aspect-ratio: 1 / 1;*/
+  padding: 4px;
+  vertical-align: middle;
+}
+
+#tbl img {
+  width: 70%;
+  height: 70%;
+  /*
+  max-width: 100%;
+  max-height: 100%;*/
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+#tbl p {
+  font-size: 1.3em;
+  color: #333;
+  padding: 0px;
+  margin: 0px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* CRITICAL: Force header styles on mmk page */
+.auth-buttons,
+#header-placeholder {
+  all: revert !important;
+}
+
+.auth-buttons {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: hsl(210, 36%, 96%) !important;
+  padding: 15px 20px !important;
+}
+
+.auth-buttons img.logo {
+  width: 50px !important;
+  height: auto !important;
+  cursor: pointer !important;
+}
+
+.auth-buttons .fa-user-circle {
+  font-size: 2rem !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.auth-buttons button {
+  font-size: 1rem !important;
+  padding: 0.375rem 0.75rem !important;
+}
+
+/* ✅ Score badge + submit button */
+#submitScoreBtn {
+  
+  /*
+  position: fixed;
+  right: 20px;
+  bottom: 20px;*/
+
+  margin: 30px auto 40px;
+  text-align: center;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+#submitScoreBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#scoreBadge {
+  display:inline-block;
+  /*
+  position: fixed;
+  left: 20px;
+  bottom: 24px;*/
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 18px;
+  z-index: 9999;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e5e7eb;
+}
+
+/* ✅ Celebration overlay */
+#bp26CelebrateOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 10000;
+  padding: 20px;
+}
+.bp26CelebrateBox {
+  width: min(460px, 92vw);
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  font-family: system-ui, Arial, sans-serif;
+}
+.bp26Sparkles {
+  font-size: 54px;
+  line-height: 1.1;
+  margin: 8px 0 6px;
+  animation: bp26Pop 600ms ease-out both;
+}
+@keyframes bp26Pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.bp26Btn {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
+  cursor: pointer;
+}
+.bp26Confetti {
+  position: fixed;
+  top: -12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  z-index: 10001;
+  opacity: 0.95;
+  animation: bp26Fall 950ms linear forwards;
+  pointer-events: none;
+}
+@keyframes bp26Fall {
+  to {
+    transform: translateY(110vh) rotate(540deg);
+    opacity: 0.9;
+  }
+}
+
+/* ✅ ensure counters show as text (won't affect header) */
+#wm #nomd,
+#wm #nowt {
+  display: inline-block !important;
+  min-width: 28px !important;
+  height: auto !important;
+  padding: 0 6px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  font-weight: 700 !important;
+  overflow: visible !important;
+}
+:root {
+  --cols: 6;
+}
+
+@media (max-width: 800px) {
+  h1{
+    margin-top:60px;
+    font-size: 2.0em;
+  }
+  #wm {
+    display: block;
+    font-size: 1.2em;
+  }
+
+
+  #tbl img{
+    max-width: 100%;
+    
+  }
+  #mytable {
+  width: 90%;
+  overflow-x: auto;
+}
+
+
+  
+
+  #tbl p {
+    font-size: 0.9em;
+  }
+  /*
+  #submitScoreBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}*/
+#submitScoreBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/*
+#scoreBadge {
+  position: fixed;
+  left: 20px;
+  bottom: 24px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  z-index: 9999;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e5e7eb;
+}*/
+}
+
+@media (max-width: 450px) {
+
+  :root{
+    --cols: 4;
+  }
+  body{
+    padding-top:3%;
+  }
+  center{
+    width: 100%;
+    height: auto;  
+    margin: 5px auto;
+  }
+   h1 { 
+    margin-top:70px;
+    font-size: 1.5em; 
+  }
+  #tbl td {
+    padding: 4px;
+  }
+  #tbl td {
+    padding: 2px;
+    width: calc(100% / 4);
+  }
+    #tbl img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+  
+
+  #tbl p {
+    font-size: 0.8em;
+  }
+
+  #wm {
+    font-size: 1.2em;
+  }
 }

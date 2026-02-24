@@ -322,7 +322,7 @@ function checkMatrix(check_case_no) {
      
      if ( (check_case_no === case_no+1) || (check_case_no === 0) ) {
      
-       if (expected.localeCompare(Guess[i])) {
+       if (expected.trimStart().localeCompare(Guess[i])) {
           num_misplaced_words += 1;
         }
      }

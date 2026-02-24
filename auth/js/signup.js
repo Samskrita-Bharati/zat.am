@@ -1,4 +1,13 @@
-import { signUp, updateUserProfile, ensureUserDocument } from "../api/auth-api.js";
+import {
+  signUp,
+  updateUserProfile,
+  ensureUserDocument,
+} from "../api/auth-api.js";
+import {
+  sendEmailVerification,
+  signOut,
+  auth,
+} from "../api/firebase-config.js";
 
 const signupForm = document.getElementById("signup-form");
 const nameInput = document.getElementById("signup-name");
@@ -41,15 +50,30 @@ signupForm.addEventListener("submit", async (e) => {
     // Create Firestore user document with default isAdmin = false
     await ensureUserDocument(user, { name });
 
-    message.innerHTML = "Account created! Redirecting...";
+    // Send verification email
+    await sendEmailVerification(user);
+
+    // Sign out the user immediately
+    await signOut(auth);
+
+    message.innerHTML =
+      "Account created! Please check your email to verify your account before logging in.";
     message.style.color = "green";
 
     setTimeout(() => {
-      window.location.href = "preferences.html"; // ✅ Redirect to preferences page
-    }, 1500);
+      // window.location.href = "preferences.html"; // Redirect to preferences page
+      window.location.href = "login.html";
+    }, 4000);
   } catch (error) {
     console.error(error);
-    message.innerHTML = error.message;
+
+    // Handle error
+    if (error.code === "auth/too-many-requests") {
+      message.innerHTML =
+        "Too many signup attempts. Please try again in a few minutes.";
+    } else {
+      message.innerHTML = error.message;
+    }
     message.style.color = "red";
   }
 });

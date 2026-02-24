@@ -1,422 +1,328 @@
-# Admin Status and Firestore Integration
+# Auth Admin Role & Bilingual / Transliteration Architecture
 
-This document explains how **admin status** is modeled, enforced, and used in the `zat.am` project. It is intended for:
+This document explains two cross-cutting features of the zat.am web app:
 
-- The **auth/frontend team** (how admin status is created, stored, and read).
-- The **leaderboard team** (how to check admin status and rely on Firestore rules).
+1. How **admin status** is modeled in Firebase Auth + Firestore and consumed by the frontend.
+2. How the **bilingual / transliteration system** works end-to-end (preferences → navbar → URLs → games), including the new shared bp26 transliteration module.
+
+It is written for future contributors who may adjust or extend the current implementation.
 
 ---
 
-## 1. Data Model
+## 1. High-Level Overview
 
-### 1.1 Firestore `users` Collection
+- Firebase Auth is the source of truth for user identities.
+- Firestore stores per-user metadata in a nested structure under `users/{uid}`:
+  - `users/{uid}/private/account` – sensitive fields (email, `isAdmin`, `createdAt`).
+  - `users/{uid}/public/profile` – non-sensitive fields (display name, language, location, preferences flags).
+- Admin status (`isAdmin`) is read from Firestore and never set from untrusted client input.
+- Bilingual/transliteration behavior is driven by:
+  - Preferred language code stored in Firestore and mirrored in localStorage.
+  - A bilingual on/off flag stored in localStorage and exposed globally.
+  - URL query parameter `t` that transliteration-capable pages consume.
+  - The shared helper `bp26/js/transliteration.js` for bp26 game pages.
 
-Each authenticated user has a corresponding document in the `users` collection:
+Key implementation files:
 
-- Collection: `users`
-- Document ID: `uid` (Firebase Auth user ID)
-- Fields:
-  - `email` (string) – user email
-  - `name` (string) – display name
-  - `isAdmin` (boolean) – admin flag (default `false`)
-  - `createdAt` (timestamp) – server timestamp when the profile is created
+- Auth/admin:
+  - `auth/api/firebase-config.js`
+  - `auth/api/auth-api.js`
+  - `firestore.rules`
+  - `auth/js/signup.js`, `auth/js/login.js`, `auth/js/profile.js`, `auth/js/preferences.js`
+  - `auth/api/middleware.js`, `js/navbar-auth.js`
+- Bilingual/transliteration:
+  - `auth/js/preferences.js`, `auth/js/profile.js`
+  - `js/navbar-auth.js`, `js/bilingual-toggle.js`
+  - `app.js` (main menu / game links)
+  - `bp26/js/transliteration.js` (shared transliteration utility)
+  - bp26 pages that include that helper (for example `bp26/fnd.html`, `bp26/fw.html`, `bp26/lrn.html`, `bp26/mk.html`, `bp26/ma.html`, and ZIM variants).
 
-Example document structure:
+---
 
-```json
-{
-  "email": "user@example.com",
-  "name": "User Name",
-  "isAdmin": false,
-  "createdAt": {".sv": "timestamp"}
-}
+## 2. Firestore Data Model for Auth & Admin
+
+### 2.1 Document Layout
+
+Each authenticated user has documents under the top-level `users` collection:
+
+```text
+users/{uid}/private/account   # sensitive account info
+users/{uid}/public/profile    # public profile + preferences
 ```
 
-> **Important:** `isAdmin` is **never** set or updated from arbitrary client input. It is only:
-> - Initially created as `false` by the client.
-> - Changed to `true` or back to `false` via trusted mechanisms (e.g., Firestore console, Admin SDK, or a secure admin-only UI that respects the rules).
+- `users/{uid}/private/account` fields:
+  - `email` (string) – copied from Firebase Auth.
+  - `isAdmin` (boolean) – whether this user is an admin. Default: `false`.
+  - `createdAt` (timestamp) – `serverTimestamp()` when the account doc is created.
 
----
+- `users/{uid}/public/profile` fields (current usage):
+  - `name` (string) – display name.
+  - `language` (string) – preferred second-language code (see section 5.1).
+  - `country` (string) – country name.
+  - `region` (string) – province/state where applicable.
+  - `location` (string) – combined location string.
+  - `preferencesSet` (boolean) – whether the user completed preferences.
+  - `streak` (number) – current streak value.
+  - `createdAt` (timestamp) – set on first profile creation.
 
-## 2. Firestore Security Rules
+### 2.2 Creation & Idempotency (`ensureUserDocument`)
 
-Firestore rules are defined in `firestore.rules` at the project root.
+File: `auth/api/auth-api.js`
 
-Key behaviors:
+`ensureUserDocument(user, extraData)`:
 
-### 2.1 Users Collection Rules
+- Returns early if no `user`.
+- Reads both:
+  - `users/{uid}/private/account`
+  - `users/{uid}/public/profile`
+- If missing, creates them with safe defaults.
+- Explicitly strips `isAdmin` from `extraData` so callers cannot client-set admin.
+- Returns `isNewUser` when both docs were previously absent.
 
-- **Read own document**
-  - `allow read: if request.auth.uid == userId;`
+Key points:
 
-- **Create own document**
-  - `allow create: if request.auth.uid == userId;`
+- Safe to call from all login paths (email/password, Google).
+- Existing docs are not overwritten.
+- `isAdmin` cannot be escalated by untrusted client input.
 
-- **Update own document, but cannot change `isAdmin`**
-  - Users can update their profile, **except** for `isAdmin`:
-  - If the request tries to change `isAdmin` when updating their own document, the write is denied.
+### 2.3 Reading Admin Status (`getCurrentUserProfile`, `isCurrentUserAdmin`)
 
-- **Admins can update only `isAdmin` for other users**
-  - If `request.auth.uid != userId` and the caller is an admin (`isAdmin == true` in their own user document), they can change **only** the `isAdmin` field on other user documents.
-  - Rules enforce that the diff of changed keys is exactly `['isAdmin']`.
+File: `auth/api/auth-api.js`
 
-- **Deletes are denied**
-  - `allow delete: if false;` – user documents cannot be deleted via client.
+- `getCurrentUserProfile()`:
+  - Reads both nested docs.
+  - Merges account + profile into a single object for frontend use.
+  - Returns `isAdmin` from `private/account`.
 
-### 2.2 Leaderboards (for leaderboard team)
+- `isCurrentUserAdmin()`:
+  - Wraps `getCurrentUserProfile()`.
+  - Returns `true` only if `profile.isAdmin === true`.
 
-Rules for leaderboards are present but currently commented out as a TODO. When enabled:
+Used by profile/admin-aware UI and reusable for leaderboard/admin controls.
 
-- Leaderboard documents are under: `leaderboards/{gameId}/{leaderboardType}/scores/{userId}`.
-- Public read: Anyone can read leaderboard scores.
-- Writes:
-  - `allow create, update: if request.auth.uid == userId;` – users can write only their own scores.
-- Deletes / resets:
-  - `allow delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;` – only admins can delete/reset scores.
+### 2.4 Firestore Security Rules
 
-The leaderboard team can uncomment and adjust this block when implementing leaderboards.
+File: `firestore.rules`
 
-### 2.3 Admin Logs (future)
+Helpers:
 
-- `admin-logs/{document}` can only be **read** by admins; no writes allowed currently.
-
-### 2.4 Catch-All
-
-- Any other document paths default to **deny all** (`allow read, write: if false;`).
-
----
-
-## 3. Frontend Firebase Setup
-
-### 3.1 Environment Variables
-
-Firebase config is driven by Vite environment variables defined in `.env`:
-
-- `VITE_FIREBASE_API_KEY`
-- `VITE_FIREBASE_AUTH_DOMAIN`
-- `VITE_FIREBASE_PROJECT_ID`
-- `VITE_FIREBASE_STORAGE_BUCKET`
-- `VITE_FIREBASE_MESSAGING_SENDER_ID`
-- `VITE_FIREBASE_APP_ID`
-
-These are consumed in `auth/api/firebase-config.js` to initialize Firebase:
-
-- `initializeApp(firebaseConfig)`
-- `getAuth(app)` – for authentication
-- `getFirestore(app)` – for Firestore
-
-Exports:
-
-- `auth`, `db`
-- Auth helpers: `createUserWithEmailAndPassword`, `signInWithEmailAndPassword`, etc.
-
----
-
-## 4. Auth Flow and User Document Creation
-
-All auth paths ensure a corresponding Firestore `users/{uid}` document exists.
-
-### 4.1 Helper: `ensureUserDocument(user, extraData?)`
-
-Defined in `auth/api/auth-api.js`.
+- `isSignedIn()`
+- `isOwner(userId)`
+- `isAdmin()` (reads `users/{uid}/private/account.isAdmin`)
 
 Behavior:
 
-- If `user` is falsy ⇒ no-op.
-- Looks up `users/{user.uid}`.
-  - If the document **exists** ⇒ returns without modifying anything.
-  - If it **does not exist** ⇒ creates it with:
-    - `email` from `user.email` (or empty string)
-    - `name` from `user.displayName` or `extraData.name` (or empty string)
-    - `isAdmin: false`
-    - `createdAt: serverTimestamp()`
-    - Any other safe fields from `extraData`, **excluding** `isAdmin`.
+- Base `users/{userId}` doc:
+  - Create/read allowed to owner; read also allowed to admin.
+  - Update/delete denied.
 
-> This function intentionally **never** changes `isAdmin` on existing documents.
+- `users/{userId}/private/{docId}`:
+  - Owner and admin can read.
+  - Owner can create own private doc but cannot set `isAdmin: true`.
+  - Owner can update private doc except changing `isAdmin`.
+  - Admin can update other users only when changed keys are exactly `['isAdmin']`.
+  - Deletes denied.
 
-### 4.2 Signup Flow
+- `users/{userId}/public/{docId}`:
+  - Public read.
+  - Owner-only create/update.
+  - Deletes denied.
 
-File: `auth/js/signup.js`
+- `leaderboards`:
+  - Public read.
+  - Signed-in write (current broad rule; tighten later by game/team requirements).
 
-- `signUp(email, password)` creates a Firebase Auth user.
-- `updateUserProfile(user, { displayName: name })` stores name in the auth profile.
-- `ensureUserDocument(user, { name })` then creates the Firestore profile if missing.
+- `admin-logs`:
+  - Read admin-only.
+  - Writes currently denied.
 
-Result:
+- Catch-all: deny all.
 
-- New users always get a `users/{uid}` document with `isAdmin: false` and `createdAt` set.
+Admin flag lifecycle:
 
-### 4.3 Email/Password Login Flow
-
-File: `auth/js/login.js`
-
-- `login(email, password)` signs the user in and returns a credential.
-- `ensureUserDocument(userCred.user)` is called:
-  - Useful for older users who existed before this profile setup.
-  - If the profile document is missing, it is created.
-
-### 4.4 Google Sign-In Flow
-
-File: `auth/js/login.js` and `auth/api/auth-api.js`
-
-- `signInWithGoogle()` (in `auth-api.js`) does:
-  - `signInWithPopup(auth, googleProvider)`
-  - `ensureUserDocument(cred.user)`
-  - Returns the credential.
-
-- `login.js` also calls `ensureUserDocument(cred.user)` after the call, but `ensureUserDocument` is idempotent; if the doc already exists, nothing changes.
-
-Result:
-
-- Google-only users also get consistent user documents in `users`.
+- New users start with `isAdmin: false`.
+- Promotion/demotion should happen via trusted mechanisms:
+  - Firestore console,
+  - Admin SDK / Cloud Function,
+  - future admin-only tooling that respects these rules.
 
 ---
 
-## 5. Helper Functions for Teams
+## 3. Auth Flows & Where Admin Fits
 
-All helpers are in `auth/api/auth-api.js`.
+### 3.1 Signup (`auth/js/signup.js`)
 
-### 5.1 `ensureUserDocument(user, extraData?)`
+1. `signUp(email, password)` creates Firebase Auth user.
+2. `updateUserProfile(user, { displayName: name })` updates Auth profile.
+3. `ensureUserDocument(user, { name })` creates nested Firestore docs if missing.
+4. Email verification is sent and user is signed out until verified.
 
-- **Purpose:** Guarantee a `users/{uid}` profile exists without ever changing `isAdmin`.
-- **Usage:** Already wired into signup and login flows; you usually don’t need to call this manually.
+### 3.2 Login (`auth/js/login.js`)
 
-Example (if needed):
+- Email/password login:
+  - blocks access if email not verified,
+  - calls `ensureUserDocument(user)` for backfill,
+  - reads profile to decide preferences flow.
 
-```js
-import { ensureUserDocument, getCurrentUser } from "/auth/api/auth-api.js";
+- Google login:
+  - signs in via OAuth,
+  - calls `ensureUserDocument(cred.user)`.
 
-const user = getCurrentUser();
-await ensureUserDocument(user, { name: "Optional Name Override" });
-```
+### 3.3 Protected Routes (`auth/api/middleware.js`)
 
-### 5.2 `getCurrentUserProfile()`
+- `bp26` pages require authenticated user.
+- Middleware redirects unauthenticated users to login with redirect URL.
+- This is auth-only (not admin-only).
 
-- **Purpose:** Fetch the current logged-in user’s Firestore profile document.
-- **Returns:**
-  - `null` if no user is logged in or the profile doc doesn’t exist.
-  - Otherwise: `{ id, email, name, isAdmin, createdAt, ... }`.
+### 3.4 Profile & Role Display (`auth/js/profile.js`)
 
-Example:
-
-```js
-import { getCurrentUserProfile } from "/auth/api/auth-api.js";
-
-const profile = await getCurrentUserProfile();
-if (profile) {
-  console.log("User name:", profile.name);
-  console.log("Is admin:", profile.isAdmin);
-}
-```
-
-### 5.3 `isCurrentUserAdmin()`
-
-- **Purpose (main one for leaderboard team):** Quickly check whether the logged-in user is an admin.
-- **Returns:**
-  - `true` if `profile.isAdmin === true`.
-  - `false` otherwise or if there is no profile.
-
-Example (client-side guard):
-
-```js
-import { isCurrentUserAdmin } from "/auth/api/auth-api.js";
-
-const canReset = await isCurrentUserAdmin();
-if (canReset) {
-  // Show or enable admin-only controls
-} else {
-  // Hide or disable admin-only controls
-}
-```
-
-### 5.4 Existing Auth Helpers (for completeness)
-
-- `signUp(email, password)` – create a new auth user.
-- `login(email, password)` – email/password sign-in.
-- `logout()` – sign out.
-- `resetPassword(email)` – send password reset email.
-- `checkAuth()` – Promise that resolves with the user if logged in, rejects otherwise.
-- `getCurrentUser()` – returns `auth.currentUser` (or `null`).
-- `updateUserProfile(user, data)` – wraps `updateProfile`.
-- `signInWithGoogle()` – Google OAuth sign-in (and ensures a user document exists).
+- `checkAuth()` ensures login.
+- `getCurrentUserProfile()` provides merged data.
+- Role badge/row uses `profile.isAdmin`.
+- Profile editing updates public profile only; does not edit `private/account.isAdmin`.
 
 ---
 
-## 6. Leaderboard Team: How to Use Admin Status
+## 4. Bilingual / Transliteration System
 
-### 6.1 Client-Side Usage (UI / Buttons)
+This section reflects the current architecture after bp26 transliteration refactor.
 
-- To show an admin-only button (e.g., "Reset Leaderboard"):
+### 4.1 Language Codes
 
-```js
-import { isCurrentUserAdmin } from "/auth/api/auth-api.js";
+Preferred language is represented by short codes:
 
-async function initLeaderboardPage() {
-  const resetBtn = document.getElementById("reset-leaderboard-btn");
-  const isAdmin = await isCurrentUserAdmin();
+- `1` (itrans fallback/script mapping)
+- `gu`, `ka`, `be`, `ml`, `te`, `ta`
+- `ia` (iast)
 
-  if (isAdmin) {
-    resetBtn.style.display = "block";
-  } else {
-    resetBtn.style.display = "none";
-  }
-}
+These codes are stored in:
 
-initLeaderboardPage();
-```
+- Firestore profile: `users/{uid}/public/profile.language`
+- localStorage: `zatPreferredLang`
+- global state: `window.zatPreferredLang`
 
-### 6.2 Server-Side / Cloud Functions (if used)
+### 4.2 Preferences Flow (`auth/js/preferences.js`)
 
-If you use Cloud Functions with the Admin SDK to reset leaderboards:
+User sets language + location fields; `updateUserPreferences(user, prefs)` merges into public profile and defaults missing values.
 
-- **Important:** Admin SDK bypasses Firestore rules, so you must manually enforce admin checks.
-- Pattern:
-  1. Function is called by an authenticated user.
-  2. In the function, read `users/{uid}` (from Firestore) using the Admin SDK.
-  3. Check `isAdmin === true`.
-  4. Only perform reset operations if the check passes.
+### 4.3 Navbar State (`js/navbar-auth.js`)
 
-This mirrors what the Firestore rules do for client-side deletes.
+- On auth state changed:
+  - load profile language into global + localStorage.
+  - read bilingual toggle flag (`zatBilingualOn`).
+- Toggle button:
+  - requires preferred language when turning on,
+  - persists flag,
+  - triggers `window.zatRefreshMenu()` and `window.zatSyncBilingualQueryParam()` if present.
+
+### 4.4 URL Sync (`js/bilingual-toggle.js`)
+
+This helper keeps URL `t` aligned with global bilingual state:
+
+- Normalizes legacy `t=1` in supported contexts.
+- Adds/removes `t` based on `zatBilingualOn` and preferred language.
+- Exposes `window.zatSyncBilingualQueryParam()` for navbar-triggered sync.
+
+### 4.5 Main Menu Link Injection (`app.js`)
+
+Main menu currently appends `?t=<preferredLang>` for bp26 links when bilingual is on.
+
+### 4.6 Shared bp26 Transliteration Module (`bp26/js/transliteration.js`)
+
+The bp26 pages now use a shared helper instead of duplicating `tlang` arrays and raw `Sanscript.t(...)` calls everywhere.
+
+Exports via `window.bp26Translit`:
+
+- `LANG_MAP` – code → Sanscript target mapping.
+- `getRawT(search?)` – reads raw URL `t`.
+- `getTargetScript(search?)` – resolves `t` into target script or `null`.
+- `transliterate(text, from?, options?)` – safe conversion with optional target/fallback.
+- `numberToDevanagari(value)` – utility for score/counter display.
+
+Behavior details:
+
+- If `Sanscript` is not available, returns original text.
+- If `t` is unsupported/missing, returns original text unless `fallback` is specified.
+- Catches conversion errors and fails safely.
+
+### 4.7 bp26 Pages Migrated to Shared Helper
+
+Main games:
+
+- `bp26/lrn.html`
+- `bp26/mk.html`
+- `bp26/fnd.html`
+- `bp26/fw.html`
+- `bp26/ma.html`
+
+ZIM variants:
+
+- `bp26/z3.html`
+- `bp26/z5.html`
+- `bp26/z6.html`
+- `bp26/zim3.html`
+
+Additional ZIM updates:
+
+- Shared header + bilingual toggle wiring added to the above pages.
+- Canvas offset logic added so game content renders below fixed header.
+- `z6` includes hover popup word text with transliteration fallback (`itrans`) when bilingual is off.
 
 ---
 
-## 7. Operational Steps: Firebase CLI and Rules Deployment
+## 5. Extending or Modifying
 
-### 7.1 One-Time Setup: Install Firebase CLI (Locally)
+### 5.1 Add a New Language
 
-On your machine (Windows):
+1. Add option to preferences/profile language selectors.
+2. Add label mapping in profile/navbar UI.
+3. Extend `LANG_MAP` in `bp26/js/transliteration.js` (and any non-bp26 transliteration maps still using local arrays).
+
+### 5.2 Make a New Page Respect Bilingual Mode
+
+1. Include `../js/bilingual-toggle.js` (or correct relative path).
+2. Read `t` from URL as needed.
+3. For bp26 pages, use `window.bp26Translit` rather than per-page maps.
+4. Optionally ensure main menu appends `t` for that game directory in `app.js`.
+
+### 5.3 Admin-Only UI / Actions
+
+1. Require auth (`checkAuth()` / `onAuthStateChanged`).
+2. Gate UI/action with `isCurrentUserAdmin()`.
+3. Ensure corresponding write paths are admin-protected in Firestore rules or moved to trusted backend.
+
+---
+
+## 6. Firebase CLI Operational Notes
+
+Install and use Firebase CLI as needed:
 
 ```bash
 npm install -g firebase-tools
-```
-
-Verify installation:
-
-```bash
-firebase --version
-```
-
-### 7.2 Login to Firebase
-
-```bash
 firebase login
-```
-
-- Follow the browser prompts and select the same Google account that owns the `zat-am-main` project.
-
-### 7.3 Initialize Firebase in the Project (If Not Already Done)
-
-From the project root (`zat.am`):
-
-```bash
-cd c:/src/coop/sheridancollege/new/zat.am
-firebase init
-```
-
-During `firebase init`:
-
-1. Select **Firestore** (and any other features you need, e.g., Hosting).
-2. Choose existing project: **`zat-am-main`**.
-3. For Firestore rules file, point to `firestore.rules` (already created).
-4. For Firestore indexes, accept the default (`firestore.indexes.json`).
-
-This will create/update local Firebase config files (e.g., `.firebaserc`, `firebase.json`).
-
-### 7.4 Deploy Firestore Rules
-
-Any time you update `firestore.rules`, deploy with:
-
-```bash
 firebase deploy --only firestore:rules
 ```
 
-This pushes the local rules to the live project.
-
-### 7.5 (Optional) Deploy Hosting / Functions
-
-If you also manage hosting or Cloud Functions via Firebase, use:
-
-```bash
-firebase deploy
-# or
-firebase deploy --only hosting
-firebase deploy --only functions
-```
-
-This is independent of admin status, but it may be part of your overall workflow.
+Deploy other targets (`hosting`, `functions`) as needed by your workflow.
 
 ---
 
-## 8. How to Assign and Test Admin Status
+## 7. Quick Admin Testing
 
-### 8.1 Assign Admin via Firestore Console (Recommended for Now)
-
-1. Go to Firebase console → Firestore → `users` collection.
-2. Find the user document by `uid` (after they have signed up/logged in once).
-3. Edit the document:
-   - Set `isAdmin` to `true`.
-4. Save the document.
-
-The user is now an admin according to both the frontend helper functions and Firestore rules.
-
-### 8.2 End-to-End Test Scenario
-
-**Step 1 – Create a normal user**
-
-1. Visit `/auth/signup.html`.
-2. Sign up with a name, email, and password.
-3. In Firebase console → Firestore → `users` collection:
-   - Verify a document with the new `uid` exists.
-   - Confirm fields: `email`, `name`, `isAdmin: false`, `createdAt`.
-
-**Step 2 – Promote this user to admin**
-
-1. In Firestore console, open their `users/{uid}` doc.
-2. Set `isAdmin` to `true`.
-3. Save.
-
-**Step 3 – Verify admin helpers**
-
-While logged in as this user, open browser DevTools console on any page that loads the Firebase app and run:
+1. Create/login user.
+2. Verify docs exist at:
+   - `users/{uid}/private/account`
+   - `users/{uid}/public/profile`
+3. Promote in console by setting `private/account.isAdmin = true`.
+4. Validate with:
 
 ```js
-import("/auth/api/auth-api.js").then(async m => {
-  const profile = await m.getCurrentUserProfile();
-  console.log("Profile:", profile);
-  const isAdmin = await m.isCurrentUserAdmin();
-  console.log("isAdmin:", isAdmin);
+import("/auth/api/auth-api.js").then(async (m) => {
+  console.log(await m.getCurrentUserProfile());
+  console.log("isAdmin:", await m.isCurrentUserAdmin());
 });
 ```
 
-You should see:
-
-- `profile.isAdmin === true`
-- `isAdmin: true`
-
-**Step 4 – Verify non-admin behavior**
-
-1. Log out.
-2. Create or log in as a different, non-admin user.
-3. Run the same console snippet.
-
-You should see:
-
-- `profile.isAdmin === false` (or `null` if no profile yet).
-- `isAdmin: false`.
-
-**Step 5 – Leaderboard behavior (once implemented)**
-
-- Client-side: Admin users see and can click the reset button; non-admins do not.
-- Firestore rules: Only admin users can perform delete/reset operations according to the leaderboard rules once enabled.
-
 ---
 
-## 9. Summary
-
-- Admin status is represented by `isAdmin` in `users/{uid}`.
-- Client-side code **never** directly changes `isAdmin` on existing users.
-- Firestore rules enforce who can read/write user documents and who is allowed to perform admin-only operations (e.g., leaderboard resets).
-- Helper functions `getCurrentUserProfile()` and `isCurrentUserAdmin()` provide a clean API for teams to work with admin status.
-- Firebase CLI is used to manage and deploy Firestore rules (`firebase deploy --only firestore:rules`).
-
-If you need more functionality (e.g., an admin panel to manage `isAdmin` flags via UI), it should build on top of these helpers and respect the existing Firestore rules.
+If auth, Firestore structure, or transliteration wiring changes again, update this file so it remains the single source of truth.

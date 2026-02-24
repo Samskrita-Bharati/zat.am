@@ -32,24 +32,14 @@ const passwordCard = document.getElementById("password-card");
 
 const countriesOptGroup = document.getElementById("all-countries");
 
-// const languageNames = {
-//   1: "Devanagari (देवनागरी)",
-//   be: "Bengali (বাংলা)",
-//   gu: "Gujarati (ગુજરાતી)",
-//   ka: "Kannada (ಕನ್ನಡ)",
-//   ml: "Malayalam (മലയാളം)",
-//   te: "Telugu (తెలుగు)",
-//   ta: "Tamil (தமிழ்)",
-// };
-
 const languageNames = {
-  1: "Devanagari",
-  be: "Bengali",
-  gu: "Gujarati",
-  ka: "Kannada",
-  ml: "Malayalam",
-  te: "Telugu",
-  ta: "Tamil",
+  1: "Devanagari (देवनागरी)",
+  be: "Bengali (বাংলা)",
+  gu: "Gujarati (ગુજરાતી)",
+  ka: "Kannada (ಕನ್ನಡ)",
+  ml: "Malayalam (മലയാളം)",
+  te: "Telugu (తెలుగు)",
+  ta: "Tamil (தமிழ்)",
 };
 
 let currentUser = null;
@@ -136,6 +126,13 @@ checkAuth()
 
     profileName.textContent = currentProfile.name || "User";
     profileEmail.textContent = user.email;
+
+    const profileIconElement = document.querySelector(".profile-icon");
+    if (user.photoURL) {
+      profileIconElement.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="profile-avatar-img">`;
+    } else {
+      profileIconElement.innerHTML = '<i class="fas fa-user-circle"></i>';
+    }
 
     if (currentProfile.isAdmin) {
       displayRole.textContent = "Admin";
@@ -234,6 +231,7 @@ editNameForm.addEventListener("submit", async (e) => {
       country: country || "",
       region: region || "",
       location: location || "",
+      preferencesSet: true,
     });
 
     // Update display
@@ -325,3 +323,18 @@ logoutBtn.addEventListener("click", async () => {
     console.error(error);
   }
 });
+
+// Handle Back to Games link based on origin
+const backLink = document.getElementById("back-link");
+if (backLink) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const origin = urlParams.get("from");
+
+  if (origin === "bp26") {
+    backLink.href = "../bp26/index.html";
+    backLink.textContent = "Back to Competition";
+  } else {
+    backLink.href = "../index24.html";
+    backLink.textContent = "Back to Games";
+  }
+}
