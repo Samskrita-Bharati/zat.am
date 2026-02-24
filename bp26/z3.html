@@ -109,7 +109,9 @@
                             window.location.reload();
                         })
                         timeout(1, () => { // wait for 1 second then let player close pane
-                            new Pane(wintmp,yellow).show();
+                            // Show popup and submit score
+                            submitScoreNow(timer.time * 3);
+                            new Pane(wintmp + "\nScore: " + timer.time * 3,yellow).show();
                         });
                     } else {
                         wrong.score++;
@@ -162,5 +164,32 @@
             });
             window.addEventListener("resize", bp26OffsetZimCanvas);
         </script>
+
+        <!-- Score submission setup-->
+        <script>
+            // Set the game name to be used the database insert
+            window.addEventListener("DOMContentLoaded", () => {
+                if (window.bp26Init) {
+                    window.bp26Init({ game: "bp26-Game6", day: 6 });
+                }
+            });
+
+            // Submit score function
+            async function submitScoreNow(finalScore) {
+                if (typeof window.reportScore !== "function") {
+                    console.warn("[BP26] reportScore() not found. Check that ./js/bp26-score.js is loading.");
+                    return;
+                }
+
+                try {
+                    await window.reportScore(finalScore);
+                    console.log("[BP26] ✅ reportScore success");
+                } catch (err) {
+                    console.error("[BP26] ❌ reportScore failed", err);
+                }
+            }
+        </script>
+        <!-- Score submission logic -->
+        <script type="module" src="./js/bp26-score.js"></script>
     </body>
 </html>
