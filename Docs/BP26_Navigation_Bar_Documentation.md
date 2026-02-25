@@ -14,7 +14,7 @@ It provides:
 - A logout button that signs the user out and protects restricted pages
 - A bilingual toggle button (only visible when logged in)
 
-![Bp26 Nav Bar](./bp26NavBar.png)
+![Bp26 Nav Bar](./images/bp26NavBar.png)
 
 ---
 
@@ -120,8 +120,8 @@ Returns the user to the BP26 root page.
 ### Important UX Detail
 `.auth-btn` starts with `visibility: hidden` so users do not see the wrong state before Firebase authentication loads.
 
-![Nav Bar HTML](./navBarHtml.png)
-![Nav Bar HTML 2](./navBarHtml2.png)
+![Nav Bar HTML](./images/navBarHtml.png)
+![Nav Bar HTML 2](./images/navBarHtml2.png)
 
 ---
 
@@ -147,9 +147,9 @@ This listens for authentication state changes.
 - User email displayed
 - Greeting uses display name or email prefix
 
-![onAuth1](./onAuth1.png)
-![onAuth2](./onAuth2.png)
-![onAuth3](./onAuth3.png)
+![onAuth1](./images/onAuth1.png)
+![onAuth2](./images/onAuth2.png)
+![onAuth3](./images/onAuth3.png)
 
 
 ---
@@ -161,7 +161,7 @@ Dropdown behavior is controlled using event listeners:
 - Clicking the profile icon toggles the dropdown visibility
 - Clicking outside closes the dropdown
 
-![Profile Dropdown](./ProfileDropdown.png)
+![Profile Dropdown](./images/ProfileDropdown.png)
 
 ---
 
@@ -183,7 +183,7 @@ signOut(auth)
   - Shows confirmation alert
   - Reloads the page
 
-![dropdown Logout](./dropDownLogout.png)
+![dropdown Logout](./images/dropDownLogout.png)
 
 ---
 
@@ -206,7 +206,7 @@ The button updates dynamically:
 - **Bilingual: On**
 - **Bilingual: Off**
 
-![bilingual](./bilingualState.png)
+![bilingual](./images/bilingualState.png)
 
 ---
 

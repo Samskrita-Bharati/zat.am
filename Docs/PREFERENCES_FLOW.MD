@@ -101,7 +101,7 @@ Province/State selection is required only if:
 
 If neither language nor country is selected, the form cannot be submitted.
 
-[![preferences_page]][img2](img2.png)
+[![preferences_page]][img2](./images/img2.png)
 
 ```js
 if (!language && !country) {

@@ -64,7 +64,7 @@ data-cy="forgot-pswd"
 
 ```
 
-[![forget_password]][img1](img1.png)
+[![forget_password]][img1](./images/img1.png)
 
 ## Reset Form
 

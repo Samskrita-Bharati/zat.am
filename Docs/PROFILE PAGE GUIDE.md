@@ -10,7 +10,7 @@ The Profile Page allows users to view and edit their account information, includ
 **Loading User Profile Data**\
 When the page loads, it fetches the user's profile information from Firebase:
 
-![](Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.001.png)
+![](./images/Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.001.png)
 
 **What this does:**
 
@@ -28,7 +28,7 @@ When the page loads, it fetches the user's profile information from Firebase:
 **Displaying Profile Photo**\
 For Google users, we show their Google profile picture:
 
-![](Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.002.png)\
+![](./images/Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.002.png)\
 **What this does:**
 
 - Checks if user has a photoURL, only Google users have this
@@ -38,7 +38,7 @@ For Google users, we show their Google profile picture:
 **Showing Admin Role**\
 If the user is an admin, we display their role:
 
-![](Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.003.png)
+![](./images/Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.003.png)
 
 **What this does:**
 
@@ -49,7 +49,7 @@ If the user is an admin, we display their role:
 **Editing Profile**\
 When user submits the edit form, the profile updates in Firebase:
 
-![](Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.004.png)
+![](./images/Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.004.png)
 
 **What this does:**
 
@@ -65,7 +65,7 @@ When user submits the edit form, the profile updates in Firebase:
 **Password Change Functionality**\
 Users can change their password through the profile page:
 
-![](Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.005.png)
+![](./images/Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.005.png)
 
 **What this does:**
 
@@ -82,7 +82,7 @@ Users can change their password through the profile page:
 
 Users who signed in with Google cannot change their password (it's managed by Google):
 
-![](Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.006.png)
+![](./images/Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.006.png)
 
 **What this does:**
 
@@ -94,7 +94,7 @@ Users who signed in with Google cannot change their password (it's managed by Go
 **Dynamic "Back to Games" Link**\
 The back button changes based on where the user came from:
 
-![](Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.007.png)
+![](./images/Aspose.Words.6ed639c1-5025-416d-9c93-a30a2808b465.007.png)
 
 **What this does:**
 
