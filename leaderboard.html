@@ -11,7 +11,7 @@
     <canvas id="sparkleCanvas"></canvas>
 
     <div class="header-container">
-      <a href="index24.html" class="back-btn">Back to Menu</a>
+      <a href="index24.html" class="back-btn" data-cy="back-to-games">Back to Menu</a>
       <h1>Leaderboard</h1>
       <a href="analytics.html" id="analyticsBtn" class="analytics-btn"
         >Analytics</a
@@ -32,7 +32,7 @@
       <!-- ✅ NEW: Date picker (empty = all dates). Pick a date = show that date only -->
       <input id="seasonDate" type="date" />
 
-      <select id="timeFilter">
+      <select id="timeFilter" data-cy="time-filter">
         <!-- <option value="" selected>Select</option> -->
         <option value="daily" selected>Daily</option>
         <option value="weekly">Weekly</option>
