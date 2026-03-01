@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,31 +12,236 @@
     <!-- styles -->
     <link rel="stylesheet" href="styles.css" />
   </head>
+
   <body>
+    <div class="auth-buttons">
+      <img src="शत.म्.png" alt="Logo" class="logo" />
+
+      <!-- Show when logged out -->
+      <div class="auth-btn">
+        <!-- Bilingual mode toggle (shown only when logged in via navbar-auth.js) -->
+        <button id="bilingual-toggle" class="hidden" style="display: none">
+          Bilingual: Off
+        </button>
+
+        <span id="logged-out">
+          <button onclick="window.location.href = './auth/login.html'">
+            Login
+          </button>
+
+          <button onclick="window.location.href = './auth/signup.html'">
+            Sign Up
+          </button>
+        </span>
+
+        <!-- Show when logged in -->
+        <div id="logged-in" class="hidden profile-container">
+          <!-- Profile Icon -->
+          <span id="profile-btn"
+            ><i class="fas fa-user-circle fa-2x profile-icon"></i
+          ></span>
+          <!-- Dropdown Menu -->
+          <div id="profile-dropdown" class="dropdown hidden">
+            <div class="dropdown-header">
+              <p class="user-email" id="user-email-dropdown">
+                user@example.com
+              </p>
+              <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
+              <span id="username">Hi, username!</span>
+              <span id="user-language" class="user-language-row"></span>
+              <p id="streak">🔥 Streak: 0</p>
+            </div>
+            <hr />
+            <a href="./leaderboard.html?from=home">Leaderboard</a>
+            <a href="./auth/profile.html">Profile</a>
+            <a href="#" id="dropdown-logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <section class="menu">
       <!-- title -->
       <div class="title">
-	  <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  -->  </h2>
-        <!--<h2><span style="color:red">श</span><span style="color:yellow">त</span>.<span style="color:blue">म्</span></h2>-->
+        <h2>
+          संस्कृतभारती
+          <!--जयतु संस्कृतम् ।  -->
+        </h2>
         <div class="underline"></div>
       </div>
+
       <!-- filter buttons -->
-      <div class="btn-container">
-        <!-- <button type="button" class="filter-btn" data-id="all">all</button>
-        <button type="button" class="filter-btn" data-id="breakfast">
-          breakfast
-        </button>
-        <button type="button" class="filter-btn" data-id="lunch">lunch</button>
-        <button type="button" class="filter-btn" data-id="shakes">
-          shakes
-        </button> -->
-      </div>
+      <div class="btn-container"></div>
+
       <!-- menu items -->
-      <div class="section-center">
-        
-      </div>
+      <div class="section-center"></div>
     </section>
+
+    <div class="leaderboard-container">
+      <a class="leaderboard-btn" href="./leaderboard.html">🏆 Leaderboard</a>
+
+      <div class="leaderboard-panel">
+        <div class="lb-title">🏆 Monthly Leaders</div>
+
+        <div class="lb-item gold">
+          🥇
+          <span
+            id="p1Name"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100px;
+            "
+            >—</span
+          >
+          <span id="p1Score">0</span>
+        </div>
+
+        <div class="lb-item silver">
+          🥈
+          <span
+            id="p2Name"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100px;
+            "
+            >—</span
+          >
+          <span id="p2Score">0</span>
+        </div>
+
+        <div class="lb-item bronze">
+          🥉
+          <span
+            id="p3Name"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100px;
+            "
+            >—</span
+          >
+          <span id="p3Score">0</span>
+        </div>
+
+        <a href="./leaderboard.html" class="lb-link">View Full Leaderboard →</a>
+      </div>
+    </div>
+    <footer style="text-align: center; padding: 20px">
+      <a href="./legal/privacy.html" target="_blank">Privacy Policy</a>
+    </footer>
     <!-- javascript -->
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
+    <script type="module" src="./js/navbar-auth.js"></script>
+    <!-- Mini-leaderboard -->
+    <script type="module">
+      import {
+        collection,
+        getDocs,
+        doc,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+      import { db } from "./auth/api/firebase-config.js";
+      async function getTop3(selectedGame) {
+        const timestamp = Date.now();
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        // used for getting document for current month
+        const formattedDate = `${year}-${month}`; // YYYY-MM
+
+        const docRef = doc(
+          db,
+          "leaderboards",
+          selectedGame,
+          "gameHistory",
+          formattedDate,
+        );
+        const snapshot = await getDoc(docRef);
+        let data;
+        if (snapshot.data()) {
+          data = snapshot.data();
+        } else {
+          data = [];
+        }
+        const formattedData = Object.entries(data.entries).map(
+          ([key, score]) => {
+            const [timestamp, uid] = key.split("_");
+
+            return {
+              uid,
+              timestamp: Number(timestamp),
+              score,
+            };
+          },
+        );
+
+        const summary = formattedData.reduce((acc, data) => {
+          const { uid, score } = data;
+          if (!uid) return acc;
+          acc[uid] = (acc[uid] || 0) + score;
+          return acc;
+        }, {});
+
+        const top3Ids = Object.entries(summary)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3);
+
+        return await Promise.all(
+          top3Ids.map(async ([uid, score]) => {
+            const name = await fetchName(uid);
+            return { username: name, totalScore: score };
+          }),
+        );
+      }
+
+      async function fetchName(uid) {
+        try {
+          const snap = await getDoc(doc(db, "users", uid, "public", "profile"));
+          return snap.exists() ? snap.data().name : "Unknown";
+        } catch {
+          return "Unknown";
+        }
+      }
+
+      async function initMiniLeaderboard() {
+        const top3 = await getTop3("Global");
+        top3.forEach((player, i) => {
+          const nameEl = document.getElementById(`p${i + 1}Name`);
+          const scoreEl = document.getElementById(`p${i + 1}Score`);
+          if (nameEl) nameEl.textContent = player.username;
+          if (scoreEl) scoreEl.textContent = player.totalScore.toLocaleString();
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", initMiniLeaderboard);
+    </script>
+    <!-- ✅ inject Scoring + Contest buttons -->
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          const btnContainer = document.querySelector(".btn-container");
+          if (!btnContainer) return;
+
+          function addTab(id, text, href) {
+            if (btnContainer.querySelector(`[data-id="${id}"]`)) return;
+            const a = document.createElement("a");
+            a.className = "filter-btn";
+            a.setAttribute("data-id", id);
+            a.href = href;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.textContent = text;
+            btnContainer.appendChild(a);
+          }
+
+          addTab("contest", "🏆 Contest ", "./bp26/index.html");
+        }, 0);
+      });
+    </script>
   </body>
 </html>

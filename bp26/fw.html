@@ -7,78 +7,34 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="css/find.css" />
+      <!-- Header CSS -->
+    <link rel="stylesheet" href="css/header.css" />
   <script type="text/javascript" src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
-  <style>
-    /* The switch - the box around the slider */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-
-    /* Hide default HTML checkbox */
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    /* The slider */
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      -webkit-transition: .4s;
-      transition: .4s;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      -webkit-transition: .4s;
-      transition: .4s;
-    }
-
-    input:checked+.slider {
-      background-color: #2196F3;
-    }
-
-    input:focus+.slider {
-      box-shadow: 0 0 1px #2196F3;
-    }
-
-    input:checked+.slider:before {
-      -webkit-transform: translateX(26px);
-      -ms-transform: translateX(26px);
-      transform: translateX(26px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-      border-radius: 34px;
-    }
-
-    .slider.round:before {
-      border-radius: 50%;
-    }
-  </style>
   <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 </head>
 
 <body>
-  <div id="lead">अस्मिन् अक्षरसमूहे <b>शब्दावली</b>-तः पदानि सन्ति । कति ? <span style="font-weight:bold"
+      <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+  <script type="module" src="../js/bilingual-toggle.js"></script>
+
+      <!-- Load Header -->
+    <script src="js/load-header.js"></script>
+    
+  <h1 class="gameTitle">Word Search </h1>
+  <div class="header-divider"></div>
+  <div id="lead">अस्मिन् अक्षरसमूहे अद्यतन-कथा-तः पदानि सन्ति । कति ? <span style="font-weight:bold"
       id="nPresent">५</span> । करोतु अन्वेषणम् । <br><span id="lead2"></span> </div>
   <div id="statusMessage"> पदानि अन्वेषितानि</div>
+  <div id="liveScore" style="
+    text-align:center;
+    font-weight:bold;
+    margin:6px 0;
+    font-size:18px;
+  ">
+    Score: 100
+  </div>
   <div id="finishMessage">।। शुभमस्तु ।। </div>
   <div id="gridParent">
     <div id="grid"></div>
@@ -91,9 +47,9 @@
       <br>
       <strong>कठिनता</strong>
       <ul>
-        <li><a href="fw.html?size=5" onclick="sV(this)">सरलम् 5x5</a></li>
-        <li><a href="fw.html?size=7" onclick="sV(this)">मध्यमम् 7x7</a></li>
-        <li><a href="fw.html?size=9" onclick="sV(this)">कठिनम् 9x9</a></li>
+        <li><a href="fw.html?size=5" onclick="sV(this)">सरलम् </a></li>
+        <li><a href="fw.html?size=7" onclick="sV(this)">मध्यमम् </a></li>
+        <li><a href="fw.html?size=10" onclick="sV(this)">कठिनम् </a></li>
       </ul>
 
 
@@ -123,6 +79,63 @@
     </div>
   </div>
 
+  <!-- ✅ Celebration overlay (inline) -->
+  <div id="bp26CelebrateOverlay">
+    <div class="bp26CelebrateBox">
+      <div class="bp26Sparkles">✨🎉✨</div>
+      <div id="bp26CelebrateTitle" style="font-weight:700;font-size:18px;margin-bottom:6px;">
+        Submitted ✅
+      </div>
+      <div id="bp26CelebrateSub" style="font-size:14px;color:#374151;">
+        Nice work!
+      </div>
+      <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
+    </div>
+  </div>
+
+  <script>
+    /* ---------------------------
+       Celebration (inline)
+    --------------------------- */
+    function bp26Celebrate({ title="Submitted ✅", subtitle="Nice work!", score=null } = {}) {
+      const overlay = document.getElementById("bp26CelebrateOverlay");
+      const t = document.getElementById("bp26CelebrateTitle");
+      const s = document.getElementById("bp26CelebrateSub");
+
+      t.textContent = title;
+      s.textContent = score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
+
+      overlay.style.display = "flex";
+      bp26BurstConfetti(70);
+
+      setTimeout(() => { overlay.style.display = "none"; }, 2200);
+    }
+
+    function bp26BurstConfetti(count=60) {
+      for (let i = 0; i < count; i++) {
+        const c = document.createElement("div");
+        c.className = "bp26Confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.width = (6 + Math.random() * 8) + "px";
+        c.style.height = (6 + Math.random() * 8) + "px";
+        c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
+        c.style.transform = `translateY(0) rotate(${Math.random() * 180}deg)`;
+        c.style.animationDuration = (800 + Math.random() * 600) + "ms";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 1600);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const closeBtn = document.getElementById("bp26CelebrateClose");
+      const overlay = document.getElementById("bp26CelebrateOverlay");
+      if (closeBtn) closeBtn.addEventListener("click", () => overlay.style.display = "none");
+      if (overlay) overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) overlay.style.display = "none";
+      });
+    });
+  </script>
+
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
@@ -133,19 +146,39 @@
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
   <script>
+    const BP26_GAME = "bp26-Game4";
+    const BP26_DAY = 4;
     var wpp = 15;
     var answers = [];
     var wlist = [];
-    var N_ROWS = 7;
-    var N_COLS = 7;
+    var N_ROWS = 10;
+    var N_COLS = 10;
     var nc = 0;
-    var N_WORDS_TO_FIND = 4;
+    var N_WORDS_TO_FIND = 5;
+    var isGameFinished = false;
+    let score = 0;
+    let scoreInterval = null;
+    const liveScoreEl = document.getElementById("liveScore");
     const urlParams = new URLSearchParams(window.location.search);
     var data = urlParams.get('d');
     if (!data)
       data = "अक्षरसमूहे अद्यतन-कथा पदानि सन्ति करोतु अन्वेषणम्";
 
-    var wordList = Sanscript.t(data, 'iast', 'devanagari').split(" ");
+  // Bilingual support: read transliteration target from `t` param
+  // (e.g., t=gu, t=ka). When missing or unsupported, fall back to
+  // IAST for tooltips/overlays.
+  var t = urlParams.get('t');
+  if (!t) t = 0;
+  var tlang = [];
+  tlang[1] = "itrans";
+  tlang['gu'] = "gujarati";
+  tlang['ka'] = "kannada";
+  tlang['be'] = "bengali";
+  tlang['ml'] = "malayalam";
+  tlang['te'] = "telugu";
+  tlang['ta'] = "tamil";
+
+  var wordList = Sanscript.t(data, 'iast', 'devanagari').split(" ");
     document.addEventListener('DOMContentLoaded', function () {
       //	timer = setInterval('countSecs("timer")',1000); //1000ms to wait before executing the code =1 second  
       //       countSecs("timer");
@@ -179,6 +212,34 @@
         N_WORDS_TO_FIND = Math.min(Math.floor(size / 2), wordList.length);
       }
       var MAX_MARKER_IDX = 6;
+
+      function initScoreByDifficulty() {
+        const size = urlParams.get('size');
+        if (size == 10) {   
+          score = 200; // hard 
+        } 
+        else if (size == 7) {  
+          score = 100; // medium
+        }
+        else if (size == 5){
+          score = 50; // easy 
+        }
+        else {
+          score = 200; // fallback
+        }
+
+        // show starting score
+        liveScoreEl.textContent = "Score: " + Math.round(score);
+
+        // time decay: -0.6 per second
+        scoreInterval = setInterval(() => {
+          score -= 0.6; 
+          if (score < 0) score = 0;
+
+          liveScoreEl.textContent = "Score: " + Math.round(score);
+        }, 1000);
+      }
+
       var main = function () {
         drawGrid();
         var nWordsPut = 0;
@@ -238,22 +299,53 @@
           $("#answers").append("<li>" + answers[answerIdx] + "</li>");
         }
       };
-      var cellClick = function (e) {
-        //alert(nc++);
-        nc++;
-        var cell = $(e.target).closest("td").get(0);
-        nAnswersDiscovered += processCell(cell).length;
-        $("#nFound").text(String.fromCharCode(0x0966 + nAnswersDiscovered));
-        if (nAnswersDiscovered == nAnswersPresent) {
-          $("#finishMessage").append("\n AFTER " + nc + " clicks!")
-          alert("You found " + nAnswersPresent + " words \n AFTER " + nc + " clicks!")
-          var ask = confirm("पुनः ? Press 'ok' to play again");
-          if (ask) {
-            window.location.reload();
-          }
-          else
-            cellClick = null;
 
+      var cellClick = async function (e) {
+        // prevent double submission
+        if (isGameFinished) return;
+
+        nc++;
+        // lose points for wrong clicks
+        score -= 1;
+        if (score < 0) score = 0;
+
+        var cell = $(e.target).closest("td").get(0);
+        const foundNow = processCell(cell).length;
+        nAnswersDiscovered += foundNow;
+
+        // gain points when you actually find words
+        if (foundNow > 0) {
+          score += foundNow * 10;
+        }     
+        liveScoreEl.textContent = "Score: " + Math.round(score);
+
+        $("#nFound").text(String.fromCharCode(0x0966 + nAnswersDiscovered));
+
+        if (nAnswersDiscovered == nAnswersPresent) {
+          isGameFinished = true;
+          clearInterval(scoreInterval);
+          const finalScore = Math.round(score);
+          liveScoreEl.textContent = "Final Score: " + finalScore;
+
+          // ✅ submit the actual game score
+          let submitOk = true;
+          try {
+            if (window.reportScore) {
+              await window.reportScore(finalScore); // ✅ send correct score
+            }
+          } catch (err) {
+            submitOk = false;
+            console.error("Score submit failed:", err);
+          }
+
+          // ✅ show celebration first (no alert/confirm to block it)
+          bp26Celebrate({
+            title: submitOk ? "Score Submitted ✅" : "Finished ✅",
+            subtitle: submitOk ? "Great job!" : "Saved locally (Firebase not ready)",
+            score: finalScore
+          });
+
+          $("#finishMessage").append("<br>AFTER " + nc + " clicks!");
           $("#finishMessage").show();
           $("#statusMessage").hide();
           $("#lead").hide();
@@ -531,7 +623,10 @@
                     (slotColIdx + wordIdx);
                 default:
               }
-              $(targetCell).html("<span title='" + Sanscript.t(String(charToPut), 'devanagari', 'iast') + "'>" + charToPut + "</span>");
+              var ttChar = (t && tlang[t])
+                ? Sanscript.t(String(charToPut), 'devanagari', tlang[t])
+                : Sanscript.t(String(charToPut), 'devanagari', 'iast');
+              $(targetCell).html("<span title='" + ttChar + "'>" + charToPut + "</span>");
             }
             //placed the word
             return true;
@@ -607,7 +702,10 @@
         $("#grid td").each(function (idx, cell) {
           if ($(cell).text().trim().length == 0) {
             ra = getRandomAkshara();
-            $(cell).html("<span title='" + Sanscript.t(String(ra), 'devanagari', 'itrans') + "'>" + ra + "</span>");
+            var ttRa = (t && tlang[t])
+              ? Sanscript.t(String(ra), 'devanagari', tlang[t])
+              : Sanscript.t(String(ra), 'devanagari', 'itrans');
+            $(cell).html("<span title='" + ttRa + "'>" + ra + "</span>");
           }
         });
       };
@@ -667,6 +765,7 @@
       $(window).resize(resizeGrid);
       //$(document).ready(main);
 
+      initScoreByDifficulty();
       main();
     }
 
@@ -680,7 +779,10 @@
     function showHint1() {
       $("#lead2").html("");
       for (var i = 0; i < wordList.length; i++) {
-        $("#lead2").append("<span class=nob title='" + Sanscript.t(wordList[i], 'devanagari', 'iast') + "'>" + wordList[i] + " </span>");
+        var ttWord = (t && tlang[t])
+          ? Sanscript.t(wordList[i], 'devanagari', tlang[t])
+          : Sanscript.t(wordList[i], 'devanagari', 'iast');
+        $("#lead2").append("<span class=nob title='" + ttWord + "'>" + wordList[i] + " </span>");
       }
 
     };
@@ -690,10 +792,23 @@
         if (answers.includes(wordList[i]))
           $("#lead2").append("<strong>" + wordList[i] + "</strong> ");
         else
-          $("#lead2").append("<span class=nob title='" + Sanscript.t(wordList[i], 'devanagari', 'iast') + "'>" + wordList[i] + " </span>");
+          $("#lead2").append("<span class=nob title='" + ((t && tlang[t])
+            ? Sanscript.t(wordList[i], 'devanagari', tlang[t])
+            : Sanscript.t(wordList[i], 'devanagari', 'iast')) + "'>" + wordList[i] + " </span>");
       }
 
     };</script>
-</body>
 
+    <!-- IMPORTANT: This is your Firestore score file -->
+    <script type="module" src="./js/bp26-score.js"></script>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.bp26Init) {
+          window.bp26Init({ game: BP26_GAME, day: BP26_DAY });
+        }
+      });
+    </script>
+ 
+</body>
 </html>
