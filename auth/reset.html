@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password - zat.am</title>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+    <div class="container">
+      <div class="form-box">
+        <div class="forgot-password">
+          <h2>Forgot your password?</h2>
+          <div class="header-divider"></div>
+
+          <form id="reset-form">
+            <p class="user-message">Enter your email address below and we'll send you a link to reset your password.</p>
+            <input type="email" id="reset-email" placeholder="Email Address" required data-cy="reset-email" />
+            <button class="create-btn" type="submit" data-cy="reset-btn">RESET PASSWORD</button>
+          </form>
+          <div id="errormessage" data-cy="message"></div>
+      </div>
+    </div>
+    <script type="module" src="./js/reset.js"></script>
+</body>
+</html>

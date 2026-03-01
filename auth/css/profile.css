@@ -1,0 +1,496 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700&display=swap");
+
+:root {
+  --clr-grey-1: hsl(209, 61%, 16%);
+  --clr-grey-3: hsl(209, 34%, 30%);
+  --clr-grey-5: hsl(210, 22%, 49%);
+  --clr-grey-8: hsl(210, 31%, 80%);
+  --clr-grey-10: hsl(210, 36%, 96%);
+  --clr-gold: #c59d5f;
+  --clr-white: #fff;
+  --ff-primary: "Roboto", sans-serif;
+  --ff-secondary: "Open Sans", sans-serif;
+  --transition: all 0.3s linear;
+  --radius: 0.5rem;
+  --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: var(--ff-secondary);
+  background: var(--clr-grey-10);
+  padding: 40px;
+  margin: 0;
+}
+
+.profile-container {
+  max-width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.left-section {
+  background: var(--clr-white);
+  padding: 30px;
+  border-radius: var(--radius);
+  box-shadow: var(--light-shadow);
+  text-align: center;
+  height: fit-content;
+}
+
+.profile-icon i {
+  font-size: 90px;
+  color: var(--clr-gold);
+}
+
+.left-section h2 {
+  font-family: var(--ff-primary);
+  color: var(--clr-grey-1);
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+.left-section p {
+  font-family: var(--ff-secondary);
+  color: var(--clr-grey-5);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.left-section hr {
+  border: none;
+  border-top: 2px solid var(--clr-grey-8);
+  margin: 20px 0;
+}
+
+.profile-details {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--clr-grey-10);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-family: var(--ff-primary);
+  font-weight: 600;
+  color: var(--clr-grey-3);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-family: var(--ff-secondary);
+  color: var(--clr-grey-1);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.left-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 2px solid var(--clr-gold);
+  color: var(--clr-gold);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 15px;
+  font-family: var(--ff-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.logout-btn:hover {
+  background: var(--clr-gold);
+  color: var(--clr-white);
+}
+
+.back-link {
+  display: block;
+  color: var(--clr-gold);
+  text-decoration: none;
+  font-size: 15px;
+  font-family: var(--ff-secondary);
+  font-weight: 600;
+  padding: 10px;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  text-align: center;
+}
+
+.back-link:hover {
+  background: var(--clr-grey-10);
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.profile-card {
+  background: var(--clr-white);
+  padding: 35px;
+  border-radius: var(--radius);
+  box-shadow: var(--light-shadow);
+}
+
+.profile-card h2 {
+  font-family: var(--ff-primary);
+  color: var(--clr-grey-1);
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  border-bottom: 3px solid var(--clr-gold);
+  padding-bottom: 10px;
+}
+
+.profile-card form {
+  margin-top: 20px;
+}
+
+.profile-card label {
+  display: block;
+  font-family: var(--ff-primary);
+  font-weight: 600;
+  color: var(--clr-grey-3);
+  margin-bottom: 8px;
+  margin-top: 15px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-card input {
+  width: 90%;
+  padding: 12px 15px;
+  border: 2px solid var(--clr-grey-8);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: var(--ff-secondary);
+  margin-bottom: 15px;
+  background: var(--clr-white);
+  transition: var(--transition);
+}
+
+.profile-card select {
+  width: 93%;
+  padding: 12px 15px;
+  border: 2px solid var(--clr-grey-8);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: var(--ff-secondary);
+  margin-bottom: 15px;
+  background: var(--clr-white);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.profile-card select:focus {
+  outline: none;
+  border-color: var(--clr-gold);
+  box-shadow: 0 0 0 3px rgba(197, 157, 95, 0.1);
+}
+
+.profile-card input:focus {
+  outline: none;
+  border-color: var(--clr-gold);
+  box-shadow: 0 0 0 3px rgba(197, 157, 95, 0.1);
+}
+
+.profile-card button {
+  padding: 12px 35px;
+  background-color: var(--clr-gold);
+  color: var(--clr-white);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 15px;
+  font-family: var(--ff-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  box-shadow: var(--light-shadow);
+  margin-top: 10px;
+}
+
+.profile-card button:hover {
+  background-color: #b08a50;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#name-message,
+#password-message {
+  margin-top: 20px;
+  padding: 12px 15px;
+  text-align: center;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.profile-card.disabled {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.profile-card.disabled::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius);
+  pointer-events: none;
+}
+
+.profile-card.disabled input {
+  cursor: not-allowed;
+}
+
+.profile-card.disabled button {
+  background: #e0e0e0;
+  color: #9e9e9e;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.profile-card.disabled button:hover {
+  background: #e0e0e0;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Profile image */
+.profile-avatar-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-icon {
+  display: inline-block;
+}
+
+/*  Tablets */
+@media screen and (max-width: 1024px) {
+  .profile-container {
+    grid-template-columns: 350px 1fr;
+    gap: 25px;
+  }
+
+  body {
+    padding: 30px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .left-section {
+    max-width: 100%;
+  }
+
+  body {
+    padding: 25px;
+  }
+}
+
+/* Phones */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 20px 15px;
+  }
+
+  .profile-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .left-section {
+    padding: 25px 20px;
+  }
+
+  .profile-card {
+    padding: 25px 20px;
+  }
+
+  .profile-card h2 {
+    font-size: 1.35rem;
+  }
+
+  .profile-icon i {
+    font-size: 80px;
+  }
+
+  .profile-avatar-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-card input,
+  .profile-card select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 0;
+  }
+
+  .detail-label,
+  .detail-value {
+    text-align: left;
+  }
+}
+
+/* Mobile Phones */
+@media screen and (max-width: 480px) {
+  body {
+    padding: 15px 10px;
+  }
+
+  .profile-container {
+    gap: 15px;
+  }
+
+  .left-section {
+    padding: 20px 15px;
+  }
+
+  .left-section h2 {
+    font-size: 1.25rem;
+  }
+
+  .left-section p {
+    font-size: 13px;
+  }
+
+  .profile-icon i {
+    font-size: 70px;
+  }
+
+  .profile-avatar-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .profile-card {
+    padding: 20px 15px;
+  }
+
+  .profile-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .profile-card label {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  .profile-card input,
+  .profile-card select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .profile-card button {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .logout-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .back-link {
+    font-size: 14px;
+  }
+
+  .detail-label {
+    font-size: 12px;
+  }
+
+  .detail-value {
+    font-size: 13px;
+  }
+
+  #name-message,
+  #password-message {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+}
+
+/* Small Devices */
+@media screen and (max-width: 360px) {
+  body {
+    padding: 10px 8px;
+  }
+
+  .left-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .profile-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .profile-icon i {
+    font-size: 60px;
+  }
+
+  .profile-avatar-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .profile-card input,
+  .profile-card select {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .profile-card button {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+}
