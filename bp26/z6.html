@@ -68,7 +68,7 @@ function padz(num) {
                 function setSpecial() {
                     tilpics = [];
                     var mywords = image.slice();
-                    special = rand(wpp); // index starts at 0
+                    special = rand(wpp-1); // index starts at 0
                     wintmp = mywords[special];
                     winmsg = words[special];
                     if (t) winmsg+= "\n"+Sanscript.t(String(winmsg), 'devanagari',tlang[t])
