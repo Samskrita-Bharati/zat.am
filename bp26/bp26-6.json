@@ -1,0 +1,44 @@
+var bpwords=[0,
+['गणेशः', 'रामः', 'कृष्णः ', 'शिवः', 'सरस्वती', 'दुर्गा ', 'ओंकारः', 'आञ्जनेयः', 'सूर्यः', 'दीपः ', 'देवालयः', 'अर्चकः', 'जपति', 'यजति', 'नमति'],
+['विद्यालयः', 'बालकः', 'अध्यापकः', 'वृद्धः', 'छात्रः', 'बालिका', 'अध्यापिका', 'वृद्धा', 'छात्रा ', 'अम्बा', 'गृहम्', 'चित्रमन्दिरम्', 'लिखति', 'पठति', 'गच्छति'],
+['क्रीडकः', 'नापितः ', 'शिल्पकारः ', 'पाचकः ', 'आरक्षकः', 'रुग्णः', 'विदूषकः ', 'गायिका', 'वैद्या', 'चालिका', 'चित्रकारी', 'नर्तकी', 'क्रीडति', 'गायति', 'हसति'],
+['दर्पणः', 'चषकः', 'चमसः', 'कुञ्चिका', 'यानपेटिका', 'द्विचक्रिका', 'छुरिका', 'कर्तरी', 'घटी', 'कन्दुकम्', 'दूरदर्शनम्', 'लोकयानम्', 'स्वीकरोति', 'क्रीणाति', 'ददाति'],
+['आसन्दः', 'ग्रन्थालयः', 'उत्पीठिका', 'मापिका', 'रन्ध्रिका ', 'अङ्कनी', 'लेखनी', 'योजिनी ', 'तीक्ष्णकम् ', 'सङ्गणकम्', 'पुस्तकम्', 'क्रीडाङ्गणम्', 'नयति ', 'आनयति', 'पश्यति'],
+['तालः', 'दन्तकूर्चः', 'नौका ', 'द्रोणी', 'सम्मार्जनी', 'युतकम्', 'द्वारम्', 'ऊरुकम्', 'छत्रम्', 'कार्यानम्', 'विमानम्', 'चक्रम्', 'पतति', 'गृह्णाति ', 'अस्ति'],
+]
+
+var bpuc=[0,
+['', '', '', '', '', '', '1F549', '', '2600', '1FA94', '', '', '', '', ''],
+['1F3EB', '1F466', '1F468-200D-1F3EB', '1F474', '', '1F467', '1F469-200D-1F3EB', '1F475', '', '', '1F3E0', '', '270D', '', ''],
+['26F9-FE0F-200D-2642-FE0F', '', '', '1F9D1-200D-1F373', '1F46E', '1F912', '1F921', '1F9D1-200D-1F3A4', 'E300', '', '', '', '', '1F9D1-200D-1F3A4', '1F642'],
+['1FA9E', '1F95B', '1F944', '1F511', '1F9F3', '1F6B2', '1F52A', '2702', '23F0', '1F3C0', '', '1F68C', '', '', ''],
+['1FA91', '', '', '1F4CF', '', '270F', '1F58A', '', '', '1F4BB', '1F4D5', '1F6DD', '', '', '1F9D0'],
+['1F512', '1FAA5', '26F5', '1FAA3', '1F9F9', '1F455', '1F6AA', '1F456', '2602', '1F697', '1F6EB', '1F6DE', '1F320', '', ''],
+]
+
+var bpaud=[0,
+['imgs/bp01/u01.mp3', 'imgs/bp01/u02.mp3', 'imgs/bp01/u03.mp3', 'imgs/bp01/u04.mp3', 'imgs/bp01/u05.mp3', 'imgs/bp01/u06.mp3', 'imgs/bp01/u12.mp3', 'imgs/bp01/u08.mp3', 'imgs/bp01/u09.mp3', 'imgs/bp01/u10.mp3', 'imgs/bp01/u11.mp3', 'imgs/bp01/u07.mp3', 'imgs/bp01/u13.mp3', 'imgs/bp01/u14.mp3', 'imgs/bp01/u15.mp3'],
+['imgs/bp02/u04.mp3', 'imgs/bp02/u05.mp3', 'imgs/bp03/u05.mp3', 'imgs/bp02/26u04.mp3', 'imgs/bp02/26u05.mp3', 'imgs/bp02/u09.mp3', 'imgs/bp02/u08.mp3', 'imgs/bp02/26u08.mp3', 'imgs/bp02/26u09.mp3', 'imgs/bp03/u08.mp3', 'imgs/bp02/u12.mp3', 'imgs/bp03/u10.mp3', 'imgs/bp03/u13.mp3', 'imgs/bp03/u14.mp3', 'imgs/bp02/26u15.mp3'],
+['imgs/bp03/u06.mp3', 'imgs/bp03/26u02.mp3', 'imgs/bp03/26u03.mp3', 'imgs/bp03/26u04.mp3', 'imgs/bp03/26u05.mp3', 'imgs/bp03/26u06.mp3', 'imgs/bp03/26u07.mp3', 'imgs/bp03/26u08.mp3', 'imgs/bp03/26u09.mp3', 'imgs/bp03/26u10.mp3', 'imgs/bp03/26u11.mp3', 'imgs/bp03/26u12.mp3', 'imgs/bp03/26u13.mp3', 'imgs/bp03/26u14.mp3', 'imgs/bp03/26u15.mp3'],
+['imgs/bp04/u01.mp3', 'imgs/bp04/u02.mp3', 'imgs/bp04/u03.mp3', 'imgs/bp04/u04.mp3', 'imgs/bp04/u05.mp3', 'imgs/bp04/u06.mp3', 'imgs/bp04/u07.mp3', 'imgs/bp04/u08.mp3', 'imgs/bp04/u09.mp3', 'imgs/bp04/u10.mp3', 'imgs/bp04/u11.mp3', 'imgs/bp04/u12.mp3', 'imgs/bp04/u13.mp3', 'imgs/bp04/u14.mp3', 'imgs/bp04/u15.mp3'],
+['imgs/bp05/u01.mp3', 'imgs/bp05/u11.mp3', 'imgs/bp05/u02.mp3', 'imgs/bp05/u03.mp3', 'imgs/bp05/u04.mp3', 'imgs/bp05/u05.mp3', 'imgs/bp05/u06.mp3', 'imgs/bp05/u07.mp3', 'imgs/bp05/u08.mp3', 'imgs/bp05/u09.mp3', 'imgs/bp05/u10.mp3', 'imgs/bp05/u12.mp3', 'imgs/bp05/u13.mp3', 'imgs/bp05/u14.mp3', 'imgs/bp06/u13.mp3'],
+['imgs/bp02/u06.mp3', 'imgs/bp03/u04.mp3', 'imgs/bp03/u09.mp3', 'imgs/bp03/u07.mp3', 'imgs/bp06/u12.mp3', 'imgs/bp02/u10.mp3', 'imgs/bp02/u11.mp3', 'imgs/bp03/u12.mp3', 'imgs/bp06/u08.mp3', 'imgs/bp06/u09.mp3', 'imgs/bp06/u10.mp3', 'imgs/bp06/u11.mp3', 'imgs/bp06/u14.mp3', 'imgs/bp06/u15.mp3', 'imgs/bp05/u15.mp3'],
+]
+
+var bpimage=[0,
+['imgs/bp01/c01.png', 'imgs/bp01/c02.png', 'imgs/bp01/c03.png', 'imgs/bp01/c04.png', 'imgs/bp01/c05.png', 'imgs/bp01/c06.png', 'https://openmoji.org/data/color/svg/1F549.svg', 'imgs/bp01/c08.png', 'https://openmoji.org/data/color/svg/2600.svg', 'https://openmoji.org/data/color/svg/1FA94.svg', 'imgs/bp01/c11.png', 'imgs/bp01/c12.png', 'imgs/bp01/c13.png', 'imgs/bp01/c14.png', 'imgs/bp01/c15.png'],
+['https://openmoji.org/data/color/svg/1F3EB.svg', 'imgs/bp02/c05.png', 'imgs/bp03/c05.png', 'imgs/bp04/c04.png', 'imgs/bp06/c05.png', 'imgs/bp02/c09.png', 'imgs/bp02/c08.png', 'imgs/bp04/c05.png', 'imgs/bp06/c06.png', 'imgs/bp03/c08.png', 'https://openmoji.org/data/color/svg/1F3E0.svg', 'imgs/bp03/c10.png', 'imgs/bp03/c13.png', 'imgs/bp03/c14.png', 'imgs/bp04/c14.png'],
+['imgs/bp03/c06.png', 'imgs/bp03/26c02.png', 'imgs/bp03/26c03.png', 'https://openmoji.org/data/color/svg/1F9D1-200D-1F373.svg', 'https://openmoji.org/data/color/svg/1F46E.svg', 'https://openmoji.org/data/color/svg/1F912.svg', 'https://openmoji.org/data/color/svg/1F921.svg', 'imgs/bp04/c06.png', 'imgs/bp05/c06.png', 'imgs/bp03/26c10.png', 'imgs/bp03/26c11.png', 'imgs/bp04/c08.png', 'imgs/bp03/26c13.png', 'https://openmoji.org/data/color/svg/1F9D1-200D-1F3A4.svg', 'https://openmoji.org/data/color/svg/1F642.svg'],
+['https://openmoji.org/data/color/svg/1FA9E.svg', 'https://openmoji.org/data/color/svg/1F95B.svg', 'https://openmoji.org/data/color/svg/1F944.svg', 'https://openmoji.org/data/color/svg/1F511.svg', 'https://openmoji.org/data/color/svg/1F9F3.svg', 'https://openmoji.org/data/color/svg/1F6B2.svg', 'https://openmoji.org/data/color/svg/1F52A.svg', 'https://openmoji.org/data/color/svg/2702.svg', 'https://openmoji.org/data/color/svg/23F0.svg', 'https://openmoji.org/data/color/svg/1F3C0.svg', 'imgs/bp05/c12.png', 'imgs/bp05/c10.png', 'imgs/bp04/26c13.png', 'imgs/bp04/26c14.png', 'imgs/bp04/26c15.png'],
+['https://openmoji.org/data/color/svg/1FA91.svg', 'imgs/bp05/c11.png', 'imgs/bp05/26c02.png', 'imgs/bp05/26c03v2.png', 'imgs/bp05/c04.png', 'https://openmoji.org/data/color/svg/270F.svg', 'https://openmoji.org/data/color/svg/1F58A.svg', 'imgs/bp05/c07.png', 'imgs/bp05/c08.png', 'https://openmoji.org/data/color/svg/1F4BB.svg', 'https://openmoji.org/data/color/svg/1F4D5.svg', 'imgs/bp05/26c12.png', 'imgs/bp05/c13.png', 'imgs/bp05/c14.png', 'imgs/bp02/c15.png'],
+['https://openmoji.org/data/color/svg/1F512.svg', 'https://openmoji.org/data/color/svg/1FAA5.svg', 'https://openmoji.org/data/color/svg/26F5.svg', 'https://openmoji.org/data/color/svg/1FAA3.svg', 'https://openmoji.org/data/color/svg/1F9F9.svg', 'https://openmoji.org/data/color/svg/1F455.svg', 'https://openmoji.org/data/color/svg/1F6AA.svg', 'https://openmoji.org/data/color/svg/1F456.svg', 'https://openmoji.org/data/color/svg/2602.svg', 'https://openmoji.org/data/color/svg/1F697.svg', 'https://openmoji.org/data/color/svg/1F6EB.svg', 'https://openmoji.org/data/color/svg/1F6DE.svg', 'imgs/bp06/c14.png', 'imgs/bp06/26c15.png', 'imgs/bp06/c15v2.png'],
+]
+
+var bplinga=[0,
+['p', 'p', 'p', 'p', 's', 's', 'p', 'p', 'p', 'p', 'p', 'p', 'k', 'k', 'k'],
+['p', 'p', 'p', 'p', 'p', 's', 's', 's', 's', 's', 'n', 'n', 'k', 'k', 'k'],
+['p', 'p', 'p', 'p', 'p', 'p', 'p', 's', 's', 's', 's', 's', 'k', 'k', 'k'],
+['p', 'p', 'p', 's', 's', 's', 's', 's', 's', 'n', 'n', 'n', 'k', 'k', 'k'],
+['p', 'p', 's', 's', 's', 's', 's', 's', 'n', 'n', 'n', 'n', 'k', 'k', 'k'],
+['p', 'p', 's', 's', 's', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'k', 'k', 'k'],
+]
