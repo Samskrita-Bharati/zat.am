@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Scrambler - using ZIM!</title>
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script src="https://zimjs.org/cdn/nft/00/zim.js"></script>
+    <script src="bp26-6.json"></script>
+    <script>
+        var keys = ["S", "E", "T"];
+        var text = "सम्मार्जनी";
+        var set;
+        var tile;
+        let special;
+        function setSpecial() {
+            special = rand(bpwords[set].length - 1);
+            text = bpwords[set][special];
+            const segmenter = new Intl.Segmenter("hi", { granularity: "grapheme" });
+            keys = [...segmenter.segment(text)].map(seg => seg.segment);
+            scrambler = new Scrambler({ tile: tile, keys: keys, keyProperty: "text" }).pos(50, -20, CENTER, CENTER);
+        }
+        var scaling = "fit"; // this will resize to fit inside the screen dimensions
+        var width = 1024;
+        var height = 768;
+        var color = light;
+        var outerColor = darker;
+        // as of ZIM 5.5.0 you do not need to put zim before ZIM functions and classes
+        var frame = new Frame(scaling, width, height, color, outerColor);
+        frame.on("ready", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            var t = urlParams.get('t');
+            //if (!t)
+            //  t = 1;
+            set = urlParams.get('s');
+            if (!set || isNaN(set))
+                set = 0;
+            var stage = frame.stage;
+            var tiles = [];
+
+            debugger;
+            //keys = segmenter.segment(text);
+            zog(keys);
+            zim.loop(keys, function (letter, i) {
+                var tile = new zim.Label({
+                    text: letter,
+                    color: pink.lighten(.9),
+                    size: 26,
+                    backing: new zim.Rectangle(50, 50, new RadialColor([purple, pink], [0, 1], 0, 0, 100, 0, 0, 0)),
+                    align: CENTER,
+                    valign: CENTER,
+                });
+                tiles.push(tile);
+            });
+            tile = new Tile({
+                obj: tiles,
+                unique: true,
+                cols: 9,
+                rows: 1,
+                spacingV: 5
+            });
+            var scrambler = new Scrambler({ tile: tile, keys: keys, keyProperty: "text" }).pos(50, -20, CENTER, CENTER);
+            var emitter = new Emitter({
+                obj: new Rectangle(10, 10, [purple, pink, green]),
+                startPaused: true,
+                random: {
+                    scale: { min: 1, max: 4 },
+                    rotation: { min: 0, max: 360 }
+                },
+                angle: { min: 180, max: 270 },
+                vertical: true,
+                height: scrambler.height,
+                width: 10,
+                force: { min: 4, max: 8 },
+                num: 5 // five at a time
+            }).pos(50, 0, CENTER, CENTER);
+            scrambler.on("complete", function () {
+                emitter.spurt(150);
+                setSpecial();
+                scrambler.scramble(1, 1);
+            });
+            stage.update(); // this is needed to show any changes
+        }); // end of ready
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+
+<body>
+    <!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+
+</html>
