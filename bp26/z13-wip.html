@@ -12,13 +12,14 @@
         var text = "सम्मार्जनी";
         var set;
         var tile;
+        let segmenter
         let special;
         function setSpecial() {
             special = rand(bpwords[set].length - 1);
             text = bpwords[set][special];
-            const segmenter = new Intl.Segmenter("hi", { granularity: "grapheme" });
+            segmenter = new Intl.Segmenter("hi", { granularity: "grapheme" });
             keys = [...segmenter.segment(text)].map(seg => seg.segment);
-            scrambler = new Scrambler({ tile: tile, keys: keys, keyProperty: "text" }).pos(50, -20, CENTER, CENTER);
+            //scrambler = new Scrambler({ tile: tile, keys: keys, keyProperty: "text" }).pos(50, -20, CENTER, CENTER);
         }
         var scaling = "fit"; // this will resize to fit inside the screen dimensions
         var width = 1024;
@@ -37,7 +38,7 @@
                 set = 0;
             var stage = frame.stage;
             var tiles = [];
-
+            setSpecial();
             debugger;
             //keys = segmenter.segment(text);
             zog(keys);
