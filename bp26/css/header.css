@@ -1,0 +1,410 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700&display=swap");
+
+:root {
+  --clr-grey-1: hsl(209, 61%, 16%);
+  --clr-grey-3: hsl(209, 34%, 30%);
+  --clr-grey-5: hsl(210, 22%, 49%);
+  --clr-grey-8: hsl(210, 31%, 80%);
+  --clr-grey-10: hsl(210, 36%, 96%);
+  --clr-gold: #c59d5f;
+  --clr-white: #fff;
+  --ff-primary: "Roboto", sans-serif;
+  --ff-secondary: "Open Sans", sans-serif;
+  --transition: all 0.3s linear;
+  --radius: 0.5rem;
+}
+
+.auth-buttons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--clr-grey-10);
+  padding: 15px 20px;
+}
+
+.auth-buttons .logo {
+  width: 5%;
+  max-width: 100px;
+}
+
+.auth-buttons button {
+  margin-left: 10px;
+  padding: 0.375rem 0.75rem;
+  background: transparent;
+  border: 2px solid var(--clr-gold);
+  font-size: 1rem;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  border-radius: var(--radius);
+  color: var(--clr-gold);
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-buttons button:hover {
+  background: var(--clr-gold);
+  color: var(--clr-white);
+}
+
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  cursor: pointer;
+  color: var(--clr-gold);
+  transition: var(--transition);
+  display: inline-block !important;
+  line-height: 1;
+}
+
+#profile-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#dropdown-profile-icon {
+  display: block;
+  text-align: center;
+  line-height: 1;
+}
+
+.dropdown {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background: var(--clr-grey-10);
+  border: 2px solid var(--clr-gold);
+  border-radius: var(--radius);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  min-width: 220px;
+  padding: 10px 0;
+  z-index: 1001;
+}
+
+/* More specific targeting for dropdown when it has the ID */
+#profile-dropdown.dropdown {
+  all: unset;
+  position: absolute !important;
+  top: 35px !important;
+  right: 0 !important;
+  background: var(--clr-grey-10) !important;
+  border: 2px solid var(--clr-gold) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+  min-width: 220px !important;
+  padding: 10px 0 !important;
+  z-index: 1001 !important;
+  display: block !important;
+}
+
+#profile-dropdown.dropdown.hidden {
+  display: none !important;
+}
+
+.dropdown .dropdown-header {
+  text-align: center;
+}
+
+.dropdown .user-email {
+  padding: 10px 15px;
+  margin: 0;
+  color: var(--clr-grey-3);
+  font-size: 0.85rem;
+  font-weight: bold;
+  font-style: italic;
+  word-break: break-all;
+}
+
+#username {
+  padding-top: 20px;
+  font-size: 1.2rem;
+}
+
+.user-language-row {
+  display: block;
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  color: var(--clr-grey-5);
+}
+
+.dropdown hr {
+  margin: 5px 0;
+  border: none;
+  border-top: 1px solid var(--clr-grey-8);
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px;
+  color: var(--clr-grey-3);
+  text-decoration: none;
+}
+
+.dropdown a:hover {
+  background: var(--clr-gold);
+  color: var(--clr-white);
+}
+
+.hidden {
+  display: none;
+}
+
+.profile-image,
+.dropdown-profile-image {
+  width: auto !important;
+}
+
+.profile-image {
+  width: 40px !important;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.1);
+}
+
+.dropdown-profile-image {
+  width: 60px !important;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px auto;
+  display: block;
+}
+
+@media screen and (max-width: 768px) {
+  .auth-buttons {
+    padding: 10px 15px;
+  }
+  .auth-buttons .logo {
+    width: 30px;
+  }
+  .auth-buttons button {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+    margin-left: 5px;
+  }
+  .dropdown {
+    min-width: 180px;
+  }
+}
+
+#profile-btn .fa-user-circle {
+  font-size: 2.5rem !important;
+  width: 40px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+#dropdown-profile-icon .fa-user-circle {
+  font-size: 3rem !important;
+  width: 60px !important;
+  height: 60px !important;
+  line-height: 60px !important;
+}
+
+#profile-btn {
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#dropdown-profile-icon {
+  min-width: 60px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+}
+
+/* Stronger dropdown styles to override page-specific CSS */
+#profile-dropdown {
+  position: absolute !important;
+  top: 35px !important;
+  right: 0 !important;
+  background: var(--clr-grey-10) !important;
+  border: 2px solid var(--clr-gold) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+  min-width: 220px !important;
+  padding: 5px 0 !important;
+  z-index: 1001 !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+#profile-dropdown .dropdown-header {
+  text-align: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+#profile-dropdown .user-email {
+  padding: 8px 1px 0px 1px !important;
+  margin: 0 !important;
+  color: var(--clr-grey-3) !important;
+  font-size: 0.85rem !important;
+  font-weight: normal !important;
+  font-style: italic !important;
+  font-family: "Roboto", sans-serif !important;
+  word-break: break-all !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+#profile-dropdown #username {
+  padding: 0px 0px !important;
+  font-size: 1.3rem !important;
+  display: block !important;
+  border: none !important;
+  background: transparent !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+#profile-dropdown .user-language-row {
+  display: block !important;
+  padding: 3px 15px 8px 15px !important;
+  font-size: 0.9rem !important;
+  font-family: "Roboto", sans-serif !important;
+  color: var(--clr-grey-5) !important;
+  border: none !important;
+  background: transparent !important;
+  margin: 0 !important;
+}
+
+#profile-dropdown hr {
+  margin: 5px 0 !important;
+  border: none !important;
+  border-top: 1px solid var(--clr-grey-8) !important;
+  padding: 0 !important;
+}
+
+#profile-dropdown a {
+  display: block !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  color: var(--clr-grey-3) !important;
+  text-decoration: none !important;
+  font-size: 1rem !important;
+  font-family: var(--ff-secondary) !important;
+  border: none !important;
+  background: transparent !important;
+  text-align: left !important;
+  width: auto !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+#profile-dropdown a:hover {
+  background: var(--clr-gold) !important;
+  color: var(--clr-white) !important;
+}
+
+#profile-dropdown #dropdown-profile-icon {
+  min-width: 60px !important;
+  min-height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 3px auto 0px auto !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+#profile-dropdown span {
+  border: none !important;
+  background: transparent !important;
+}
+
+#profile-dropdown * {
+  box-sizing: border-box !important;
+}
+
+.auth-buttons .fa-user-circle,
+#profile-btn .fa-user-circle,
+#profile-btn i.fa-user-circle {
+  font-size: 2rem !important;
+  width: 40px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  display: inline-block !important;
+}
+
+#dropdown-profile-icon .fa-user-circle,
+#dropdown-profile-icon i.fa-user-circle {
+  font-size: 3rem !important;
+  width: 60px !important;
+  height: 60px !important;
+  line-height: 60px !important;
+  display: inline-block !important;
+}
+
+#profile-btn {
+  min-width: 40px !important;
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#profile-btn,
+#profile-btn *,
+.profile-icon,
+.profile-image {
+  font-size: initial !important;
+}
+
+.auth-buttons button {
+  font-size: 1rem !important;
+}
+
+img.logo,
+a img.logo,
+.auth-buttons a img,
+.auth-buttons > a > img {
+  width: 50px !important;
+  max-width: 90px !important;
+  min-width: 70px !important;
+  height: auto !important;
+  display: block !important;
+}
+
+@media screen and (max-width: 768px) {
+  img.logo,
+  a img.logo,
+  .auth-buttons a img,
+  .auth-buttons > a > img {
+    width: 50px !important;
+    min-width: 60px !important;
+  }
+}
