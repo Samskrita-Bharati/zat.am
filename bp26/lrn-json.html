@@ -76,7 +76,7 @@ display: none !important;
 }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-    <script src="bp26-6.json"></script>
+    <script src="bp26-10.json"></script>
 </head>
 </body>
 <img src="bp26c.png" style="float:left" width="10%">
@@ -107,8 +107,8 @@ display: none !important;
             triesElement = document.getElementById("nowt");
             const urlParams = new URLSearchParams(window.location.search);
             var set = urlParams.get('s');
-            if (!set || isNaN(set) || (set >= bpwords.length))
-                set = 0;
+            if (!set || isNaN(set) || (set >= bpwords.length) || (set <= 0))
+                set = 1;
             var t = urlParams.get('t'); // transliterate mode - 1 is true
             if (!t)
 {
