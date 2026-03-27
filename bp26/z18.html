@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="bp26-10.json"></script>
+	<meta charset="utf-8" />
+	<title>BodhaPlay scrambler</title>
+
+	<script type="module">
+		let items = [];
+		var rnd=0;
+		var stile;
+		var ccl;
+		var keys;
+		var text;
+		var set;
+		var scrambler;
+		var tile;
+		var wrdlists = [];
+		let segmenter;
+		let special;
+		var scores = [];
+		var wrd15;
+		//var stage;
+		var emitter;
+		var tiles = [];
+		function done() {
+			scores[text] = ccl;
+			
+			debugger;
+			//zog(ccl);
+			emitter.spurt(150);
+			items[bpwords[set].indexOf(text)].alpha=0.5;
+			zogr("special: "+special);
+			zogy("rnd: "+rnd);
+			zogg("ccl: "+ccl);
+			zogb("text: "+text);
+			rnd++;
+			wrdlists[bpwords[set].indexOf(text)]=text+": "+ccl;
+			window.setTimeout(function () {
+				scrambler.dispose();
+				setSpecial();
+			}, 1000);
+			/*
+			frame.remakeCanvas(768, 1024);
+			frame.update();
+			stage.update();
+			stage.clear();
+			*/
+		}
+		function setSpecial() {
+			tiles = [];
+			//	stage = frame.stage;
+			//stage.clear();
+			ccl = 0;
+			special = rand(wrd15.length - 1);
+			text = wrd15.splice(special, 1);
+			zog(wrd15);
+			if (text == ""){
+				zog(wrdlists);
+				zog(scores);
+				alert(scores.toString());
+			}
+			segmenter = new Intl.Segmenter("hi", { granularity: "grapheme" });
+			keys = [...segmenter.segment(text)].map(seg => seg.segment);
+			zim.loop(keys, function (letter, i) {
+				var tile = new zim.Label({
+					text: letter,
+					color: pink.lighten(.9),
+					size: 56,
+					backing: new zim.Rectangle(150, 150, new RadialColor([purple, pink], [0, 1], 0, 0, 100, 0, 0, 0)),
+					align: CENTER,
+					valign: CENTER,
+				});
+				tiles.push(tile);
+			});
+			stile = new Tile({ obj: tiles, unique: true, cols: 1, rows: 9, spacingV: 5 });
+			scrambler = new Scrambler({ tile: stile, keys: keys, keyProperty: "text" }).pos(50, -20, CENTER, CENTER);
+			scrambler.on("complete", done);
+			scrambler.on("pressup", function () { ccl++; });
+			S.update();
+			//	stage.update(); // this is needed to show any changes
+		}
+
+		let sp = "p01s.png";
+		function padz(num) {
+			num = num.toString();
+			if (num.length < 2) num = "0" + num;
+			return num;
+		}
+		import zim from "https://zimjs.org/cdn/019/zim_pizzazz";
+
+		// See Docs under Frame for FIT, FILL, FULL, and TAG
+		const urlParams = new URLSearchParams(window.location.search);
+		var t = urlParams.get('t');
+		//if (!t)
+		//  t = 1;
+		set = urlParams.get('s');
+		if (!set || isNaN(set) || (set >= bpwords.length) || (set <= 0))
+			set = 1;
+		sp = "p" + padz(set) + "s.png";
+		const assets = [sp, "gf_Changa"];
+		const path = "https://zat.am/bp26/img/"
+		new Frame(FIT, 1024, 768, light, purple.darken(.5), ready, assets, path);
+		function ready() {
+
+			// given F (Frame), S (Stage), W (width), H (height)
+			// put code here
+			const bar = new Rectangle(W, 40, black).addTo();
+			F.makeIcon({ box: black }).scaleTo(bar, 90, 90).loc(10, 3);
+			new Label("शब्दावली - " + set, 25, "Changa", pink).pos(0, 2, CENTER, CENTER, bar);
+			//const board = new Tile(new Rectangle(100, 100, red, null, null, 10).reg(CENTER), 3, 5, 5, 5).center().mov(0, 40);
+			// HORIZONTAL LIST
+			items = [];
+			loop(3 * 5, i => {
+				const box = new Container(100, 100).reg(CENTER);
+				new Rectangle(100, 100, white, darker, 2, 10).addTo(box);
+				const sprite = new Sprite(sp, 4, 4).siz(null, 100).run({ frame: i }).center(box);
+				box.frame = i; // remember sprite number or put label here if sprite uses them
+				box.mouseChildren = false; // so drag the whole box later
+				items.push(box);
+			});
+
+			const list = new List({
+				backdropColor: white,
+				paddingH: 5,
+				valign: TOP,
+				indent: 2,
+				width: W,
+				height: 100,
+				viewNum: 15,
+				list: items,
+				dropCopy: false, // if true then drag a copy of the item in the list, if false then drag the item itself and remove from list
+				vertical: false,
+				dropWidth: 100,
+		//		dropTargets: board.items,
+				dropHitTest: "reg",
+				dropEnd: false
+			}).loc(0, 40);
+			wrd15 = bpwords[set].slice();
+			setSpecial();
+			emitter = new Emitter({
+				obj: new Rectangle(15, 15, [purple, pink, green]),
+				startPaused: true,
+				random: {
+					scale: { min: 1, max: 4 },
+					rotation: { min: 0, max: 360 }
+				},
+				angle: { min: 180, max: 270 },
+				vertical: true,
+				height: scrambler.height,
+				width: 10,
+				force: { min: 4, max: 8 },
+				num: 5 // five at a time
+			}).pos(100, 100, CENTER, CENTER);
+
+		}
+	</script>
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+
+<body></body>
+
+</html>
