@@ -42,7 +42,11 @@
 			special = rand(wrd15.length - 1);
 			text = wrd15.splice(special, 1);
 			if (text == "") {
-				const end = new Pane("Total : " + ttlccl + " = " + Sanscript.t(String(ttlccl), 'itrans', 'devanagari'), yellow);
+				const end = new Pane("Total : " + ttlccl + " = " + Sanscript.t(String(ttlccl), 'itrans', 'devanagari')+"\n\n\n", yellow);
+				const cancel = new Button(120, 50, "Done", red).center(end).mov(-100);
+				const redo = new Button(120, 50, "पुनः 🤔", green).center(end).mov(100);
+				cancel.on("click", ()=>{end.hide();});
+				redo.on("click", ()=>{window.location.reload();});
 				end.show(); // show end, when closes will call restart
 				end.noMouse(); // do not let player close the pane right away
 				timeout(1, () => { // wait for 1 second then let player close pane
