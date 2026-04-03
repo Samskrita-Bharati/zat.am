@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+	<script src="bp26-10.json"></script>
+	<meta charset="utf-8" />
+	<title>BodhaPlay scrambler</title>
+	<script type="module">
+		let itm;
+		var size=2;
+		let items = [];
+		let itemsw = [];
+		var rnd = 0;
+		var stile;
+		var ttlccl = 0;
+		var ccl;
+		var keys;
+		var text;
+		let set;
+		var scrambler;
+		var tile;
+		var wrdlists = [];
+		let segmenter;
+		let special;
+		var scores = [];
+		var wrd15;
+		var items15;
+		var emitter;
+		var tiles = [];
+		function done() {
+			scores[text] = ccl;
+			zogg("Score for " + text + " is " + ccl);
+			ttlccl += ccl;
+			emitter.spurt(150);
+			new Label(ccl,30).addTo(itemsw[bpwords[set].indexOf(text[0])])
+			itemsw[bpwords[set].indexOf(text[0])].alpha = 0.3;
+			rnd++;
+			wrdlists[bpwords[set].indexOf(text)] = text + ": " + ccl;
+			window.setTimeout(function () {
+				scrambler.dispose();
+				setSpecial();
+			}, 1000);
+		}
+		function setSpecial() {
+			tiles = [];
+			ccl = 0;
+			special = rand(wrd15.length - 1);
+			text = wrd15.splice(special, 1);
+			itm = items15.splice(special,1);
+			if (text == "") {
+				const end = new Pane("Total : " + ttlccl + " = " + Sanscript.t(String(ttlccl), 'itrans', 'devanagari')+"\n\n\n", yellow);
+				const cancel = new Button(120, 50, "Done", red).center(end).mov(-100);
+				const redo = new Button(120, 50, "पुनः 🤔", green).center(end).mov(100);
+				cancel.on("click", ()=>{end.hide();});
+				redo.on("click", ()=>{window.location.reload();});
+				end.show(); // show end, when closes will call restart
+				end.noMouse(); // do not let player close the pane right away
+				timeout(1, () => { // wait for 1 second then let player close pane
+					end.mouse();
+				});
+			}
+			else{
+			scrambler = new Scrambler(chop(itm[0],size,size)).center();
+			scrambler.on("complete", done);
+			scrambler.on("pressup", function () { ccl++; });
+			S.update();
+			}
+		}
+		let sp = "p01s.png";
+		function padz(num) {
+			num = num.toString();
+			if (num.length < 2) num = "0" + num;
+			return num;
+		}
+		import zim from "https://zimjs.org/cdn/019/zim_pizzazz";
+		const urlParams = new URLSearchParams(window.location.search);
+		set = urlParams.get('s');
+		if (!set || isNaN(set) || (set >= bpwords.length) || (set <= 0))
+			set = 1;
+		if (urlParams.get('a') == 1)
+		  size=3;
+		sp = "p" + padz(set) + "s.png";
+		const assets = [sp, "gf_Changa"];
+		const path = "https://zat.am/bp26/img/"
+		new Frame(FIT, 768, 1024, light, purple.darken(.5), ready, assets, path);
+		function ready() {
+			const bar = new Rectangle(W, 40, black).addTo();
+			F.makeIcon({ box: black }).scaleTo(bar, 90, 90).loc(10, 3);
+			new Label("शब्दावली - " + set, 25, "Changa", pink).pos(0, 2, CENTER, CENTER, bar);
+			// HORIZONTAL LIST
+			items = [];
+			itemsw=[];
+			loop(3 * 5, i => {
+				const box = new Container(400, 400).reg(CENTER);
+				const boxw = new Container(100, 100).reg(CENTER);
+				new Rectangle(400, 400, white, darker, 2, 10).addTo(box);
+				const sprite = new Sprite(sp, 4, 4).siz(null, 400).run({ frame: i }).center(box);
+				box.frame = i; // remember sprite number or put label here if sprite uses them
+				box.mouseChildren = false; // so drag the whole box later
+				items.push(box);
+				itemsw.push(new Label(bpwords[set][i], 15, "Changa", black).addTo(boxw).center(boxw));
+			});
+			items15 = items.slice();		
+			const list = new List({
+				backdropColor: white,
+				paddingH: 5,
+				valign: CENTER,
+				indent: 2,
+				width: W,
+				height: 50,
+				viewNum: 15,
+				list: itemsw,
+				dropCopy: false, // if true then drag a copy of the item in the list, if false then drag the item itself and remove from list
+				vertical: false,
+				dropWidth: 100,
+				dropHitTest: "reg",
+				dropEnd: false
+			}).loc(0, 40);
+			wrd15 = bpwords[set].slice();
+			setSpecial();
+			emitter = new Emitter({
+				obj: new Rectangle(15, 15, [purple, pink, green]),
+				startPaused: true,
+				random: {
+					scale: { min: 1, max: 4 },
+					rotation: { min: 0, max: 360 }
+				},
+				angle: { min: 180, max: 270 },
+				vertical: true,
+				height: scrambler.height,
+				width: 10,
+				force: { min: 4, max: 8 },
+				num: 5 // five at a time
+			}).pos(50, 0, CENTER, CENTER);
+		}
+	</script>
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
