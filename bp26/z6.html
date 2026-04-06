@@ -93,7 +93,7 @@ function padz(num) {
                             const pick = e.target; // this gets what caused the event
                             if (wintmp == pick.bitmap.file) {
                                 pnmsg = winmsg;
-                                emitter.loc(pick).spurt(25);
+                                //emitter.loc(pick).spurt(25);
                                 tile.noMouse(); // do not let player press on tile
                                 end.noMouse(); // do not let player close the pane right away
                                 //timeout(1, ()=>{ // wait for 1 second then let player close pane
