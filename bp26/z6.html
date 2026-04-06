@@ -14,6 +14,7 @@
         // 500 x 1000 good for phones
         new Frame(FIT, 768, 1024, black, dark, ready, "gf_Tourney");
         var setp="";
+let timer;
 function padz(num) {
     num = num.toString();
     if (num.length < 2) num = "0" + num;
@@ -94,6 +95,7 @@ function padz(num) {
                             if (wintmp == pick.bitmap.file) {
                                 pnmsg = winmsg;
                                 //emitter.loc(pick).spurt(25);
+timer.stop();
                                 tile.noMouse(); // do not let player press on tile
                                 end.noMouse(); // do not let player close the pane right away
                                 //timeout(1, ()=>{ // wait for 1 second then let player close pane
@@ -121,7 +123,7 @@ function padz(num) {
                 });
                 //const right = new Scorer({ backgroundColor: green }).pos(100, 80, RIGHT, BOTTOM);
                 const wrong = new Scorer({ color: white, backgroundColor: red }).pos(100, 80, LEFT, BOTTOM);
-                const timer = new Timer(20).pos(0, 80, CENTER, BOTTOM);
+                timer = new Timer(20).pos(0, 80, CENTER, BOTTOM);
                 STYLE = { font: "Tourney", backdropColor: black.toAlpha(.8) }
                 const end = new Pane(pnmsg + "\nIt was " + winmsg, yellow);
                 timer.on("complete", () => {
