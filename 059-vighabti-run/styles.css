@@ -1,0 +1,79 @@
+/* Box Model Resets */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 380px;
+}
+
+.score-display {
+    font-size: 1.2rem;
+    color: #486581;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.flashcard {
+    background-color: #f0f4f8;
+    border: 2px dashed #486581;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+#sanskrit-word {
+    font-size: 2.5rem;
+    color: #102a43;
+    margin-bottom: 5px;
+}
+
+#word-meaning {
+    font-size: 1.1rem;
+    color: #627d98;
+}
+
+/* CSS GRID LAYOUT ENGINE */
+.bin-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates exactly 2 equal columns */
+    gap: 15px;                             /* Handles all margin/spacing arithmetic */
+    width: 100%;
+}
+
+.bin-btn {
+    background-color: #bcccdc;
+    border: 2px solid #486581;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    padding: 15px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #102a43;
+    transition: all 0.1s ease;
+}
+
+.bin-btn:hover {
+    background-color: #9fb3c8;
+}
+
+.bin-btn:active {
+    transform: scale(0.95);
+}

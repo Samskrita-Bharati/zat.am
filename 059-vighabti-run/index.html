@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibhakti Rapid Run</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="score-display">Score: <span id="score-counter">0</span></div>
+        
+        <div class="flashcard">
+            <h1 id="sanskrit-word">Loading...</h1>
+            <p id="word-meaning">Meaning</p>
+        </div>
+
+        <div class="bin-grid">
+            <button class="bin-btn" onclick="submitAnswer('Prathamā')">Prathamā (1st)</button>
+            <button class="bin-btn" onclick="submitAnswer('Dvitīyā')">Dvitīyā (2nd)</button>
+            <button class="bin-btn" onclick="submitAnswer('Tṛtīyā')">Tṛtīyā (3rd)</button>
+            <button class="bin-btn" onclick="submitAnswer('Caturthī')">Caturthī (4th)</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
