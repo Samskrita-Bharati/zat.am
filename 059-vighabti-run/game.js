@@ -16,6 +16,30 @@ let streak = 0;
 let currentWordIndex = 0;
 let gameDeck = [];
 
+function playSound(isCorrect) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (isCorrect) {
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1); 
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.25);
+    } else {
+        oscillator.type = "sawtooth";
+        oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.3);
+    }
+}
+
 function shuffleDeck() {
     gameDeck = [...wordDatabase];
     for (let i = gameDeck.length - 1; i > 0; i--) {
@@ -53,12 +77,14 @@ function submitAnswer(chosenCase) {
         
         flashcardElement.style.border = "2px solid #10b981";
         flashcardElement.style.boxShadow = "0 0 20px rgba(16, 185, 129, 0.4)";
+        playSound(true);
     } else {
         streak = 0;
         document.getElementById("streak-counter").innerText = streak;
         
         flashcardElement.style.border = "2px solid #ef4444";
         flashcardElement.style.boxShadow = "0 0 20px rgba(239, 68, 68, 0.4)";
+        playSound(false);
     }
 
     setTimeout(() => {
