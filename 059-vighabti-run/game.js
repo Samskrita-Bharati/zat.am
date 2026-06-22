@@ -12,6 +12,7 @@ const wordDatabase = [
 ];
 
 let score = 0;
+let streak = 0;
 let currentWordIndex = 0;
 let gameDeck = [];
 
@@ -19,7 +20,6 @@ function shuffleDeck() {
     gameDeck = [...wordDatabase];
     for (let i = gameDeck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        // Swap elements using array destructuring syntax
         [gameDeck[i], gameDeck[j]] = [gameDeck[j], gameDeck[i]];
     }
 }
@@ -42,16 +42,25 @@ function loadNextWord() {
 function submitAnswer(chosenCase) {
     const currentQuestion = gameDeck[currentWordIndex];
     const flashcardElement = document.querySelector(".flashcard");
+
     flashcardElement.style.transition = "all 0.2s ease";
+
     if (chosenCase === currentQuestion.case) {
         score++;
+        streak++;
         document.getElementById("score-counter").innerText = score;
+        document.getElementById("streak-counter").innerText = streak;
+        
         flashcardElement.style.border = "2px solid #10b981";
         flashcardElement.style.boxShadow = "0 0 20px rgba(16, 185, 129, 0.4)";
     } else {
+        streak = 0;
+        document.getElementById("streak-counter").innerText = streak;
+        
         flashcardElement.style.border = "2px solid #ef4444";
-        flashcardElement.style.boxShadow = "0 0 20px rgba(239, 2ea, 68, 0.4)";
+        flashcardElement.style.boxShadow = "0 0 20px rgba(239, 68, 68, 0.4)";
     }
+
     setTimeout(() => {
         flashcardElement.style.border = "1px solid rgba(99, 102, 241, 0.2)";
         flashcardElement.style.boxShadow = "none";
