@@ -50,13 +50,8 @@ function shuffleDeck() {
 
 function loadNextWord() {
     if (currentWordIndex >= gameDeck.length) {
-        document.querySelector(".game-container").innerHTML = `
-            <div class="flashcard">
-                <h1 style="color: #10b981;">Run Complete!</h1>
-                <p style="font-size: 1.3rem; margin-top: 10px;">Final Score: <strong>${score} / ${gameDeck.length}</strong></p>
-            </div>
-        `;
-        return;
+        shuffleDeck();
+        currentWordIndex = 0;
     }
     const currentQuestion = gameDeck[currentWordIndex];
     document.getElementById("sanskrit-word").innerText = currentQuestion.word;
