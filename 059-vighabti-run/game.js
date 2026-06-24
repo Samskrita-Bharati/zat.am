@@ -15,6 +15,8 @@ let score = 0;
 let streak = 0;
 let currentWordIndex = 0;
 let gameDeck = [];
+let timerInterval = null;
+let timeLeft = 10;
 
 function playSound(isCorrect) {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -40,6 +42,39 @@ function playSound(isCorrect) {
     }
 }
 
+function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 10;
+    document.getElementById("timer-display").innerText = timeLeft;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer-display").innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            handleTimeout();
+        }
+    }, 1000);
+}
+
+function handleTimeout() {
+    streak = 0;
+    document.getElementById("streak-counter").innerText = streak;
+    
+    const flashcardElement = document.querySelector(".flashcard");
+    flashcardElement.style.border = "2px solid #ef4444";
+    flashcardElement.style.boxShadow = "0 0 20px rgba(239, 68, 68, 0.4)";
+    playSound(false);
+
+    setTimeout(() => {
+        flashcardElement.style.border = "1px solid rgba(99, 102, 241, 0.2)";
+        flashcardElement.style.boxShadow = "none";
+        currentWordIndex++;
+        loadNextWord();
+    }, 600);
+}
+
 function shuffleDeck() {
     gameDeck = [...wordDatabase];
     for (let i = gameDeck.length - 1; i > 0; i--) {
@@ -56,9 +91,11 @@ function loadNextWord() {
     const currentQuestion = gameDeck[currentWordIndex];
     document.getElementById("sanskrit-word").innerText = currentQuestion.word;
     document.getElementById("word-meaning").innerText = currentQuestion.translation;
+    startTimer();
 }
 
 function submitAnswer(chosenCase) {
+    clearInterval(timerInterval);
     const currentQuestion = gameDeck[currentWordIndex];
     const flashcardElement = document.querySelector(".flashcard");
 
