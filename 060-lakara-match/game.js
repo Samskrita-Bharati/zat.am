@@ -4,11 +4,25 @@ const wordDatabase = [
     { word: "गमिष्यति", translation: "He will go", case: "Lṛṭ" },
     { word: "गच्छतु", translation: "Let him go / Go!", case: "Loṭ" },
     { word: "पठति", translation: "He reads", case: "Laṭ" },
-    { word: "अपठत्", translation: "He read (past)", case: "Laṅ" },
+    { word: "अपठत्", translation: "He read", case: "Laṅ" },
     { word: "पठिष्यति", translation: "He will read", case: "Lṛṭ" },
     { word: "पठतु", translation: "Let him read", case: "Loṭ" },
     { word: "खादति", translation: "He eats", case: "Laṭ" },
-    { word: "अखादत्", translation: "He ate", case: "Laṅ" }
+    { word: "अखादत्", translation: "He ate", case: "Laṅ" },
+    { word: "खादिष्यति", translation: "He will eat", case: "Lṛṭ" },
+    { word: "खादतु", translation: "Let him eat / Eat!", case: "Loṭ" },
+    { word: "लिखति", translation: "He writes", case: "Laṭ" },
+    { word: "अलिखत्", translation: "He wrote", case: "Laṅ" },
+    { word: "लेखिष्यति", translation: "He will write", case: "Lṛṭ" },
+    { word: "लिखतु", translation: "Let him write / Write!", case: "Loṭ" },
+    { word: "हसति", translation: "He laughs", case: "Laṭ" },
+    { word: "अहसत्", translation: "He laughed", case: "Laṅ" },
+    { word: "हसिष्यति", translation: "He will laugh", case: "Lṛṭ" },
+    { word: "हसतु", translation: "Let him laugh", case: "Loṭ" },
+    { word: "पिबति", translation: "He drinks", case: "Laṭ" },
+    { word: "अपिबत्", translation: "He drank", case: "Laṅ" },
+    { word: "पास्यति", translation: "He will drink", case: "Lṛṭ" },
+    { word: "पिबतु", translation: "Let him drink", case: "Loṭ" }
 ];
 
 let score = 0;
