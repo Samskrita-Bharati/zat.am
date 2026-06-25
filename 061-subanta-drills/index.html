@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subanta Suffix Drills</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="score-display">
+            Score: <span id="score-counter">0</span> | 
+            Streak: <span id="streak-counter" style="color: #6366f1;">0</span> | 
+            Time: <span id="timer-display" style="color: #ef4444;">10</span>s
+        </div>
+        
+        <div class="flashcard">
+            <h1 id="sanskrit-word">Loading...</h1>
+            <p id="word-meaning">Identify the Suffix Case Role</p>
+        </div>
+
+        <div class="bin-grid">
+            <button class="bin-btn" onclick="submitAnswer('Prathamā')">Prathamā (1st - Subject)</button>
+            <button class="bin-btn" onclick="submitAnswer('Tṛtīyā')">Tṛtīyā (3rd - By/With)</button>
+            <button class="bin-btn" onclick="submitAnswer('Ṣaṣṭhī')">Ṣaṣṭhī (6th - Of)</button>
+            <button class="bin-btn" onclick="submitAnswer('Saptamī')">Saptamī (7th - In/On)</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
