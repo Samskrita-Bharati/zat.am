@@ -27,10 +27,13 @@ const wordDatabase = [
 
 let score = 0;
 let streak = 0;
+let highScore = localStorage.getItem("lakara_high_score") ? parseInt(localStorage.getItem("lakara_high_score")) : 0;
 let currentWordIndex = 0;
 let gameDeck = [];
 let timerInterval = null;
 let timeLeft = 10;
+
+document.getElementById("high-counter").innerText = highScore;
 
 function playSound(isCorrect) {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -120,6 +123,12 @@ function submitAnswer(chosenCase) {
         streak++;
         document.getElementById("score-counter").innerText = score;
         document.getElementById("streak-counter").innerText = streak;
+        
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem("lakara_high_score", highScore);
+            document.getElementById("high-counter").innerText = highScore;
+        }
         
         flashcardElement.style.border = "2px solid #10b981";
         flashcardElement.style.boxShadow = "0 0 20px rgba(16, 185, 129, 0.4)";
