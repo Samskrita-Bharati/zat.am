@@ -19,7 +19,7 @@ async function fetchPanchang(dateInput, callback) {
     try {
       showLoadingPopup(); // Show loading popup
       
-        const apiUrl = `https://panchang.glitch.me/panchang?date=${dateInput}`;
+        const apiUrl = `https://panchang-640p.onrender.com/panchang?date=${dateInput}`;
         console.log(apiUrl);
         const response = await fetch(apiUrl);
       
