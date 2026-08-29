@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.game-container {
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.score-display {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    background-color: #0f172a;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.instructions-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.left-label { color: #38bdf8; }
+.right-label { color: #f43f5e; }
+
+.swiper-zone {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.swipe-card {
+    width: 220px;
+    height: 280px;
+    background-color: #0f172a;
+    border: 2px solid #475569;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #f8fafc;
+    cursor: grab;
+    user-select: none;
+    position: absolute;
+    transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+
+.swipe-card:active {
+    cursor: grabbing;
+}
+
+.keyboard-guide {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #64748b;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
