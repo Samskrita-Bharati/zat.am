@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakāra Match</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="score-display">
+            Score: <span id="score-counter">0</span> | 
+            Streak: <span id="streak-counter" style="color: #6366f1;">0</span> | 
+            High: <span id="high-counter" style="color: #eab308;">0</span> |
+            Time: <span id="timer-display" style="color: #ef4444;">10</span>s
+        </div>
+        
+        <div class="flashcard">
+            <h1 id="sanskrit-word">Loading...</h1>
+            <p id="word-meaning">Meaning</p>
+        </div>
+
+        <div class="bin-grid">
+            <button class="bin-btn" onclick="submitAnswer('Laṭ')">Laṭ (Present)</button>
+            <button class="bin-btn" onclick="submitAnswer('Laṅ')">Laṅ (Past)</button>
+            <button class="bin-btn" onclick="submitAnswer('Lṛṭ')">Lṛṭ (Future)</button>
+            <button class="bin-btn" onclick="submitAnswer('Loṭ')">Loṭ (Command)</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
