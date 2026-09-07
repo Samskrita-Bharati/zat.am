@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>श्रीमद्भगवद्गीता - श्लोकः / अन्वयः / तात्पर्यम् / Audio/ क्रीडा </title>
+</head>
+<script src="bg700kdat.json"></script>
+<body>
+<section data-id="caa878efb2dc4c40341dc29d59a7e132" data-state="su" style="visibility: visible; display: block;" class="present">
+					<div class="sl-block" data-block-type="text" style="width: 807px; left: 76.5px; top: 22.8778px; height: auto;" data-block-id="59698c140c7079b80572724d8e915f57">
+						<div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="z-index: 10;">
+							<h4><span><a id="sua" target="_blank" href="https://www.gitasupersite.iitk.ac.in/srimad">श्रीमद्भगवद्गीता</a> https://t.me/sbbg23 </span>
+							</h4>
+							<strong>श्लोकः </strong><p id="bg1"><br></p>
+							<span style="color:orange;text-decoration:underline">अन्वयः</span> <span id="bg1a"><br></span><br>
+							<span style="color:tomato;text-decoration:underline">तात्पर्यम्  </span> <span id="bg1t"><br></span><br>
+
+							<span style="color:orange">पदान्वेषणम् </span> <span id="bg1k1"><br></span><br>
+							<span style="color:tomato">Arrange श्लोकः </span> <span id="bg1k2"><br></span><br>
+							<audio controls controlsList="nodownload" id="bg1aud">
+							</audio>
+							<span id="bgpbt"></span>
+							<br>
+							<input type="range" id="bgpb" min="0" max="700" disabled="">
+							
+							<button onclick="savpr()">Save my Progress </button>
+							<button onclick="shwpr()">Show my progress</button>
+						</div>
+					</div>
+				</section>
+				<script>
+				function savpr()
+				{
+				 if (confirm("This will update (overwrite) progress locally on this device (till this श्लोकः ) Are you sure?")){
+					localStorage['mybgpr2024']=t+1;
+					localStorage['mybgpr2024c']=ch;
+					localStorage['mybgpr2024v']=v;
+					}
+				}
+				function shwpr()
+				{
+					alert(localStorage['mybgpr2024'] + " out of 700 \n Completed till - " + "अध्यायः " + localStorage['mybgpr2024c'] + " श्लोकः "+localStorage['mybgpr2024v']);
+				}
+				function pop_bg(snum)
+		{
+		document.getElementById("bgpb").value=snum;
+		document.getElementById("bg1").innerHTML = bg[snum].d + "<br>" ;
+		document.getElementById("bg1a").innerHTML = bg[snum].a + "<br>" ;
+		document.getElementById("bg1t").innerHTML = bg[snum].t + "<br>" ;
+		document.getElementById("bg1aud").src= "http://www.geetachanting.net/bvg/audio/x0001/"+ch+"/bvg"+ch+"v"+v+".mp3";
+		document.getElementById("bg1k1").innerHTML = " <a href='fw.html?" + urlParams + "' target ='giyk'>"+" क्रीडा १ </a><br>";
+		document.getElementById("bg1k2").innerHTML = " <a href='abgcv.htm?" + urlParams + "' target ='giyk'>"+" क्रीडा २ </a><br>";
+		document.getElementById("bgpbt").innerHTML +="<br>" + parseInt(parseInt(snum)+1) + " / 700";
+		}
+				const urlParams = new URLSearchParams(window.location.search);
+				var ch = urlParams.get("ch");
+if (ch && parseInt(ch) >= 1 && parseInt(ch) <= 18) {
+}
+else
+	ch=Math.floor(Math.random() * (18 - 1) + 1);
+var v = urlParams.get("v");
+if ( (!v) || isNaN(v))
+	v=1;
+var vCount = [0,46,118,161,203,232,279,309,337,371,413,468,488,523,550,570,594,622,700];
+var t = vCount[parseInt(ch)-1] + parseInt(v)-1;
+			
+		pop_bg(t);
+		</script>
+		</body>
+		</html>
