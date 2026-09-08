@@ -30,14 +30,17 @@
 				function savpr()
 				{
 				 if (confirm("This will update (overwrite) progress locally on this device (till this श्लोकः ) Are you sure?")){
-					localStorage['mybgpr2024']=t+1;
-					localStorage['mybgpr2024c']=ch;
-					localStorage['mybgpr2024v']=v;
+					localStorage['mybgpr2026']=t+1;
+					localStorage['mybgpr2026c']=ch;
+					localStorage['mybgpr2026v']=v;
 					}
 				}
 				function shwpr()
 				{
-					alert(localStorage['mybgpr2024'] + " out of 700 \n Completed till - " + "अध्यायः " + localStorage['mybgpr2024c'] + " श्लोकः "+localStorage['mybgpr2024v']);
+var result = (typeof localStorage['mybgpr2026'] !== 'undefined') ? localStorage['mybgpr2026'] : 0;
+var resultc = (typeof localStorage['mybgpr2026c'] !== 'undefined') ? localStorage['mybgpr2026c'] : "-";
+var resultv = (typeof localStorage['mybgpr2026v'] !== 'undefined') ? localStorage['mybgpr2026v'] : "-";
+					alert(result + " out of 700 \n Completed till - " + "अध्यायः " + resultc + " श्लोकः "+resultv);
 				}
 				function pop_bg(snum)
 		{
