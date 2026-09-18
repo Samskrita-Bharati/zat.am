@@ -48,7 +48,8 @@ var resultv = (typeof localStorage['mybgpr2026v'] !== 'undefined') ? localStorag
 		document.getElementById("bg1").innerHTML = bg[snum].d + "<br>" ;
 		document.getElementById("bg1a").innerHTML = bg[snum].a + "<br>" ;
 		document.getElementById("bg1t").innerHTML = bg[snum].t + "<br>" ;
-		document.getElementById("bg1aud").src= "http://www.geetachanting.net/bvg/audio/x0001/"+ch+"/bvg"+ch+"v"+v+".mp3";
+		//document.getElementById("bg1aud").src= "http://www.geetachanting.net/bvg/audio/x0001/"+ch+"/bvg"+ch+"v"+v+".mp3";
+document.getElementById("bg1aud").src= "https://old.gitasupersite.in/sites/default/files/audio/CHAP"+parseInt(ch)+"/"+parseInt(ch)+"-"+parseInt(v)+".MP3";
 		document.getElementById("bg1k1").innerHTML = " <a href='fw.html?" + urlParams + "' target ='giyk'>"+" क्रीडा १ </a><br>";
 		document.getElementById("bg1k2").innerHTML = " <a href='abgcv.htm?" + urlParams + "' target ='giyk'>"+" क्रीडा २ </a><br>";
 		document.getElementById("bgpbt").innerHTML +="<br>" + parseInt(parseInt(snum)+1) + " / 700";
