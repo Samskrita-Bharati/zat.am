@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.score-display {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    background-color: #0f172a;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.flashcard {
+    background-color: #0f172a;
+    padding: 40px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flashcard h1 {
+    font-size: 2rem;
+    color: #f8fafc;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.flashcard p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+.bin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.bin-btn {
+    background-color: #334155;
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.bin-btn:hover {
+    background-color: #475569;
+    transform: translateY(-2px);
+}
