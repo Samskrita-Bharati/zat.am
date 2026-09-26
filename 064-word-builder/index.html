@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanskrit Word Builder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="score-display">
+            Score: <span id="score-counter">0</span> | 
+            Streak: <span id="streak-counter" style="color: #6366f1;">0</span> | 
+            High: <span id="high-counter" style="color: #eab308;">0</span> |
+            Time: <span id="timer-display" style="color: #ef4444;">15</span>s
+        </div>
+        
+        <div class="target-card">
+            <p>Spell out the translation for:</p>
+            <h1 id="target-prompt">Loading...</h1>
+        </div>
+
+        <div class="input-display" id="player-input-view">
+        </div>
+
+        <div class="keyboard-grid" id="letter-bank">
+        </div>
+
+        <div class="control-row">
+            <button class="ctrl-btn clear-btn" onclick="clearInput()">Clear</button>
+            <button class="ctrl-btn submit-btn" onclick="submitWord()">Submit</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
