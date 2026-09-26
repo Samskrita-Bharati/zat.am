@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibhakti Sorting Bin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="score-display">
+            Score: <span id="score-counter">0</span> | 
+            Streak: <span id="streak-counter" style="color: #6366f1;">0</span> | 
+            High: <span id="high-counter" style="color: #eab308;">0</span> |
+            Time: <span id="timer-display" style="color: #ef4444;">12</span>s
+        </div>
+        
+        <div class="conveyor-belt">
+            <p>Sort this form into the correct number bin:</p>
+            <div id="spawned-item" class="sorting-item">Loading...</div>
+        </div>
+
+        <div class="bins-container">
+            <button class="bin" onclick="sortToBin('Singular')">
+                <div class="bin-title">Singular</div>
+                <div class="bin-subtitle">(एकवचनम्)</div>
+            </button>
+            <button class="bin" onclick="sortToBin('Dual')">
+                <div class="bin-title">Dual</div>
+                <div class="bin-subtitle">(द्विवचनम्)</div>
+            </button>
+            <button class="bin" onclick="sortToBin('Plural')">
+                <div class="bin-title">Plural</div>
+                <div class="bin-subtitle">(बहुवचनम्)</div>
+            </button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
