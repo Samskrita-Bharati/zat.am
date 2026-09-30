@@ -1,22 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>Typer</title>
-  <meta name="description" content="A tower defense like typing game">
-  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="typer.css">
-  <script async src="https://kit.fontawesome.com/a1c4b21e48.js"></script>
-  <script defer src="canvas.js"></script>
-  <script defer src="https://berkerol.github.io/libraries/particle.js"></script>
-  <script defer src="typer.js"></script>
-</head>
-
-<body>
-  <canvas id="canvas">Your browser doesn't support HTML5.</canvas>
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typer</title>
+    <link rel="stylesheet" href="styles/landing.css" />
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+    <!-- Hussain's FontAwesome Kit -->
+    <script
+      src="https://kit.fontawesome.com/492a3bab45.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Typer Game</h1>
+      </div>
+      <div class="card-grid">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>Game Description</h3>
+              <img src="images/game.png" alt="Game Description"/>
+            </div>
+            <div class="flip-card-back">
+              <p>Samskrita Typer - A Typing game for prospect Sanskrit Learners</p>
+              <br>
+              <p>Enjoy the Mini-Game 🫶🏻</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>How to Play</h3>
+              <img src="images/question-mark.png" alt="Employee Handbook"/>
+            </div>
+            <div class="flip-card-back">
+              <p>Inspired by Tower Defence Mechanism, this game pushes user to defence the orange circle in middle from incoming Digits&Letters</p>
+              <br>
+              <p>Eliminate the Digits&Letters by TYPING it 🎮</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>Developer</h3>
+              <img src="images/developer.png" alt="Project Reports"/>
+            </div>
+            <div class="flip-card-back">
+              <h3>Inspiration</h3>
+              <p>https://github.com/berkerol/typer</p>
+              <br>
+              <p>Developed by Harsh & Hussain 🙂</p>
+            </div>
+          </div>
+        </div>
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h3>Association</h3>
+              <img src="images/group.png" alt="Company Culture"/>
+            </div>
+            <div class="flip-card-back">
+              <h1>Samskrita Bharati</h1>
+              <br>
+              <p>Game Developed for Samskrita Bharati users</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="play-game" onclick="document.location='game.html'">PlayGame</button>
+    </div>
+  </body>
 </html>
