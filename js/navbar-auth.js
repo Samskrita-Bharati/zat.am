@@ -3,21 +3,18 @@ import {
   onAuthStateChanged,
   signOut,
 } from "../auth/api/firebase-config.js";
+
 import { getCurrentUserProfile } from "../auth/api/auth-api.js";
+
 import { updateStreak } from "../auth/api/streak.js";
 
-const loggedOut = document.getElementById("logged-out");
-const loggedIn = document.getElementById("logged-in");
-const profileBtn = document.getElementById("profile-btn");
-const dropdown = document.getElementById("profile-dropdown");
-const userEmailDropdown = document.getElementById("user-email-dropdown");
-const usernameDisplay = document.getElementById("username");
-const streakDisplay = document.getElementById("streak");
-const userLanguageRow = document.getElementById("user-language");
-const dropdownLogout = document.getElementById("dropdown-logout");
-const bilingualBtn = document.getElementById("bilingual-toggle");
+// Prevent duplicate initialization
+let navbarInitialized = false;
 
-// Match the human-readable language names used on the profile page
+// =====================================================
+// LANGUAGE LABELS
+// =====================================================
+
 const languageNames = {
   1: "Devanagari",
   be: "Bengali",
@@ -28,252 +25,414 @@ const languageNames = {
   ta: "Tamil",
 };
 
-// Initialize shared bilingual state from localStorage
-const storedBilingual = localStorage.getItem("zatBilingualOn");
-window.zatBilingualOn = storedBilingual === "1";
+// =====================================================
+// NAVBAR TRANSLATIONS
+// =====================================================
 
-const storedLang = localStorage.getItem("zatPreferredLang");
-if (storedLang) {
-  window.zatPreferredLang = storedLang;
-}
+const navbarTranslations = {
+  en: {
+    navGames: "Games",
+    navAbout: "About",
+    navContest: "Contest",
+    navLeaderboard: "Leaderboard",
 
-const updateBilingualButton = () => {
-  if (!bilingualBtn) return;
-  const on = window.zatBilingualOn === true;
-  bilingualBtn.textContent = on ? "Bilingual: On" : "Bilingual: Off";
+    login: "↪ Login",
+    signup: "Sign Up",
+
+    leaderboardDropdown: "Leaderboard",
+
+    profile: "Profile",
+    logout: "Logout",
+
+    langButton: "🌐 EN / SA",
+  },
+
+  sa: {
+    navGames: "क्रीडाः",
+    navAbout: "विषये",
+    navContest: "स्पर्धा",
+    navLeaderboard: "श्रेष्ठसूची",
+
+    login: "↪ प्रवेशः",
+    signup: "पञ्जीकरणम्",
+
+    leaderboardDropdown: "श्रेष्ठसूची",
+
+    profile: "परिचयः",
+    logout: "निर्गमः",
+
+    langButton: "🌐 SA / EN",
+  },
 };
 
-// Check if user is logged in
-onAuthStateChanged(auth, async (user) => {
-  const authBtn = document.querySelector(".auth-btn");
-  if (authBtn) {
-    authBtn.style.visibility = "visible";
+// =====================================================
+// DEFAULT PROFILE AVATAR
+// =====================================================
+
+function fallbackAvatarMarkup(large = false) {
+  return `
+    <span class="zatam-profile-fallback ${large ? "large" : ""}">
+      👤
+    </span>
+  `;
+}
+
+// =====================================================
+// LOCALIZED GREETING
+//
+// This still uses the user's preferred script.
+// It is separate from EN / SA website language.
+// =====================================================
+
+function getLocalizedNamaste(langCode) {
+  switch (langCode) {
+    case "be":
+      return "নমস্তে";
+
+    case "gu":
+      return "નમસ્તે";
+
+    case "ka":
+      return "ನಮಸ್ತೆ";
+
+    case "ml":
+      return "നമസ്തേ";
+
+    case "te":
+      return "నమస్తే";
+
+    case "ta":
+      return "நமஸ்தே";
+
+    default:
+      return "Namaste";
+  }
+}
+
+// =====================================================
+// MAIN INITIALIZER
+// =====================================================
+
+export async function initNavbarAuth() {
+  if (navbarInitialized) {
+    return;
   }
 
-  if (user) {
-    loggedOut.classList.add("hidden");
-    loggedIn.classList.remove("hidden");
+  navbarInitialized = true;
 
-    // Show bilingual toggle only for logged-in users
-    if (bilingualBtn) {
-      bilingualBtn.classList.remove("hidden");
-      bilingualBtn.style.display = "";
-    }
+  // ===========================================
+  // GET ELEMENTS AFTER NAVBAR HAS BEEN INJECTED
+  // ===========================================
 
-    // Display email
-    userEmailDropdown.textContent = user.email;
+  const loggedOut = document.getElementById("logged-out");
 
-    // display user firstname or username from email, if username not available
-    let displayName;
+  const loggedIn = document.getElementById("logged-in");
 
-    if (user.displayName) {
-      // Get first name only
-      displayName = user.displayName.split(" ")[0];
-    } else {
-      // Get email username before '@' symbol
-      displayName = user.email.split("@")[0];
-    }
+  const profileBtn = document.getElementById("profile-btn");
 
-    usernameDisplay.textContent = `Hi, ${displayName}!`;
+  const dropdown = document.getElementById("profile-dropdown");
 
-    // Load user profile to get preferred language code
-    // Helper: map preferred language code to a localized "Namaste"
-    const getLocalizedNamaste = (langCode) => {
-      switch (langCode) {
-        case "be":
-          return "নমস্তে"; // Bengali
-        case "gu":
-          return "નમસ્તે"; // Gujarati
-        case "ka":
-          return "ನಮಸ್ತೆ"; // Kannada
-        case "ml":
-          return "നമസ്തേ"; // Malayalam
-        case "te":
-          return "నమస్తే"; // Telugu
-        case "ta":
-          return "நமஸ்தே"; // Tamil
-        default:
-          return "Namaste";
+  const userEmailDropdown = document.getElementById("user-email-dropdown");
+
+  const usernameDisplay = document.getElementById("username");
+
+  const streakDisplay = document.getElementById("streak");
+
+  const userLanguageRow = document.getElementById("user-language");
+
+  const dropdownLogout = document.getElementById("dropdown-logout");
+
+  const headerAvatar = document.getElementById("navbar-profile-avatar");
+
+  const dropdownAvatar = document.getElementById("dropdown-avatar");
+
+  const headerUserName = document.getElementById("navbar-user-name");
+
+  const langBtn = document.getElementById("zatamLangBtn");
+
+  const loginBtn = document.getElementById("navbar-login-btn");
+
+  const signupBtn = document.getElementById("navbar-signup-btn");
+
+  const profileLink = document.getElementById("profile-link-dropdown");
+
+  const leaderboardLink = document.getElementById("leaderboard-link-dropdown");
+
+  if (!loggedOut || !loggedIn || !profileBtn || !dropdown) {
+    console.error("Navbar auth elements are missing.");
+
+    return;
+  }
+
+  // ===================================================
+  // EN / SA INTERFACE LANGUAGE
+  // ===================================================
+
+  let currentLanguage = localStorage.getItem("zatamLanguage") || "en";
+
+  function applyNavbarLanguage(emitEvent = true) {
+    const t = navbarTranslations[currentLanguage] || navbarTranslations.en;
+
+    document.querySelectorAll("[data-nav-i18n]").forEach((element) => {
+      const key = element.dataset.navI18n;
+
+      if (t[key]) {
+        element.textContent = t[key];
       }
-    };
+    });
 
-    // Google Profile image
-    if (user.photoURL) {
-      profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="profile-image">`;
-    } else {
-      profileBtn.innerHTML =
-        '<i class="fas fa-user-circle fa-2x profile-icon"></i>';
+    if (langBtn) {
+      langBtn.textContent = t.langButton;
     }
 
-    const dropdownIconSpan = dropdown.querySelector(".dropdown-header > span");
-    if (dropdownIconSpan) {
-      if (user.photoURL) {
-        dropdownIconSpan.innerHTML = `<img src="${user.photoURL}" alt="Profile" class="dropdown-profile-image">`;
-      } else {
-        dropdownIconSpan.innerHTML =
-          '<i class="fas fa-user-circle fa-3x profile-icon"></i>';
+    localStorage.setItem("zatamLanguage", currentLanguage);
+
+    window.zatamLanguage = currentLanguage;
+
+    if (emitEvent) {
+      window.dispatchEvent(
+        new CustomEvent("zatam:languagechange", {
+          detail: {
+            language: currentLanguage,
+          },
+        }),
+      );
+    }
+  }
+
+  if (langBtn) {
+    langBtn.addEventListener("click", () => {
+      currentLanguage = currentLanguage === "en" ? "sa" : "en";
+
+      applyNavbarLanguage();
+    });
+  }
+
+  applyNavbarLanguage(false);
+
+  // ===================================================
+  // LOGIN / SIGNUP
+  // ===================================================
+
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      if (loginBtn.dataset.href) {
+        window.location.href = loginBtn.dataset.href;
       }
-    }
+    });
+  }
 
-    // Load user profile to get preferred language code and update UI
-    getCurrentUserProfile()
-      .then((profile) => {
+  if (signupBtn) {
+    signupBtn.addEventListener("click", () => {
+      if (signupBtn.dataset.href) {
+        window.location.href = signupBtn.dataset.href;
+      }
+    });
+  }
+
+  // ===================================================
+  // PROFILE DROPDOWN
+  // ===================================================
+
+  profileBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    dropdown.classList.toggle("hidden");
+
+    const expanded = !dropdown.classList.contains("hidden");
+
+    profileBtn.setAttribute("aria-expanded", String(expanded));
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!loggedIn.contains(event.target)) {
+      dropdown.classList.add("hidden");
+
+      profileBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // ===================================================
+  // AUTH STATE
+  // ===================================================
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      loggedOut.classList.add("hidden");
+
+      loggedIn.classList.remove("hidden");
+
+      // ===========================================
+      // NAME
+      // ===========================================
+
+      let displayName = "Player";
+
+      if (user.displayName) {
+        displayName = user.displayName.split(" ")[0];
+      } else if (user.email) {
+        displayName = user.email.split("@")[0];
+      }
+
+      if (headerUserName) {
+        headerUserName.textContent = displayName;
+      }
+
+      if (userEmailDropdown) {
+        userEmailDropdown.textContent = user.email || "";
+      }
+
+      // ===========================================
+      // AVATAR
+      // ===========================================
+
+      if (headerAvatar) {
+        if (user.photoURL) {
+          headerAvatar.innerHTML = `
+              <img
+                src="${user.photoURL}"
+                alt="${displayName}"
+              />
+            `;
+        } else {
+          headerAvatar.innerHTML = fallbackAvatarMarkup();
+        }
+      }
+
+      if (dropdownAvatar) {
+        if (user.photoURL) {
+          dropdownAvatar.innerHTML = `
+              <img
+                src="${user.photoURL}"
+                alt="${displayName}"
+              />
+            `;
+        } else {
+          dropdownAvatar.innerHTML = fallbackAvatarMarkup(true);
+        }
+      }
+
+      // ===========================================
+      // USER PROFILE / PREFERRED SCRIPT
+      // ===========================================
+
+      try {
+        const profile = await getCurrentUserProfile();
+
         if (profile && profile.language) {
           window.zatPreferredLang = profile.language;
+
           localStorage.setItem("zatPreferredLang", profile.language);
         }
 
-        const langCode = window.zatPreferredLang || "";
-        const greetingWord = getLocalizedNamaste(langCode);
-        usernameDisplay.textContent = `${greetingWord}, ${displayName}!`;
+        const langCode =
+          window.zatPreferredLang ||
+          localStorage.getItem("zatPreferredLang") ||
+          "";
+
+        const greeting = getLocalizedNamaste(langCode);
+
+        if (usernameDisplay) {
+          usernameDisplay.textContent = `${greeting}, ${displayName}!`;
+        }
 
         if (userLanguageRow) {
           if (langCode) {
-            const langLabel = languageNames[langCode] || langCode;
-            userLanguageRow.textContent = `Language: ${langLabel}`;
+            const languageLabel = languageNames[langCode] || langCode;
+
+            userLanguageRow.textContent = `Language: ${languageLabel}`;
+
             userLanguageRow.style.display = "block";
           } else {
             userLanguageRow.textContent = "";
+
             userLanguageRow.style.display = "none";
           }
         }
+      } catch (error) {
+        console.error("Unable to load user profile:", error);
 
-        updateBilingualButton();
-      })
-      .catch(() => {
-        const langCode = window.zatPreferredLang || "";
-        const greetingWord = getLocalizedNamaste(langCode);
-        usernameDisplay.textContent = `${greetingWord}, ${displayName}!`;
-
-        if (userLanguageRow) {
-          if (langCode) {
-            const langLabel = languageNames[langCode] || langCode;
-            userLanguageRow.textContent = `Language: ${langLabel}`;
-            userLanguageRow.style.display = "block";
-          } else {
-            userLanguageRow.textContent = "";
-            userLanguageRow.style.display = "none";
-          }
+        if (usernameDisplay) {
+          usernameDisplay.textContent = `Namaste, ${displayName}!`;
         }
-
-        updateBilingualButton();
-      });
-
-    const streak = await updateStreak(user.uid);
-    streakDisplay.textContent = `🔥 Streak: ${streak}`;
-  } else {
-    loggedOut.classList.remove("hidden");
-    loggedIn.classList.add("hidden");
-
-    // Hide bilingual toggle for logged-out users
-    if (bilingualBtn) {
-      bilingualBtn.classList.add("hidden");
-      bilingualBtn.style.display = "none";
-    }
-
-    updateBilingualButton();
-  }
-});
-
-// Toggle dropdown on profile icon click
-profileBtn.addEventListener("click", () => {
-  dropdown.classList.toggle("hidden");
-});
-
-// Close dropdown when clicking outside
-document.addEventListener("click", (e) => {
-  if (!loggedIn.contains(e.target)) {
-    dropdown.classList.add("hidden");
-  }
-});
-
-// Logout
-if (dropdownLogout) {
-  dropdownLogout.addEventListener("click", async (e) => {
-    e.preventDefault();
-    try {
-      await signOut(auth);
-      dropdown.classList.add("hidden");
-
-      // Check if we're on a protected page
-      const currentPath = window.location.pathname;
-      if (currentPath.includes("/bp26/")) {
-        // Redirect to login instead of showing alert
-        window.location.href = "../auth/login.html";
-      } else {
-        // On public pages, just show confirmation
-        alert("Logged out successfully!");
-        // Optionally reload to update UI
-        window.location.reload();
       }
-    } catch (error) {
-      alert("Error logging out");
-      console.error(error);
+
+      // ===========================================
+      // STREAK
+      // ===========================================
+
+      if (streakDisplay) {
+        try {
+          const streak = await updateStreak(user.uid);
+
+          streakDisplay.textContent = `🔥 Streak: ${streak}`;
+        } catch (error) {
+          console.error("Unable to load streak:", error);
+
+          streakDisplay.textContent = "🔥 Streak: 0";
+        }
+      }
+    } else {
+      loggedOut.classList.remove("hidden");
+
+      loggedIn.classList.add("hidden");
+
+      dropdown.classList.add("hidden");
     }
   });
-}
 
-// Bilingual mode toggle handler
-if (bilingualBtn) {
-  updateBilingualButton();
+  // ===================================================
+  // LOGOUT
+  // ===================================================
 
-  bilingualBtn.addEventListener("click", () => {
-    const preferredLang =
-      window.zatPreferredLang || localStorage.getItem("zatPreferredLang") || "";
+  if (dropdownLogout) {
+    dropdownLogout.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
 
-    const turningOn = !window.zatBilingualOn;
+        dropdown.classList.add("hidden");
 
-    // Require a preferred language before turning bilingual mode ON
-    if (turningOn && !preferredLang) {
-      alert(
-        "Please set your preferred language in the Preferences page first.",
-      );
-      return;
-    }
+        // Public main zat.am pages can simply refresh.
+        window.location.reload();
+      } catch (error) {
+        console.error("Logout failed:", error);
 
-    window.zatBilingualOn = turningOn;
-    localStorage.setItem("zatBilingualOn", turningOn ? "1" : "0");
-    updateBilingualButton();
+        alert("Error logging out.");
+      }
+    });
+  }
 
-    // If the main menu is present, refresh it so links (like bp26)
-    // immediately pick up the new bilingual state.
-    if (typeof window.zatRefreshMenu === "function") {
-      window.zatRefreshMenu();
-    }
+  // ===================================================
+  // PROFILE ORIGIN
+  // ===================================================
 
-    // On pages that support bilingual query-param behavior
-    // (e.g., competition/game pages that load bilingual-toggle.js),
-    // sync the current page URL's `t` parameter with the new state.
-    if (typeof window.zatSyncBilingualQueryParam === "function") {
-      window.zatSyncBilingualQueryParam();
-    }
-  });
-}
+  if (profileLink) {
+    const profileUrl = new URL(profileLink.href);
 
-// Set profile link with origin parameter
-const profileLinkDropdown = document.getElementById("profile-link-dropdown");
-if (profileLinkDropdown) {
-  profileLinkDropdown.addEventListener("click", (e) => {
-    e.preventDefault();
     const currentPath = window.location.pathname;
-    const origin = currentPath.includes("/bp26/") ? "bp26" : "home";
-    window.location.href = `../auth/profile.html?from=${origin}`;
-  });
+
+    profileUrl.searchParams.set(
+      "from",
+      currentPath.includes("/bp26/") ? "bp26" : "home",
+    );
+
+    profileLink.href = profileUrl.href;
+  }
+
+  // ===================================================
+  // LEADERBOARD ORIGIN
+  // ===================================================
+
+  if (leaderboardLink) {
+    const leaderboardUrl = new URL(leaderboardLink.href);
+
+    const currentPath = window.location.pathname;
+
+    leaderboardUrl.searchParams.set(
+      "from",
+      currentPath.includes("/bp26/") ? "bp26" : "home",
+    );
+
+    leaderboardLink.href = leaderboardUrl.href;
+  }
 }
-
-// Set leaderboard link with origin parameter
-document.addEventListener("DOMContentLoaded", () => {
-  const leaderboardLinks = document.querySelectorAll(
-    'a[href*="leaderboard.html"]',
-  );
-  const currentPath = window.location.pathname;
-  const origin = currentPath.includes("/bp26/") ? "bp26" : "home";
-
-  leaderboardLinks.forEach((link) => {
-    const href = link.getAttribute("href");
-    if (href && !href.includes("?from=")) {
-      const separator = href.includes("?") ? "&" : "?";
-      link.setAttribute("href", `${href}${separator}from=${origin}`);
-    }
-  });
-});

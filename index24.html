@@ -13,81 +13,133 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
 
-  <body>
-    <div class="auth-buttons">
-      <img src="शत.म्.png" alt="Logo" class="logo" />
+  <body data-page="games">
+    <!-- =========================
+     ZAT.AM2 STYLE HEADER
+========================= -->
+    <div id="navbar-mount"></div>
 
-      <!-- Show when logged out -->
-      <div class="auth-btn">
-        <!-- Bilingual mode toggle (shown only when logged in via navbar-auth.js) -->
-        <button id="bilingual-toggle" class="hidden" style="display: none">
-          Bilingual: Off
-        </button>
+    <!-- =========================
+     HERO
+========================= -->
 
-        <span id="logged-out">
-          <button
-            data-cy="login-btn"
-            onclick="window.location.href = './auth/login.html'"
-          >
-            Login
+    <section class="hero">
+      <div class="hero-text">
+        <h2>
+          Learn Sanskrit<br />
+          Through Games
+        </h2>
+
+        <div class="hero-underline"></div>
+
+        <p>
+          Making Sanskrit learning fun through interactive play, clever puzzles,
+          engaging games, and exciting challenges.
+        </p>
+
+        <div class="hero-buttons">
+          <button class="primary-btn" id="startPlayingBtn" type="button">
+            🎮 Start Playing
           </button>
 
-          <button
-            data-cy="signup-btn"
-            onclick="window.location.href = './auth/signup.html'"
-          >
-            Sign Up
+          <button class="secondary-btn" id="howItWorksBtn" type="button">
+            📖 How It Works
           </button>
-        </span>
-
-        <!-- Show when logged in -->
-        <div id="logged-in" class="hidden profile-container">
-          <!-- Profile Icon -->
-          <span data-cy="profile-button" id="profile-btn"
-            ><i class="fas fa-user-circle fa-2x profile-icon"></i
-          ></span>
-          <!-- Dropdown Menu -->
-          <div id="profile-dropdown" class="dropdown hidden">
-            <div class="dropdown-header">
-              <p class="user-email" id="user-email-dropdown">
-                user@example.com
-              </p>
-              <span><i class="fas fa-user-circle fa-3x profile-icon"></i></span>
-              <span id="username">Hi, username!</span>
-              <span id="user-language" class="user-language-row"></span>
-              <p id="streak">🔥 Streak: 0</p>
-            </div>
-            <hr />
-            <a
-              href="./leaderboard.html?from=home"
-              data-cy="leaderboard-page-button"
-              >Leaderboard</a
-            >
-            <a href="./auth/profile.html" data-cy="profile-page-button"
-              >Profile</a
-            >
-            <a href="#" data-cy="logout-button" id="dropdown-logout">Logout</a>
-          </div>
         </div>
       </div>
-    </div>
+
+      <!-- =========================
+       DYNAMIC SLIDER
+  ========================= -->
+
+      <div class="hero-art">
+        <div class="hero-sun"></div>
+        <div class="hero-mountain"></div>
+
+        <div class="floating-letter letter-1">क</div>
+        <div class="floating-letter letter-2">अ</div>
+        <div class="floating-letter letter-3">म</div>
+
+        <div
+          class="game-slideshow"
+          id="gameSlideshow"
+          aria-label="Featured Sanskrit games"
+        >
+          <!-- app.js inserts slides here -->
+          <div id="featuredSlides"></div>
+
+          <!-- app.js inserts dots here -->
+          <div class="slide-dots" id="featuredSlideDots"></div>
+
+          <button
+            class="slide-arrow slide-prev"
+            id="featuredSlidePrev"
+            type="button"
+            aria-label="Previous slide"
+          >
+            &lsaquo;
+          </button>
+
+          <button
+            class="slide-arrow slide-next"
+            id="featuredSlideNext"
+            type="button"
+            aria-label="Next slide"
+          >
+            &rsaquo;
+          </button>
+
+          <button class="slide-toggle" id="featuredSlideToggle" type="button">
+            Pause
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+     GAME CATEGORIES
+========================= -->
+
+    <section class="category-bar" id="gamesSection">
+      <!-- app.js still generates ALL category buttons -->
+      <div class="btn-container"></div>
+    </section>
+
+    <!-- =========================
+     GAMES
+========================= -->
 
     <section class="menu">
-      <!-- title -->
-      <div data-cy="main-title" class="title">
-        <h2>
-          संस्कृतभारती
-          <!--जयतु संस्कृतम् ।  -->
-        </h2>
-        <div class="underline"></div>
+      <div class="games-heading">
+        <h2>संस्कृतभारती</h2>
+        <div class="games-heading-underline"></div>
+
+        <p>Choose a game and start learning Sanskrit through play.</p>
       </div>
 
-      <!-- filter buttons -->
-      <div class="btn-container"></div>
-
-      <!-- menu items -->
+      <!-- app.js still generates ALL games -->
       <div class="section-center"></div>
     </section>
+
+    <!-- =========================
+     HOW IT WORKS MODAL
+========================= -->
+
+    <div class="zatam-overlay" id="zatamOverlay">
+      <div class="zatam-modal">
+        <div class="zatam-modal-icon">💡</div>
+
+        <h3>How It Works</h3>
+
+        <p>
+          Choose a game category, select a game, and click Play Now to begin.
+        </p>
+
+        <button class="zatam-modal-btn" id="zatamModalOk" type="button">
+          OK
+        </button>
+      </div>
+    </div>
 
     <div class="leaderboard-container">
       <a class="leaderboard-btn" href="./leaderboard.html">🏆 Leaderboard</a>
@@ -148,6 +200,7 @@
     </footer>
     <!-- javascript -->
     <script src="./app.js"></script>
+    <script type="module" src="./js/navbar-loader.js"></script>
     <script>
       window.addEventListener("DOMContentLoaded", () => {
         const setInitialActiveButton = () => {
@@ -177,7 +230,6 @@
         });
       });
     </script>
-    <script type="module" src="./js/navbar-auth.js"></script>
     <!-- Mini-leaderboard -->
     <script type="module">
       import {

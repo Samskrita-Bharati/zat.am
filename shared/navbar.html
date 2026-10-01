@@ -1,0 +1,175 @@
+<header class="zatam-header">
+  <!-- =========================
+       LOGO
+  ========================== -->
+
+  <a class="zatam-logo" data-route="index24.html">
+    <div class="zatam-logo-mark" aria-hidden="true">
+      <div class="zatam-logo-circle zc1"></div>
+      <div class="zatam-logo-circle zc2"></div>
+      <div class="zatam-logo-circle zc3"></div>
+    </div>
+
+    <div class="zatam-logo-text">
+      <h1><span>za</span><span>t</span><span>.am</span></h1>
+
+      <p>शब्दम् मम प्रेरणम्</p>
+    </div>
+  </a>
+
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
+  <nav class="zatam-nav">
+    <a data-route="index24.html" data-nav-page="games" data-nav-i18n="navGames">
+      Games
+    </a>
+
+    <a data-route="About.html" data-nav-page="about" data-nav-i18n="navAbout">
+      About
+    </a>
+    <a
+      data-route="Resources.html"
+      data-nav-page="resources"
+      data-nav-i18n="navResources"
+    >
+      Resources
+    </a>
+
+    <a
+      data-route="bp26/index.html"
+      data-nav-page="contest"
+      data-nav-i18n="navContest"
+    >
+      Contest
+    </a>
+
+    <a
+      data-route="leaderboard.html"
+      data-nav-page="leaderboard"
+      data-nav-i18n="navLeaderboard"
+    >
+      Leaderboard
+    </a>
+  </nav>
+
+  <!-- =========================
+       HEADER ACTIONS
+  ========================== -->
+
+  <div class="zatam-header-actions">
+    <!-- Zat.am2 style EN / SA toggle -->
+    <button
+      class="zatam-lang-btn"
+      id="zatamLangBtn"
+      type="button"
+      aria-label="Change language"
+    >
+      🌐 EN / SA
+    </button>
+
+    <!-- =========================
+         LOGGED OUT
+    ========================== -->
+
+    <div id="logged-out" class="zatam-auth-logged-out">
+      <button
+        id="navbar-login-btn"
+        class="zatam-login-btn"
+        data-route="auth/login.html"
+        data-cy="login-btn"
+        type="button"
+        data-nav-i18n="login"
+      >
+        ↪ Login
+      </button>
+
+      <button
+        id="navbar-signup-btn"
+        class="zatam-signup-btn"
+        data-route="auth/signup.html"
+        data-cy="signup-btn"
+        type="button"
+        data-nav-i18n="signup"
+      >
+        Sign Up
+      </button>
+    </div>
+
+    <!-- =========================
+         LOGGED IN
+    ========================== -->
+
+    <div id="logged-in" class="zatam-profile-container hidden">
+      <button
+        id="profile-btn"
+        class="zatam-user-profile"
+        data-cy="profile-button"
+        type="button"
+        aria-expanded="false"
+        aria-controls="profile-dropdown"
+      >
+        <span id="navbar-profile-avatar">
+          <span class="zatam-profile-fallback"> 👤 </span>
+        </span>
+
+        <span id="navbar-user-name"> Player </span>
+
+        <span class="zatam-profile-chevron" aria-hidden="true"> ▾ </span>
+      </button>
+
+      <!-- =========================
+           PROFILE DROPDOWN
+      ========================== -->
+
+      <div id="profile-dropdown" class="zatam-dropdown hidden">
+        <div class="zatam-dropdown-header">
+          <p class="zatam-user-email" id="user-email-dropdown">
+            user@example.com
+          </p>
+
+          <div class="zatam-dropdown-avatar" id="dropdown-avatar">
+            <span class="zatam-profile-fallback large"> 👤 </span>
+          </div>
+
+          <span id="username"> Hi, username! </span>
+
+          <span id="user-language" class="zatam-user-language"></span>
+
+          <p id="streak">🔥 Streak: 0</p>
+        </div>
+
+        <div class="zatam-dropdown-divider"></div>
+
+        <a
+          id="leaderboard-link-dropdown"
+          data-route="leaderboard.html"
+          data-cy="leaderboard-page-button"
+          data-nav-i18n="leaderboardDropdown"
+        >
+          Leaderboard
+        </a>
+
+        <a
+          id="profile-link-dropdown"
+          data-route="auth/profile.html"
+          data-cy="profile-page-button"
+          data-nav-i18n="profile"
+        >
+          Profile
+        </a>
+
+        <button
+          id="dropdown-logout"
+          class="zatam-dropdown-logout"
+          data-cy="logout-button"
+          type="button"
+          data-nav-i18n="logout"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
