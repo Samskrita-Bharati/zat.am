@@ -65,6 +65,16 @@ var symbols = [
   "३१",
 ];
 const urlParams = new URLSearchParams(window.location.search);
+var o = urlParams.get("oks");
+//if (o!="aam")
+//{
+//var today  = new Date()
+//}
+//else
+//{
+var today = new Date(2026, 09, 30, 00, 00, 00);
+//}
+var months = [];
 
 // Helper: append the current bilingual `t` parameter (if any) to a link
 function appendT(href) {
