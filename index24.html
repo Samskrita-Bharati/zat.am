@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>शत.म् zat.am</title>   
+    <title>शत.म् zat.am</title>
     <!-- font-awesome -->
     <link
       rel="stylesheet"
@@ -25,11 +25,17 @@
         </button>
 
         <span id="logged-out">
-          <button data-cy="login-btn" onclick="window.location.href = './auth/login.html'">
+          <button
+            data-cy="login-btn"
+            onclick="window.location.href = './auth/login.html'"
+          >
             Login
           </button>
 
-          <button data-cy="signup-btn" onclick="window.location.href = './auth/signup.html'">
+          <button
+            data-cy="signup-btn"
+            onclick="window.location.href = './auth/signup.html'"
+          >
             Sign Up
           </button>
         </span>
@@ -52,8 +58,14 @@
               <p id="streak">🔥 Streak: 0</p>
             </div>
             <hr />
-            <a href="./leaderboard.html?from=home" data-cy="leaderboard-page-button">Leaderboard</a>
-            <a href="./auth/profile.html" data-cy="profile-page-button">Profile</a>
+            <a
+              href="./leaderboard.html?from=home"
+              data-cy="leaderboard-page-button"
+              >Leaderboard</a
+            >
+            <a href="./auth/profile.html" data-cy="profile-page-button"
+              >Profile</a
+            >
             <a href="#" data-cy="logout-button" id="dropdown-logout">Logout</a>
           </div>
         </div>
@@ -136,6 +148,35 @@
     </footer>
     <!-- javascript -->
     <script src="./app.js"></script>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const setInitialActiveButton = () => {
+          const firstButton = document.querySelector(
+            ".btn-container button.filter-btn",
+          );
+
+          if (firstButton) {
+            firstButton.classList.add("active");
+          }
+        };
+
+        setInitialActiveButton();
+
+        document.addEventListener("click", (event) => {
+          const button = event.target.closest("button.filter-btn");
+
+          if (!button) return;
+
+          document
+            .querySelectorAll(".btn-container button.filter-btn")
+            .forEach((btn) => {
+              btn.classList.remove("active");
+            });
+
+          button.classList.add("active");
+        });
+      });
+    </script>
     <script type="module" src="./js/navbar-auth.js"></script>
     <!-- Mini-leaderboard -->
     <script type="module">
