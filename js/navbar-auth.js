@@ -33,8 +33,10 @@ const navbarTranslations = {
   en: {
     navGames: "Games",
     navAbout: "About",
+    navResources: "Resources",
     navContest: "Contest",
     navLeaderboard: "Leaderboard",
+    navContact: "Contact",
 
     login: "↪ Login",
     signup: "Sign Up",
@@ -50,8 +52,10 @@ const navbarTranslations = {
   sa: {
     navGames: "क्रीडाः",
     navAbout: "विषये",
+    navResources: "संसाधनानि",
     navContest: "स्पर्धा",
     navLeaderboard: "श्रेष्ठसूची",
+    navContact: "सम्पर्कः",
 
     login: "↪ प्रवेशः",
     signup: "पञ्जीकरणम्",

@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Zat.am - Contact</title>
+
+    <link rel="stylesheet" href="./css/contact.css" />
+  </head>
+
+  <body data-page="contact">
+    <!-- =====================================================
+         SHARED NAVBAR
+    ====================================================== -->
+
+    <div id="navbar-mount"></div>
+
+    <!-- =====================================================
+         CONTACT PAGE
+    ====================================================== -->
+
+    <main class="contact-page">
+      <!-- ===================================================
+           HERO
+      ==================================================== -->
+
+      <section class="contact-hero">
+        <div class="contact-hero-content">
+          <h1 data-page-i18n="heroTitle">Contact Us</h1>
+
+          <div class="contact-underline"></div>
+
+          <p data-page-i18n="heroDesc">
+            Have feedback, a bug report, or an idea for a new Sanskrit game?
+            Send a message and help improve Zat.am.
+          </p>
+        </div>
+
+        <!-- HERO ART -->
+
+        <div class="contact-hero-art" aria-hidden="true">
+          <div class="contact-sun"></div>
+
+          <div class="contact-mountain"></div>
+
+          <div class="contact-hero-card contact-card-1">न</div>
+
+          <div class="contact-hero-card contact-card-2">म</div>
+
+          <div class="contact-hero-card contact-card-3">ः</div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           CONTACT CONTENT
+      ==================================================== -->
+
+      <section class="contact-layout">
+        <!-- =================================================
+             CONTACT FORM
+        ================================================== -->
+
+        <article class="contact-card">
+          <h2 class="contact-section-title" data-page-i18n="formTitle">
+            Send a Message
+          </h2>
+
+          <form id="contactForm">
+            <!-- NAME -->
+
+            <label for="name" data-page-i18n="nameLabel"> Name </label>
+
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Your name"
+              data-page-placeholder-i18n="namePlaceholder"
+              autocomplete="name"
+              required
+            />
+
+            <!-- EMAIL -->
+
+            <label for="email" data-page-i18n="emailLabel"> Email </label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              data-page-placeholder-i18n="emailPlaceholder"
+              autocomplete="email"
+              required
+            />
+
+            <!-- TOPIC -->
+
+            <label for="topic" data-page-i18n="topicLabel"> Topic </label>
+
+            <select id="topic" name="topic" required>
+              <option value="Feedback" data-page-i18n="topicFeedback">
+                Feedback
+              </option>
+
+              <option value="Bug Report" data-page-i18n="topicBug">
+                Bug Report
+              </option>
+
+              <option value="New Game Idea" data-page-i18n="topicGame">
+                New Game Idea
+              </option>
+            </select>
+
+            <!-- MESSAGE -->
+
+            <label for="message" data-page-i18n="messageLabel"> Message </label>
+
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Write your message..."
+              data-page-placeholder-i18n="messagePlaceholder"
+              maxlength="3000"
+              required
+            ></textarea>
+
+            <!-- SUBMIT -->
+
+            <button
+              type="submit"
+              class="contact-primary-btn"
+              id="contactSubmitBtn"
+              data-page-i18n="sendBtn"
+            >
+              Send Message
+            </button>
+
+            <!-- RESULT -->
+
+            <div
+              class="contact-notice"
+              id="formNotice"
+              role="status"
+              aria-live="polite"
+            ></div>
+          </form>
+        </article>
+
+        <!-- =================================================
+             SIDE INFORMATION
+        ================================================== -->
+
+        <aside class="contact-card contact-side-card">
+          <div class="contact-main-icon">💬</div>
+
+          <h2 class="contact-side-title" data-page-i18n="sideTitle">
+            Other Ways to Connect
+          </h2>
+
+          <p class="contact-side-description" data-page-i18n="sideDesc">
+            Use this page for project feedback, class demo notes, and future
+            support links.
+          </p>
+
+          <div class="contact-info-list">
+            <!-- BUG -->
+
+            <div class="contact-mini-card">
+              <div class="contact-mini-icon">🐞</div>
+
+              <div>
+                <h3 data-page-i18n="mini1Title">Report Bugs</h3>
+
+                <p data-page-i18n="mini1Desc">
+                  Tell us what broke and which page you were using.
+                </p>
+              </div>
+            </div>
+
+            <!-- GAME IDEA -->
+
+            <div class="contact-mini-card">
+              <div class="contact-mini-icon">💡</div>
+
+              <div>
+                <h3 data-page-i18n="mini2Title">Suggest Games</h3>
+
+                <p data-page-i18n="mini2Desc">
+                  Share ideas for Sanskrit learning activities.
+                </p>
+              </div>
+            </div>
+
+            <!-- CLASS USE -->
+
+            <div class="contact-mini-card">
+              <div class="contact-mini-icon">🎓</div>
+
+              <div>
+                <h3 data-page-i18n="mini3Title">Class Use</h3>
+
+                <p data-page-i18n="mini3Desc">
+                  Use feedback to improve the educational experience.
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="contact-footer">
+      <a
+        href="./legal/privacy.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-page-i18n="privacy"
+      >
+        Privacy Policy
+      </a>
+    </footer>
+
+    <!-- =====================================================
+         CONTACT PAGE TRANSLATIONS
+    ====================================================== -->
+
+    <script>
+      const contactTranslations = {
+        en: {
+          heroTitle: "Contact Us",
+
+          heroDesc:
+            "Have feedback, a bug report, or an idea for a new Sanskrit game? Send a message and help improve Zat.am.",
+
+          formTitle: "Send a Message",
+
+          nameLabel: "Name",
+
+          namePlaceholder: "Your name",
+
+          emailLabel: "Email",
+
+          emailPlaceholder: "you@example.com",
+
+          topicLabel: "Topic",
+
+          topicFeedback: "Feedback",
+
+          topicBug: "Bug Report",
+
+          topicGame: "New Game Idea",
+
+          messageLabel: "Message",
+
+          messagePlaceholder: "Write your message...",
+
+          sendBtn: "Send Message",
+
+          sending: "Sending...",
+
+          formSuccess: "Thank you! Your message has been sent successfully.",
+
+          formError: "Sorry, something went wrong. Please try again.",
+
+          sideTitle: "Other Ways to Connect",
+
+          sideDesc:
+            "Use this page for project feedback, class demo notes, and future support links.",
+
+          mini1Title: "Report Bugs",
+
+          mini1Desc: "Tell us what broke and which page you were using.",
+
+          mini2Title: "Suggest Games",
+
+          mini2Desc: "Share ideas for Sanskrit learning activities.",
+
+          mini3Title: "Class Use",
+
+          mini3Desc: "Use feedback to improve the educational experience.",
+
+          privacy: "Privacy Policy",
+        },
+
+        sa: {
+          heroTitle: "सम्पर्कः",
+
+          heroDesc:
+            "प्रतिक्रिया, दोषसूचना, नूतनसंस्कृतक्रीडाविचारः वा अस्ति? सन्देशं प्रेषयित्वा Zat.am सुधारय।",
+
+          formTitle: "सन्देशं प्रेषय",
+
+          nameLabel: "नाम",
+
+          namePlaceholder: "भवतः नाम",
+
+          emailLabel: "ईमेल्",
+
+          emailPlaceholder: "you@example.com",
+
+          topicLabel: "विषयः",
+
+          topicFeedback: "प्रतिक्रिया",
+
+          topicBug: "दोषसूचना",
+
+          topicGame: "नूतनक्रीडाविचारः",
+
+          messageLabel: "सन्देशः",
+
+          messagePlaceholder: "भवतः सन्देशं लिखतु...",
+
+          sendBtn: "सन्देशं प्रेषय",
+
+          sending: "प्रेष्यते...",
+
+          formSuccess: "धन्यवादः! भवतः सन्देशः सफलतया प्रेषितः।",
+
+          formError: "क्षम्यताम्, सन्देशप्रेषणे त्रुटिः। पुनः प्रयत्नं कुरु।",
+
+          sideTitle: "सम्पर्कस्य अन्ये उपायाः",
+
+          sideDesc:
+            "परियोजना-प्रतिक्रियायै, वर्गप्रदर्शन-टिप्पण्यै, भावि-साहाय्य-सूत्रैः च एतत् पृष्ठम् उपयुज्यताम्।",
+
+          mini1Title: "दोषान् सूचय",
+
+          mini1Desc: "किं भग्नम्, कस्मिन् पृष्ठे आसीः इति वद।",
+
+          mini2Title: "क्रीडाविचारान् ददातु",
+
+          mini2Desc: "संस्कृताध्ययनक्रीडानां विचारान् साझा कुरु।",
+
+          mini3Title: "वर्गोपयोगः",
+
+          mini3Desc: "शैक्षिकानुभवं सुधारयितुं प्रतिक्रियां प्रयुञ्जीत।",
+
+          privacy: "गोपनीयता नीति",
+        },
+      };
+
+      let currentContactLanguage =
+        localStorage.getItem("zatamLanguage") || "en";
+
+      function getContactTranslation(key) {
+        const language =
+          contactTranslations[currentContactLanguage] || contactTranslations.en;
+
+        return language[key] || "";
+      }
+
+      function updateContactLanguage(language) {
+        currentContactLanguage = language === "sa" ? "sa" : "en";
+
+        const translations = contactTranslations[currentContactLanguage];
+
+        document
+          .querySelectorAll("[data-page-i18n]")
+          .forEach(function (element) {
+            const key = element.dataset.pageI18n;
+
+            if (translations[key]) {
+              element.textContent = translations[key];
+            }
+          });
+
+        document
+          .querySelectorAll("[data-page-placeholder-i18n]")
+          .forEach(function (element) {
+            const key = element.dataset.pagePlaceholderI18n;
+
+            if (translations[key]) {
+              element.placeholder = translations[key];
+            }
+          });
+
+        document.documentElement.lang =
+          currentContactLanguage === "sa" ? "sa" : "en";
+      }
+
+      updateContactLanguage(currentContactLanguage);
+
+      window.addEventListener("zatam:languagechange", function (event) {
+        updateContactLanguage(event.detail.language);
+      });
+    </script>
+
+    <!-- =====================================================
+         EMAILJS
+    ====================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script>
+      /* ===================================================
+         EMAILJS INITIALIZATION
+      ==================================================== */
+
+      emailjs.init("L2ZiBhjpwKli5cihX");
+
+      /* ===================================================
+         CONTACT FORM
+      ==================================================== */
+
+      const contactForm = document.getElementById("contactForm");
+
+      const contactSubmitBtn = document.getElementById("contactSubmitBtn");
+
+      const formNotice = document.getElementById("formNotice");
+
+      contactForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        if (!contactForm.checkValidity()) {
+          contactForm.reportValidity();
+
+          return;
+        }
+
+        contactSubmitBtn.disabled = true;
+
+        contactSubmitBtn.textContent = getContactTranslation("sending");
+
+        formNotice.classList.remove("visible", "success", "error");
+
+        const topicSelect = document.getElementById("topic");
+
+        const selectedTopic =
+          topicSelect.options[topicSelect.selectedIndex].textContent;
+
+        const templateParams = {
+          name: document.getElementById("name").value.trim(),
+
+          email: document.getElementById("email").value.trim(),
+
+          topic: selectedTopic,
+
+          title: selectedTopic,
+
+          message: document.getElementById("message").value.trim(),
+
+          time: new Date().toLocaleString(),
+        };
+
+        try {
+          await emailjs.send(
+            "service_4arbmft",
+            "template_9d1f76h",
+            templateParams,
+          );
+
+          formNotice.textContent = getContactTranslation("formSuccess");
+
+          formNotice.classList.add("visible", "success");
+
+          contactForm.reset();
+        } catch (error) {
+          console.error("EmailJS error:", error);
+
+          formNotice.textContent = getContactTranslation("formError");
+
+          formNotice.classList.add("visible", "error");
+        } finally {
+          contactSubmitBtn.disabled = false;
+
+          contactSubmitBtn.textContent = getContactTranslation("sendBtn");
+        }
+      });
+    </script>
+
+    <!-- =====================================================
+         SHARED NAVBAR
+    ====================================================== -->
+
+    <script type="module" src="./js/navbar-loader.js"></script>
+  </body>
+</html>
