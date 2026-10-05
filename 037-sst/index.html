@@ -21,7 +21,11 @@ div.formatlist {
 </style>
 </head>
 
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
 <strong> CREDITS: This is 'tweaked' from http://shreevatsa.appspot.com/sanskrit/transliterate.html</strong>
 <p>Note: see <a href="http://en.wikipedia.org/wiki/Help:Multilingual_support_(Indic)">
 these instructions</a> for ways to input Sanskrit directly (without transliteration), see <a href="http://www.google.com/transliterate/indic">Google Indic transliteration</a> for another way, <a href="http://www.iit.edu/~laksvij/language/">this page</a> for some other languages, and <a href="http://people.w3.org/rishida/scripts/pickers/devanagari/">this "picker"</a> for characters not covered here.</p>
@@ -97,4 +101,11 @@ function addLoadEvent(func) {
 //addLoadEvent(makeentryarea);
 addLoadEvent(prepareTareas);
 </script>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>

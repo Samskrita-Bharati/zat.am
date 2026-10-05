@@ -16,7 +16,11 @@
     <meta property="og:image" content="sopansarpicon.png"/>
     <meta property="og:image:width" content="300"/>
     <meta property="og:image:height" content="300"/>
-</head><body>
+</head><body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
 <div style="position: relative;">
     <canvas id="canvas" width="900" height="900"></canvas>
     <canvas style="display: block;" id="dcanvas" width="900" height="900"></canvas>
@@ -355,5 +359,12 @@ GameEng.init();
 <audio autobuffer preload=auto>
 <source src="100.mp3.mp3" />
 </audio>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 </html>

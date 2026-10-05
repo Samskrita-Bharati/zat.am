@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="style/styles.css" />
     <script src="script/logic.js"></script>
   </head>
-  <body>
+  <body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
     <h1>Auto श्लोकपाठक: Auto Reader for Shloka from श्रीमद् भगवद्गीता</h1>
     <div class="container">
       <div id="vScroll" class="scroll-section" onmouseover="pauseScrolling()" onmouseout="resumeScrolling()">
@@ -23,6 +27,13 @@
         <button class="decrease" onclick="changeSpeed(-0.1)">Decrease Speed</button>
       </div>
     </div>
-  </body>
+  
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
+</body>
   <footer>Developed by Hussain</footer>
 </html>

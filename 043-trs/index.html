@@ -28,8 +28,11 @@
         'Your HighScore is : ' +
           Sanscript.t(String(zatamhs), 'iast', 'devanagari'),
       );
-    "
-  >
+    " data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
     <div id="messageBox" class="sendmessage">
       <h1
         style="
@@ -88,7 +91,14 @@
     >
       Saving highscore...
     </p>
-  </body>
+  
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
+</body>
 
   <script>
     document.onkeydown = function (evt) {

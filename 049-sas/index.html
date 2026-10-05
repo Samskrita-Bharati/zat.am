@@ -89,7 +89,11 @@
         }
     </style>
 </head>
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
     <button class="language-toggle" onclick="toggleLanguage()">Switch to English</button>
     <div class="content">
         <div class="left-column">
@@ -157,5 +161,12 @@
         renderChapters();
         fetchRandomSloka();
     </script>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 </html>

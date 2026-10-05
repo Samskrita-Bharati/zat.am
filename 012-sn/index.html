@@ -63,7 +63,11 @@ font-weight:bold;}
 .twelve { transform: rotate(240deg) translate(200px); }
 </style>
 </head>
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
 <div class="circle-big">
     <div data-angle=270 class="circle one" ondrop="drop(event)" ondragover="allowDrop(event)" r="1"><center><p style="transform: rotate(-270deg)" ondragover="return false" ondragenter="return false">१</p></center></div>
     <div data-angle=300 class="circle two" ondrop="drop(event)" ondragover="allowDrop(event)" r="2"><center><p ondragover="return false" ondragenter="return false" style="transform: rotate(-300deg)"></p></center></div>
@@ -196,5 +200,12 @@ document.onkeydown = function (e) {
     }
 }
 </script>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 </html>
