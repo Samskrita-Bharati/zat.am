@@ -139,7 +139,7 @@ form.addEventListener("submit", (e) => {
   showMessage("Preferences saved! Redirecting...", "green");
 
   setTimeout(() => {
-    window.location.href = "../index24.html";
+    window.location.href = "../index.html";
   }, 1200);
 });
 
@@ -148,7 +148,7 @@ document.getElementById("skip-btn").addEventListener("click", () => {
   showMessage("Skipping... Redirecting...", "green");
 
   setTimeout(() => {
-    window.location.href = "../index24.html";
+    window.location.href = "../index.html";
   }, 1000);
 });
 

@@ -1,5 +1,5 @@
-﻿||||
-| :- | :-: | -: |
+﻿|     |     |     |
+| :-- | :-: | --: |
 
 **PROFILE PAGE GUIDE**\
 **Last updated:** February 9, 2026
@@ -15,12 +15,16 @@ When the page loads, it fetches the user's profile information from Firebase:
 **What this does:**
 
 1. Calls checkAuth() to verify user is logged in
+
 - If not logged in → Redirects to login page
 - If logged in → Continues to load profile
 
 1. Gets user profile data using getCurrentUserProfile()
+
 - ` `Fetches name, language, location, etc. from Firebase
+
 1. Displays user information:
+
 - Name or "User" if the display name is not set yet
 - Email address
 - Profile photo, if user has logged in using Google, otherwise default profile icon
@@ -53,10 +57,12 @@ When user submits the edit form, the profile updates in Firebase:
 
 **What this does:**
 
-1. Gets form values: 
+1. Gets form values:
+
 - Display name
 - Preferred language
 - Country and province/state (if applicable)
+
 1. Updates Firebase Authentication display name
 1. Updates Firestore database with all profile fields
 1. Updates the page display immediately without refresh
@@ -69,12 +75,14 @@ Users can change their password through the profile page:
 
 **What this does:**
 
-1. Validates password requirements: 
+1. Validates password requirements:
+
 - New password matches confirmation
 - Password is at least 8 characters
 - New password is different from current
+
 1. Calls Firebase to change password
-1. Shows appropriate messages: 
+1. Shows appropriate messages:
    1. Success → Green message
    1. Error → Red message with specific error
 
@@ -99,12 +107,15 @@ The back button changes based on where the user came from:
 **What this does:**
 
 1. Checks URL parameter “?from=bp26” or “?from=home”
-1. If from BP26: 
+1. If from BP26:
+
 - Button says "Back to Competition"
 - Links to /bp26/index.html
-1. If from anywhere else: 
+
+1. If from anywhere else:
+
 - Button says "Back to Games"
-- Links to /index24.html
+- Links to /index.html
 
 **Why this is helpful:**\
 User experience is better when they return to where they came from, not always the same page.
@@ -120,6 +131,5 @@ The Profile Page provides:
 - Dynamic back navigation
 - Admin role display
 - Profile photo support
-||||
-| :- | :-: | -: |
-
+  ||||
+  | :- | :-: | -: |

@@ -6,7 +6,7 @@ BP26 SHARED NAVBAR LOADER
 Uses the MAIN Zat.am shared navbar.
 
 BP26 homepage:
-  BP26 logo -> ../index24.html
+  BP26 logo -> ../index.html
 
 BP26 games:
   BP26 logo -> ./index.html
@@ -55,7 +55,7 @@ All BP26 pages:
 
   shared/navbar.html uses:
 
-  data-route="index24.html"
+  data-route="index.html"
   data-route="About.html"
   data-route="Resources.html"
   etc.
@@ -173,7 +173,7 @@ All BP26 pages:
       main Zat.am homepage
       */
 
-      logo.href = new URL("index24.html", siteRoot).href;
+      logo.href = new URL("index.html", siteRoot).href;
 
       logo.title = "Go to Zat.am Home";
 
