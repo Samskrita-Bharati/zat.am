@@ -50,7 +50,7 @@ function isMainGamePage() {
   const relativePath = getRelativePagePath();
 
   // Root homepage:
-  // /index24.html
+  // /index.html
   // or /
   if (!relativePath || !relativePath.includes("/")) {
     return false;

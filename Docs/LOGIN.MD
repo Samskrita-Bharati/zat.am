@@ -1,5 +1,6 @@
-# Zat.am Login Flow Document  
-**Last Updated:** Feb. 9th, 2026  
+# Zat.am Login Flow Document
+
+**Last Updated:** Feb. 9th, 2026
 
 ---
 
@@ -32,22 +33,23 @@ from Firebase Authentication to verify the provided credentials for the given au
 Returns: `UserCredential` object
 
 ```js
-export const login = async(email, password) => {
-    return await singInWithEmailAndPassword(auth,email,password);
+export const login = async (email, password) => {
+  return await singInWithEmailAndPassword(auth, email, password);
 };
 ```
 
 ## `signInWithGoogle()`
 
 Uses:
+
 - Opens a Google sign-in popup
 - User completes sign-in
 - The returned `UserCredential` object is saved in the variable `cred`
 
 ```js
 export const signInWithGoogle = async () => {
-const cred = await signInWithPopup(auth, googleProvider);
-return cred;
+  const cred = await signInWithPopup(auth, googleProvider);
+  return cred;
 };
 ```
 
@@ -85,26 +87,26 @@ If the user is new or missing any document:
 - Admin status can only be changed directly in Firebase
 
 ```js
-const isNewUser = !accountSnap. exists() && ! profileSnap. exists();
+const isNewUser = !accountSnap.exists() && !profileSnap.exists();
 
 if (!accountSnap.exists()) {
-await setDoc(accountRef, {
-email: email || "",
-isAdmin: false,
-createdAt: serverTimestamp(),
-});
+  await setDoc(accountRef, {
+    email: email || "",
+    isAdmin: false,
+    createdAt: serverTimestamp(),
+  });
 }
 
 if (!profileSnap.exists()) {
-await setDoc(profileRef, {
-name: displayName || safeExtraData.name || "",
-language: safeExtraData.language || "1", // Default language
-country: safeExtraData.country || "",
-region: safeExtraData.region || "",
-location: safeExtraData.location || "",
-preferencesSet: false, // Default preferences set to False
-createdAt: serverTimestamp(),
-});
+  await setDoc(profileRef, {
+    name: displayName || safeExtraData.name || "",
+    language: safeExtraData.language || "1", // Default language
+    country: safeExtraData.country || "",
+    region: safeExtraData.region || "",
+    location: safeExtraData.location || "",
+    preferencesSet: false, // Default preferences set to False
+    createdAt: serverTimestamp(),
+  });
 }
 return isNewUser;
 ```
@@ -133,28 +135,28 @@ The login functionality is contained in `login.js`.
 - A **Resend Verification Link** appears
 - User is signed out until email is verified
 
-```js 
+```js
 // Check if email is verified
 if (!user.emailVerified) {
-unverifiedUser = user;
-resendVerificationBtn.style.display = "block";
+  unverifiedUser = user;
+  resendVerificationBtn.style.display = "block";
   //***********//
- await signOut(auth); 
- return 
+  await signOut(auth);
+  return;
 }
- ```
+```
 
 ### Resend Verification Link
 
 The resend link only appears if:
+
 - The user attempts to sign in with an **unverified email address**
 
-```html 
+```html
 <p>
-<a href="#" id="resend-verification" style="display: none"
-| >Resend Verification Email</a
-
->
+  <a href="#" id="resend-verification" style="display: none" |
+    >Resend Verification Email</a
+  >
 </p>
 ```
 
@@ -188,22 +190,19 @@ For both **Google Sign-In** and **Email & Password Sign-In**:
    - Preferences are incomplete by default
    - Redirected to: `preferences.html`
 3. If the user is returning:
-   - Redirected to: `index24.html`
+   - Redirected to: `index.html`
 
 ```js
-await ensureUserDocument (user);
+await ensureUserDocument(user);
 // Check if preferences are set
 const { getCurrentUserProfile } = await import(" .. /api/auth-api.js");
 const profile = await getCurrentUserProfile();
 //
 if (!profile.preferencesSet) {
-window.location.href = "preferences.html";
+  window.location.href = "preferences.html";
+} else {
+  // Default redirect to main page
+  window.location.href = " .. /index.html";
 }
-else {
-// Default redirect to main page
-window. location.href = " .. /index24.html";}
 //
-
 ```
-
-

@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "vite --open /index24.html && echo \n🌐 URL: http://localhost:5173/index24.html",
+    "dev": "vite --open /index.html && echo \n🌐 URL: http://localhost:5173/index.html",
     "build": "vite build",
     "preview": "vite preview"
   },

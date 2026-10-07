@@ -334,7 +334,7 @@ if (backLink) {
     backLink.href = "../bp26/index.html";
     backLink.textContent = "Back to Competition";
   } else {
-    backLink.href = "../index24.html";
+    backLink.href = "../index.html";
     backLink.textContent = "Back to Games";
   }
 }

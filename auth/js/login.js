@@ -63,7 +63,7 @@ loginForm.addEventListener("submit", async (e) => {
           window.location.href = decodeURIComponent(redirectUrl);
         } else {
           // Default redirect to main page
-          window.location.href = "../index24.html";
+          window.location.href = "../index.html";
         }
       }
     }, 1000);
@@ -97,7 +97,7 @@ googleSignInBtn.addEventListener("click", async () => {
           window.location.href = decodeURIComponent(redirectUrl);
         } else {
           // Default redirect to main page
-          window.location.href = "../index24.html";
+          window.location.href = "../index.html";
         }
       }
     }, 1000);
