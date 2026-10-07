@@ -1,12 +1,38 @@
+html,
 body {
-  height: 100%;
-  
-  width: 90vw;
+  min-height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   background-color: #f0f0f0;
-  margin: 16px auto;
   line-height: 1.4;
+  overflow-x: hidden;
+}
+
+/* =====================================================
+   NAVBAR
+   Leave shared BP26 navbar at normal full viewport width
+===================================================== */
+
+#header-placeholder {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* =====================================================
+   ORIGINAL GAME WIDTH
+   Old body sizing moved here so it does not constrain navbar
+===================================================== */
+
+#fwGameShell {
+  width: 90vw;
   max-width: 1600px;
-  padding-top: 7%;
+  margin: 16px auto;
 }
 
 .mangalam {
@@ -130,19 +156,17 @@ body {
   font-size: 2em;
   align-self: stretch;
   position: relative;
+
   transition:
     background-color 0.15s ease,
     box-shadow 0.15s ease;
 }
 
-span {
-  display: grid;
-  place-items: center;
-}
-
-span:not(#profile-btn) {
-  border: 1px solid white;
-}
+/*
+  IMPORTANT:
+  These used to target every span on the page,
+  including spans inside the shared navbar.
+*/
 
 #nPresent {
   display: inline;
@@ -192,30 +216,37 @@ span:not(#profile-btn) {
   background-color: rgba(255, 0, 0, 0.2);
   z-index: 20;
 }
+
 .marker1 {
   background-color: rgba(0, 255, 0, 0.2);
   z-index: 30;
 }
+
 .marker2 {
   background-color: rgba(0, 0, 255, 0.2);
   z-index: 40;
 }
+
 .marker3 {
   background-color: rgba(0, 255, 255, 0.2);
   z-index: 50;
 }
+
 .marker4 {
   background-color: rgba(255, 255, 0, 0.4);
   z-index: 60;
 }
+
 .marker5 {
   background-color: rgba(255, 0, 255, 0.2);
   z-index: 70;
 }
+
 .marker6 {
   background-color: rgba(128, 64, 128, 0.2);
   z-index: 80;
 }
+
 .markerX {
   background-color: rgba(128, 128, 128, 0.2);
   z-index: 90;
@@ -259,9 +290,16 @@ span:not(#profile-btn) {
   box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.06);
 }
 
-/* RESPONSIVE */
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
 @media (max-width: 1200px) {
-  body {
+  /*
+    This used to be applied to BODY.
+    It now applies only to the game.
+  */
+  #fwGameShell {
     width: 100%;
     height: auto;
     margin: 0;
@@ -360,9 +398,10 @@ span:not(#profile-btn) {
 }
 
 /* Mobile */
+
 @media (max-width: 768px) {
-  body {
-    padding: 14% 0px 20px;
+  #fwGameShell {
+    padding: 14% 0 20px;
   }
 
   #lead {
@@ -407,7 +446,7 @@ span:not(#profile-btn) {
 }
 
 @media (max-width: 480px) {
-  body {
+  #fwGameShell {
     padding-top: 16%;
   }
 
@@ -434,7 +473,7 @@ span:not(#profile-btn) {
 }
 
 @media (max-width: 360px) {
-  body {
+  #fwGameShell {
     padding-top: 18%;
   }
 
@@ -502,7 +541,10 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-/* Celebration UI */
+/* =====================================================
+   Celebration UI
+===================================================== */
+
 #bp26CelebrateOverlay {
   position: fixed;
   inset: 0;
@@ -514,6 +556,7 @@ input:checked + .slider:before {
   padding: 20px;
   border: none;
 }
+
 .bp26CelebrateBox {
   position: relative;
   width: min(460px, 92vw);
@@ -525,22 +568,26 @@ input:checked + .slider:before {
   font-family: system-ui, Arial, sans-serif;
   border: 1px solid #eee;
 }
+
 .bp26Sparkles {
   font-size: 54px;
   line-height: 1.1;
   margin: 8px 0 6px;
   animation: bp26Pop 600ms ease-out both;
 }
+
 @keyframes bp26Pop {
   0% {
     transform: scale(0.6);
     opacity: 0;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
   }
 }
+
 .bp26Btn {
   margin-top: 12px;
   padding: 10px 14px;
@@ -549,6 +596,7 @@ input:checked + .slider:before {
   background: #f9fafb;
   cursor: pointer;
 }
+
 .bp26Confetti {
   position: fixed;
   top: -12px;
@@ -560,6 +608,7 @@ input:checked + .slider:before {
   animation: bp26Fall 950ms linear forwards;
   pointer-events: none;
 }
+
 @keyframes bp26Fall {
   to {
     transform: translateY(110vh) rotate(540deg);

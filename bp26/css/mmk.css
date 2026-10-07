@@ -1,60 +1,86 @@
 html {
-  #background: url("../शत.म्.png") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  width: 100%;
+  min-height: 100%;
 }
-body {
+
+body.memory-game {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
   background: #f0f0f0;
-  padding-top: 7%;
-  
-  
+  color: #333;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
 }
-.pos1 {
-  position: absolute;
-  top: 0%;
-  right: 2%;
+
+#header-placeholder {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
-.pos2 {
-  position: absolute;
-  top: 20%;
-  left: 2%;
+
+.memory-game-main {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 28px 18px 48px;
+  text-align: center;
+  box-sizing: border-box;
 }
-.myp {
+
+.memory-game-main,
+.memory-game-main *,
+.memory-game-main *::before,
+.memory-game-main *::after {
+  box-sizing: border-box;
+}
+
+.memory-game-main h1 {
+  margin: 4px 0 8px;
+  color: #333;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.header-divider {
+  width: min(420px, 60%);
+  height: 3px;
+  margin: 7px auto 18px;
+  background: #ca9e0d;
+  border-radius: 999px;
+}
+
+#wm {
+  margin: 8px auto 14px;
+  color: #333;
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.7;
   text-align: center;
 }
-td {
-  border: 3px solid #ca9e0d;
-  cursor: pointer;
-}
-h1 {
-  font-size: clamp(1.3em, 4vw, 3.1em);
-  color: #333;
-  font-weight: 600;
-  margin-top:20px;
-  
-}
 
-/* Game-specific styles - don't use generic selectors */
-#wm {
-  font-size: 2em;
-  color: #333;
-  margin: 5px;
+#wm #nomd,
+#wm #nowt {
+  display: inline-block !important;
+  min-width: 26px !important;
+  height: auto !important;
+  margin: 0 4px;
+  padding: 0 4px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-size: 1em !important;
+  font-weight: 800 !important;
+  overflow: visible !important;
 }
-
-#wm span,
-#nomd,
-#nowt {
-  font-size: 1.5em;
-}
-
-#tbl img{
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-  }
 
 #nomd {
   color: green;
@@ -64,205 +90,204 @@ h1 {
   color: red;
 }
 
-center {
-  margin: 10px auto;
-  width: 90vw;
+.time-stat {
+  margin-left: 16px;
+  font-weight: 500;
 }
 
-.header-divider {
-  content: "";
-  width: 60%;
-  height: 3px;
-  background-color: goldenrod;
-  margin: 5px auto 15px;
-}
-/* style for table */
-#mytable {
-  width: 80%;
-  overflow-x: auto;
- 
-  
+#timeDisp {
+  color: #0b2b4f;
+  font-weight: 800;
 }
 
-
-#tbl {
-  width: 100%;
-  max-width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  background-color: white;
-  padding: 10px;
-  box-shadow: 1px 2px 5px black;
-  font-size: 1.1em;
-  font-weight: 600;
-}
-
-
-#tbl tr td {
-  padding: 15px;
-}
-
-/* for table data */
-#tbl td{
-  /*
-  min-width: 0;
-  aspect-ratio: 1 / 1;*/
-  padding: 4px;
-  vertical-align: middle;
-}
-
-#tbl img {
-  width: 70%;
-  height: 70%;
-  /*
-  max-width: 100%;
-  max-height: 100%;*/
-  object-fit: contain;
+#pr {
+  width: min(720px, 92%);
+  height: 17px;
   display: block;
+  margin: 0 auto 20px;
+}
+
+#mytable {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   margin: 0 auto;
 }
 
-#tbl p {
-  font-size: 1.3em;
+#tbl {
+  width: min(100%, 980px);
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 7px;
+  margin: 0 auto;
+  padding: 6px;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+#tbl td {
+  height: clamp(94px, 11vw, 140px);
+  overflow: hidden;
+  padding: 7px;
+  vertical-align: middle;
+  background: #fff;
+  border: 2px solid #ca9e0d;
+  border-radius: 12px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+#tbl td:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+#tbl img {
+  width: 100%;
+  height: 100%;
+  max-width: 110px;
+  max-height: 105px;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+#tbl .myp {
+  width: 100%;
+  margin: 0;
+  padding: 4px;
   color: #333;
-  padding: 0px;
-  margin: 0px;
+  font-size: clamp(0.75rem, 1.35vw, 1.12rem);
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: center;
   overflow-wrap: anywhere;
   word-break: break-word;
+  cursor: pointer;
 }
 
-/* CRITICAL: Force header styles on mmk page */
-.auth-buttons,
-#header-placeholder {
-  all: revert !important;
-}
-
-.auth-buttons {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 1000 !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  background: hsl(210, 36%, 96%) !important;
-  padding: 15px 20px !important;
-}
-
-.auth-buttons img.logo {
-  width: 50px !important;
-  height: auto !important;
-  cursor: pointer !important;
-}
-
-.auth-buttons .fa-user-circle {
-  font-size: 2rem !important;
-  width: 40px !important;
-  height: 40px !important;
-}
-
-.auth-buttons button {
-  font-size: 1rem !important;
-  padding: 0.375rem 0.75rem !important;
-}
-
-/* ✅ Score badge + submit button */
-#submitScoreBtn {
-  
-  /*
-  position: fixed;
-  right: 20px;
-  bottom: 20px;*/
-
-  margin: 30px auto 40px;
-  text-align: center;
-  padding: 12px 16px;
-  border: none;
+#scoreBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 24px auto 0;
+  padding: 9px 16px;
+  background: #fff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+#scoreValue {
+  margin-left: 5px;
+  color: #0b2b4f;
+  font-weight: 800;
+}
+
+#submitScoreBtn {
+  display: block;
+  min-height: 44px;
+  margin: 14px auto 10px;
+  padding: 10px 18px;
   background: #1f2937;
   color: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+  font-family: inherit;
   font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  z-index: 9999;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
+
+#submitScoreBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #0b2b4f;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.17);
+}
+
 #submitScoreBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-#scoreBadge {
-  display:inline-block;
-  /*
-  position: fixed;
-  left: 20px;
-  bottom: 24px;*/
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: #ffffff;
-  color: #111827;
-  font-size: 18px;
-  z-index: 9999;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  border: 1px solid #e5e7eb;
-}
-
-/* ✅ Celebration overlay */
+/* Celebration functionality preserved */
 #bp26CelebrateOverlay {
   position: fixed;
   inset: 0;
   display: none;
   align-items: center;
   justify-content: center;
+  padding: 20px;
   background: rgba(0, 0, 0, 0.35);
   z-index: 10000;
-  padding: 20px;
 }
+
 .bp26CelebrateBox {
   width: min(460px, 92vw);
+  padding: 18px;
   background: #fff;
   border-radius: 18px;
-  padding: 18px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
   text-align: center;
   font-family: system-ui, Arial, sans-serif;
 }
+
 .bp26Sparkles {
+  margin: 8px 0 6px;
   font-size: 54px;
   line-height: 1.1;
-  margin: 8px 0 6px;
   animation: bp26Pop 600ms ease-out both;
 }
+
 @keyframes bp26Pop {
   0% {
     transform: scale(0.6);
     opacity: 0;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
   }
 }
+
 .bp26Btn {
   margin-top: 12px;
   padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
   background: #f9fafb;
+  border: 1px solid #ddd;
+  border-radius: 12px;
   cursor: pointer;
 }
+
 .bp26Confetti {
   position: fixed;
   top: -12px;
   width: 10px;
   height: 10px;
   border-radius: 3px;
-  z-index: 10001;
   opacity: 0.95;
-  animation: bp26Fall 950ms linear forwards;
   pointer-events: none;
+  animation: bp26Fall 950ms linear forwards;
+  z-index: 10001;
 }
+
 @keyframes bp26Fall {
   to {
     transform: translateY(110vh) rotate(540deg);
@@ -270,124 +295,127 @@ center {
   }
 }
 
-/* ✅ ensure counters show as text (won't affect header) */
-#wm #nomd,
-#wm #nowt {
-  display: inline-block !important;
-  min-width: 28px !important;
-  height: auto !important;
-  padding: 0 6px !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  font-weight: 700 !important;
-  overflow: visible !important;
-}
-:root {
-  --cols: 6;
-}
-
-@media (max-width: 800px) {
-  h1{
-    margin-top:60px;
-    font-size: 2.0em;
-  }
-  #wm {
-    display: block;
-    font-size: 1.2em;
+@media (max-width: 900px) {
+  .memory-game-main {
+    padding: 24px 14px 42px;
   }
 
-
-  #tbl img{
-    max-width: 100%;
-    
-  }
-  #mytable {
-  width: 90%;
-  overflow-x: auto;
-}
-
-
-  
-
-  #tbl p {
-    font-size: 0.9em;
-  }
-  /*
-  #submitScoreBtn {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 12px;
-  background: #1f2937;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 9999;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}*/
-#submitScoreBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-/*
-#scoreBadge {
-  position: fixed;
-  left: 20px;
-  bottom: 24px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: #ffffff;
-  color: #111827;
-  font-size: 14px;
-  z-index: 9999;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  border: 1px solid #e5e7eb;
-}*/
-}
-
-@media (max-width: 450px) {
-
-  :root{
-    --cols: 4;
-  }
-  body{
-    padding-top:3%;
-  }
-  center{
+  #tbl {
     width: 100%;
-    height: auto;  
-    margin: 5px auto;
+    border-spacing: 6px;
   }
-   h1 { 
-    margin-top:70px;
-    font-size: 1.5em; 
-  }
+
   #tbl td {
+    height: clamp(88px, 18vw, 125px);
+    padding: 6px;
+  }
+
+  #tbl img {
+    max-width: 95px;
+    max-height: 90px;
+  }
+
+  #tbl .myp {
+    font-size: clamp(0.75rem, 2vw, 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .memory-game-main {
+    padding: 20px 10px 36px;
+  }
+
+  .memory-game-main h1 {
+    margin-top: 0;
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .header-divider {
+    width: 70%;
+    margin-bottom: 13px;
+  }
+
+  #wm {
+    margin-bottom: 10px;
+    padding: 0 6px;
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .time-stat {
+    display: inline-block;
+    margin-left: 8px;
+  }
+
+  #pr {
+    width: 94%;
+    margin-bottom: 14px;
+  }
+
+  #tbl {
+    width: 100%;
+    padding: 2px;
+    border-spacing: 6px;
+  }
+
+  #tbl td {
+    height: clamp(96px, 26vw, 122px);
+    padding: 5px;
+    border-width: 2px;
+    border-radius: 10px;
+  }
+
+  #tbl img {
+    max-width: 82px;
+    max-height: 82px;
+  }
+
+  #tbl .myp {
+    padding: 2px;
+    font-size: clamp(0.72rem, 2.6vw, 0.92rem);
+    line-height: 1.28;
+  }
+
+  #scoreBadge {
+    margin-top: 18px;
+    font-size: 14px;
+  }
+
+  #submitScoreBtn {
+    width: min(280px, 90%);
+  }
+}
+
+@media (max-width: 420px) {
+  .memory-game-main {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  #wm {
+    font-size: 0.82rem;
+  }
+
+  .time-stat {
+    display: block;
+    margin: 4px 0 0;
+  }
+
+  #tbl {
+    border-spacing: 4px;
+  }
+
+  #tbl td {
+    height: clamp(92px, 30vw, 112px);
     padding: 4px;
   }
-  #tbl td {
-    padding: 2px;
-    width: calc(100% / 4);
-  }
-    #tbl img {
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-}
-  
 
-  #tbl p {
-    font-size: 0.8em;
+  #tbl img {
+    max-width: 72px;
+    max-height: 72px;
   }
 
-  #wm {
-    font-size: 1.2em;
+  #tbl .myp {
+    font-size: clamp(0.64rem, 3.1vw, 0.8rem);
   }
 }

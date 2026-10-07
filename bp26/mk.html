@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Memory क्रीडा</title>
 
-    <!-- ✅ KEEP OLD (Bootstrap 4.4.1) for header compatibility -->
+    <!-- KEEP OLD (Bootstrap 4.4.1) for header compatibility -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -20,7 +20,7 @@
     ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3vZ9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"
     ></script>
     <script
@@ -30,9 +30,9 @@
     ></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-  <script src="./js/transliteration.js"></script>
+    <script src="./js/transliteration.js"></script>
 
-    <!-- IMPORTANT: Load page CSS first, header CSS last -->
+    <!-- Page CSS first, BP26 shared header CSS last -->
     <link href="css/mmk.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/header.css" />
 
@@ -40,158 +40,37 @@
       type="text/javascript"
       src="https://unpkg.com/papaparse@latest/papaparse.min.js"
     ></script>
-    <!--
-    <style>
-      body {
-        padding-top: 7%;
-      }
-
-      /* ✅ Score badge + submit button */
-      #submitScoreBtn {
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-        padding: 12px 16px;
-        border: none;
-        border-radius: 12px;
-        background: #1f2937;
-        color: #fff;
-        font-size: 14px;
-        cursor: pointer;
-        z-index: 9999;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-      }
-      #submitScoreBtn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      #scoreBadge {
-        position: fixed;
-        left: 20px;
-        bottom: 24px;
-        padding: 10px 14px;
-        border-radius: 12px;
-        background: #ffffff;
-        color: #111827;
-        font-size: 14px;
-        z-index: 9999;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-        border: 1px solid #e5e7eb;
-      }
-
-      /* ✅ Celebration overlay */
-      #bp26CelebrateOverlay {
-        position: fixed;
-        inset: 0;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.35);
-        z-index: 10000;
-        padding: 20px;
-      }
-      .bp26CelebrateBox {
-        width: min(460px, 92vw);
-        background: #fff;
-        border-radius: 18px;
-        padding: 18px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-        text-align: center;
-        font-family: system-ui, Arial, sans-serif;
-      }
-      .bp26Sparkles {
-        font-size: 54px;
-        line-height: 1.1;
-        margin: 8px 0 6px;
-        animation: bp26Pop 600ms ease-out both;
-      }
-      @keyframes bp26Pop {
-        0% {
-          transform: scale(0.6);
-          opacity: 0;
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-      .bp26Btn {
-        margin-top: 12px;
-        padding: 10px 14px;
-        border-radius: 12px;
-        border: 1px solid #ddd;
-        background: #f9fafb;
-        cursor: pointer;
-      }
-      .bp26Confetti {
-        position: fixed;
-        top: -12px;
-        width: 10px;
-        height: 10px;
-        border-radius: 3px;
-        z-index: 10001;
-        opacity: 0.95;
-        animation: bp26Fall 950ms linear forwards;
-        pointer-events: none;
-      }
-      @keyframes bp26Fall {
-        to {
-          transform: translateY(110vh) rotate(540deg);
-          opacity: 0.9;
-        }
-      }
-
-      /* ✅ ensure counters show as text (won't affect header) */
-      #wm #nomd,
-      #wm #nowt {
-        display: inline-block !important;
-        min-width: 28px !important;
-        height: auto !important;
-        padding: 0 6px !important;
-        border-radius: 0 !important;
-        background: transparent !important;
-        border: none !important;
-        font-weight: 700 !important;
-        overflow: visible !important;
-      }
-    </style>
   </head>
 
-  <body>
+  <body class="memory-game">
     <!-- Auth Middleware -->
     <script type="module" src="/auth/api/middleware.js"></script>
-    <!-- ✅ Header Placeholder (Login/Signup stays working) -->
+
+    <!-- BP26 shared navbar -->
     <div id="header-placeholder"></div>
     <script type="module" src="../js/bilingual-toggle.js"></script>
     <script src="js/load-header.js"></script>
 
-    <center>
+    <main class="memory-game-main">
       <h1>Memory क्रीडा</h1>
       <div class="header-divider"></div>
-      <br />
 
-      <!-- ✅ Added Time + keep old counters -->
+      <!-- Added Time + keep old counters -->
       <p id="wm">
         Matches Done: <span id="nomd">०</span> Wrong Moves:
         <span id="nowt">०</span>
-        <span style="margin-left: 16px; font-weight: 500"
-          >Time: <span id="timeDisp">0</span>s</span
-        >
+        <span class="time-stat">Time: <span id="timeDisp">0</span>s</span>
       </p>
 
       <progress id="pr" max="15" value="0"></progress>
       <div id="mytable"></div>
 
-       <!-- ✅ Score badge + submit button -->
-    <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
-    <button id="submitScoreBtn">Submit Score (Game 2)</button>
-     
-    </center>
+      <!-- Score badge + submit button -->
+      <div id="scoreBadge">Score: <span id="scoreValue">0</span></div>
+      <button id="submitScoreBtn">Submit Score (Game 2)</button>
+    </main>
 
-    
-
-    <!-- ✅ Celebration overlay -->
+    <!-- Celebration overlay -->
     <div id="bp26CelebrateOverlay">
       <div class="bp26CelebrateBox">
         <div class="bp26Sparkles">✨🎉✨</div>
@@ -209,16 +88,16 @@
     </div>
 
     <script type="module">
-      /* ✅ Make reportScore available globally like your new file expects */
+      /* Make reportScore available globally like your new file expects */
       import { reportScore, bp26Init } from "./js/bp26-score.js";
       window.reportScore = reportScore;
       const translit = window.bp26Translit;
 
-      // ✅ Init scoring namespace
+      // Init scoring namespace
       window.bp26Init = bp26Init;
       window.bp26Init({ game: "bp26-Game2", day: 2 });
 
-      // ✅ celebration helpers
+      // celebration helpers
       function bp26BurstConfetti(count = 60) {
         for (let i = 0; i < count; i++) {
           const c = document.createElement("div");
@@ -241,11 +120,14 @@
         const overlay = document.getElementById("bp26CelebrateOverlay");
         const t = document.getElementById("bp26CelebrateTitle");
         const s = document.getElementById("bp26CelebrateSub");
+
         t.textContent = title;
         s.textContent =
           score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
+
         overlay.style.display = "flex";
         bp26BurstConfetti(70);
+
         setTimeout(() => {
           overlay.style.display = "none";
         }, 3000);
@@ -257,15 +139,17 @@
           document.getElementById("bp26CelebrateOverlay").style.display =
             "none";
         });
+
       document
         .getElementById("bp26CelebrateOverlay")
         .addEventListener("click", (e) => {
-          if (e.target.id === "bp26CelebrateOverlay")
+          if (e.target.id === "bp26CelebrateOverlay") {
             e.target.style.display = "none";
+          }
         });
 
       // ---------------------------
-      // ✅ Timer (same behavior as your new one)
+      // Timer
       // ---------------------------
       let secs = 0;
       let timer = null;
@@ -276,7 +160,7 @@
         if (t) t.textContent = String(secs);
       }
 
-      // ✅ score state
+      // score state
       let scoreSubmitted = false;
       let currentScore = 0;
 
@@ -287,17 +171,18 @@
 
       function computeScore(matchesdone) {
         // computeScore(wpp, wrongMoves) OLD FORMULA
-        // const base = wpp * 10; // 150 when wpp=15
+        // const base = wpp * 10;
         // const penaltyWrong = wrongMoves * 2;
         // const penaltyTime = secs;
         // return Math.max(0, base - penaltyWrong - penaltyTime);
-        return matchesdone*10;
+        return matchesdone * 10;
       }
 
       async function submitScoreNow() {
         if (scoreSubmitted) return;
 
         const btn = document.getElementById("submitScoreBtn");
+
         if (btn) {
           btn.disabled = true;
           btn.textContent = "Submitting...";
@@ -306,17 +191,21 @@
         try {
           if (typeof window.reportScore !== "function") {
             alert("Score system not loaded. Check ./js/bp26-score.js path.");
+
             if (btn) {
               btn.disabled = false;
               btn.textContent = "Submit Score (Game 2)";
             }
+
             return;
           }
 
           await window.reportScore(currentScore);
           scoreSubmitted = true;
 
-          if (btn) btn.textContent = `Submitted ✅ (Score: ${currentScore})`;
+          if (btn) {
+            btn.textContent = `Submitted ✅ (Score: ${currentScore})`;
+          }
 
           bp26Celebrate({
             title: "Score Submitted ✅",
@@ -326,6 +215,7 @@
         } catch (e) {
           console.error("❌ submit score failed", e);
           alert("Submit failed. Open Console (F12) and send the red error.");
+
           if (btn) {
             btn.disabled = false;
             btn.textContent = "Submit Score (Game 2)";
@@ -338,12 +228,13 @@
         .addEventListener("click", submitScoreNow);
 
       // ---------------------------
-      // ✅ OLD GAME LOGIC BELOW (kept the same)
-      // Only changes: hook score + timer updates without changing gameplay.
+      // OLD GAME LOGIC BELOW
+      // Gameplay, score, data source and submission behavior are preserved.
       // ---------------------------
       document.addEventListener("DOMContentLoaded", function () {
         var lnk =
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
+
         Papa.parse(lnk, {
           download: true,
           header: true,
@@ -363,6 +254,7 @@
         var triesElement = document.getElementById("nowt");
 
         const urlParams = new URLSearchParams(window.location.search);
+
         var o = urlParams.get("o");
         if (!o) o = 0;
 
@@ -380,9 +272,12 @@
           words.push(row.padam);
 
           const imgVal = row["Imaage link"] || "";
-          if (imgVal.length == 4 || imgVal.length == 5)
+
+          if (imgVal.length == 4 || imgVal.length == 5) {
             imglnk = openmojibase + imgVal + ".svg";
-          else imglnk = imgVal;
+          } else {
+            imglnk = imgVal;
+          }
 
           image.push(imglnk);
         }
@@ -417,53 +312,61 @@
           location.reload();
         }
 
-        
+        /*
+          Same 24-card game size at every breakpoint:
+          desktop      = 6 × 4
+          phone/tablet = 4 × 6
+          small phone  = 3 × 8
+        */
+        var rowLength;
+        var colLength;
 
-        /*var rowLength = words.length / 3;
-        var colLength = 6;
-        var gamesize = rowLength * colLength;*/
-
-        var rowLength, colLength;
-        
-       var width = 150;
+        // Kept from the original game for compatibility.
+        var width = 150;
         var height = 120;
 
+        const viewportWidth = window.innerWidth;
 
-        if (window.innerWidth <= 450) {
-        // Mobile → 4 columns × 6 rows
-            colLength = 4;
-            rowLength = 6;
-            width = 50;
-            height = 50;
-
-          }else {
-              // All larger screens → 6 columns × 4 rows
-              colLength = 6;
-              rowLength = 4;
-
-        if (window.innerWidth <= 700) {
-          width = 90;
-          height = 90;
-        } else{
+        if (viewportWidth <= 768) {
+          // Mobile
+          colLength = 3;
+          rowLength = 8;
+          width = 82;
+          height = 82;
+        } else if (viewportWidth <= 1024) {
+          // Tablet
+          colLength = 4;
+          rowLength = 6;
+          width = 95;
+          height = 95;
+        } else {
+          // Desktop
+          colLength = 6;
+          rowLength = 4;
           width = 150;
           height = 120;
         }
-      }
-         
-       var gamesize = rowLength * colLength;
 
-        // ✅ start timer (only play mode)
+        var gamesize = rowLength * colLength;
+
+        // start timer (only play mode)
         if (l != 1) {
           secs = 0;
-          if (timer) clearInterval(timer);
+
+          if (timer) {
+            clearInterval(timer);
+          }
+
           timer = setInterval(tick, 1000);
         }
+
         tick();
 
         function refreshScoreUI() {
           currentScore = computeScore(matchesdone);
           updateScoreUI();
         }
+
         refreshScoreUI();
 
         function code() {
@@ -474,10 +377,15 @@
 
           for (var x = 0; x < gamesize / 2; x++) {
             D1Data.push({ src: image[x], clicked: false });
-            D1Data.push({ src: image[x], clicked: false, wrd: words[x] });
+            D1Data.push({
+              src: image[x],
+              clicked: false,
+              wrd: words[x],
+            });
           }
 
           var rand = 0;
+
           for (var y = 0; y < rowLength; y++) {
             var temp = [];
             var x = 0;
@@ -490,6 +398,7 @@
               D1Data.splice(rand, 1);
               x++;
             }
+
             D2Data.push(temp);
           }
 
@@ -499,6 +408,7 @@
           function genTable(rowLength, colLength, imageData2D) {
             var table = document.createElement("TABLE");
             table.id = "tbl";
+
             var myTableDiv = document.getElementById("mytable");
             myTableDiv.innerHTML = "";
 
@@ -512,23 +422,33 @@
 
                 if (!imageData2D[i][j].wrd) {
                   var img = document.createElement("img");
-                  if (o != 1) img.src = bg;
-                  else img.src = imageData2D[i][j].src;
-                  //img.height = height; 
-                  //img.width = width; 
+
+                  if (o != 1) {
+                    img.src = bg;
+                  } else {
+                    img.src = imageData2D[i][j].src;
+                  }
+
                   td.appendChild(img);
                 } else {
                   var p = document.createElement("p");
                   p.className = "myp";
                   p.innerHTML = imageData2D[i][j].wrd;
-                  if (tScript)
+
+                  if (tScript) {
                     p.innerHTML +=
                       " - " +
-                      translit.transliterate(imageData2D[i][j].wrd, "devanagari");
+                      translit.transliterate(
+                        imageData2D[i][j].wrd,
+                        "devanagari",
+                      );
+                  }
+
                   td.appendChild(p);
                 }
               }
             }
+
             myTableDiv.appendChild(table);
           }
 
@@ -542,43 +462,48 @@
               if (clickedCards.length == 0) {
                 if (this.tagName.toLowerCase() === "img") {
                   this.src = D2Data[row][column].src;
-                  //this.height = height;
-                  //this.width = width;
                 }
+
                 D2Data[row][column].clicked = true;
                 clickedCards.push(D2Data[row][column]);
 
                 const d =
                   document.getElementsByTagName("tr")[clickedCards[0].x];
                 const r = d.getElementsByTagName("td")[clickedCards[0].y];
+
                 r.style.border = "2px dashed red";
               } else {
                 if (D2Data[row][column].src === clickedCards[0].src) {
                   const d =
                     document.getElementsByTagName("tr")[clickedCards[0].x];
                   const r = d.getElementsByTagName("td")[clickedCards[0].y];
+
                   r.style.border = "3px solid " + colors[matchesdone];
                   r.style.cursor = "no-drop";
                   r.style.color = "blue";
 
                   matchesdone++;
+
                   r.innerHTML +=
-                    "<br>☑️ " +
-                    translit.numberToDevanagari(matchesdone);
+                    "<br>☑️ " + translit.numberToDevanagari(matchesdone);
+
                   document.getElementById("pr").value = matchesdone;
 
-                  document.getElementById("nomd").innerHTML = translit.numberToDevanagari(matchesdone);
+                  document.getElementById("nomd").innerHTML =
+                    translit.numberToDevanagari(matchesdone);
 
                   this.parentElement.style.border =
                     "3px solid " + colors[matchesdone - 1];
+
                   this.parentElement.style.cursor = "no-drop";
                   this.style.color = "blue";
-                  this.innerHTML +=
-                    "<br>✔️ " +
-                    translit.numberToDevanagari(matchesdone);
 
-                  if (this.tagName.toLowerCase() === "img")
+                  this.innerHTML +=
+                    "<br>✔️ " + translit.numberToDevanagari(matchesdone);
+
+                  if (this.tagName.toLowerCase() === "img") {
                     this.src = D2Data[row][column].src;
+                  }
 
                   D2Data[row][column].clicked = true;
                   clickedCards = [];
@@ -587,7 +512,10 @@
                   refreshScoreUI();
 
                   if (count == gamesize) {
-                    if (timer) clearInterval(timer);
+                    if (timer) {
+                      clearInterval(timer);
+                    }
+
                     refreshScoreUI();
                     submitScoreNow();
 
@@ -603,14 +531,20 @@
                     );
 
                     var ask = confirm("पुनः ? Press 'ok' to play again");
-                    if (ask) restart();
+
+                    if (ask) {
+                      restart();
+                    }
                   }
                 } else {
                   numberOfWrongTries += 1;
-                  triesElement.innerHTML = translit.numberToDevanagari(numberOfWrongTries);
 
-                  if (this.tagName.toLowerCase() === "img")
+                  triesElement.innerHTML =
+                    translit.numberToDevanagari(numberOfWrongTries);
+
+                  if (this.tagName.toLowerCase() === "img") {
                     this.src = D2Data[row][column].src;
+                  }
 
                   D2Data[row][column].clicked = true;
                   waiting.value = true;
@@ -618,6 +552,7 @@
                   const d =
                     document.getElementsByTagName("tr")[clickedCards[0].x];
                   const r = d.getElementsByTagName("td")[clickedCards[0].y];
+
                   r.style.border = "1px solid blue";
 
                   refreshScoreUI();
@@ -638,7 +573,10 @@
           };
 
           function flipback(row, column, This, clickedCards, waiting, D2Data) {
-            if (This.tagName.toLowerCase() === "img") This.src = bg;
+            if (This.tagName.toLowerCase() === "img") {
+              This.src = bg;
+            }
+
             document.getElementById("tbl").rows[clickedCards[0].x].cells[
               clickedCards[0].y
             ].firstElementChild.src = bg;
@@ -652,19 +590,21 @@
           }
 
           if (l != 1) {
-            var list = document.getElementsByTagName("img");
+            /*
+              Scope handlers to the game table so navbar/profile images
+              can never receive the memory-card click behavior.
+            */
+            var list = document.querySelectorAll("#tbl img");
+
             for (var i = 0; i < list.length; i++) {
-              if (
-                list[i].classList.contains("logo") ||
-                list[i].classList.contains("profile-image") ||
-                list[i].classList.contains("dropdown-profile-image")
-              )
-                continue;
               list[i].onclick = clkfn;
             }
 
-            var plist = document.getElementsByClassName("myp");
-            for (var i = 0; i < plist.length; i++) plist[i].onclick = clkfn;
+            var plist = document.querySelectorAll("#tbl .myp");
+
+            for (var i = 0; i < plist.length; i++) {
+              plist[i].onclick = clkfn;
+            }
           }
         }
 
