@@ -24,7 +24,11 @@
     <!-- The website JavaScript file -->
     <script src="script.js" defer></script>
   </head>
-    <body>
+    <body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
         <noscript>
             <p>This online Panchang puzzle only works if Javascript is enabled in your web browser.</p>
             <p>Please see your web browser help to know how to enable Javascript</p>
@@ -285,7 +289,14 @@
         })
       }
     </script>
-  </body>
+  
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
+</body>
   <footer>
     <span style="white-space: nowrap"> &copy; 2025 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Courtesy: Oliverrt </span>
   </footer>

@@ -146,7 +146,11 @@ background-color:red}
 </style>
 
 </head>
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
 <H1>संस्कृतम्  Minesweeper</H1>
 <progress id="mss" value="0" max="80"> 0% </progress>
 <table id=grid>
@@ -303,5 +307,12 @@ cell.style.backgroundColor="";
   }
 }
 </script>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 </html>

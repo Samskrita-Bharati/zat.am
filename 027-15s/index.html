@@ -7,7 +7,11 @@
 	<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 	<link rel="stylesheet" href="15-puzzle.css">
 </head>
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
 	<div id="puzzle"></div>
 	<div id="controls">
 		<button id="solve">Solve</button>
@@ -19,5 +23,12 @@
 	<p></p>
 
 	<script src="15-puzzle.js"></script>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 </html>

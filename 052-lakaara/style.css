@@ -1,12 +1,4 @@
 /* Basic page style resets */
-* {
-  box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
 
 body {
   font-family: arial, helvetica, sans-serif;
@@ -20,7 +12,6 @@ main {
   max-width: 840px;
   margin: 0 auto;
   line-height: 2rem;
-
 }
 
 [draggable] {
@@ -40,7 +31,7 @@ main {
   padding: 10px 10px;
   width: 20%;
   text-align: center;
-  color: #555555; 
+  color: #555555;
   background: #eeeeee;
   border: 1px solid #cccccc;
   -webkit-box-sizing: border-box;
@@ -58,7 +49,7 @@ main {
   padding: 10px 10px;
   width: 20%;
   text-align: center;
-  color: #555555; 
+  color: #555555;
   background: #dddddd;
   border: 1px solid #cccccc;
   -webkit-box-sizing: border-box;
@@ -66,7 +57,7 @@ main {
   box-sizing: border-box;
 }
 
-.solved{
+.solved {
   background: #ffffff;
   cursor: auto;
 }
@@ -98,7 +89,6 @@ h1 {
 p {
   text-align: center;
   font-size: 1.1em;
-
 }
 
 #share #settings {
@@ -138,7 +128,8 @@ button {
   width: 60px;
   height: 34px;
   margin-left: 20px;
-  background: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/rocket.png?v=1695663248265) right center no-repeat;
+  background: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/rocket.png?v=1695663248265)
+    right center no-repeat;
   background-size: 60px;
 }
 
@@ -161,21 +152,43 @@ button {
   text-transform: uppercase;
   font-size: 1.5em;
   font-weight: bold;
-  color: #5595DD;
+  color: #5595dd;
 }
 
 @keyframes shake {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  10% { transform: translate(-1px, -2px) rotate(-1deg); }
-  20% { transform: translate(-3px, 0px) rotate(1deg); }
-  30% { transform: translate(3px, 2px) rotate(0deg); }
-  40% { transform: translate(1px, -1px) rotate(1deg); }
-  50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
-  70% { transform: translate(3px, 1px) rotate(-1deg); }
-  80% { transform: translate(-1px, -1px) rotate(1deg); }
-  90% { transform: translate(1px, 2px) rotate(0deg); }
-  100% { transform: translate(1px, -2px) rotate(-1deg); }
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 
 @keyframes zoomOutRight {
@@ -184,8 +197,6 @@ button {
     transform: scale(0.1) translate(500px, 0);
   }
 }
-
-
 
 /*  Glitch remix button styles*/
 /* Navigation grid */
@@ -201,14 +212,14 @@ button {
 .reveal {
   display: grid;
   align-items: center;
-  place-items: center; 
+  place-items: center;
   margin: 0 auto;
-  padding: 20px; 
+  padding: 20px;
   filter: grayscale(100%);
 }
 
 .reveal:hover {
-    filter: grayscale(0%);
+  filter: grayscale(0%);
 }
 
 footer {
@@ -217,7 +228,6 @@ footer {
   place-items: center;
   align-items: center;
 }
-
 
 .tooltip {
   position: relative;

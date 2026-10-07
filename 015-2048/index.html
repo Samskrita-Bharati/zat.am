@@ -13,7 +13,13 @@
     <title>२०४८ - 2048</title>
 </head>
 
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
+    <!-- Auth Middleware-->
+    <script type="module" src="/auth/api/middleware.js"></script>
     <div class="container">
         <div class="heading">
             <h1 class="title" style="color:tomato">
@@ -94,6 +100,13 @@
     <script src="js/view.js"></script>
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 
 </html>

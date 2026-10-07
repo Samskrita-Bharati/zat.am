@@ -71,7 +71,11 @@ form{
 }
 </style>
 </head>
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
 <script>
 /*
 Starting point was .. https://gist.github.com/tkon99/4c98af713acc73bed74c  ... tkon99/name.js
@@ -109,5 +113,12 @@ document.getElementById("nameplace").innerHTML = generateName();
 		</form>
 	</div>
 </div>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 </html>

@@ -1,0 +1,284 @@
+/*
+=================================================
+BP26 NAVBAR
+=================================================
+
+The actual navbar design comes from the
+main Zat.am shared navbar stylesheet.
+
+This file only contains BP26-specific
+integration and logo overrides.
+=================================================
+*/
+
+/*
+=================================================
+USE EXACT MAIN ZAT.AM NAVBAR DESIGN
+=================================================
+*/
+
+@import url("../../shared/navbar.css");
+
+/*
+=================================================
+BP26 NAVBAR MOUNT
+=================================================
+
+The main site uses:
+
+#navbar-mount
+
+BP26 uses:
+
+#header-placeholder
+
+So BP26 needs the same sticky behavior
+on its own mount.
+=================================================
+*/
+
+#header-placeholder {
+  width: 100% !important;
+
+  position: sticky !important;
+
+  top: 0 !important;
+
+  z-index: 5000 !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+}
+
+/*
+=================================================
+REMOVE OLD FIXED-HEADER SPACING
+=================================================
+
+Some BP26 games still contain:
+
+body {
+  padding-top: 7%;
+}
+
+That was needed for the OLD fixed header.
+
+The new navbar is sticky and remains in normal
+document flow, so that spacing is no longer needed.
+=================================================
+*/
+
+body.bp26-navbar-page {
+  padding-top: 0 !important;
+}
+
+/*
+=================================================
+NAVBAR
+=================================================
+*/
+
+#header-placeholder .zatam-header {
+  width: 100% !important;
+
+  position: relative !important;
+
+  top: auto !important;
+
+  left: auto !important;
+
+  right: auto !important;
+
+  margin: 0 !important;
+
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/*
+=================================================
+BP26 BRAND
+=================================================
+*/
+
+#header-placeholder .bp26-navbar-brand {
+  min-width: 120px;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: flex-start !important;
+
+  padding: 0 !important;
+
+  margin: 0 !important;
+
+  text-decoration: none !important;
+
+  cursor: pointer !important;
+}
+
+/*
+=================================================
+BP26 LOGO
+=================================================
+*/
+
+#header-placeholder .bp26-navbar-logo {
+  width: auto !important;
+
+  height: 54px !important;
+
+  max-width: 175px !important;
+
+  min-width: 0 !important;
+
+  max-height: 58px !important;
+
+  display: block !important;
+
+  object-fit: contain !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  border: none !important;
+
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+}
+
+/*
+=================================================
+PROTECT SHARED NAVBAR FROM GAME CSS
+=================================================
+
+A few BP26 games contain broad selectors for
+buttons, images, headings, etc.
+
+Keep the navbar using the main-site box model.
+=================================================
+*/
+
+#header-placeholder .zatam-header,
+#header-placeholder .zatam-header *,
+#header-placeholder .zatam-header *::before,
+#header-placeholder .zatam-header *::after {
+  box-sizing: border-box !important;
+}
+
+/*
+=================================================
+AUTH / PROFILE PROTECTION
+=================================================
+*/
+
+#header-placeholder #logged-out,
+#header-placeholder #logged-in,
+#header-placeholder #profile-btn,
+#header-placeholder #profile-dropdown {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/*
+=================================================
+PROFILE IMAGES
+=================================================
+*/
+
+#header-placeholder .profile-image {
+  width: 38px !important;
+
+  height: 38px !important;
+
+  object-fit: cover !important;
+
+  border-radius: 50% !important;
+}
+
+#header-placeholder .dropdown-profile-image {
+  width: 60px !important;
+
+  height: 60px !important;
+
+  object-fit: cover !important;
+
+  border-radius: 50% !important;
+}
+
+/*
+=================================================
+BP26 HOMEPAGE LINK STYLE PROTECTION
+=================================================
+
+bp26/css/style.css adds a tomato bottom border
+to every <a> on the contest homepage.
+
+Keep that styling in the BP26 content, but prevent
+it from affecting the shared navbar.
+=================================================
+*/
+
+#header-placeholder .zatam-header a {
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+
+#header-placeholder .zatam-header a:hover,
+#header-placeholder .zatam-header a:focus,
+#header-placeholder .zatam-header a:visited {
+  border-bottom: none !important;
+}
+
+/*
+=================================================
+TABLET
+=================================================
+*/
+
+@media (max-width: 950px) {
+  #header-placeholder .bp26-navbar-logo {
+    height: 48px !important;
+
+    max-width: 150px !important;
+  }
+
+  #header-placeholder .bp26-navbar-brand {
+    min-width: 105px;
+  }
+}
+
+/*
+=================================================
+MOBILE
+=================================================
+*/
+
+@media (max-width: 760px) {
+  #header-placeholder .bp26-navbar-logo {
+    height: 42px !important;
+
+    max-width: 125px !important;
+  }
+
+  #header-placeholder .bp26-navbar-brand {
+    min-width: auto;
+  }
+}
+
+/*
+=================================================
+VERY SMALL MOBILE
+=================================================
+*/
+
+@media (max-width: 420px) {
+  #header-placeholder .bp26-navbar-logo {
+    height: 38px !important;
+
+    max-width: 105px !important;
+  }
+}

@@ -1,0 +1,789 @@
+/* =====================================================
+   SHARED ZAT.AM NAVBAR
+===================================================== */
+
+/* =====================================================
+   GAME PAGE CSS ISOLATION
+
+   Old Zat.am games often contain broad selectors such as:
+   div, header, button, img, a, h1, etc.
+
+   On normal game pages only, reset those inherited/author
+   styles inside the shared navbar before applying the real
+   navbar rules below.
+===================================================== */
+
+.zatam-game-page :where(#navbar-mount),
+.zatam-game-page :where(#navbar-mount .zatam-header),
+.zatam-game-page :where(#navbar-mount .zatam-header *),
+.zatam-game-page :where(#navbar-mount .zatam-header *::before),
+.zatam-game-page :where(#navbar-mount .zatam-header *::after) {
+  all: revert;
+  box-sizing: border-box;
+}
+
+.zatam-header,
+.zatam-header *,
+.zatam-header *::before,
+.zatam-header *::after {
+  box-sizing: border-box !important;
+}
+
+/* =====================================================
+   NAVBAR MOUNT
+===================================================== */
+
+#navbar-mount {
+  width: 100%;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 5000;
+}
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.zatam-header {
+  width: 100%;
+  height: 76px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  padding: 0 32px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #eadfce;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  box-shadow: 0 2px 10px rgba(11, 43, 79, 0.035);
+}
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.zatam-logo {
+  display: flex;
+  align-items: center;
+
+  flex-shrink: 0;
+
+  gap: 12px;
+
+  color: inherit;
+
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.zatam-logo-mark {
+  width: 58px;
+  height: 42px;
+
+  position: relative;
+}
+
+.zatam-logo-circle {
+  position: absolute;
+
+  width: 30px;
+  height: 30px;
+
+  border: 2px solid;
+
+  border-radius: 50%;
+
+  opacity: 0.75;
+}
+
+.zc1 {
+  left: 0;
+  top: 5px;
+
+  border-color: #f6b23b;
+}
+
+.zc2 {
+  left: 14px;
+  top: 0;
+
+  border-color: #e86c5b;
+}
+
+.zc3 {
+  left: 24px;
+  top: 12px;
+
+  border-color: #7188a8;
+}
+
+.zatam-logo-text h1 {
+  margin: 0;
+
+  color: #09264a;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 28px;
+  font-weight: 800;
+
+  line-height: 24px;
+
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.zatam-logo-text h1 span:nth-child(1) {
+  color: #f16945;
+}
+
+.zatam-logo-text h1 span:nth-child(2) {
+  color: #2f6dff;
+}
+
+.zatam-logo-text h1 span:nth-child(3) {
+  color: #111;
+}
+
+.zatam-logo-text p {
+  margin: 4px 0 0;
+
+  color: #39415c;
+
+  font-size: 12px;
+
+  line-height: normal;
+}
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.zatam-nav {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 38px;
+
+  color: #18284a;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.zatam-nav a {
+  height: 100%;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0;
+
+  color: inherit;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.zatam-nav a:hover {
+  color: #0b2b4f;
+}
+
+.zatam-nav a.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 17px;
+
+  height: 3px;
+
+  background: #f6b23b;
+
+  border-radius: 999px;
+}
+
+/* =====================================================
+   HEADER ACTIONS
+===================================================== */
+
+.zatam-header-actions {
+  display: flex;
+  align-items: center;
+
+  flex-shrink: 0;
+
+  gap: 12px;
+}
+
+/* =====================================================
+   LANGUAGE BUTTON
+===================================================== */
+
+.zatam-lang-btn {
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 18px;
+
+  background: white;
+
+  color: #111;
+
+  border: 1.5px solid #222;
+
+  border-radius: 14px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.zatam-lang-btn:hover {
+  transform: translateY(-2px);
+
+  background: #fffaf2;
+
+  box-shadow: 0 8px 18px rgba(11, 43, 79, 0.14);
+}
+
+/* =====================================================
+   LOGGED OUT
+===================================================== */
+
+.zatam-auth-logged-out {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.zatam-login-btn,
+.zatam-signup-btn {
+  height: 40px;
+
+  padding: 0 16px;
+
+  border-radius: 14px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.zatam-login-btn {
+  background: #0b2b4f;
+
+  color: white;
+
+  border: 1.5px solid #0b2b4f;
+}
+
+.zatam-signup-btn {
+  background: white;
+
+  color: #0b2b4f;
+
+  border: 1.5px solid #0b2b4f;
+}
+
+.zatam-login-btn:hover,
+.zatam-signup-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 18px rgba(11, 43, 79, 0.16);
+}
+
+.zatam-signup-btn:hover {
+  background: #0b2b4f;
+
+  color: white;
+}
+
+/* =====================================================
+   USER PROFILE
+===================================================== */
+
+.zatam-profile-container {
+  position: relative;
+}
+
+.zatam-user-profile {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 4px 10px 4px 5px;
+
+  background: white;
+
+  border: 1.5px solid #0b2b4f;
+
+  border-radius: 16px;
+
+  color: #0b2b4f;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.zatam-user-profile:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 18px rgba(11, 43, 79, 0.14);
+}
+
+#navbar-profile-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  border: 2px solid #f6b23b;
+
+  border-radius: 50%;
+
+  background: #ffe1a5;
+}
+
+#navbar-profile-avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+#navbar-user-name {
+  max-width: 115px;
+
+  overflow: hidden;
+
+  color: #0b2b4f;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.zatam-profile-chevron {
+  color: #687789;
+
+  font-size: 11px;
+}
+
+.zatam-profile-fallback {
+  font-size: 18px;
+}
+
+.zatam-profile-fallback.large {
+  font-size: 30px;
+}
+
+/* =====================================================
+   DROPDOWN
+===================================================== */
+
+.zatam-dropdown {
+  width: 250px;
+
+  position: absolute;
+
+  top: calc(100% + 12px);
+  right: 0;
+
+  overflow: visible;
+
+  padding: 12px 0;
+
+  background: #ffffff;
+
+  border: 1px solid #eadfce;
+
+  border-radius: 16px;
+
+  box-shadow: 0 18px 40px rgba(11, 43, 79, 0.2);
+
+  z-index: 6000;
+}
+
+.zatam-dropdown::before {
+  content: "";
+
+  width: 14px;
+  height: 14px;
+
+  position: absolute;
+
+  top: -8px;
+  right: 20px;
+
+  background: white;
+
+  border-left: 1px solid #eadfce;
+  border-top: 1px solid #eadfce;
+
+  transform: rotate(45deg);
+}
+
+.zatam-dropdown-header {
+  padding: 8px 16px 14px;
+
+  text-align: center;
+}
+
+.zatam-user-email {
+  margin: 0 0 10px;
+
+  color: #687789;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  word-break: break-all;
+}
+
+.zatam-dropdown-avatar {
+  width: 62px;
+  height: 62px;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  margin: 6px auto 9px;
+
+  background: #ffe1a5;
+
+  border: 3px solid #f6b23b;
+
+  border-radius: 50%;
+}
+
+.zatam-dropdown-avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+#username {
+  display: block;
+
+  margin-top: 7px;
+
+  color: #0b2b4f;
+
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.zatam-user-language {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #687789;
+
+  font-size: 13px;
+}
+
+#streak {
+  margin: 10px 0 0;
+
+  color: #24394f;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.zatam-dropdown-divider {
+  height: 1px;
+
+  background: #eadfce;
+}
+
+.zatam-dropdown a,
+.zatam-dropdown-logout {
+  width: 100%;
+
+  display: block;
+
+  padding: 12px 18px;
+
+  background: transparent;
+
+  border: none;
+
+  color: #24394f;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-align: left;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    padding 0.2s ease;
+}
+
+.zatam-dropdown a:hover,
+.zatam-dropdown-logout:hover {
+  padding-left: 22px;
+
+  background: #fff7e8;
+
+  color: #0b2b4f;
+}
+
+/* =====================================================
+   UTILITIES
+===================================================== */
+
+.zatam-header .hidden {
+  display: none !important;
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+  .zatam-header {
+    padding: 0 18px;
+  }
+
+  .zatam-nav {
+    gap: 20px;
+
+    font-size: 14px;
+  }
+
+  #navbar-user-name {
+    display: none;
+  }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 760px) {
+  .zatam-header {
+    min-height: 68px;
+    height: auto;
+
+    padding: 12px 14px;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+  }
+
+  .zatam-logo-mark {
+    display: none;
+  }
+
+  .zatam-logo-text h1 {
+    font-size: 24px;
+  }
+
+  .zatam-logo-text p {
+    display: none;
+  }
+
+  .zatam-nav {
+    width: 100%;
+
+    order: 3;
+
+    justify-content: center;
+
+    gap: 22px;
+
+    min-height: 36px;
+  }
+
+  .zatam-nav a {
+    height: 36px;
+  }
+
+  .zatam-nav a.active::after {
+    bottom: 0;
+  }
+
+  .zatam-lang-btn,
+  .zatam-login-btn,
+  .zatam-signup-btn {
+    height: 36px;
+
+    padding: 0 10px;
+
+    font-size: 12px;
+  }
+
+  .zatam-user-profile {
+    min-height: 40px;
+  }
+
+  #navbar-profile-avatar {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+  .zatam-nav {
+    gap: 14px;
+
+    font-size: 12px;
+  }
+
+  .zatam-header-actions {
+    gap: 6px;
+  }
+
+  .zatam-signup-btn {
+    display: none;
+  }
+
+  .zatam-dropdown {
+    width: 225px;
+  }
+}
+
+/* =====================================================
+   MAIN GAME PAGE NAVBAR HARDENING
+
+   Applied only when navbar-loader.js detects a normal
+   Zat.am game folder. Main site pages and BP26 are not
+   affected by this section.
+===================================================== */
+
+body.zatam-game-page {
+  padding-top: calc(
+    var(--zatam-original-body-padding-top, 0px) +
+      var(--zatam-navbar-height, 76px) + 14px
+  ) !important;
+}
+
+body.zatam-game-page #navbar-mount {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: 0 !important;
+
+  overflow: visible !important;
+
+  transform: none !important;
+
+  z-index: 2147483000 !important;
+}
+
+body.zatam-game-page #navbar-mount .zatam-header {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+
+  float: none !important;
+
+  transform: none !important;
+}
+
+body.zatam-game-page #navbar-mount .zatam-logo,
+body.zatam-game-page #navbar-mount .zatam-logo-text,
+body.zatam-game-page #navbar-mount .zatam-header-actions,
+body.zatam-game-page #navbar-mount .zatam-auth-logged-out,
+body.zatam-game-page #navbar-mount .zatam-profile-container {
+  width: auto !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+
+  float: none !important;
+}
+
+body.zatam-game-page #navbar-mount .zatam-nav {
+  min-width: 0 !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+
+  float: none !important;
+}

@@ -132,13 +132,13 @@ const menu = [
     dir: "019-cs",
     desc: ` Jigsaw puzzle for a <pre>chitram</pre>`,
   },
-  {
-    id: 20,
-    title: "कथा game",
-    category: "RG",
-    dir: "020-kk",
-    desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
-  },
+  // {
+  //   id: 20,
+  //   title: "कथा game",
+  //   category: "RG",
+  //   dir: "020-kk",
+  //   desc: ` Put a कथा (story) in place!<pre>kathaa</pre>`,
+  // },
   {
     id: 21,
     title: "अन्वेषणम् ",
@@ -385,74 +385,548 @@ const menu = [
     dir: "999-cs",
     desc: `Paint by sa~Nkhyaa coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
+  {
+    id: 31,
+    title: "vishwa संस्कृतम्  ",
+    category: "ET",
+    dir: "bp26",
+    desc: `BodhaPlay संस्कृतम् competition 2026 coming soon - <pre>shiighram aagamiShyati... </pre>`,
+  },
 ];
-// get parent element
+
+// =====================================================
+// MAIN ELEMENTS
+// =====================================================
+
 const sectionCenter = document.querySelector(".section-center");
 const btnContainer = document.querySelector(".btn-container");
-// display all items when page loads
+
+// =====================================================
+// FEATURED GAMES FOR HERO SLIDER
+//
+// These IDs come directly from your existing menu array.
+// Change this array anytime to change featured games.
+// =====================================================
+
+const featuredGameIds = [
+  2, // Rock Paper Scissors
+  3, // Ladders & Snakes
+  4, // Sudoku
+  5, // Tic Tac Toe
+  15, // 2048
+  19, // Picture Puzzle
+  22, // Paasha
+  40, // Analog Clock
+  51, // Numerale
+  53, // Noun Declensions
+];
+
+// =====================================================
+// SLIDER STATE
+// =====================================================
+
+let featuredSlideIndex = 0;
+let featuredSlideTimer = null;
+let featuredPaused = false;
+
+// =====================================================
+// PAGE LOAD
+// =====================================================
+
 window.addEventListener("DOMContentLoaded", function () {
+  // Existing menu logic
   diplayMenuItems(menu);
   displayMenuButtons();
+
+  // New Zat.am2 interface
+  initFeaturedSlider();
+  initHeroButtons();
+  initHowItWorksModal();
 });
+
+// =====================================================
+// BUILD GAME URL
+//
+// This preserves your bilingual BP26 logic.
+// It also fixes external Telegram links.
+// =====================================================
+
+function buildGameHref(item) {
+  // External links such as Telegram
+  if (/^https?:\/\//i.test(item.dir)) {
+    return item.dir;
+  }
+
+  let href = `./${item.dir}/`;
+
+  const bilingualOn =
+    window.zatBilingualOn === true ||
+    localStorage.getItem("zatBilingualOn") === "1";
+
+  const preferredLanguageCode =
+    window.zatPreferredLang || localStorage.getItem("zatPreferredLang") || "1";
+
+  // Preserve your existing BP26 bilingual behaviour
+  if (bilingualOn && item.dir === "bp26") {
+    const separator = href.includes("?") ? "&" : "?";
+
+    href += `${separator}t=` + encodeURIComponent(preferredLanguageCode);
+  }
+
+  return href;
+}
+
+// =====================================================
+// COVER IMAGE
+// =====================================================
+
+function getGameCover(item) {
+  // External Telegram games do not have a local cover folder.
+  if (/^https?:\/\//i.test(item.dir)) {
+    return "./शत.म्.png";
+  }
+
+  return `./${item.dir}/cover.jpg`;
+}
+
+// =====================================================
+// DISPLAY GAME CARDS
+// =====================================================
 
 function diplayMenuItems(menuItems) {
   let displayMenu = menuItems.map(function (item) {
-    return `<article class="menu-item">
-          <img src=${item.dir}/cover.jpg alt="${item.title}" class="photo" />
-          <div class="item-info">
-            <header>
-              <a href=${item.dir}/ target="zat.am">${item.title}</a>
-              <h4 class="price">${item.category}</h4>
-            </header>
-            <p class="item-text">
-              ${item.desc}
-            </p>
-          </div>
-        </article>`;
-  });
-  displayMenu = displayMenu.join("");
-  // console.log(displayMenu);
+    const href = buildGameHref(item);
+    const cover = getGameCover(item);
 
-  sectionCenter.innerHTML = displayMenu;
+    return `
+      <article
+        class="menu-item"
+        data-cy="game-${item.dir}"
+      >
+
+        <a
+          href="${href}"
+          target="zat.am"
+          class="game-image-link"
+          data-cy="game-link-${item.dir}"
+        >
+          <div class="game-image-wrapper">
+
+            <img
+              src="${cover}"
+              alt="${item.title}"
+              class="photo"
+              onerror="
+                this.onerror=null;
+                this.src='./शत.म्.png';
+              "
+            />
+
+            <span class="game-category-tag">
+              ${item.category}
+            </span>
+
+          </div>
+        </a>
+
+
+        <div class="item-info">
+
+          <h3 class="game-title">
+            <a
+              href="${href}"
+              target="zat.am"
+            >
+              ${item.title}
+            </a>
+          </h3>
+
+
+          <div class="game-meta">
+
+            <span class="price">
+              ${item.category}
+            </span>
+
+          </div>
+
+
+          <div class="item-text">
+            ${item.desc}
+          </div>
+
+
+          <div class="game-card-bottom">
+
+            <a
+              href="${href}"
+              target="zat.am"
+              class="play-btn"
+              data-cy="play-${item.dir}"
+            >
+              Play Now ▶
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+    `;
+  });
+
+  sectionCenter.innerHTML = displayMenu.join("");
 }
+
+// =====================================================
+// REFRESH HOOK FOR navbar-auth.js
+// =====================================================
+
+if (typeof window !== "undefined") {
+  window.zatRefreshMenu = function () {
+    diplayMenuItems(menu);
+  };
+}
+
+// =====================================================
+// CATEGORY BUTTONS
+//
+// Your filtering logic is still the same.
+// Only active button styling was added.
+// =====================================================
+
 function displayMenuButtons() {
   const categories = menu.reduce(
     function (values, item) {
       if (!values.includes(item.category)) {
         values.push(item.category);
       }
+
       return values;
     },
-    ["all"]
+    ["all"],
   );
+
   const categoryBtns = categories
     .map(function (category) {
-      return `<button type="button" class="filter-btn" data-id=${category}>
-          ${category}
-        </button>`;
+      return `
+        <button
+          type="button"
+          class="filter-btn"
+          data-id="${category}"
+        >
+          ${category === "all" ? "▦ ALL" : category}
+        </button>
+      `;
     })
     .join("");
 
   btnContainer.innerHTML = categoryBtns;
+
   const filterBtns = btnContainer.querySelectorAll(".filter-btn");
-  //console.log(filterBtns);
+
+  // Start with ALL active
+  const firstButton = filterBtns[0];
+
+  if (firstButton) {
+    firstButton.classList.add("active");
+  }
 
   filterBtns.forEach(function (btn) {
     btn.addEventListener("click", function (e) {
-      // console.log(e.currentTarget.dataset);
       const category = e.currentTarget.dataset.id;
-      const menuCategory = menu.filter(function (menuItem) {
-        // console.log(menuItem.category);
-        if (menuItem.category === category) {
-          //hht	if (menuItem.category.indexOf(category)>0) {
-          return menuItem;
-        }
+
+      // Selected button styling
+      filterBtns.forEach(function (button) {
+        button.classList.remove("active");
       });
+
+      e.currentTarget.classList.add("active");
+
+      // KEEP EXISTING FILTER LOGIC
       if (category === "all") {
         diplayMenuItems(menu);
+
+        return;
+      }
+
+      const menuCategory = menu.filter(function (menuItem) {
+        return menuItem.category === category;
+      });
+
+      diplayMenuItems(menuCategory);
+    });
+  });
+}
+
+// =====================================================
+// FEATURED SLIDER
+// =====================================================
+
+function getFeaturedGames() {
+  return featuredGameIds
+    .map(function (id) {
+      return menu.find(function (game) {
+        return game.id === id;
+      });
+    })
+    .filter(Boolean);
+}
+
+// =====================================================
+// RENDER SLIDER
+// =====================================================
+
+function renderFeaturedSlider() {
+  const slidesContainer = document.getElementById("featuredSlides");
+
+  const dotsContainer = document.getElementById("featuredSlideDots");
+
+  if (!slidesContainer || !dotsContainer) {
+    return;
+  }
+
+  const featuredGames = getFeaturedGames();
+
+  slidesContainer.innerHTML = featuredGames
+    .map(function (item, index) {
+      const href = buildGameHref(item);
+      const cover = getGameCover(item);
+
+      return `
+        <article
+          class="featured-slide ${index === 0 ? "active" : ""}"
+          data-slide-index="${index}"
+        >
+
+          <a
+            href="${href}"
+            target="zat.am"
+            class="featured-slide-link"
+          >
+
+            <div class="slide-preview">
+
+              <img
+                src="${cover}"
+                alt="${item.title}"
+                onerror="
+                  this.onerror=null;
+                  this.src='./शत.म्.png';
+                "
+              />
+
+            </div>
+
+
+            <div class="slide-caption">
+
+              ${item.title}
+
+              <span>
+                ${item.category}
+              </span>
+
+            </div>
+
+          </a>
+
+        </article>
+      `;
+    })
+    .join("");
+
+  dotsContainer.innerHTML = featuredGames
+    .map(function (_, index) {
+      return `
+        <button
+          type="button"
+          class="slide-dot ${index === 0 ? "active" : ""}"
+          data-slide-target="${index}"
+          aria-label="Show slide ${index + 1}"
+        ></button>
+      `;
+    })
+    .join("");
+}
+
+// =====================================================
+// SHOW SLIDE
+// =====================================================
+
+function showFeaturedSlide(index) {
+  const slides = document.querySelectorAll(".featured-slide");
+
+  const dots = document.querySelectorAll(".slide-dot");
+
+  if (!slides.length) {
+    return;
+  }
+
+  featuredSlideIndex = (index + slides.length) % slides.length;
+
+  slides.forEach(function (slide, index) {
+    slide.classList.toggle("active", index === featuredSlideIndex);
+  });
+
+  dots.forEach(function (dot, index) {
+    dot.classList.toggle("active", index === featuredSlideIndex);
+  });
+}
+
+// =====================================================
+// SLIDER TIMER
+// =====================================================
+
+function stopFeaturedSlider() {
+  window.clearInterval(featuredSlideTimer);
+
+  featuredSlideTimer = null;
+}
+
+function startFeaturedSlider() {
+  if (featuredPaused) {
+    return;
+  }
+
+  stopFeaturedSlider();
+
+  featuredSlideTimer = window.setInterval(function () {
+    showFeaturedSlide(featuredSlideIndex + 1);
+  }, 3600);
+}
+
+// =====================================================
+// MOVE SLIDER
+// =====================================================
+
+function moveFeaturedSlide(direction) {
+  showFeaturedSlide(featuredSlideIndex + direction);
+
+  startFeaturedSlider();
+}
+
+// =====================================================
+// INITIALIZE SLIDER
+// =====================================================
+
+function initFeaturedSlider() {
+  renderFeaturedSlider();
+
+  const prevButton = document.getElementById("featuredSlidePrev");
+
+  const nextButton = document.getElementById("featuredSlideNext");
+
+  const toggleButton = document.getElementById("featuredSlideToggle");
+
+  const dotsContainer = document.getElementById("featuredSlideDots");
+
+  if (prevButton) {
+    prevButton.addEventListener("click", function () {
+      moveFeaturedSlide(-1);
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", function () {
+      moveFeaturedSlide(1);
+    });
+  }
+
+  if (dotsContainer) {
+    dotsContainer.addEventListener("click", function (event) {
+      const dot = event.target.closest(".slide-dot");
+
+      if (!dot) {
+        return;
+      }
+
+      showFeaturedSlide(Number(dot.dataset.slideTarget));
+
+      startFeaturedSlider();
+    });
+  }
+
+  if (toggleButton) {
+    toggleButton.addEventListener("click", function () {
+      featuredPaused = !featuredPaused;
+
+      toggleButton.textContent = featuredPaused ? "Play" : "Pause";
+
+      toggleButton.setAttribute(
+        "aria-label",
+        featuredPaused ? "Play slideshow" : "Pause slideshow",
+      );
+
+      if (featuredPaused) {
+        stopFeaturedSlider();
       } else {
-        diplayMenuItems(menuCategory);
+        startFeaturedSlider();
       }
     });
+  }
+
+  showFeaturedSlide(0);
+
+  startFeaturedSlider();
+}
+
+// =====================================================
+// HERO BUTTONS
+// =====================================================
+
+function initHeroButtons() {
+  const startPlayingBtn = document.getElementById("startPlayingBtn");
+
+  if (!startPlayingBtn) {
+    return;
+  }
+
+  startPlayingBtn.addEventListener("click", function () {
+    document.getElementById("gamesSection")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  });
+}
+
+// =====================================================
+// HOW IT WORKS MODAL
+// =====================================================
+
+function initHowItWorksModal() {
+  const button = document.getElementById("howItWorksBtn");
+
+  const overlay = document.getElementById("zatamOverlay");
+
+  const okButton = document.getElementById("zatamModalOk");
+
+  if (!button || !overlay || !okButton) {
+    return;
+  }
+
+  function openModal() {
+    overlay.classList.add("visible");
+
+    okButton.focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove("visible");
+  }
+
+  button.addEventListener("click", openModal);
+
+  okButton.addEventListener("click", closeModal);
+
+  overlay.addEventListener("click", function (event) {
+    if (event.target === overlay) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && overlay.classList.contains("visible")) {
+      closeModal();
+    }
   });
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,31 +12,329 @@
     <!-- styles -->
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <section class="menu">
-      <!-- title -->
-      <div class="title">
-	  <h2>संस्कृतभारती <!--जयतु संस्कृतम् ।  -->  </h2>
-        <!--<h2><span style="color:red">श</span><span style="color:yellow">त</span>.<span style="color:blue">म्</span></h2>-->
-        <div class="underline"></div>
+
+  <body data-page="games">
+    <!-- =========================
+     ZAT.AM2 STYLE HEADER
+========================= -->
+    <div id="navbar-mount"></div>
+
+    <!-- =========================
+     HERO
+========================= -->
+
+    <section class="hero">
+      <div class="hero-text">
+        <h2>
+          Learn Sanskrit<br />
+          Through Games
+        </h2>
+
+        <div class="hero-underline"></div>
+
+        <p>
+          Making Sanskrit learning fun through interactive play, clever puzzles,
+          engaging games, and exciting challenges.
+        </p>
+
+        <div class="hero-buttons">
+          <button class="primary-btn" id="startPlayingBtn" type="button">
+            🎮 Start Playing
+          </button>
+
+          <button class="secondary-btn" id="howItWorksBtn" type="button">
+            📖 How It Works
+          </button>
+        </div>
       </div>
-      <!-- filter buttons -->
-      <div class="btn-container">
-        <!-- <button type="button" class="filter-btn" data-id="all">all</button>
-        <button type="button" class="filter-btn" data-id="breakfast">
-          breakfast
-        </button>
-        <button type="button" class="filter-btn" data-id="lunch">lunch</button>
-        <button type="button" class="filter-btn" data-id="shakes">
-          shakes
-        </button> -->
-      </div>
-      <!-- menu items -->
-      <div class="section-center">
-        
+
+      <!-- =========================
+       DYNAMIC SLIDER
+  ========================= -->
+
+      <div class="hero-art">
+        <div class="hero-sun"></div>
+        <div class="hero-mountain"></div>
+
+        <div class="floating-letter letter-1">क</div>
+        <div class="floating-letter letter-2">अ</div>
+        <div class="floating-letter letter-3">म</div>
+
+        <div
+          class="game-slideshow"
+          id="gameSlideshow"
+          aria-label="Featured Sanskrit games"
+        >
+          <!-- app.js inserts slides here -->
+          <div id="featuredSlides"></div>
+
+          <!-- app.js inserts dots here -->
+          <div class="slide-dots" id="featuredSlideDots"></div>
+
+          <button
+            class="slide-arrow slide-prev"
+            id="featuredSlidePrev"
+            type="button"
+            aria-label="Previous slide"
+          >
+            &lsaquo;
+          </button>
+
+          <button
+            class="slide-arrow slide-next"
+            id="featuredSlideNext"
+            type="button"
+            aria-label="Next slide"
+          >
+            &rsaquo;
+          </button>
+
+          <button class="slide-toggle" id="featuredSlideToggle" type="button">
+            Pause
+          </button>
+        </div>
       </div>
     </section>
+
+    <!-- =========================
+     GAME CATEGORIES
+========================= -->
+
+    <section class="category-bar" id="gamesSection">
+      <!-- app.js still generates ALL category buttons -->
+      <div class="btn-container"></div>
+    </section>
+
+    <!-- =========================
+     GAMES
+========================= -->
+
+    <section class="menu">
+      <div class="games-heading">
+        <h2>संस्कृतभारती</h2>
+        <div class="games-heading-underline"></div>
+
+        <p>Choose a game and start learning Sanskrit through play.</p>
+      </div>
+
+      <!-- app.js still generates ALL games -->
+      <div class="section-center"></div>
+    </section>
+
+    <!-- =========================
+     HOW IT WORKS MODAL
+========================= -->
+
+    <div class="zatam-overlay" id="zatamOverlay">
+      <div class="zatam-modal">
+        <div class="zatam-modal-icon">💡</div>
+
+        <h3>How It Works</h3>
+
+        <p>
+          Choose a game category, select a game, and click Play Now to begin.
+        </p>
+
+        <button class="zatam-modal-btn" id="zatamModalOk" type="button">
+          OK
+        </button>
+      </div>
+    </div>
+
+    <div class="leaderboard-container">
+      <a class="leaderboard-btn" href="./leaderboard.html">🏆 Leaderboard</a>
+
+      <div class="leaderboard-panel">
+        <div class="lb-title">🏆 Monthly Leaders</div>
+
+        <div class="lb-item gold">
+          🥇
+          <span
+            id="p1Name"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100px;
+            "
+            >—</span
+          >
+          <span id="p1Score">0</span>
+        </div>
+
+        <div class="lb-item silver">
+          🥈
+          <span
+            id="p2Name"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100px;
+            "
+            >—</span
+          >
+          <span id="p2Score">0</span>
+        </div>
+
+        <div class="lb-item bronze">
+          🥉
+          <span
+            id="p3Name"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100px;
+            "
+            >—</span
+          >
+          <span id="p3Score">0</span>
+        </div>
+
+        <a href="./leaderboard.html" class="lb-link">View Full Leaderboard →</a>
+      </div>
+    </div>
+    <footer style="text-align: center; padding: 20px">
+      <a href="./legal/privacy.html" target="_blank">Privacy Policy</a>
+    </footer>
     <!-- javascript -->
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
+    <script type="module" src="./js/navbar-loader.js"></script>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const setInitialActiveButton = () => {
+          const firstButton = document.querySelector(
+            ".btn-container button.filter-btn",
+          );
+
+          if (firstButton) {
+            firstButton.classList.add("active");
+          }
+        };
+
+        setInitialActiveButton();
+
+        document.addEventListener("click", (event) => {
+          const button = event.target.closest("button.filter-btn");
+
+          if (!button) return;
+
+          document
+            .querySelectorAll(".btn-container button.filter-btn")
+            .forEach((btn) => {
+              btn.classList.remove("active");
+            });
+
+          button.classList.add("active");
+        });
+      });
+    </script>
+    <!-- Mini-leaderboard -->
+    <script type="module">
+      import {
+        collection,
+        getDocs,
+        doc,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+      import { db } from "./auth/api/firebase-config.js";
+      async function getTop3(selectedGame) {
+        const timestamp = Date.now();
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        // used for getting document for current month
+        const formattedDate = `${year}-${month}`; // YYYY-MM
+
+        const docRef = doc(
+          db,
+          "leaderboards",
+          selectedGame,
+          "gameHistory",
+          formattedDate,
+        );
+        const snapshot = await getDoc(docRef);
+        let data;
+        if (snapshot.data()) {
+          data = snapshot.data();
+        } else {
+          data = [];
+        }
+        const formattedData = Object.entries(data.entries).map(
+          ([key, score]) => {
+            const [timestamp, uid] = key.split("_");
+
+            return {
+              uid,
+              timestamp: Number(timestamp),
+              score,
+            };
+          },
+        );
+
+        const summary = formattedData.reduce((acc, data) => {
+          const { uid, score } = data;
+          if (!uid) return acc;
+          acc[uid] = (acc[uid] || 0) + score;
+          return acc;
+        }, {});
+
+        const top3Ids = Object.entries(summary)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3);
+
+        return await Promise.all(
+          top3Ids.map(async ([uid, score]) => {
+            const name = await fetchName(uid);
+            return { username: name, totalScore: score };
+          }),
+        );
+      }
+
+      async function fetchName(uid) {
+        try {
+          const snap = await getDoc(doc(db, "users", uid, "public", "profile"));
+          return snap.exists() ? snap.data().name : "Unknown";
+        } catch {
+          return "Unknown";
+        }
+      }
+
+      async function initMiniLeaderboard() {
+        const top3 = await getTop3("Global");
+        top3.forEach((player, i) => {
+          const nameEl = document.getElementById(`p${i + 1}Name`);
+          const scoreEl = document.getElementById(`p${i + 1}Score`);
+          if (nameEl) nameEl.textContent = player.username;
+          if (scoreEl) scoreEl.textContent = player.totalScore.toLocaleString();
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", initMiniLeaderboard);
+    </script>
+    <!-- ✅ inject Scoring + Contest buttons -->
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          const btnContainer = document.querySelector(".btn-container");
+          if (!btnContainer) return;
+
+          function addTab(id, text, href) {
+            if (btnContainer.querySelector(`[data-id="${id}"]`)) return;
+            const a = document.createElement("a");
+            a.className = "filter-btn";
+            a.setAttribute("data-id", id);
+            a.href = href;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.textContent = text;
+            btnContainer.appendChild(a);
+          }
+
+          addTab("contest", "🏆 Contest ", "./bp26/index.html");
+        }, 0);
+      });
+    </script>
   </body>
 </html>

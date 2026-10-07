@@ -49,7 +49,7 @@ a {
 }
 
 a:hover {
-  color: #47CCFC;
+  color: #47ccfc;
 }
 
 td {
@@ -73,12 +73,24 @@ td {
 }
 
 .empty {
-  background: repeating-linear-gradient(0, #eee 0, #eee 1px, white 1px, white 5px);
+  background: repeating-linear-gradient(
+    0,
+    #eee 0,
+    #eee 1px,
+    white 1px,
+    white 5px
+  );
   background-size: 1px 5px;
 }
 
 .sun {
-  background: repeating-linear-gradient(0, #eee 0, #eee 1px, gray 1px, gray 5px);
+  background: repeating-linear-gradient(
+    0,
+    #eee 0,
+    #eee 1px,
+    gray 1px,
+    gray 5px
+  );
   background-size: 1px 5px;
 }
 
@@ -103,8 +115,8 @@ td {
   z-index: -1;
   display: block;
   content: "";
-  width: 24px; height: 24px;
-  background: #36FFA3;
+  width: 24px;
+  height: 24px;
   background: Tomato;
   border-radius: 24px;
   position: absolute;
@@ -117,16 +129,17 @@ td {
 .past a {
   opacity: 0.9;
 }
-.pastd{
-	color:red;
+
+.pastd {
+  color: red;
 }
 
 .days td:hover .day:before {
   z-index: -1;
   display: block;
   content: "";
-  width: 24px; height: 24px;
-  border: 1px solid #36FFA3;
+  width: 24px;
+  height: 24px;
   border: 1px solid Tomato;
   border-radius: 24px;
   position: absolute;
@@ -135,23 +148,31 @@ td {
   top: 0;
 }
 
-.following-days a { font-size: 0; }
+.following-days a {
+  font-size: 0;
+}
 
 .multi-days {
   background: #f9f9f9;
   margin-left: -2px;
   margin-right: -2px;
-  border-bottom: 2px #CCF4FF solid;
+  border-bottom: 2px #ccf4ff solid;
 }
 
-.multi-days a { border: 0; }
-.multi-days a:hover { color: #000; }
+.multi-days a {
+  border: 0;
+}
 
-.no-event { color: #aaa; }
+.multi-days a:hover {
+  color: #000;
+}
 
-.mantra
-{
-	font-size: 14px;
+.no-event {
+  color: #aaa;
+}
+
+.mantra {
+  font-size: 14px;
   padding: 6px;
   display: inline-block;
   border: 0;

@@ -42,7 +42,11 @@ font-weight:bold;
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 </head>
-<body>
+<body data-page="games">
+
+    <!-- Shared Zat.am Navbar -->
+    <div id="navbar-mount"></div>
+
 <center><div id="table" style="display: table;">
    <div id="row1" style="display: table-row;">
       <div id="cell11" class="tile1" onClick="clickTile(1,1);">१</div>
@@ -66,6 +70,13 @@ font-weight:bold;
 </center>
 <div style="float:right" id="hint">0<div>
 <script src="../cmpk-jul.json"></script>
+
+
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
 </body>
 <script>
 const urlParams = new URLSearchParams(window.location.search);

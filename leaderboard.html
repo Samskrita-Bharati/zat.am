@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Zat.am - Leaderboard</title>
+
+    <link rel="stylesheet" href="leaderboardStyles.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+  </head>
+
+  <body class="leaderboard-page" data-page="leaderboard">
+    <!-- =========================================
+         SHARED ZAT.AM NAVBAR
+    ========================================== -->
+
+    <div id="navbar-mount"></div>
+
+    <!-- Sparkle animation canvas -->
+    <canvas id="sparkleCanvas"></canvas>
+
+    <!-- =========================================
+         LEADERBOARD PAGE
+    ========================================== -->
+
+    <main class="lb-page">
+      <!-- =====================================
+           HERO
+      ====================================== -->
+
+      <section class="lb-hero">
+        <div class="lb-hero-icon" aria-hidden="true">🏆</div>
+
+        <div class="lb-hero-copy">
+          <div class="lb-eyebrow">Zat.am Community</div>
+
+          <h1>Leaderboard</h1>
+
+          <p>
+            Compete, learn &amp; climb the ranks!
+            <br />
+            See top players across Zat.am learning activities and competitions.
+          </p>
+        </div>
+
+        <div class="lb-hero-actions">
+          <a
+            href="./index24.html"
+            class="back-btn lb-secondary-action"
+            data-cy="back-to-games"
+          >
+            ← Back to Games
+          </a>
+
+          <a
+            href="./analytics.html"
+            id="analyticsBtn"
+            class="analytics-btn lb-primary-action"
+            style="display: none"
+          >
+            Analytics
+          </a>
+        </div>
+      </section>
+
+      <!-- =====================================
+           MAIN 2-COLUMN LAYOUT
+      ====================================== -->
+
+      <section class="lb-layout">
+        <!-- =================================
+             LEFT / MAIN CONTENT
+        ================================== -->
+
+        <div class="lb-main-column">
+          <!-- =============================
+               FILTERS
+          ============================== -->
+
+          <section class="lb-filter-card">
+            <div class="lb-section-heading">
+              <div>
+                <span class="lb-section-kicker"> Explore Rankings </span>
+
+                <h2>Leaderboard Filters</h2>
+              </div>
+
+              <div id="filterRangeDisplay" class="lb-range-display"></div>
+            </div>
+
+            <div class="lb-controls">
+              <!-- Game -->
+
+              <div class="lb-field lb-game-field">
+                <label for="gameSelect"> 🎮 Game </label>
+
+                <select id="gameSelect">
+                  <option value="Global">Global</option>
+
+                  <option value="bp26-Game1">BP26 - Game 1</option>
+
+                  <option value="bp26-Game2">BP26 - Game 2</option>
+
+                  <option value="bp26-Game3">BP26 - Game 3</option>
+
+                  <option value="bp26-Game4">BP26 - Game 4</option>
+
+                  <option value="bp26-Game5">BP26 - Game 5</option>
+
+                  <option value="bp26-Game6">BP26 - Game 6</option>
+
+                  <option value="bp26-Game7">BP26 - Game 7</option>
+                </select>
+              </div>
+
+              <!-- Date -->
+
+              <div class="lb-field">
+                <label for="seasonDate"> 📅 Choose Date </label>
+
+                <input id="seasonDate" type="date" />
+              </div>
+
+              <!-- Time -->
+
+              <div class="lb-field">
+                <label for="timeFilter"> 🗓️ Time Period </label>
+
+                <select id="timeFilter" data-cy="time-filter">
+                  <option value="daily" selected>Today</option>
+
+                  <option value="weekly">This Week</option>
+
+                  <option value="monthly">This Month</option>
+
+                  <option value="allDates">All Time</option>
+                </select>
+              </div>
+
+              <!-- Scoring -->
+
+              <div class="lb-field lb-scoring-field">
+                <span class="lb-field-label"> ⭐ Ranking By </span>
+
+                <div id="scoring" class="lb-score-toggle">
+                  <label class="lb-score-option">
+                    <input
+                      type="radio"
+                      id="score"
+                      value="totalScore"
+                      name="scoringSystem"
+                      checked
+                    />
+
+                    <span> Score </span>
+                  </label>
+
+                  <label class="lb-score-option">
+                    <input
+                      type="radio"
+                      id="timePlayed"
+                      value="totalTimePlayed"
+                      name="scoringSystem"
+                    />
+
+                    <span> Time Played </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =============================
+               PODIUM
+          ============================== -->
+
+          <section class="lb-ranking-section">
+            <div class="lb-section-heading">
+              <div>
+                <span class="lb-section-kicker"> Top Players </span>
+
+                <h2>Hall of Champions</h2>
+              </div>
+            </div>
+
+            <div class="podium">
+              <!-- SECOND -->
+
+              <div class="podium-card rank-2" id="card-2" data-color="#C0C0C0">
+                <div class="podium-medal">🥈</div>
+
+                <div class="rank">#2</div>
+
+                <div class="name" id="name-2">---</div>
+
+                <div class="location" id="location-2">---</div>
+
+                <div class="score" id="score-2">---</div>
+              </div>
+
+              <!-- FIRST -->
+
+              <div class="podium-card rank-1" id="card-1" data-color="#FFD700">
+                <div class="podium-crown">Champion</div>
+
+                <div class="podium-medal">🥇</div>
+
+                <div class="rank">#1</div>
+
+                <div class="name" id="name-1">---</div>
+
+                <div class="location" id="location-1">---</div>
+
+                <div class="score" id="score-1">---</div>
+              </div>
+
+              <!-- THIRD -->
+
+              <div class="podium-card rank-3" id="card-3" data-color="#CD7F32">
+                <div class="podium-medal">🥉</div>
+
+                <div class="rank">#3</div>
+
+                <div class="name" id="name-3">---</div>
+
+                <div class="location" id="location-3">---</div>
+
+                <div class="score" id="score-3">---</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =============================
+               LEADERBOARD
+          ============================== -->
+
+          <section class="leaderboard-card">
+            <div class="leaderboard-table-header">
+              <div>Rank</div>
+
+              <div>Player</div>
+
+              <div>Score</div>
+            </div>
+
+            <!-- leaderboard.js renders rows here -->
+
+            <div id="leaderboard"></div>
+
+            <!-- Pagination -->
+
+            <div class="pagination">
+              <button id="prevBtn" type="button">← Previous</button>
+
+              <span class="page-info">
+                Page
+                <strong id="pageNum"> 1 </strong>
+                of
+                <strong id="totalPages"> 1 </strong>
+              </span>
+
+              <button id="nextBtn" type="button">Next →</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- =================================
+             RIGHT SIDEBAR
+        ================================== -->
+
+        <aside class="lb-sidebar">
+          <!-- Current View -->
+
+          <section class="side-card">
+            <div class="side-card-icon">🎮</div>
+
+            <h3>Choose Your Ranking</h3>
+
+            <p>Compare players by game, date, score, or total time played.</p>
+
+            <div class="lb-tip-list">
+              <div>
+                <span>🏆</span>
+
+                <div>
+                  <strong>Global</strong>
+                  <small> Compare everyone together. </small>
+                </div>
+              </div>
+
+              <div>
+                <span>📅</span>
+
+                <div>
+                  <strong>Date Filters</strong>
+                  <small>
+                    View daily, weekly, monthly or all-time results.
+                  </small>
+                </div>
+              </div>
+
+              <div>
+                <span>⭐</span>
+
+                <div>
+                  <strong>Score</strong>
+                  <small> Rank players by accumulated game score. </small>
+                </div>
+              </div>
+
+              <div>
+                <span>⏱️</span>
+
+                <div>
+                  <strong>Time Played</strong>
+                  <small> Compare total activity time. </small>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Competition card -->
+
+          <section class="side-card lb-competition-card">
+            <div class="side-card-icon">🏅</div>
+
+            <h3>Competition Rankings</h3>
+
+            <p>
+              BP26 competition games can be selected from the Game filter to
+              view their individual standings.
+            </p>
+          </section>
+
+          <!-- =============================
+               ADMIN PANEL
+          ============================== -->
+
+          <section
+            id="adminPanel"
+            class="side-card admin-panel"
+            style="display: none"
+          >
+            <div class="side-card-icon">⚙️</div>
+
+            <h3>Admin Controls</h3>
+
+            <div class="admin-status-row">
+              <span> Competition Active </span>
+
+              <label class="toggle-switch">
+                <input type="checkbox" id="statusToggle" />
+
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <button id="resetBtn" type="button" class="reset-btn">
+              Reset Current Leaderboard
+            </button>
+
+            <p id="resetHint"></p>
+          </section>
+        </aside>
+      </section>
+
+      <!-- =====================================
+           BOTTOM INFORMATION
+      ====================================== -->
+
+      <section class="bottom-info">
+        <article class="info-card">
+          <div class="info-icon">🎓</div>
+
+          <div>
+            <h4>Learn Sanskrit</h4>
+
+            <p>Build vocabulary and language skills while you play.</p>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon">🎮</div>
+
+          <div>
+            <h4>Play &amp; Practice</h4>
+
+            <p>Interactive activities make practice engaging.</p>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon">🏆</div>
+
+          <div>
+            <h4>Track Progress</h4>
+
+            <p>Compare scores and see how your ranking changes.</p>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon">👥</div>
+
+          <div>
+            <h4>Community</h4>
+
+            <p>Learn alongside other Sanskrit learners.</p>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- =========================================
+         DEFAULT DATE + BACK BUTTON
+    ========================================== -->
+
+    <script>
+      // Set default leaderboard date before
+      // leaderboard.js begins fetching data.
+      const seasonDateInput = document.getElementById("seasonDate");
+
+      seasonDateInput.value = new Date().toISOString().split("T")[0];
+
+      // Preserve existing origin-aware back button.
+      document.addEventListener("DOMContentLoaded", () => {
+        const backBtn = document.querySelector(".back-btn");
+
+        if (!backBtn) {
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const origin = urlParams.get("from");
+
+        if (origin === "bp26") {
+          backBtn.textContent = "← Back to Competition";
+
+          backBtn.href = "./bp26/index.html";
+        } else {
+          backBtn.textContent = "← Back to Games";
+
+          backBtn.href = "./index24.html";
+        }
+      });
+    </script>
+
+    <!-- =========================================
+         SHARED ZAT.AM NAVBAR
+    ========================================== -->
+
+    <script type="module" src="./js/navbar-loader.js"></script>
+
+    <!-- =========================================
+         EXISTING LEADERBOARD LOGIC
+         DO NOT REPLACE
+    ========================================== -->
+
+    <script type="module" src="./leaderboard.js"></script>
+  </body>
+</html>

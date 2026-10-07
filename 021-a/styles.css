@@ -1,271 +1,703 @@
-/*
-=============== 
-Fonts
-===============
-*/
-@import url("https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Roboto:400,500,700&display=swap");
 
-/*
-=============== 
-Variables
-===============
-*/
+/* =====================================================
+   PAGE VARIABLES
+===================================================== */
 
-:root {
-  /* dark shades of primary color*/
-  --clr-primary-1: hsl(205, 86%, 17%);
-  --clr-primary-2: hsl(205, 77%, 27%);
-  --clr-primary-3: hsl(205, 72%, 37%);
-  --clr-primary-4: hsl(205, 63%, 48%);
-  /* primary/main color */
-  --clr-primary-5: #49a6e9;
-  /* lighter shades of primary color */
-  --clr-primary-6: hsl(205, 89%, 70%);
-  --clr-primary-7: hsl(205, 90%, 76%);
-  --clr-primary-8: hsl(205, 86%, 81%);
-  --clr-primary-9: hsl(205, 90%, 88%);
-  --clr-primary-10: hsl(205, 100%, 96%);
-  /* darkest grey - used for headings */
-  --clr-grey-1: hsl(209, 61%, 16%);
-  --clr-grey-2: hsl(211, 39%, 23%);
-  --clr-grey-3: hsl(209, 34%, 30%);
-  --clr-grey-4: hsl(209, 28%, 39%);
-  /* grey used for paragraphs */
-  --clr-grey-5: hsl(210, 22%, 49%);
-  --clr-grey-6: hsl(209, 23%, 60%);
-  --clr-grey-7: hsl(211, 27%, 70%);
-  --clr-grey-8: hsl(210, 31%, 80%);
-  --clr-grey-9: hsl(212, 33%, 89%);
-  --clr-grey-10: hsl(210, 36%, 96%);
-  --clr-white: #fff;
-  --clr-red-dark: hsl(360, 67%, 44%);
-  --clr-red-light: hsl(360, 71%, 66%);
-  --clr-green-dark: hsl(125, 67%, 44%);
-  --clr-green-light: hsl(125, 71%, 66%);
-  --clr-gold: #c59d5f;
-  --clr-black: #222;
-  --ff-primary: "Roboto", sans-serif;
-  --ff-secondary: "Open Sans", sans-serif;
-  --transition: all 0.3s linear;
-  --spacing: 0.25rem;
-  --radius: 0.5rem;
-  --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  --max-width: 1170px;
-  --fixed-width: 620px;
+.anveshan-page {
+  --anv-navy: #0b2b4f;
+  --anv-navy-dark: #09264a;
+
+  --anv-text: #24394f;
+  --anv-muted: #687789;
+
+  --anv-gold: #f6b23b;
+  --anv-gold-dark: #b85c00;
+
+  --anv-coral: #f16945;
+
+  --anv-blue: #315fd9;
+
+  --anv-cream: #fffaf2;
+  --anv-cream-soft: #fff7e8;
+
+  --anv-white: #ffffff;
+
+  --anv-border: #eadfce;
+  --anv-border-soft: #f0e9de;
+
+  --anv-shadow: 0 5px 16px rgba(11, 43, 79, 0.07);
+
+  --anv-shadow-hover: 0 15px 32px rgba(11, 43, 79, 0.14);
 }
-/*
-=============== 
-Global Styles
-===============
-*/
 
-*,
-::after,
-::before {
-  margin: 0;
-  padding: 0;
+/* =====================================================
+   PAGE RESET
+   Scoped so it DOES NOT affect shared navbar
+===================================================== */
+
+.anveshan-main,
+.anveshan-main *,
+.anveshan-main *::before,
+.anveshan-main *::after {
   box-sizing: border-box;
 }
-body {
-  font-family: var(--ff-secondary);
-  background: var(--clr-grey-10);
-  color: var(--clr-grey-1);
-  line-height: 1.5;
-  font-size: 0.875rem;
-    background-image: url("शत.म्.png");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size:cover;
-    background-size:100% 100%;
-	  background-size:contain;
-	    background-size:200px;
+
+body.anveshan-page {
+  margin: 0;
+
+  background: #fffaf2;
+
+  color: var(--anv-navy-dark);
+
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
 }
-ul {
-  list-style-type: none;
-}
-a {
-  text-decoration: none;
-}
-img:not(.logo) {
+
+/* =====================================================
+   MAIN WRAPPER
+===================================================== */
+
+.anveshan-main {
   width: 100%;
+
+  max-width: 1280px;
+
+  margin: 0 auto;
+
+  padding: 34px 42px 56px;
 }
-img {
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.anveshan-hero {
+  display: flex;
+
+  align-items: center;
+
+  gap: 26px;
+
+  margin-bottom: 34px;
+
+  padding: 28px 30px;
+
+  background: linear-gradient(135deg, #ffffff 0%, #fff7e8 100%);
+
+  border: 1px solid var(--anv-border);
+
+  border-radius: 22px;
+
+  box-shadow: var(--anv-shadow);
+}
+
+.anveshan-hero-icon {
+  width: 82px;
+  height: 82px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+
+  border: 1px solid var(--anv-border);
+
+  border-radius: 22px;
+
+  box-shadow: 0 5px 14px rgba(11, 43, 79, 0.06);
+
+  font-size: 42px;
+}
+
+.anveshan-hero-copy {
+  min-width: 0;
+}
+
+.anveshan-eyebrow {
   display: block;
-}
 
-h1,
-h2,
-h3,
-h4 {
-  letter-spacing: var(--spacing);
-  text-transform: capitalize;
-  line-height: 1.25;
-  margin-bottom: 0.75rem;
-  font-family: var(--ff-primary);
-}
-h1 {
-  font-size: 3rem;
-}
-h2 {
-  font-size: 2rem;
-}
-h3 {
-  font-size: 1.25rem;
-}
-h4 {
-  font-size: 0.875rem;
-}
-p {
-  margin-bottom: 1.25rem;
-  color: var(--clr-grey-5);
-}
-@media screen and (min-width: 800px) {
-  h1 {
-    font-size: 4rem;
-  }
-  h2 {
-    font-size: 2.5rem;
-  }
-  h3 {
-    font-size: 1.75rem;
-  }
-  h4 {
-    font-size: 1rem;
-  }
-  body {
-    font-size: 1rem;
-  }
-  h1,
-  h2,
-  h3,
-  h4 {
-    line-height: 1;
-  }
-}
-/*  global classes */
+  margin-bottom: 6px;
 
-.btn {
+  color: var(--anv-gold-dark);
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
   text-transform: uppercase;
-  background: transparent;
-  color: var(--clr-black);
-  padding: 0.375rem 0.75rem;
-  letter-spacing: var(--spacing);
-  display: inline-block;
-  transition: var(--transition);
-  font-size: 0.875rem;
-  border: 2px solid var(--clr-black);
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  border-radius: var(--radius);
-}
-.btn:hover {
-  color: var(--clr-white);
-  background: var(--clr-black);
-}
-/* section */
-.section {
-  padding: 5rem 0;
 }
 
-main {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
+.anveshan-hero h1 {
+  margin: 0 0 8px;
+
+  color: var(--anv-navy);
+
+  font-size: 44px;
+
+  font-weight: 800;
+
+  line-height: 1.15;
 }
-/*
-=============== 
-Menu
-===============
-*/
+
+.anveshan-hero p {
+  max-width: 620px;
+
+  margin: 0;
+
+  color: var(--anv-text);
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  line-height: 1.55;
+}
+
+/* =====================================================
+   MENU SECTION
+===================================================== */
 
 .menu {
-  padding: 5rem 0;
-}
-.title {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.underline {
-  width: 5rem;
-  height: 0.25rem;
-  background: var(--clr-gold);
-  margin-left: auto;
-  margin-right: auto;
-}
-.btn-container {
-  margin-bottom: 4rem;
-  display: flex;
-  justify-content: center;
-}
-.filter-btn {
-  background: transparent;
-  border-color: var(--clr-gold);
-  font-size: 1rem;
-  text-transform: capitalize;
-  margin: 0 0.5rem;
-  letter-spacing: 1px;
-  border-radius: var(--radius);
-  padding: 0.375rem 0.75rem;
-  color: var(--clr-gold);
-  cursor: pointer;
-  transition: var(--transition);
-}
-.filter-btn:hover {
-  background: var(--clr-gold);
-  color: var(--clr-white);
-}
-.section-center {
-  width: 90vw;
-  margin: 0 auto;
-  max-width: 1170px;
-  display: grid;
-  gap: 3rem 2rem;
-  justify-items: center;
-}
-.menu-item {
-  display: grid;
-  gap: 1rem 2rem;
-  max-width: 25rem;
-}
-.photo {
-  object-fit: cover;
-  height: 200px;
-  border: 0.25rem solid var(--clr-gold);
-  border-radius: var(--radius);
-}
-.item-info header {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 0.5px dotted var(--clr-grey-5);
-}
-.item-info h4 {
-  margin-bottom: 0.5rem;
-}
-.price {
-  color: var(--clr-gold);
-}
-.item-text {
-  margin-bottom: 0;
-  padding-top: 1rem;
+  width: 100%;
+
+  padding: 0;
 }
 
-@media screen and (min-width: 768px) {
-  .menu-item {
-    grid-template-columns: 225px 1fr;
-    gap: 0 1.25rem;
-    max-width: 40rem;
-  }
-  .photo {
-    height: 175px;
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.title {
+  max-width: 700px;
+
+  margin: 0 auto 24px;
+
+  text-align: center;
+}
+
+.section-eyebrow {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--anv-gold-dark);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.title h2 {
+  margin: 0 0 10px;
+
+  color: var(--anv-navy);
+
+  font-size: 34px;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+}
+
+.underline {
+  width: 62px;
+
+  height: 4px;
+
+  margin: 0 auto 12px;
+
+  background: var(--anv-gold);
+
+  border-radius: 999px;
+}
+
+.section-description {
+  margin: 0;
+
+  color: var(--anv-muted);
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+/* =====================================================
+   FILTER BUTTONS
+===================================================== */
+
+.btn-container {
+  min-height: 10px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-bottom: 28px;
+}
+
+.filter-btn {
+  min-height: 40px;
+
+  padding: 0 17px;
+
+  background: #ffffff;
+
+  color: var(--anv-navy);
+
+  border: 1px solid var(--anv-border);
+
+  border-radius: 12px;
+
+  box-shadow: 0 3px 9px rgba(11, 43, 79, 0.05);
+
+  font-family: "Open Sans", Arial, sans-serif;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  letter-spacing: normal;
+
+  text-transform: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+
+  background: var(--anv-navy);
+
+  color: #ffffff;
+
+  border-color: var(--anv-navy);
+
+  box-shadow: 0 7px 16px rgba(11, 43, 79, 0.13);
+}
+
+.filter-btn.active {
+  background: var(--anv-navy);
+
+  color: #ffffff;
+
+  border-color: var(--anv-navy);
+}
+
+/* =====================================================
+   CARD GRID
+===================================================== */
+
+.section-center {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+/* =====================================================
+   GAME CARD
+===================================================== */
+
+.menu-item {
+  min-width: 0;
+
+  overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  background: #ffffff;
+
+  border: 1px solid var(--anv-border);
+
+  border-radius: 18px;
+
+  box-shadow: var(--anv-shadow);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.menu-item:hover {
+  transform: translateY(-5px);
+
+  border-color: #e4d2b6;
+
+  box-shadow: var(--anv-shadow-hover);
+}
+
+/* =====================================================
+   CARD IMAGE
+===================================================== */
+
+.menu-item .photo {
+  width: 100%;
+
+  height: 205px;
+
+  display: block;
+
+  object-fit: cover;
+
+  background: #f5f2ec;
+
+  border: none;
+
+  border-radius: 0;
+}
+
+/* =====================================================
+   CARD INFORMATION
+===================================================== */
+
+.item-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 18px 18px 17px;
+}
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.item-info header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin: 0;
+
+  padding: 0 0 12px;
+
+  background: transparent;
+
+  border: none;
+
+  border-bottom: 1px solid var(--anv-border-soft);
+}
+
+.item-info h4 {
+  min-width: 0;
+
+  margin: 0;
+
+  color: var(--anv-navy);
+
+  font-family: "Open Sans", Arial, sans-serif;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+  line-height: 1.35;
+
+  letter-spacing: normal;
+
+  text-transform: none;
+}
+
+/* =====================================================
+   OLD "PRICE" FIELD
+   Styled like Zat.am badge
+===================================================== */
+
+.price {
+  flex-shrink: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 27px;
+
+  margin: 0 !important;
+
+  padding: 4px 9px;
+
+  background: var(--anv-cream-soft);
+
+  color: var(--anv-gold-dark) !important;
+
+  border: 1px solid #f0dab1;
+
+  border-radius: 999px;
+
+  font-size: 11px !important;
+
+  font-weight: 800 !important;
+}
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+.item-text {
+  margin: 13px 0 0;
+
+  padding: 0;
+
+  color: var(--anv-muted);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  line-height: 1.55;
+}
+
+/* =====================================================
+   LINKS INSIDE CARDS
+===================================================== */
+
+.menu-item a {
+  color: var(--anv-navy);
+
+  text-decoration: none;
+}
+
+.menu-item a:hover {
+  color: var(--anv-blue);
+}
+
+/* =====================================================
+   IF CARD ITSELF CONTAINS BUTTONS
+===================================================== */
+
+.menu-item .btn {
+  min-height: 38px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 16px;
+
+  padding: 0 15px;
+
+  background: var(--anv-navy);
+
+  color: #ffffff;
+
+  border: 1px solid var(--anv-navy);
+
+  border-radius: 11px;
+
+  box-shadow: none;
+
+  font-family: "Open Sans", Arial, sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: normal;
+
+  text-transform: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.menu-item .btn:hover {
+  transform: translateY(-2px);
+
+  background: var(--anv-navy);
+
+  color: #ffffff;
+
+  box-shadow: 0 6px 14px rgba(11, 43, 79, 0.16);
+}
+
+/* =====================================================
+   OPTIONAL BACKGROUND WATERMARK
+===================================================== */
+
+.anveshan-page::before {
+  content: "";
+
+  width: 190px;
+  height: 190px;
+
+  position: fixed;
+
+  right: 28px;
+  bottom: 20px;
+
+  background: url("शत.म्.png") center / contain no-repeat;
+
+  opacity: 0.035;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+.anveshan-main {
+  position: relative;
+
+  z-index: 1;
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+  .section-center {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-@media screen and (min-width: 1200px) {
-  .section-center {
-    width: 95vw;
-    grid-template-columns: 1fr 1fr;
+
+/* =====================================================
+   SMALL TABLET
+===================================================== */
+
+@media (max-width: 760px) {
+  .anveshan-main {
+    padding: 26px 18px 42px;
   }
-  .photo {
-    height: 150px;
+
+  .anveshan-hero {
+    align-items: flex-start;
+
+    padding: 22px;
+
+    gap: 18px;
+  }
+
+  .anveshan-hero-icon {
+    width: 66px;
+    height: 66px;
+
+    border-radius: 18px;
+
+    font-size: 34px;
+  }
+
+  .anveshan-hero h1 {
+    font-size: 36px;
+  }
+
+  .title h2 {
+    font-size: 30px;
+  }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 620px) {
+  .anveshan-main {
+    padding: 22px 14px 36px;
+  }
+
+  .anveshan-hero {
+    flex-direction: column;
+  }
+
+  .anveshan-hero-icon {
+    width: 60px;
+    height: 60px;
+
+    font-size: 31px;
+  }
+
+  .anveshan-hero h1 {
+    font-size: 32px;
+  }
+
+  .anveshan-hero p {
+    font-size: 14px;
+  }
+
+  .section-center {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .menu-item .photo {
+    height: 210px;
+  }
+
+  .btn-container {
+    gap: 8px;
+  }
+
+  .filter-btn {
+    min-height: 38px;
+
+    padding: 0 13px;
+
+    font-size: 12px;
+  }
+}
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+  .anveshan-hero {
+    padding: 19px;
+  }
+
+  .anveshan-hero h1 {
+    font-size: 29px;
+  }
+
+  .title h2 {
+    font-size: 27px;
+  }
+
+  .item-info {
+    padding: 16px;
+  }
+
+  .item-info h4 {
+    font-size: 16px;
   }
 }

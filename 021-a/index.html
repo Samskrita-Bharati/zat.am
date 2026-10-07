@@ -1,33 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>अन्वेषणम्</title>
-    <!-- font-awesome -->
+
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
     />
-    <!-- styles -->
+
+    <!-- Game Styles -->
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <section class="menu">
-      <!-- title -->
-      <div class="title">
-	  <h2>अन्वेषणम् <!--जयतु संस्कृतम् ।  -->  </h2>
-        <div class="underline"></div>
-      </div>
-      <!-- filter buttons -->
-      <div class="btn-container">
-      </div>
-      <!-- menu items -->
-      <div class="section-center">
-        
-      </div>
-    </section>
-    <!-- javascript -->
+
+  <body class="anveshan-page" data-page="games">
+    <!-- =========================================
+         SHARED ZAT.AM NAVBAR
+    ========================================== -->
+
+    <div id="navbar-mount"></div>
+
+    <!-- =========================================
+         GAME CONTENT
+    ========================================== -->
+
+    <main class="anveshan-main">
+      <!-- =====================================
+           HERO
+      ====================================== -->
+
+      <section class="anveshan-hero">
+        <div class="anveshan-hero-icon">🔎</div>
+
+        <div class="anveshan-hero-copy">
+          <span class="anveshan-eyebrow"> Sanskrit Learning Game </span>
+
+          <h1>अन्वेषणम्</h1>
+
+          <p>
+            Explore the activities below and continue your Sanskrit learning
+            journey.
+          </p>
+        </div>
+      </section>
+
+      <!-- =====================================
+           GAME MENU
+      ====================================== -->
+
+      <section class="menu">
+        <!-- Title -->
+
+        <div class="title">
+          <span class="section-eyebrow"> Choose an Activity </span>
+
+          <h2>अन्वेषणम्</h2>
+
+          <div class="underline"></div>
+
+          <p class="section-description">
+            Select a category or activity to begin.
+          </p>
+        </div>
+
+        <!-- Filter Buttons -->
+
+        <div class="btn-container"></div>
+
+        <!-- Game Cards -->
+
+        <div class="section-center"></div>
+      </section>
+    </main>
+
+    <!-- =========================================
+         GAME JAVASCRIPT
+    ========================================== -->
+
     <script src="app.js"></script>
+
+    <!-- =========================================
+         SHARED ZAT.AM NAVBAR
+    ========================================== -->
+
+    <script type="module" src="../js/navbar-loader.js"></script>
   </body>
 </html>

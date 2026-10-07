@@ -1,0 +1,436 @@
+body {
+  background: #f0f0f0;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 2em;
+
+  margin: 0;
+
+  padding: 0;
+}
+
+/*
+=================================================
+GAME GRID
+=================================================
+*/
+
+#svgdiv {
+  width: 90%;
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 30px;
+
+  display: grid;
+
+  grid-template-columns: repeat(5, 1fr);
+
+  gap: 20px;
+}
+
+/*
+=================================================
+GAME IMAGES
+=================================================
+*/
+
+#svgdiv img {
+  width: 100%;
+
+  max-width: 250px;
+
+  height: auto;
+
+  justify-self: center;
+
+  padding: 8px;
+
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  transition:
+    filter 0.2s ease,
+    opacity 0.2s ease;
+}
+
+#svgdiv img:hover {
+  filter: brightness(90%);
+
+  opacity: 0.6;
+}
+
+/*
+=================================================
+TARGET WORD
+=================================================
+*/
+
+#tofind button {
+  min-width: 1em;
+
+  min-height: 1em;
+
+  font-size: 1em;
+}
+
+#tofind button:hover {
+  background-color: #e2e2e2;
+
+  cursor: pointer;
+}
+
+/*
+=================================================
+SVG HOVER EFFECTS
+=================================================
+*/
+
+svg:hover {
+  x-width: 30%;
+}
+
+.st0:hover {
+  fill: red;
+}
+
+.st1:hover {
+  fill: yellow;
+}
+
+.st2:hover {
+  fill: blue;
+}
+
+*[class^="st"]:hover {
+  stroke: green;
+}
+
+/*
+=================================================
+IMAGE ROTATIONS
+=================================================
+*/
+
+img[id$="1"] {
+  transform: rotate(10deg);
+}
+
+img[id$="2"] {
+  transform: rotate(20deg);
+}
+
+img[id$="3"] {
+  transform: rotate(30deg);
+}
+
+img[id$="4"] {
+  transform: rotate(40deg);
+}
+
+img[id$="5"] {
+  transform: rotate(50deg);
+}
+
+img[id$="6"] {
+  transform: rotate(60deg);
+}
+
+img[id$="7"] {
+  transform: rotate(70deg);
+}
+
+img[id$="8"] {
+  transform: rotate(80deg);
+}
+
+img[id$="9"] {
+  transform: rotate(90deg);
+}
+
+/*
+=================================================
+LARGE SCREENS
+=================================================
+*/
+
+@media (min-width: 1600px) {
+  #svgdiv {
+    max-width: 1600px;
+
+    gap: 25px;
+  }
+
+  #svgdiv img {
+    max-width: 280px;
+  }
+}
+
+/*
+=================================================
+TABLETS
+4 IMAGES PER ROW
+=================================================
+*/
+
+@media (max-width: 1024px) {
+  body {
+    font-size: 1.8em;
+  }
+
+  #svgdiv {
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    padding: 25px;
+  }
+
+  #svgdiv img {
+    max-width: none;
+  }
+}
+
+/*
+=================================================
+SMALL TABLETS
+3 IMAGES PER ROW
+=================================================
+*/
+
+@media (max-width: 768px) {
+  body {
+    font-size: 1.6em;
+  }
+
+  #svgdiv {
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+
+    padding: 20px;
+  }
+
+  #svgdiv img {
+    padding: 6px;
+  }
+}
+
+/*
+=================================================
+MOBILE
+3 IMAGES PER ROW
+=================================================
+*/
+
+@media (max-width: 600px) {
+  body {
+    font-size: 1.5em;
+  }
+
+  #svgdiv {
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    padding: 15px;
+  }
+
+  #svgdiv img {
+    padding: 5px;
+  }
+}
+
+/*
+=================================================
+SMALL MOBILE
+2 IMAGES PER ROW
+=================================================
+*/
+
+@media (max-width: 400px) {
+  body {
+    font-size: 1.4em;
+  }
+
+  #svgdiv {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+
+    padding: 12px;
+  }
+
+  #svgdiv img {
+    padding: 4px;
+  }
+
+  #svgdiv img:hover {
+    filter: brightness(90%);
+
+    opacity: 0.6;
+  }
+}
+
+/*
+=================================================
+CELEBRATION OVERLAY
+=================================================
+*/
+
+#bp26CelebrateOverlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 10000;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/*
+=================================================
+CELEBRATION BOX
+=================================================
+*/
+
+.bp26CelebrateBox {
+  position: relative;
+
+  width: min(460px, 92vw);
+
+  padding: 18px;
+
+  background: #ffffff;
+
+  border-radius: 18px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+
+  text-align: center;
+
+  font-family: system-ui, Arial, sans-serif;
+}
+
+/*
+=================================================
+CELEBRATION SPARKLES
+=================================================
+*/
+
+.bp26Sparkles {
+  margin: 8px 0 6px;
+
+  font-size: 54px;
+
+  line-height: 1.1;
+
+  animation: bp26Pop 600ms ease-out both;
+}
+
+@keyframes bp26Pop {
+  0% {
+    transform: scale(0.6);
+
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+
+    opacity: 1;
+  }
+}
+
+/*
+=================================================
+CELEBRATION BUTTON
+=================================================
+*/
+
+.bp26Btn {
+  margin-top: 12px;
+
+  padding: 10px 14px;
+
+  background: #f9fafb;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+}
+
+/*
+=================================================
+CONFETTI
+=================================================
+*/
+
+.bp26Confetti {
+  position: fixed;
+
+  top: -12px;
+
+  z-index: 10001;
+
+  width: 10px;
+
+  height: 10px;
+
+  border-radius: 3px;
+
+  opacity: 0.95;
+
+  pointer-events: none;
+
+  animation: bp26Fall 950ms linear forwards;
+}
+
+@keyframes bp26Fall {
+  to {
+    transform: translateY(110vh) rotate(540deg);
+
+    opacity: 0.9;
+  }
+}
+
+/*
+=================================================
+PRINT
+=================================================
+*/
+
+@media print {
+  .k {
+    border-left: 4px ridge green;
+  }
+
+  .p {
+    border-left: 3px groove blue;
+  }
+
+  .s {
+    border-left: 3px groove red;
+  }
+
+  .n {
+    border-left: 3px groove black;
+  }
+
+  button {
+    display: none !important;
+  }
+}
