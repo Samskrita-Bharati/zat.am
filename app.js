@@ -1,4 +1,4 @@
-const menu = [
+export const menu = [
   {
     id: 1,
     title: "श्रीमद् भगवद्गीता",
@@ -32,6 +32,7 @@ const menu = [
     title: "द्वन्द्वयुद्धम् ",
     category: "RG",
     dir: "005-dy",
+    analytics: false,
     desc: `क्रीडतु । <br> Shall we call Tic-Tac-Toe in Sanskrit as <pre>dvandvayuddham ? :)</pre>`,
   },
   {
@@ -434,11 +435,14 @@ let featuredPaused = false;
 // =====================================================
 
 window.addEventListener("DOMContentLoaded", function () {
-  // Existing menu logic
+  // Only run homepage UI code when the homepage elements exist.
+  if (!sectionCenter || !btnContainer) {
+    return;
+  }
+
   diplayMenuItems(menu);
   displayMenuButtons();
 
-  // New Zat.am2 interface
   initFeaturedSlider();
   initHeroButtons();
   initHowItWorksModal();
