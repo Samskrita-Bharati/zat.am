@@ -32,7 +32,7 @@ export const menu = [
     title: "द्वन्द्वयुद्धम् ",
     category: "RG",
     dir: "005-dy",
-    analytics: false,
+    // analytics: false,
     desc: `क्रीडतु । <br> Shall we call Tic-Tac-Toe in Sanskrit as <pre>dvandvayuddham ? :)</pre>`,
   },
   {
