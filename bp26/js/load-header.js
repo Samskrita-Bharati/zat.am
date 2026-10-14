@@ -44,6 +44,8 @@ All BP26 pages:
 
   const siteRoot = new URL("../../", loaderUrl);
 
+  const gaTrackingUrl = new URL("js/google-analytics.js", siteRoot);
+
   const navbarHtmlUrl = new URL("shared/navbar.html", siteRoot);
 
   const navbarAuthUrl = new URL("js/navbar-auth.js", siteRoot);
@@ -264,6 +266,22 @@ All BP26 pages:
     }
   }
 
+  // -------------------------------------------------
+  // GOOGLE ANALYTICS
+  // -------------------------------------------------
+
+  async function initializeGoogleAnalytics() {
+    try {
+      const { initGoogleAnalytics } = await import(gaTrackingUrl.href);
+
+      initGoogleAnalytics({
+        context: "bp26",
+      });
+    } catch (error) {
+      console.error("[BP26] Google Analytics failed:", error);
+    }
+  }
+
   /*
   -------------------------------------------------
   LOAD MAIN SHARED NAVBAR
@@ -357,5 +375,6 @@ All BP26 pages:
     }
   }
 
+  initializeGoogleAnalytics();
   loadBp26Navbar();
 })();

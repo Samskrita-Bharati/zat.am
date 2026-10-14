@@ -2,6 +2,8 @@
 // SHARED NAVBAR LOADER
 // =====================================================
 
+import { initGoogleAnalytics } from "./google-analytics.js";
+
 const projectRoot = new URL("../", import.meta.url);
 
 const navbarHtmlUrl = new URL("../shared/navbar.html", import.meta.url);
@@ -257,5 +259,9 @@ export async function loadNavbar() {
     console.error("Failed to load Zat.am navbar:", error);
   }
 }
+
+initGoogleAnalytics({
+  context: "main",
+});
 
 loadNavbar();
