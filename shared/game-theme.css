@@ -1,0 +1,614 @@
+/* =========================================================
+   ZAT.AM SHARED GAME THEME
+   =========================================================
+
+   Purpose:
+   - Give Zat.am games a consistent visual shell.
+   - Keep each game's actual board/play area free to keep its own style.
+   - Avoid broad selectors that could break the shared navbar.
+
+   Recommended setup on a normal game page:
+
+   <body data-page="games" class="zatam-themed-game">
+     <div id="navbar-mount"></div>
+
+     <main class="zatam-game-shell">
+       ...
+     </main>
+
+     <script type="module" src="../js/navbar-loader.js"></script>
+   </body>
+
+   Then load this stylesheet:
+
+   <link rel="stylesheet" href="../shared/game-theme.css">
+
+   IMPORTANT:
+   Do not replace a game's core gameplay CSS with this file.
+   Use these classes for the surrounding game UI:
+   title, instructions, stats, buttons, result card/modal, etc.
+   ========================================================= */
+
+/* =========================================================
+   THEME TOKENS
+   ========================================================= */
+
+:root {
+  --zatam-navy: #0b2b4f;
+  --zatam-heading: #09264a;
+  --zatam-gold: #f6b23b;
+  --zatam-coral: #f16945;
+  --zatam-blue: #2f6dff;
+
+  --zatam-white: #ffffff;
+  --zatam-page: #fffaf2;
+  --zatam-soft: #fff7e8;
+  --zatam-border: #eadfce;
+
+  --zatam-text: #18284a;
+  --zatam-muted: #687789;
+
+  --zatam-success: #2f855a;
+  --zatam-success-soft: #eef9f2;
+
+  --zatam-danger: #c2413b;
+  --zatam-danger-soft: #fff1ef;
+
+  --zatam-radius-sm: 10px;
+  --zatam-radius: 14px;
+  --zatam-radius-lg: 20px;
+
+  --zatam-shadow-sm: 0 4px 12px rgba(11, 43, 79, 0.08);
+  --zatam-shadow: 0 8px 22px rgba(11, 43, 79, 0.12);
+  --zatam-shadow-lg: 0 18px 40px rgba(11, 43, 79, 0.16);
+
+  --zatam-font: Arial, Helvetica, sans-serif;
+
+  --zatam-content-width: 1100px;
+}
+
+/* =========================================================
+   PAGE WRAPPER
+   ========================================================= */
+
+.zatam-themed-game {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--zatam-page);
+  color: var(--zatam-text);
+  font-family: var(--zatam-font);
+}
+
+.zatam-game-shell,
+.zatam-game-shell *,
+.zatam-game-shell *::before,
+.zatam-game-shell *::after {
+  box-sizing: border-box;
+}
+
+.zatam-game-shell {
+  width: min(calc(100% - 32px), var(--zatam-content-width));
+
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+
+/* =========================================================
+   GAME HEADER
+   ========================================================= */
+
+.zatam-game-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.zatam-game-eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+
+  color: var(--zatam-coral);
+
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.zatam-game-title {
+  margin: 0;
+
+  color: var(--zatam-heading);
+
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.zatam-game-subtitle {
+  max-width: 700px;
+
+  margin: 10px auto 0;
+
+  color: var(--zatam-muted);
+
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   CARDS / SECTIONS
+   ========================================================= */
+
+.zatam-game-card {
+  padding: 20px;
+
+  background: var(--zatam-white);
+
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+
+  box-shadow: var(--zatam-shadow-sm);
+}
+
+.zatam-game-card + .zatam-game-card {
+  margin-top: 18px;
+}
+
+.zatam-game-section-title {
+  margin: 0 0 10px;
+
+  color: var(--zatam-heading);
+
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   INSTRUCTIONS
+   ========================================================= */
+
+.zatam-game-instructions {
+  margin-bottom: 20px;
+
+  padding: 16px 18px;
+
+  background: var(--zatam-soft);
+
+  border: 1px solid var(--zatam-border);
+  border-left: 4px solid var(--zatam-gold);
+  border-radius: var(--zatam-radius);
+}
+
+.zatam-game-instructions p {
+  margin: 0;
+
+  color: var(--zatam-text);
+
+  line-height: 1.6;
+}
+
+.zatam-game-instructions p + p {
+  margin-top: 8px;
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.zatam-game-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+.zatam-game-stat {
+  min-width: 0;
+
+  padding: 14px 16px;
+
+  background: var(--zatam-white);
+
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+
+  box-shadow: var(--zatam-shadow-sm);
+
+  text-align: center;
+}
+
+.zatam-game-stat-label {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--zatam-muted);
+
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.zatam-game-stat-value {
+  display: block;
+
+  color: var(--zatam-heading);
+
+  font-size: 1.35rem;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.zatam-game-score .zatam-game-stat-value {
+  color: var(--zatam-blue);
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.zatam-game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.zatam-game-btn {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 10px 18px;
+
+  border: 1.5px solid transparent;
+  border-radius: var(--zatam-radius);
+
+  font-family: var(--zatam-font);
+  font-size: 0.95rem;
+  line-height: 1;
+  font-weight: 800;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.zatam-game-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--zatam-shadow);
+}
+
+.zatam-game-btn:active {
+  transform: translateY(0);
+}
+
+.zatam-game-btn:focus-visible {
+  outline: 3px solid rgba(47, 109, 255, 0.28);
+  outline-offset: 3px;
+}
+
+.zatam-game-btn:disabled,
+.zatam-game-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.zatam-game-btn-primary {
+  background: var(--zatam-navy);
+  color: var(--zatam-white);
+  border-color: var(--zatam-navy);
+}
+
+.zatam-game-btn-primary:hover {
+  background: var(--zatam-heading);
+}
+
+.zatam-game-btn-secondary {
+  background: var(--zatam-white);
+  color: var(--zatam-navy);
+  border-color: var(--zatam-navy);
+}
+
+.zatam-game-btn-secondary:hover {
+  background: var(--zatam-soft);
+}
+
+.zatam-game-btn-accent {
+  background: var(--zatam-gold);
+  color: var(--zatam-heading);
+  border-color: var(--zatam-gold);
+}
+
+.zatam-game-btn-danger {
+  background: var(--zatam-coral);
+  color: var(--zatam-white);
+  border-color: var(--zatam-coral);
+}
+
+/* =========================================================
+   STATUS / FEEDBACK
+   ========================================================= */
+
+.zatam-game-status {
+  margin-top: 16px;
+
+  padding: 12px 14px;
+
+  border-radius: var(--zatam-radius);
+
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.zatam-game-status-info {
+  background: #eef4ff;
+  color: var(--zatam-navy);
+  border: 1px solid #cddcff;
+}
+
+.zatam-game-status-success {
+  background: var(--zatam-success-soft);
+  color: var(--zatam-success);
+  border: 1px solid #c9ead5;
+}
+
+.zatam-game-status-error {
+  background: var(--zatam-danger-soft);
+  color: var(--zatam-danger);
+  border: 1px solid #f5cbc7;
+}
+
+/* =========================================================
+   GAME PLAY AREA
+   =========================================================
+
+   This wrapper gives the game board breathing room without
+   changing the board's internal visual design.
+   ========================================================= */
+
+.zatam-game-play-area {
+  width: 100%;
+
+  margin-top: 20px;
+
+  padding: 20px;
+
+  background: var(--zatam-white);
+
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+
+  box-shadow: var(--zatam-shadow);
+}
+
+.zatam-game-play-area--plain {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* =========================================================
+   RESULT / COMPLETION PANEL
+   ========================================================= */
+
+.zatam-game-result {
+  width: min(100%, 560px);
+
+  margin: 24px auto 0;
+
+  padding: 24px;
+
+  background: var(--zatam-white);
+
+  border: 1px solid var(--zatam-border);
+  border-top: 5px solid var(--zatam-gold);
+  border-radius: var(--zatam-radius-lg);
+
+  box-shadow: var(--zatam-shadow-lg);
+
+  text-align: center;
+}
+
+.zatam-game-result-title {
+  margin: 0 0 8px;
+
+  color: var(--zatam-heading);
+
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.zatam-game-result-score {
+  margin: 10px 0;
+
+  color: var(--zatam-blue);
+
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 900;
+}
+
+.zatam-game-result-message {
+  margin: 0;
+
+  color: var(--zatam-muted);
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.zatam-game-modal-backdrop {
+  position: fixed;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  padding: 20px;
+
+  background: rgba(9, 38, 74, 0.55);
+
+  z-index: 5500;
+}
+
+.zatam-game-modal {
+  width: min(100%, 560px);
+  max-height: min(85vh, 720px);
+  overflow: auto;
+
+  padding: 24px;
+
+  background: var(--zatam-white);
+
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+
+  box-shadow: var(--zatam-shadow-lg);
+}
+
+.zatam-game-modal-title {
+  margin: 0 0 10px;
+
+  color: var(--zatam-heading);
+
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   SMALL BADGES
+   ========================================================= */
+
+.zatam-game-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.zatam-game-badge {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 28px;
+
+  padding: 5px 10px;
+
+  background: var(--zatam-soft);
+  color: var(--zatam-navy);
+
+  border: 1px solid var(--zatam-border);
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   ACCESSIBILITY / UTILITY
+   ========================================================= */
+
+.zatam-visually-hidden {
+  width: 1px;
+  height: 1px;
+
+  position: absolute;
+
+  overflow: hidden;
+
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+}
+
+.zatam-hidden {
+  display: none !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .zatam-game-shell {
+    width: min(calc(100% - 20px), var(--zatam-content-width));
+
+    padding: 22px 0 34px;
+  }
+
+  .zatam-game-card,
+  .zatam-game-play-area,
+  .zatam-game-result,
+  .zatam-game-modal {
+    padding: 16px;
+  }
+
+  .zatam-game-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zatam-game-actions {
+    align-items: stretch;
+  }
+
+  .zatam-game-actions .zatam-game-btn {
+    flex: 1 1 160px;
+  }
+}
+
+@media (max-width: 430px) {
+  .zatam-game-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .zatam-game-actions {
+    flex-direction: column;
+  }
+
+  .zatam-game-actions .zatam-game-btn {
+    width: 100%;
+    flex-basis: auto;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .zatam-game-btn {
+    transition: none;
+  }
+
+  .zatam-game-btn:hover {
+    transform: none;
+  }
+}
