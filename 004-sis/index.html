@@ -3,6 +3,7 @@
 	<head>
 
 		<title>सुडोकू!</title>
+		<link href="../shared/game-theme.css" rel="stylesheet" type="text/css">
 		<link href="style.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="sudoku.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><script language="javascript" type="text/javascript">
@@ -33,6 +34,9 @@ var numtmod="num";
 				$("#npx").click(function() { numberPad(0); });
 				$(".mistakeScreen").click(function() {
 					$(".mistakeScreen").fadeOut(100);
+				});
+				$(".winScreen").click(function(e) {
+					if(e.target === this) newGame();
 				});
 				$("#newGame").click(function() { newGame(); });
 				$("#tognum").click(function(){ numtog();});
@@ -121,7 +125,7 @@ var numtmod="num";
 							tile.onclick = tOnClick;
 						}
 						else {
-							tile.style.backgroundColor = "#ecf4f3";
+							tile.style.backgroundColor = "var(--zatam-success-soft)";
 							tile.className = "cell";
 							tile.innerHTML = sa[puzzle.getTileNumber(i, j)];
 						}
@@ -212,22 +216,35 @@ var numtmod="num";
 		</script>
 	</head>
 
-	<body data-page="games">
+	<body data-page="games" class="zatam-themed-game zatam-game-page">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-		<div class="mistakeScreen">
-			<center class="mistakeText">पुनरपि एकवारं प्रयत्नं कुर्म:</center>
+		<main class="zatam-game-shell">
+		<div class="mistakeScreen zatam-game-modal-backdrop">
+			<section class="zatam-game-modal" role="dialog" aria-modal="true" aria-labelledby="mistake-title">
+				<h2 id="mistake-title" class="zatam-game-modal-title">Try again</h2>
+				<p class="mistakeText">पुनरपि एकवारं प्रयत्नं कुर्म:</p>
+			</section>
 		</div>
-		<div class="winScreen">
-			<center class="winText">अभिनन्दनानि!!!</center>
+		<div class="winScreen zatam-game-modal-backdrop">
+			<section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="win-title">
+				<h2 id="win-title" class="zatam-game-result-title">Congratulations!</h2>
+				<p class="winText zatam-game-result-message">अभिनन्दनानि!!!</p>
+				<p class="zatam-game-result-message">Click outside this panel to start a new game.</p>
+			</section>
 		</div>
-		<section id="logosection">
-			<!-- <img class="logo" src="img/sudokuberlogo.png" /> -->
-			<p style="font-size: 60px; margin: -10px -10px; padding: 0px;">सुडोकू</p>
+		<section id="logosection" class="zatam-game-header">
+			<img class="logo" src="img/sudokuberlogo.png" />
+			<span class="zatam-game-eyebrow">Puzzle Game</span>
+			<!-- <h1 class="zatam-game-title">सुडोकू</h1> -->
+			<!-- <p class="zatam-game-subtitle">Fill every row, column, and 3×3 box with the correct symbols.</p> -->
 		</section>
-		<section id="sudokuPuzzle">
+		<section id="sudokuPuzzle" class="zatam-game-play-area">
+			<div class="zatam-game-instructions">
+				<p>Fill every row, column, and 3×3 box with the correct symbols. <br>Select an empty square, then choose a symbol. Use the buttons to start a new puzzle, reveal the solution, or switch between letters and numbers.</p>
+			</div>
 			<div id='numPad'>
 				<center>
 					<div>
@@ -248,10 +265,10 @@ var numtmod="num";
 				</center>
 			</div>
 			<center>
-				<form id="formwrapper">
-					<span id="newGame" class="formbutton">नूतनं सुडोकू (sudoku)</span>
-					<span id="solve" class="formbutton">उत्तरम्</span>
-					<span id="tognum" class="formbutton">व्यञ्जनम्/संख्या अनुवर्तनम् (Toggle letters/numbers)</span>
+				<form id="formwrapper" class="zatam-game-actions">
+					<span id="tognum" class="zatam-game-btn zatam-game-btn-primary">व्यञ्जनम्/संख्या अनुवर्तनम् (Toggle letters/numbers)</span>
+					<span id="newGame" class="zatam-game-btn zatam-game-btn-primary">नूतनं सुडोकू (sudoku)</span>
+					<span id="solve" class="zatam-game-btn zatam-game-btn-accent">उत्तरम्</span>
 				</form>
 			</center>
 			<table class="inner container" align="center" id="grid">
@@ -306,6 +323,10 @@ var numtmod="num";
 				</tr>
 			</table>
 		</section>
+		<footer>
+			Sudoku Source: https://github.com/artbtjr/Sudoku
+		</footer>
+		</main>
 	
 
     <!-- Shared Zat.am Navbar -->
@@ -314,8 +335,4 @@ var numtmod="num";
       src="../js/navbar-loader.js"
     ></script>
 </body>
-
-	<footer>
-		Sudoku Source: https://github.com/artbtjr/Sudoku
-	</footer>
 </html>
