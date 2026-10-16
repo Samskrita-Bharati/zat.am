@@ -11,14 +11,11 @@
 			let nums=["","१","२","३","४","५","६","७","८","९"];
 			var puzzle;
 			var selectedTile;
-			var r, c;
-var numtmod="num";
+			var numtmod = "num";
 			$(document).ready(function() {
 				init();
 				$("#grid").fadeIn(500);
 				$(".emptyCell").click(function(e) {
-					r = selectedTile.getAttribute('id').charAt(1);
-					c = selectedTile.getAttribute('id').charAt(3);
 				    $("#numPad").fadeIn(100);
 				    $("#numPad").offset({left: e.pageX - 78,top: e.pageY - 40});
 				});
@@ -49,12 +46,6 @@ var numtmod="num";
 
 			function numtog()
 			{
-			//debugger;
-			
-			
-			//if ($("td")[numtc].innerText == "क")
-			//$("td")[numtc].innerText = "1";
-			
 				if (numtmod=="num")
 				{
 				for (numtc=0;numtc<81;numtc++)
@@ -157,10 +148,7 @@ var numtmod="num";
 						for(var j = 0; j < 9; j++) {
 							var t = document.getElementById("t" + i + "x" + j);
 							if(t.classList.contains("emptyCell")) {
-								console.log("outside target")
-								console.log(fGrid);
 								if(puzzle.isValid(fGrid, i, j, sa.indexOf(t.innerHTML))) {
-									//console.log("inside target")
 									continue;
 								}
 								else {
@@ -231,46 +219,41 @@ var numtmod="num";
 		<div class="winScreen zatam-game-modal-backdrop">
 			<section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="win-title">
 				<h2 id="win-title" class="zatam-game-result-title">Congratulations!</h2>
-				<p class="winText zatam-game-result-message">अभिनन्दनानि!!!</p>
+				<p class="zatam-game-result-message">अभिनन्दनानि!!!</p>
 				<p class="zatam-game-result-message">Click outside this panel to start a new game.</p>
 			</section>
 		</div>
 		<section id="logosection" class="zatam-game-header">
 			<img class="logo" src="img/sudokuberlogo.png" />
 			<span class="zatam-game-eyebrow">Puzzle Game</span>
-			<!-- <h1 class="zatam-game-title">सुडोकू</h1> -->
-			<!-- <p class="zatam-game-subtitle">Fill every row, column, and 3×3 box with the correct symbols.</p> -->
 		</section>
 		<section id="sudokuPuzzle" class="zatam-game-play-area">
 			<div class="zatam-game-instructions">
-				<p>Fill every row, column, and 3×3 box with the correct symbols. <br>Select an empty square, then choose a symbol. Use the buttons to start a new puzzle, reveal the solution, or switch between letters and numbers.</p>
+				<p>Fill every row, column, and 3×3 box with the correct symbols. <br>Select an empty square, then choose a symbol. <br>Use the buttons to switch between letters and numbers, start a new puzzle, or reveal the solution.</p>
 			</div>
 			<div id='numPad'>
 				<center>
 					<div>
-						<!-- ["क्","ख्","ग","घ्","ङ्","च्","छ्","ज्","झ्","ञ्"] -->
-						<span id="np1" class='padNumbers' value='1'>क</span>
-						<span id="np2" class='padNumbers' value='2'>ख</span>
-						<span id="np3" class='padNumbers' value='3'>ग</span>
-						<span id="np4" class='padNumbers' value='4'>घ</span>
-						<span id="np5" class='padNumbers' value='5'>ङ</span>
+						<span id="np1" class='padNumbers'>क</span>
+						<span id="np2" class='padNumbers'>ख</span>
+						<span id="np3" class='padNumbers'>ग</span>
+						<span id="np4" class='padNumbers'>घ</span>
+						<span id="np5" class='padNumbers'>ङ</span>
 					</div>
 					<div>
-						<span id="np6" class='padNumbers' value='6'>च</span>
-						<span id="np7" class='padNumbers' value='7'>छ</span>
-						<span id="np8" class='padNumbers' value='8'>ज</span>
-						<span id="np9" class='padNumbers' value='9'>झ</span>
-						<span id="npx" class='padNumbers' value='x'>x</span>
+						<span id="np6" class='padNumbers'>च</span>
+						<span id="np7" class='padNumbers'>छ</span>
+						<span id="np8" class='padNumbers'>ज</span>
+						<span id="np9" class='padNumbers'>झ</span>
+						<span id="npx" class='padNumbers'>x</span>
 					</div>
 				</center>
 			</div>
-			<center>
-				<form id="formwrapper" class="zatam-game-actions">
-					<span id="tognum" class="zatam-game-btn zatam-game-btn-primary">व्यञ्जनम्/संख्या अनुवर्तनम् (Toggle letters/numbers)</span>
-					<span id="newGame" class="zatam-game-btn zatam-game-btn-primary">नूतनं सुडोकू (sudoku)</span>
-					<span id="solve" class="zatam-game-btn zatam-game-btn-accent">उत्तरम्</span>
-				</form>
-			</center>
+			<div class="zatam-game-actions">
+				<span id="tognum" class="zatam-game-btn zatam-game-btn-primary">व्यञ्जनम्/संख्या अनुवर्तनम् (Toggle letters/numbers)</span>
+				<span id="newGame" class="zatam-game-btn zatam-game-btn-primary">नूतनं सुडोकू (sudoku)</span>
+				<span id="solve" class="zatam-game-btn zatam-game-btn-accent">उत्तरम्</span>
+			</div>
 			<table class="inner container" align="center" id="grid">
 				<tr>
 					<td id='t0x0'></td><td id='t0x1'></td><td id='t0x2'></td>

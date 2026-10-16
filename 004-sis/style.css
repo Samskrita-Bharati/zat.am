@@ -99,8 +99,7 @@ td.emptyCell {
 	margin: 10vh auto;
 }
 
-.mistakeText,
-.winText {
+.mistakeText {
 	margin: 0;
 	color: var(--zatam-text);
 	line-height: 1.6;

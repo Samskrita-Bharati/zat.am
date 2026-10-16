@@ -35,9 +35,7 @@ https://github.com/artbtjr/Sudoku
 - Reloading the page discards the current progress and generates a new puzzle.
   Saving and restoring progress is not implemented.
 - Game code and images are stored as static project files.
-- index.html loads jQuery 1.12.4 from Google Hosted Libraries. The bundled
-  jquery-1.11.2.min.js file is retained from the original project and is not
-  currently referenced by index.html.
+- index.html loads jQuery 1.12.4 from Google Hosted Libraries.
 - No application-level caching or offline storage is implemented.
 
 4. Project Structure
@@ -54,10 +52,6 @@ style.css
 
 cover.jpg, img/sudokuberlogo.png
     Project cover and game logo assets.
-
-jquery-1.11.2.min.js
-    jQuery file retained from the original project; not currently used by
-    index.html.
 
 ../shared/game-theme.css
     Shared Zat.am game theme for the page shell, title, buttons, play area,
