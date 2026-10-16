@@ -1,164 +1,409 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Memory क्रीडा</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-   <link href="mmk.css" rel="stylesheet" type="text/css" />
-   <script src="../cmpk-jul.json"></script>
-</head>
-<body data-page="games">
+  <head>
+    <meta charset="UTF-8" />
 
-    <!-- Shared Zat.am Navbar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>Memory क्रीडा</title>
+
+    <!-- Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Sanscript -->
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+
+    <!-- Shared Zat.am Game Theme -->
+    <link rel="stylesheet" href="../shared/game-theme.css" />
+
+    <!-- Memory Game Styles -->
+    <link rel="stylesheet" href="mmk.css" />
+
+    <!-- Existing Memory Game Data -->
+    <script src="../cmpk-jul.json"></script>
+  </head>
+
+  <body data-page="games" class="zatam-themed-game zatam-memory-game">
+    <!-- =====================================
+         SHARED ZAT.AM NAVBAR
+    ====================================== -->
+
     <div id="navbar-mount"></div>
 
+    <!-- =====================================
+         EXISTING LEARNING / SLIDESHOW MODAL
+    ====================================== -->
 
-<div class="container"> 
+    <div class="container">
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
 
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">पठनम् paThanam</h4>
+              <h4 class="modal-title">पठनम् paThanam</h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <div
+                id="carousel-example-generic"
+                class="carousel slide"
+                data-ride="carousel"
+              >
+                <!-- Slides -->
+                <div class="carousel-inner" role="listbox">
+                  <div class="item active">
+                    <img id="i1" width="500" alt="" />
+                    <h3 id="c1"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i2" width="500" alt="" />
+                    <h3 id="c2"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i3" width="500" alt="" />
+                    <h3 id="c3"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i4" width="500" alt="" />
+                    <h3 id="c4"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i5" width="500" alt="" />
+                    <h3 id="c5"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i6" width="500" alt="" />
+                    <h3 id="c6"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i7" width="500" alt="" />
+                    <h3 id="c7"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i8" width="500" alt="" />
+                    <h3 id="c8"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i9" width="500" alt="" />
+                    <h3 id="c9"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i10" width="500" alt="" />
+                    <h3 id="c10"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i11" width="500" alt="" />
+                    <h3 id="c11"></h3>
+                  </div>
+
+                  <div class="item">
+                    <img id="i12" width="500" alt="" />
+                    <h3 id="c12"></h3>
+                  </div>
+                </div>
+
+                <!-- Previous -->
+                <a
+                  class="left carousel-control"
+                  href="#carousel-example-generic"
+                  role="button"
+                  data-slide="prev"
+                >
+                  <span
+                    class="glyphicon glyphicon-chevron-left"
+                    aria-hidden="true"
+                  ></span>
+
+                  <span class="sr-only"> Previous </span>
+                </a>
+
+                <!-- Next -->
+                <a
+                  class="right carousel-control"
+                  href="#carousel-example-generic"
+                  role="button"
+                  data-slide="next"
+                >
+                  <span
+                    class="glyphicon glyphicon-chevron-right"
+                    aria-hidden="true"
+                  ></span>
+
+                  <span class="sr-only"> Next </span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-
-
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner" role="listbox">
-    <div class="item active">
-      <img id="i1" width=500px alt="...">
-      <h3 id="c1" >
-      </h3>
-    </div>
-<div class="item">
-      <img id="i2" width="500px" alt="...">
-      <h3 id="c2">      </h3>
-    </div>
-<div class="item">
-      <img id="i3" width="500px" alt="...">
-      <h3 id="c3"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i4" width="500px" alt="...">
-      <h3 id="c4"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i5" width="500px" alt="...">
-      <h3 id="c5"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i6" width="500px" alt="...">
-      <h3 id="c6"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i7" width="500px" alt="...">
-      <h3 id="c7"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i8" width="500px" alt="...">
-      <h3 id="c8"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i9" width="500px" alt="...">
-      <h3 id="c9"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i10" width="500px" alt="...">
-      <h3 id="c10"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i11" width="500px" alt="...">
-      <h3 id="c11"  >      </h3>
-    </div>
-	<div class="item">
-      <img id="i12" width="500px" alt="...">
-      <h3 id="c12"  >      </h3>
-    </div>
-  </div>
-
-  <!-- Controls -->
-  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-        </div>
-<!--        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-		-->
       </div>
-      
     </div>
-  </div>
-  
-</div>
-<font size="+18" color=blue> Memory क्रीडा </font>
-<!-- Trigger the modal with a button -->
-  <button id="ss" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="openm2()" style="display:none">Slideshow</button>
-    <font id="timer" class="pos1" size="+20" color=green></font> <br>
-<br>
-      <p id="wm" style="color: green; font-size: 40px;">Wrong Moves: <span id=nowt>०</span> </p>
-  <center>
-  <progress id=pr max=12 value=0></progress>
-  <div id="mytable">
-  </div> </center>
 
-  <script src="mmk.js"></script>
-<script>
-var modal = document.getElementById("myModal");
-var openm = function(){
-  modal.style.display = "block";
-  modalImg.src = document.getElementsByTagName("td")[0].getElementsByTagName("img")[0].src;
-  captionText.innerHTML = document.getElementsByTagName("td")[1].getElementsByTagName("p")[0].innerText;
-}
-var openm2 = function(){
-j=0;
-for (i=1;i<=12;i++)
-{
-idi = "i"+i;
-idc= "c"+i;
-  document.getElementById(idi).src = document.getElementsByTagName("td")[j].getElementsByTagName("img")[0].src;
-  document.getElementById(idc).innerHTML = document.getElementsByTagName("td")[j+1].getElementsByTagName("p")[0].innerText;
-  j+=2;
-  }
-}
+    <!-- =====================================
+         MEMORY GAME
+    ====================================== -->
 
-// Get the image and insert it inside the modal - use its "alt" text as a caption
+    <main class="zatam-game-shell">
+      <!-- =================================
+           GAME HEADER
+      ================================== -->
 
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
+      <header class="zatam-game-header">
+        <div class="zatam-game-eyebrow">Zat.am Game</div>
 
+        <h1 class="zatam-game-title">Memory क्रीडा</h1>
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+        <p class="zatam-game-subtitle">
+          Match each picture with the correct Sanskrit word. Try to finish with
+          as few wrong moves as possible.
+        </p>
+      </header>
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() { 
-  modal.style.display = "none";
-}
-</script>
+      <!-- =================================
+           INSTRUCTIONS
+      ================================== -->
 
+      <section class="zatam-game-instructions">
+        <p>Select two cards at a time and find all 12 matching pairs.</p>
+      </section>
 
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
-</body>
+      <!-- =================================
+           GAME STATS
+      ================================== -->
+
+      <section
+        id="gameStats"
+        class="zatam-game-stats"
+        aria-label="Game statistics"
+      >
+        <!-- Score -->
+        <div class="zatam-game-stat zatam-game-score">
+          <span class="zatam-game-stat-label"> Score </span>
+
+          <span id="scoreValue" class="zatam-game-stat-value"> 100 </span>
+        </div>
+
+        <!-- Wrong Moves -->
+        <div id="wm" class="zatam-game-stat">
+          <span class="zatam-game-stat-label"> Wrong Moves </span>
+
+          <span id="nowt" class="zatam-game-stat-value"> ० </span>
+        </div>
+
+        <!-- Time -->
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label"> Time </span>
+
+          <span id="timer" class="zatam-game-stat-value"> ० seconds </span>
+        </div>
+
+        <!-- Matches -->
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label"> Matches </span>
+
+          <span id="matchesValue" class="zatam-game-stat-value"> 0 / 12 </span>
+        </div>
+      </section>
+
+      <!-- =================================
+           PROGRESS
+      ================================== -->
+
+      <div class="memory-progress-wrapper">
+        <progress id="pr" class="memory-progress" max="12" value="0"></progress>
+      </div>
+
+      <!-- =================================
+           GAME BOARD
+      ================================== -->
+
+      <section class="zatam-game-play-area memory-play-area">
+        <div id="mytable" class="memory-board-wrapper"></div>
+      </section>
+
+      <!-- =================================
+           GAME ACTIONS
+      ================================== -->
+
+      <div class="zatam-game-actions">
+        <button
+          type="button"
+          class="zatam-game-btn zatam-game-btn-secondary"
+          onclick="restart()"
+        >
+          ↻ Restart
+        </button>
+        <!--
+          Used by the existing learn mode.
+          mmk.js shows this button when ?l=1.
+        -->
+        <button
+          id="ss"
+          type="button"
+          class="zatam-game-btn zatam-game-btn-primary"
+          data-toggle="modal"
+          data-target="#myModal"
+          onclick="openm2()"
+          style="display: none"
+        >
+          View Slideshow
+        </button>
+      </div>
+
+      <!-- =================================
+           COMPLETION RESULT
+      ================================== -->
+
+      <section
+        id="resultPanel"
+        class="zatam-game-result zatam-hidden"
+        aria-live="polite"
+      >
+        <h2 class="zatam-game-result-title">उत्तमम्! 🎉</h2>
+
+        <div id="resultScore" class="zatam-game-result-score">100</div>
+
+        <p id="resultDetails" class="zatam-game-result-message"></p>
+
+        <div
+          id="scoreSaveStatus"
+          class="zatam-game-status zatam-game-status-info"
+        >
+          Checking leaderboard...
+        </div>
+
+        <div class="zatam-game-actions">
+          <button
+            type="button"
+            class="zatam-game-btn zatam-game-btn-primary"
+            onclick="restart()"
+          >
+            Play Again
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- =====================================
+         EXISTING MEMORY GAME LOGIC
+    ====================================== -->
+
+    <script src="mmk.js"></script>
+
+    <!-- =====================================
+         EXISTING SLIDESHOW LOGIC
+    ====================================== -->
+
+    <script>
+      var modal = document.getElementById("myModal");
+
+      var openm = function () {
+        modal.style.display = "block";
+
+        if (
+          document.getElementsByTagName("td")[0] &&
+          document.getElementsByTagName("td")[0].getElementsByTagName("img")[0]
+        ) {
+          modalImg.src = document
+            .getElementsByTagName("td")[0]
+            .getElementsByTagName("img")[0].src;
+        }
+
+        if (
+          document.getElementsByTagName("td")[1] &&
+          document.getElementsByTagName("td")[1].getElementsByTagName("p")[0]
+        ) {
+          captionText.innerHTML = document
+            .getElementsByTagName("td")[1]
+            .getElementsByTagName("p")[0].innerText;
+        }
+      };
+
+      var openm2 = function () {
+        var j = 0;
+
+        for (var i = 1; i <= 12; i++) {
+          var idi = "i" + i;
+          var idc = "c" + i;
+
+          var imageCell = document.getElementsByTagName("td")[j];
+
+          var wordCell = document.getElementsByTagName("td")[j + 1];
+
+          if (imageCell && imageCell.getElementsByTagName("img")[0]) {
+            document.getElementById(idi).src =
+              imageCell.getElementsByTagName("img")[0].src;
+          }
+
+          if (wordCell && wordCell.getElementsByTagName("p")[0]) {
+            document.getElementById(idc).innerHTML =
+              wordCell.getElementsByTagName("p")[0].innerText;
+          }
+
+          j += 2;
+        }
+      };
+
+      /*
+        These existed in the original file.
+
+        Keep them safe even if those optional
+        elements are not present on the page.
+      */
+
+      var modalImg = document.getElementById("img01");
+
+      var captionText = document.getElementById("caption");
+
+      var closeButton = document.getElementsByClassName("close")[0];
+
+      if (closeButton) {
+        closeButton.onclick = function () {
+          modal.style.display = "none";
+        };
+      }
+    </script>
+
+    <!-- =====================================
+         SHARED ZAT.AM SCORING
+    ====================================== -->
+
+    <script type="module">
+      import { initGameScore } from "../js/game-score.js";
+
+      initGameScore({
+        gameId: "009-mmk",
+        gameName: "Memory क्रीडा",
+      });
+    </script>
+
+    <!-- =====================================
+         SHARED ZAT.AM NAVBAR
+    ====================================== -->
+
+    <script type="module" src="../js/navbar-loader.js"></script>
+  </body>
 </html>
