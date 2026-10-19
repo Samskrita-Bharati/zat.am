@@ -1,382 +1,325 @@
-<html>
-  <title>सूर्यनमस्कारः</title>
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>सूर्यनमस्कारः</title>
+
+    <link rel="stylesheet" href="../shared/game-theme.css" />
+    <link rel="stylesheet" href="surya.css" />
+
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-    <style>
-      .circle-big {
-        position: relative;
-        height: 500px;
-        width: 500px;
-        background: tomato;
-        border-radius: 50% 50%;
-        margin: 10% 10%;
-        border: 5px solid black;
-      }
-      .circle-inner {
-        border-radius: 50%;
-        width: 300px;
-        height: 300px;
-        border: 5px solid white;
-        background-color: #f3f3f3;
-        display: block;
-        position: absolute;
-        overflow: hidden;
-        top: 50%;
-        left: 50%;
-        margin-top: -155px;
-        margin-left: -155px;
-
-        cursor: pointer;
-
-        background-image: url("sun.gif");
-        background-size: cover;
-      }
-      .circle {
-        border-radius: 50%;
-        width: 70px;
-        height: 70px;
-        background-color: white;
-        display: block;
-        position: absolute;
-        overflow: hidden;
-        top: 50%;
-        left: 50%;
-        margin-top: -35px;
-        margin-left: -35px;
-        transition: all 0.3s;
-      }
-      p {
-        font-weight: bold;
-      }
-
-      .one {
-        transform: rotate(270deg) translate(200px);
-        background: orange;
-      }
-      .two {
-        transform: rotate(300deg) translate(200px);
-      }
-      .three {
-        transform: rotate(330deg) translate(200px);
-      }
-      .four {
-        transform: rotate(360deg) translate(200px);
-      }
-      .five {
-        transform: rotate(30deg) translate(200px);
-      }
-      .six {
-        transform: rotate(60deg) translate(200px);
-      }
-      .seven {
-        transform: rotate(90deg) translate(200px);
-      }
-      .eight {
-        transform: rotate(120deg) translate(200px);
-      }
-      .nine {
-        transform: rotate(150deg) translate(200px);
-      }
-      .ten {
-        transform: rotate(180deg) translate(200px);
-      }
-      .eleven {
-        transform: rotate(210deg) translate(200px);
-      }
-      .twelve {
-        transform: rotate(240deg) translate(200px);
-      }
-    </style>
   </head>
-  <body data-page="games">
-    <!-- Shared Zat.am Navbar -->
+
+  <body data-page="games" class="zatam-themed-game">
     <div id="navbar-mount"></div>
 
-    <div class="circle-big">
-      <div
-        data-angle="270"
-        class="circle one"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="1"
-      >
-        <center>
-          <p
-            style="transform: rotate(-270deg)"
-            ondragover="return false;"
-            ondragenter="return false;"
-          >
-            १
+    <main class="zatam-game-shell surya-game">
+      <header class="zatam-game-header">
+        <span class="zatam-game-eyebrow">
+          Zat.am · Play &amp; learn
+        </span>
+
+        <h1 class="zatam-game-title" lang="sa">सूर्यनमस्कारः</h1>
+
+        <p class="zatam-game-subtitle">
+          Arrange the twelve Surya Namaskar invocations in order.
+        </p>
+      </header>
+
+      <div class="surya-layout">
+        <section
+          class="surya-board zatam-game-play-area"
+          aria-label="Surya Namaskar board"
+        >
+          <div class="circle-big">
+            <div
+              class="circle one"
+              data-angle="270"
+              r="1"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">१</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle two"
+              data-angle="300"
+              r="2"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">२</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle three"
+              data-angle="330"
+              r="3"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">३</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle four"
+              data-angle="0"
+              r="4"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">४</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle five"
+              data-angle="30"
+              r="5"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">५</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle six"
+              data-angle="60"
+              r="6"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">६</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle seven"
+              data-angle="90"
+              r="7"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">७</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle eight"
+              data-angle="120"
+              r="8"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">८</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle nine"
+              data-angle="150"
+              r="9"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">९</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle ten"
+              data-angle="180"
+              r="10"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">१०</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle eleven"
+              data-angle="210"
+              r="11"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">११</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div
+              class="circle twelve"
+              data-angle="240"
+              r="12"
+              ondrop="drop(event)"
+              ondragover="allowDrop(event)"
+            >
+              <span class="slot-number">१२</span>
+              <p class="slot-word"></p>
+            </div>
+
+            <div id="spin" class="circle-inner">
+              <div class="surya-centre-content">
+                <progress
+                  id="p"
+                  max="12"
+                  value="0"
+                  aria-label="Invocations placed"
+                ></progress>
+
+                <span id="progress-text">० / १२</span>
+
+                <button
+                  id="start-button"
+                  type="button"
+                  class="zatam-game-btn zatam-game-btn-primary"
+                  onclick="showInvocation()"
+                >
+                  आरम्भ
+                </button>
+
+                <p
+                  id="new"
+                  lang="sa"
+                  draggable="false"
+                  ondragstart="drag(event)"
+                  hidden
+                ></p>
+
+                <p id="trans" hidden></p>
+
+                <p class="surya-mistakes">
+                  ❌ = <strong id="wt">०</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p id="placement-feedback" hidden></p>
+        </section>
+
+        <aside
+          class="surya-instructions"
+          aria-labelledby="surya-instructions-title"
+          tabindex="0"
+        >
+          <h2 id="surya-instructions-title">How to play</h2>
+
+          <ol>
+            <li>
+              <strong>Start</strong>
+              <span>Press आरम्भ to reveal a Surya Namaskar invocation.</span>
+            </li>
+
+            <li>
+              <strong>Find its position</strong>
+              <span>
+                Count clockwise from १. ॐ मित्राय नमः is the first invocation.
+              </span>
+            </li>
+
+            <li>
+              <strong>Place the invocation</strong>
+              <span>
+                Drag the displayed invocation into its correct slot,
+                or tap the slot. An incorrect placement adds one
+                wrong attempt.
+              </span>
+            </li>
+
+            <li>
+              <strong>Complete the cycle</strong>
+              <span>
+                The next invocation appears automatically after a correct placement.
+                Use अग्रिमम् to skip the displayed invocation.
+                Place all twelve invocations to finish.
+              </span>
+            </li>
+          </ol>
+
+          <p class="surya-tip">
+            <strong>Keyboard controls</strong><br />
+            Press Enter to start. Use the left and right arrow keys to
+            select a slot, then press Enter to place the invocation.
+            After a correct placement, the next invocation appears automatically.
+            To skip, use Tab to focus अग्रिमम् and press Enter.
           </p>
-        </center>
-      </div>
-      <div
-        data-angle="300"
-        class="circle two"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="2"
-      >
-        <center>
-          <p
-            ondragover="return false;"
-            ondragenter="return false;"
-            style="transform: rotate(-300deg)"
-          ></p>
-        </center>
-      </div>
-      <div
-        data-angle="330"
-        class="circle three"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="3"
-      >
-        <center>
-          <p
-            ondragover="return false;"
-            ondragenter="return false;"
-            style="transform: rotate(-330deg)"
-          ></p>
-        </center>
-      </div>
-      <div
-        data-angle="0"
-        class="circle four"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="4"
-      >
-        <center><p style="transform: rotate(-360deg)"></p></center>
-      </div>
-      <div
-        data-angle="30"
-        class="circle five"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="5"
-      >
-        <center><p style="transform: rotate(-30deg)"></p></center>
-      </div>
-      <div
-        data-angle="60"
-        class="circle six"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="6"
-      >
-        <center><p style="transform: rotate(-60deg)"></p></center>
-      </div>
-      <div
-        data-angle="90"
-        class="circle seven"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="7"
-      >
-        <center><p style="transform: rotate(-90deg)"></p></center>
-      </div>
-      <div
-        data-angle="120"
-        class="circle eight"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="8"
-      >
-        <center><p style="transform: rotate(-120deg)"></p></center>
-      </div>
-      <div
-        data-angle="150"
-        class="circle nine"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="9"
-      >
-        <center><p style="transform: rotate(-150deg)"></p></center>
-      </div>
-      <div
-        data-angle="180"
-        class="circle ten"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="10"
-      >
-        <center><p style="transform: rotate(-180deg)"></p></center>
-      </div>
-      <div
-        data-angle="210"
-        class="circle eleven"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="11"
-      >
-        <center><p style="transform: rotate(-210deg)"></p></center>
-      </div>
-      <div
-        data-angle="240"
-        class="circle twelve"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-        r="12"
-      >
-        <center><p style="transform: rotate(-240deg)"></p></center>
-      </div>
-      <div id="spin" class="circle-inner" onclick="stop()">
-        <center>
-          <br />
 
-          <progress id="p" max="12" min="0" value="0"></progress>
-          <p id="new" draggable="true" ondragstart="drag(event)">--</p>
-          <p id="trans"></p>
-          <p>❌ = <span id="wt">०</span></p>
-        </center>
+          <p class="surya-tip">
+            <strong>Scoring</strong><br />
+            Fewer wrong attempts give a higher final score.
+            Place all twelve invocations without mistakes to earn 100.
+            Your score is submitted only after completing the game.
+          </p>
+        </aside>
       </div>
-    </div>
 
-    <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      var set = urlParams.get("s");
-      if (!set || isNaN(set)) set = 0;
-      var t = urlParams.get("t"); // transliterate mode - 1 is true
-      if (!t) t = 0;
-      var m = [
-        [
-          "ॐ मित्राय नमः",
-          "ॐ रवये नमः",
-          "ॐ सूर्याय नमः",
-          "ॐ भानवे नमः",
-          "ॐ खगाय नमः",
-          "ॐ पूष्णे नमः",
-          "ॐ हिरण्यगर्भाय नमः",
-          "ॐ मरीचये नमः",
-          "ॐ आदित्याय नमः",
-          "ॐ सवित्रे नमः",
-          "ॐ अर्काय नमः",
-          "ॐ भास्कराय नमः",
-        ],
-        [
-          "चैत्रः",
-          "वैशाखः",
-          "ज्येष्ठः",
-          "आषाढः",
-          "श्रावणः",
-          "भाद्रपदः",
-          "आश्विनः",
-          "कार्तिकः",
-          "मार्गशीर्षः",
-          "पौषः",
-          "माघः",
-          "फाल्गुनः",
-        ],
-        ["१", "२", "३", "४", "५", "६", "७", "८", "९", "१०", "११", "१२"],
-      ];
-      var m1 = (m2 = m[set]);
-      var filled = [];
-      function stop() {
-        document.getElementById("spin").style.backgroundImage =
-          "url('sun.png')";
-        pos = Math.floor(Math.random() * 100) % m2.length;
-        text = m2[pos];
-        document.getElementById("new").innerHTML = text;
-        if (t == 1)
-          document.getElementById("trans").innerHTML =
-            " - " + Sanscript.t(text, "devanagari", "itrans");
-        document
-          .getElementById("new")
-          .setAttribute("pos", m1.indexOf(text) + 1);
-      }
-      wrongtries = 0;
-      function allowDrop(ev) {
-        ev.preventDefault();
-      }
+      <dialog
+        id="surya-result"
+        class="zatam-game-result surya-result"
+        aria-labelledby="surya-result-title"
+      >
+        <h2
+          id="surya-result-title"
+          class="zatam-game-result-title"
+          tabindex="-1"
+        >
+          उत्तमम्! You won!
+        </h2>
 
-      function drag(ev) {
-        ev.dataTransfer.setData("text", ev.target.id);
-      }
+        <p class="zatam-game-result-message">
+          You placed all twelve invocations in the correct order.
+        </p>
 
-      function drop(ev) {
-        ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
-        //if (document.getElementById(data).innerHTML==ev.target.getAttribute('r'))
-        if (
-          document.getElementById(data).getAttribute("pos") ==
-          ev.target.getAttribute("r")
-        ) {
-          filled.push(document.getElementById("new").innerHTML);
-          m2 = [];
-          for (i = 0; i < m1.length; i++) {
-            if (filled.indexOf(m1[i]) < 0) m2.push(m1[i]);
-          }
-          ev.target.getElementsByTagName("p")[0].innerHTML =
-            document.getElementById(data).innerHTML;
-          document.getElementById("p").value += 1;
+        <p
+          id="surya-final-score"
+          class="zatam-game-result-score"
+        ></p>
 
-          document.getElementById("new").innerHTML = Sanscript.t(
-            document.getElementById("p").value + " / 12",
-            "iast",
-            "devanagari",
-          );
-          document.getElementById("trans").innerHTML = "";
-        } else {
-          wrongtries++;
-          document.getElementById("wt").innerHTML = Sanscript.t(
-            String(wrongtries),
-            "iast",
-            "devanagari",
-          );
-        }
-        if (
-          document.getElementById("p").value == document.getElementById("p").max
-        ) {
-          if (confirm("पुनः ? ")) window.location.reload();
-          else {
-            document.getElementById("spin").cursor = "none";
-            document.getElementById("spin").onclick = "";
-          }
-        } else {
-          document.getElementById("spin").style.backgroundImage =
-            "url('sun.gif')";
-        }
-      }
-    </script>
-    <script>
-      var circleArray = document.getElementsByClassName("circle");
-      var pArray = document.querySelectorAll("div p");
-      var angle = 30;
+        <p
+          id="surya-result-details"
+          class="zatam-game-result-message"
+        ></p>
 
-      chargearray();
+        <p
+          id="surya-save-status"
+          class="zatam-game-status zatam-game-status-info"
+          role="status"
+        ></p>
 
-      function chargearray() {
-        for (var i = 0, j = circleArray.length; i < j; i++) {
-          var circle = circleArray[i];
-          var p = pArray[i];
-          var circleAngle = parseInt(circle.dataset.angle);
-          var totalAngle = angle + circleAngle;
-          var style = "rotate(" + totalAngle + "deg) translate(200px)";
-          totalAngle = -totalAngle;
-          style = style + " rotate(" + totalAngle + "deg)";
-          circle.style.webkitTransform = style;
-          circle.style.Transform = style;
-          p.style = style;
-        }
-      }
+        <div class="zatam-game-actions">
+          <button
+            id="surya-retry"
+            type="button"
+            class="zatam-game-btn zatam-game-btn-secondary"
+            onclick="saveSuryaScore()"
+            hidden
+          >
+            Retry saving
+          </button>
 
-      document.onkeydown = function (e) {
-        e = e || window.event;
-        switch (e.which || e.keyCode) {
-          case 37:
-            angle = angle + 30;
-            chargearray();
-            break;
-          case 39:
-            angle = angle - 30;
-            chargearray();
-            break;
-        }
-      };
-    </script>
+          <button
+            id="surya-play-again"
+            type="button"
+            class="zatam-game-btn zatam-game-btn-primary"
+            onclick="window.location.reload()"
+          >
+            Play Again
+          </button>
+        </div>
+      </dialog>
+    </main>
 
-    <!-- Shared Zat.am Navbar -->
+    <script src="surya.js"></script>
+
     <script type="module" src="../js/navbar-loader.js"></script>
   </body>
 </html>

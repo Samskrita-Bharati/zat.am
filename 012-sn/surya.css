@@ -1,0 +1,412 @@
+.surya-game {
+  max-width: 1200px;
+}
+
+.surya-game,
+.surya-game * {
+  box-sizing: border-box;
+}
+
+.surya-game [hidden] {
+  display: none !important;
+}
+
+.surya-game .zatam-game-title {
+  line-height: 1.5;
+}
+
+/* Separate board and instructions panels */
+.surya-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  align-items: start;
+  gap: 24px;
+}
+
+.surya-game .surya-board {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 16px;
+}
+
+/* Board */
+.surya-game .circle-big {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  margin: 0;
+  border: 1px solid var(--zatam-border);
+  border-radius: 50%;
+  background: var(--zatam-soft);
+}
+
+.surya-game .circle-big::before {
+  content: "";
+  position: absolute;
+  inset: 59px;
+  border: 1px dashed var(--zatam-border);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Invocation positions */
+.surya-game .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 76px;
+  margin-top: -38px;
+  margin-left: -60px;
+  padding: 6px;
+  border: 1px solid var(--zatam-border);
+  border-radius: 18px;
+  background: var(--zatam-white);
+  box-shadow: var(--zatam-shadow-sm);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  text-align: center;
+}
+
+.surya-game .slot-number {
+  color: var(--zatam-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.surya-game .slot-word {
+  width: 100%;
+  margin: 0;
+  color: var(--zatam-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.surya-game .slot-word:empty {
+  display: none;
+}
+
+.surya-game .slot-number,
+.surya-game .slot-word {
+  pointer-events: none;
+}
+
+.surya-game .one {
+  border: 2px solid var(--zatam-gold);
+  background: #fff2d4;
+}
+
+.surya-game .circle.is-filled {
+  border-color: var(--zatam-success);
+  background: var(--zatam-success-soft);
+}
+
+/* Original sun images */
+.surya-game .circle-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 270px;
+  height: 270px;
+  margin-top: -135px;
+  margin-left: -135px;
+  border: 5px solid white;
+  border-radius: 50%;
+
+  background-color: #fff8dc;
+  background-image: var(--surya-sun, url("sun.gif"));
+  background-size: cover;
+  background-position: center;
+
+  overflow: hidden;
+  box-shadow: var(--zatam-shadow-sm);
+}
+
+.surya-centre-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 100%;
+  padding: 18px;
+  text-align: center;
+}
+
+.surya-game #progress-text,
+.surya-mistakes {
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--zatam-navy);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.surya-game #p {
+  width: 150px;
+  height: 10px;
+  accent-color: var(--zatam-gold);
+}
+
+.surya-game #start-button {
+  min-height: 40px;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+}
+
+.surya-game #new {
+  max-width: 100%;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--zatam-gold);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.97);
+  color: var(--zatam-navy);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.surya-game #new:active {
+  cursor: grabbing;
+}
+
+.surya-game #trans {
+  max-width: 100%;
+  margin: 0;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--zatam-navy);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.surya-mistakes {
+  margin: 0;
+}
+
+/* Independently scrollable instructions */
+.surya-instructions {
+  min-width: 0;
+  max-height: 600px;
+  margin: 0;
+  padding: 22px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+  background: var(--zatam-soft);
+}
+
+.surya-instructions h2 {
+  margin: 0 0 20px;
+  color: var(--zatam-heading);
+  font-size: 1.15rem;
+}
+
+.surya-instructions ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.surya-instructions li {
+  margin-bottom: 18px;
+  padding-left: 4px;
+  color: var(--zatam-navy);
+}
+
+.surya-instructions li strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.surya-instructions li span {
+  color: var(--zatam-muted);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.surya-tip {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--zatam-border);
+  color: var(--zatam-muted);
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+
+/* Win popup */
+.surya-game dialog.surya-result {
+  position: fixed;
+  inset: 0;
+  width: min(480px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 28px;
+  overflow-y: auto;
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+  background: var(--zatam-white, #fff);
+  color: var(--zatam-navy);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.surya-game dialog.surya-result:not([open]) {
+  display: none;
+}
+
+.surya-game dialog.surya-result::backdrop {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.surya-result .zatam-game-result-title {
+  line-height: 1.5;
+}
+
+.surya-result .zatam-game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Smaller screens */
+@media (max-width: 1100px) {
+  .surya-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 18px;
+  }
+
+  .surya-game .circle-big {
+    zoom: 0.85;
+  }
+
+  .surya-instructions {
+    max-height: 510px;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 950px) {
+  .surya-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .surya-game .circle-big {
+    zoom: 1;
+  }
+
+  .surya-instructions {
+    width: 100%;
+    max-height: 280px;
+  }
+}
+
+@media (max-width: 700px) {
+  .surya-game .surya-board {
+    padding: 12px 8px;
+  }
+
+  .surya-game .circle-big {
+    zoom: 0.8;
+  }
+}
+
+@media (max-width: 550px) {
+  .surya-game .circle-big {
+    zoom: 0.65;
+  }
+}
+
+@media (max-width: 450px) {
+  .surya-game .circle-big {
+    zoom: 0.54;
+  }
+}
+
+@media (max-width: 370px) {
+  .surya-game .circle-big {
+    zoom: 0.45;
+  }
+}@media (min-width: 1101px) {
+  .zatam-game-shell.surya-game {
+    width: 80vw;
+    max-width: 1600px;
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+
+  .surya-game .surya-layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr);
+    gap: 24px;
+  }
+
+  .surya-game .surya-board {
+    padding: 12px;
+  }
+
+  .surya-game .circle-big {
+    zoom: 0.85;
+  }
+
+  .surya-game .surya-instructions {
+    height: 534px;
+    max-height: 534px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1300px) {
+  .surya-game .circle-big {
+    zoom: 1;
+  }
+
+  .surya-game .surya-instructions {
+    height: 624px;
+    max-height: 624px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .surya-game .circle-big {
+    zoom: 1.2;
+  }
+
+  .surya-game .surya-instructions {
+    height: 744px;
+    max-height: 744px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .surya-game .circle-big {
+    zoom: 1.35;
+  }
+
+  .surya-game .surya-instructions {
+    height: 834px;
+    max-height: 834px;
+  }
+}
