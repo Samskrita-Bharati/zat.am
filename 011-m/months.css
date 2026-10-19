@@ -1,0 +1,95 @@
+.circle-big {
+  position: relative;
+  height: 500px;
+  width: 500px;
+  background: tomato;
+  border-radius: 50%;
+  margin: 10% 10%;
+  border: 5px solid black;
+}
+
+.circle-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  margin-top: -155px;
+  margin-left: -155px;
+  border: 5px solid white;
+  border-radius: 50%;
+  background-color: #f3f3f3;
+  background-image: url("sun.gif");
+  background-size: cover;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  margin-top: -35px;
+  margin-left: -35px;
+  border-radius: 50%;
+  background-color: white;
+  display: block;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+p {
+  font-weight: bold;
+}
+
+.one {
+  transform: rotate(270deg) translate(200px);
+  background: orange;
+}
+
+.two {
+  transform: rotate(300deg) translate(200px);
+}
+
+.three {
+  transform: rotate(330deg) translate(200px);
+}
+
+.four {
+  transform: rotate(360deg) translate(200px);
+}
+
+.five {
+  transform: rotate(30deg) translate(200px);
+}
+
+.six {
+  transform: rotate(60deg) translate(200px);
+}
+
+.seven {
+  transform: rotate(90deg) translate(200px);
+}
+
+.eight {
+  transform: rotate(120deg) translate(200px);
+}
+
+.nine {
+  transform: rotate(150deg) translate(200px);
+}
+
+.ten {
+  transform: rotate(180deg) translate(200px);
+}
+
+.eleven {
+  transform: rotate(210deg) translate(200px);
+}
+
+.twelve {
+  transform: rotate(240deg) translate(200px);
+}
