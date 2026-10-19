@@ -1,142 +1,112 @@
-//  Decaration of variables
- var musicOn = true;
-var userScore = 0;
-var computerScore = 0;
-const userScore_span = document.getElementById("user-score");
-const computerScore_span = document.getElementById("computer-score");
-const sccoreBoard_div = document.querySelector(".score-board");
-const result_p = document.querySelector(".result > p");
-const rock_div = document.getElementById("r");
-const paper_div = document.getElementById("p");
-const scissors_div = document.getElementById("s");
-/* hht
-const ranks = '० १ २ ३ ४ ५ ६ ७ ८ ९'.split(' ');
-const enranks = '0 1 2 3 4 5 6 7 8 9'.split(' ');
-const getRank = (i) => ranks[i % 10];
-const getenRank = (i) => enranks[i % 10];
-*/
+// Original game adapted from https://github.com/AmanRaj1608/awesome-rock-paper-scissor
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const choices = ['r', 'p', 's'];
+  const names = { r: 'शिलाखण्डः (Rock)', p: 'पत्रम् (Paper)', s: 'कर्तरी (Scissors)' };
+  const beats = { r: 's', p: 'r', s: 'p' };
+  const digits = (n) => String(n).replace(/\d/g, (d) => '०१२३४५६७८९'[d]);
+  let wins = 0, losses = 0, draws = 0, rounds = 0;
+  let lastSubmittedRound = -1, soundOn = true, saving = false;
+  let startedAt = null, api = null, loading = null, resetBeforeNextSubmit = false;
+  let pendingAttempt = null;
 
-// Creating a random function to generate computer choice
-
-function computerChoice() {
-    const choices = ['r', 'p', 's'];
-    return choices[Math.floor(Math.random() * 3)];
-}
-
-// Here I have defined 3 function to for win , luse , draw
-
-function win(userInput, compChoice) {
-    userScore++;
-
-    if (userInput === 'r' && compChoice === 's') {
-        result_p.innerHTML = `यन्त्रम् chose कर्तरी ✂. You Win ✅🎉`;
+  function loadScoring() {
+    if (api) return Promise.resolve(api);
+    if (!loading) loading = import('../js/game-score.js').then((module) => {
+      module.initGameScore({ gameId: '002-zpk', gameName: 'शिलाखण्डः, पत्रम्, कर्तरी' });
+      api = module;
+      return api;
+    }).catch((error) => { loading = null; throw error; });
+    return loading;
+  }
+  loadScoring().catch((error) => console.warn('Local play remains available; shared scoring could not load.', error));
+  function percentage() { return Math.round(wins / (wins + losses) * 100); }
+  function update() {
+    $('user-score').textContent = digits(wins);
+    $('computer-score').textContent = digits(losses);
+    $('round-count').textContent = digits(rounds);
+    $('draw-count').textContent = digits(draws);
+    $('win-percentage').textContent = wins + losses ? `${digits(percentage())}%` : '—';
+    $('submit-score').disabled = saving || wins + losses === 0 || rounds === lastSubmittedRound;
+    choices.forEach((key) => { $(key).disabled = saving; });
+  }
+  function stopAudio() {
+    choices.forEach((key) => { const audio = $(`audio-${key}`); audio.pause(); audio.currentTime = 0; });
+  }
+  function playAudio(key) {
+    stopAudio();
+    if (soundOn) $(`audio-${key}`).play().catch((error) => {
+      console.warn('Pronunciation could not play.', error);
+      $('save-status').textContent = 'Pronunciation unavailable. Check the audio files and browser sound settings.';
+    });
+  }
+  function play(key) {
+    if (saving) return;
+    if (startedAt === null) { startedAt = Date.now(); if (api) api.resetGameScore(); }
+    pendingAttempt = null;
+    const computer = choices[Math.floor(Math.random() * 3)];
+    const result = key === computer ? 'draw' : beats[key] === computer ? 'win' : 'lose';
+    if (result === 'win') wins++;
+    else if (result === 'lose') losses++;
+    else draws++;
+    rounds++;
+    choices.forEach((item) => { $(item).className = 'choice'; });
+    $(key).classList.add(result);
+    $('round-feedback').textContent = `Computer chose ${names[computer]}. ${result === 'win' ? 'You win!' : result === 'lose' ? 'Computer wins.' : 'It’s a draw.'}`;
+    $('save-status').textContent = wins + losses ? 'Your current percentage is ready to submit.' : 'Draw. Play a round with a win or loss to enable submission.';
+    update();
+    playAudio(key);
+  }
+  async function submit() {
+    if (saving || wins + losses === 0 || rounds === lastSubmittedRound) return;
+    saving = true;
+    // Keep a stable snapshot for retries, and block play while it is being sent.
+    if (!pendingAttempt) pendingAttempt = {
+      score: percentage(),
+      metrics: { wins, losses, draws, rounds, decidingRounds: wins + losses,
+        sessionElapsedSeconds: Math.floor((Date.now() - startedAt) / 1000) },
+    };
+    const attempt = pendingAttempt;
+    $('save-status').textContent = 'Saving your score…';
+    update();
+    try {
+      const shared = await loadScoring();
+      if (resetBeforeNextSubmit) {
+        shared.resetGameScore();
+        resetBeforeNextSubmit = false;
+      }
+      const result = await shared.submitGameScore(attempt.score, { result: 'completed', metrics: attempt.metrics });
+      if (result.ok || result.reason === 'already-submitted') {
+        lastSubmittedRound = rounds;
+        resetBeforeNextSubmit = true;
+        pendingAttempt = null;
+        $('save-status').textContent = `Submitted ${attempt.score}/100. The leaderboard counts your best attempt. Keep playing to submit an updated percentage.`;
+      } else {
+        $('save-status').textContent = result.reason === 'not-signed-in' ?
+          'Sign in to Zat.am, then press Submit My Score again. Your counters are still here.' :
+          'Score was not saved. Please try again.';
+      }
+    } catch (error) {
+      console.warn('Score submission failed.', error);
+      $('save-status').textContent = 'Could not save your score. Check your connection and try again. Your counters are still here.';
+    } finally {
+      saving = false;
+      update();
     }
-    else if (userInput === 'p' && compChoice === 'r') {
-        result_p.innerHTML = `यन्त्रम् chose शिलाखण्डः  ⬛. You Win ✅🎉`;
-    }
-    else if (userInput === 's' && compChoice === 'p') {
-        result_p.innerHTML = `यन्त्रम् chose पत्रम् 📜. You Win ✅🎉`;
-    }
-    // Using a delay of 350ms after showing background green/red/black colour
-    document.getElementById(userInput).classList.add('win');
-    setTimeout(function () { document.getElementById(userInput).classList.remove('win'); }, 350);
-}
+  }
+  choices.forEach((key) => $(key).addEventListener('click', () => play(key)));
+  $('music').addEventListener('click', () => {
+    soundOn = !soundOn;
+    $('music').textContent = soundOn ? 'Sound On' : 'Sound Off';
+    $('music').setAttribute('aria-pressed', String(soundOn));
+    if (!soundOn) stopAudio();
+  });
+  $('submit-score').addEventListener('click', submit);  $('submit-score').addEventListener('click', submit);
 
-function Lose(userInput, compChoice) {
-    computerScore++;
+  $('rs').addEventListener('click', () => playAudio('r'));
+  $('ps').addEventListener('click', () => playAudio('p'));
+  $('ss').addEventListener('click', () => playAudio('s'));
 
-    if (userInput === 'r' && compChoice === 'p') {
-        result_p.innerHTML = "यन्त्रम् chose पत्रम्  📜 . You Lost ❌";
-    }
-    else if (userInput === 'p' && compChoice === 's') {
-        result_p.innerHTML = `यन्त्रम् chose कर्तरी ✂ . You Lost ❌`;
-    }
-    else if (userInput === 's' && compChoice === 'r') {
-        result_p.innerHTML = `यन्त्रम् chose शिलाखण्डः ⬛ . You Lost ❌`;
-    }
-    document.getElementById(userInput).classList.add('lose');
-    setTimeout(function () { document.getElementById(userInput).classList.remove('lose'); }, 350);
-
-}
-
-function plysnd(evt)
-{
-	if (evt.target.id == 'rs') inp=0;
-	if (evt.target.id == 'ps') inp=1;
-	if (evt.target.id == 'ss') inp=2;
-	musicelements[0].pause();
-		musicelements[1].pause();
-			musicelements[2].pause();
-	if (true === musicOn)  musicelements[inp].play();
-}
-musicelements = document.getElementsByTagName("audio");
- document.getElementById("rs").onclick = plysnd;
- document.getElementById("ps").onclick = plysnd;
- document.getElementById("ss").onclick = plysnd;
- musicNode = document.getElementById('music');
-            musicNode.onclick = function() {
-                var mStatus = 'Sound On';
-                if (false === musicOn) {
-                    musicOn = true;
-                    mStatus = 'Sound On';
-                } else {
-                    musicOn = false;
-                    mStatus = 'Sound Off';
-                }
-               musicNode.innerHTML = mStatus; 
-            };
-			
-function Draw(userInput, compChoice) {
-
-    if (userInput === 'r' && compChoice === 'r') {
-        result_p.innerHTML = `यन्त्रम् chose शिलाखण्डः ⬛ . It's a Draw.`;
-    }
-    else if (userInput === 'p' && compChoice === 'p') {
-        result_p.innerHTML = `यन्त्रम् chose पत्रम्  📜 . It's a Draw.`;
-    }
-    else if (userInput === 's' && compChoice === 's') {
-        result_p.innerHTML = `यन्त्रम् chose Scissors ✂ . It's a Draw.`;
-    }
-    document.getElementById(userInput).classList.add('draw');
-    setTimeout(function () { document.getElementById(userInput).classList.remove('draw'); }, 350);
-}
-
-// Getting called by main function with info of user choice
-// Calls function Win , Lose and Draw .
-
-function game(userInput) {
-    const compChoice = computerChoice();
-    const UserChoice = userInput + compChoice;
-    if (UserChoice === "rs" || UserChoice === "pr" || UserChoice === "sp") {
-        win(userInput, compChoice);
-        console.log("Win");
-    }
-    else if (UserChoice === "rp" || UserChoice === "ps" || UserChoice === "sr") {
-        Lose(userInput, compChoice);
-        console.log("Lose");
-    }
-    else if (UserChoice === "rr" || UserChoice === "pp" || UserChoice === "ss") {
-        Draw(userInput, compChoice);
-        console.log("Draw");
-    }
-	    userScore_span.innerHTML = userScore.toString().replace(/0/g,"०").replace(/1/g,"१").replace(/2/g,"२").replace(/3/g,"३").replace(/4/g,"४").replace(/5/g,"५").replace(/6/g,"६").replace(/7/g,"७").replace(/8/g,"८").replace(/9/g,"९"); // getRank(userScore);
-    computerScore_span.innerHTML = computerScore.toString().replace(/0/g,"०").replace(/1/g,"१").replace(/2/g,"२").replace(/3/g,"३").replace(/4/g,"४").replace(/5/g,"५").replace(/6/g,"६").replace(/7/g,"७").replace(/8/g,"८").replace(/9/g,"९");
-	/*computerScore + "<br>"+ getRank(computerScore);*/
-}
-
-// Declaration of main function and calling it
-// Also initialiser of game
-
-function main() {
-    rock_div.addEventListener('click', function () {
-        game('r');
-    })
-    paper_div.addEventListener('click', function () {
-        game('p');
-    })
-    scissors_div.addEventListener('click', function () {
-        game('s');
-    })
-}
-
-main();
+  update();
+})();

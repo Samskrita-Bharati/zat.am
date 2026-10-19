@@ -41,19 +41,12 @@ body { margin: 0; background: var(--zatam-page); }
   .rps-makeover #computer-label { right: 14px; }
 }
 @media (prefers-reduced-motion: reduce) { .rps-makeover .choice { transition: none; } .rps-makeover .choice:hover { transform: none; } }
-.rps-makeover header #music {
-  margin-top: 14px;
-}
 
-.rps-audio-help {
-  margin: 10px 0 0;
-  color: var(--zatam-muted);
-  font-size: 0.85rem;
-}
-
-.rps-makeover #rs,
-.rps-makeover #ps,
-.rps-makeover #ss {
-  text-decoration: underline dotted var(--zatam-gold);
-  text-underline-offset: 8px;
-}
+.rps-makeover button.choice { font: inherit; color: var(--zatam-navy); }
+.rps-makeover button.choice:focus-visible { outline: 3px solid var(--zatam-blue); outline-offset: 4px; }
+.rps-makeover button.choice:disabled { opacity: .65; cursor: wait; transform: none; }
+.rps-live-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin: 0 0 20px; }
+.rps-live-stats p { margin: 0; color: var(--zatam-muted); font-size: .85rem; }
+.rps-live-stats strong { display: block; margin-top: 6px; font-size: 1.3rem; color: var(--zatam-navy); }
+.rps-save-status { max-width: 600px; margin: 16px auto 0; color: var(--zatam-muted); line-height: 1.6; font-size: .85rem; }
+.rps-makeover .rps-rules p + p { margin-top: 7px; }

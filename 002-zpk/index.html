@@ -12,67 +12,101 @@
     <div id="navbar-mount"></div>
 
     <main class="zatam-game-shell rps-makeover">
-    <header>
-      <p class="rps-kicker">Zat.am · Play & learn</p>
-      <h1>
-        <span id="rs">शिलाखण्डः</span> ,<span id="ps"> पत्रम् </span>,
-        <span id="ss">कर्तरी </span>
-      </h1>
-      <button id="music" type="button" class="zatam-game-btn zatam-game-btn-secondary">Sound On</button>
-      <p class="rps-audio-help">
-        Click a Sanskrit word above to hear its pronunciation.
-      </p>
-      <p class="rps-subtitle">Rock, Paper, Scissors</p>
-    </header>
-    <section class="rps-arena">
-      <div class="rps-toolbar">
-        <p>You vs. Computer</p>
-      </div>
-    
-    <div class="score-board">
-      <div id="user-label" class="badge">mama<br />मम</div>
-      <div id="computer-label" class="badge">yantram<br />यन्त्रम्</div>
-      <span id="user-score">०</span> : <span id="computer-score">०</span>
-    </div>
-    <br />
-    <div class="result">
-      <p>नमस्ते ! Let's play with यन्त्रम्</p>
-      
-    </div>
+      <header>
+        <p class="rps-kicker">Zat.am · Play &amp; learn</p>
+        <h1>
+          <span id="rs">शिलाखण्डः</span>,
+          <span id="ps">पत्रम्</span>,
+          <span id="ss">कर्तरी</span>
+        </h1>
+        <p class="rps-subtitle">Rock, Paper, Scissors</p>
+      </header>
 
-    <div class="choices">
-      <div class="choice" id="r">
-        <img src="zi.png" alt="" height="80" width="80" />
-        <span lang="sa">शिलाखण्डः</span><small>Rock</small>
-      </div>
-      <div class="choice" id="p">
-        <img src="pa.png" alt="" height="80" width="80" />
-        <span lang="sa">पत्रम्</span><small>Paper</small>
-      </div>
-      <div class="choice" id="s">
-        <img src="ka.png" alt="" height="80" width="80" />
-        <span lang="sa">कर्तरी</span><small>Scissors</small>
-      </div>
-    </div>
-    <br />
-    <p id="action-message">Make Your Choice.</p>
-    <br />
-    </section>
-    <section class="rps-rules" aria-label="Rules"><p><strong>How to play</strong></p><p>Rock beats scissors · Scissors beat paper · Paper beats rock</p><p>Click a Sanskrit title word to hear its pronunciation.</p></section>
-    <p class="rps-credit">Adapted from <a href="https://github.com/AmanRaj1608/awesome-rock-paper-scissor">AmanRaj1608’s Rock Paper Scissors</a></p>
+      <section class="rps-arena">
+        <div class="rps-toolbar">
+          <p>You vs. Computer</p>
+          <button
+            id="music"
+            type="button"
+            class="zatam-game-btn zatam-game-btn-secondary"
+            aria-pressed="true"
+          >
+            Sound On
+          </button>
+        </div>
+
+        <div class="score-board">
+          <div id="user-label" class="badge">mama<br />मम</div>
+          <div id="computer-label" class="badge">yantram<br />यन्त्रम्</div>
+          <span id="user-score">०</span> :
+          <span id="computer-score">०</span>
+        </div>
+
+        <br />
+
+        <div class="result">
+          <p id="round-feedback" role="status">
+            नमस्ते ! Let's play with यन्त्रम्
+          </p>
+        </div>
+
+        <div class="choices">
+          <button class="choice" id="r" type="button">
+            <img src="zi.png" alt="" height="80" width="80" />
+            <span lang="sa">शिलाखण्डः</span>
+            <small>Rock</small>
+          </button>
+
+          <button class="choice" id="p" type="button">
+            <img src="pa.png" alt="" height="80" width="80" />
+            <span lang="sa">पत्रम्</span>
+            <small>Paper</small>
+          </button>
+
+          <button class="choice" id="s" type="button">
+            <img src="ka.png" alt="" height="80" width="80" />
+            <span lang="sa">कर्तरी</span>
+            <small>Scissors</small>
+          </button>
+        </div>
+
+        <br />
+        <p id="action-message">Make Your Choice.</p>
+
+        <div class="rps-live-stats" style="margin-top: 24px">
+          <p>Rounds <strong id="round-count">०</strong></p>
+          <p>Win percentage <strong id="win-percentage">—</strong></p>
+        </div>
+
+        <span id="draw-count" hidden>०</span>
+
+        <div class="zatam-game-actions">
+          <button
+            id="submit-score"
+            type="button"
+            class="zatam-game-btn zatam-game-btn-primary"
+            disabled
+          >
+            Submit My Score
+          </button>
+        </div>
+
+        <p id="save-status" class="rps-save-status" role="status"></p>
+      </section>
+
+      <section class="rps-rules" aria-label="Rules">
+        <p><strong>How to play</strong></p>
+        <p>
+          Rock beats scissors · Scissors beat paper · Paper beats rock
+        </p>
+      </section>
     </main>
-    <script src="app.js" charset="utf-8"></script>
-    <audio autobuffer preload="auto">
-      <source src="r.mp3" />
-    </audio>
-    <audio autobuffer preload="auto">
-      <source src="p.mp3" />
-    </audio>
-    <audio autobuffer preload="auto">
-      <source src="s.mp3" />
-    </audio>
 
-    <!-- Shared Zat.am Navbar -->
+    <audio id="audio-r" src="r.mp3" preload="auto"></audio>
+    <audio id="audio-p" src="p.mp3" preload="auto"></audio>
+    <audio id="audio-s" src="s.mp3" preload="auto"></audio>
+
+    <script src="app.js" defer></script>
     <script type="module" src="../js/navbar-loader.js"></script>
   </body>
 </html>
