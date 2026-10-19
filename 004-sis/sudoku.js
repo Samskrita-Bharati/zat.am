@@ -151,7 +151,6 @@ function hideTiles(aGrid, hiddenGrid) {
 			hiddenGrid[i][k] = 0;
 			hiddenGrid[8-i][8-k] = 0;
 			numTiles--;
-			
 		}
 	}
 
