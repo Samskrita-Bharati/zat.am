@@ -501,19 +501,23 @@
       }
 
       function drop(ev) {
-        ev.preventDefault();
+  ev.preventDefault();
 
-        if (monthsCompleted || activePosition === null) return;
+  if (ev.dataTransfer.getData("text/plain") !== "new") return;
 
-        const slot = ev.currentTarget;
-        const sourceId = ev.dataTransfer.getData("text/plain");
+  placeMonth(ev.currentTarget);
+}
 
-        if (sourceId !== "new" || slot.dataset.filled === "true") {
-          return;
-        }
+function placeMonth(slot) {
+  if (
+    monthsCompleted ||
+    activePosition === null ||
+    slot.dataset.filled === "true"
+  ) {
+    return;
+  }
 
-        const slotPosition = Number(slot.getAttribute("r"));
-
+  const slotPosition = Number(slot.getAttribute("r"));
         if (slotPosition !== activePosition) {
           wrongtries++;
 
@@ -673,17 +677,80 @@
         }
       }
 
-      function chargearray() {
-        circleArray.forEach((circle) => {
-          const circleAngle = Number(circle.dataset.angle);
-          const totalAngle = angle + circleAngle;
+      var selectedPosition = 1;
 
-          circle.style.transform =
-            `rotate(${totalAngle}deg) ` +
-            `translate(240px) ` +
-            `rotate(${-totalAngle}deg)`;
-        });
-      }
+function chargearray() {
+  circleArray.forEach((circle) => {
+    const circleAngle = Number(circle.dataset.angle);
+    const fixedAngle = 30 + circleAngle;
+    const position = Number(circle.getAttribute("r"));
+
+    circle.style.transform =
+      `rotate(${fixedAngle}deg) ` +
+      `translate(240px) ` +
+      `rotate(${-fixedAngle}deg)`;
+
+    circle.classList.toggle("one", position === selectedPosition);
+  });
+}
+
+document.addEventListener("keydown", function (event) {
+  if (event.defaultPrevented || monthsCompleted) return;
+
+  const target = event.target;
+
+  if (
+    target.matches("input, textarea, select") ||
+    target.isContentEditable
+  ) {
+    return;
+  }
+
+  // Keep other buttons and links working normally.
+  if (
+    target.closest("a") ||
+    (
+      target.closest("button") &&
+      target.closest("button").id !== "start-button"
+    )
+  ) {
+    return;
+  }
+
+  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+    event.preventDefault();
+
+    selectedPosition = event.key === "ArrowLeft"
+      ? (selectedPosition === 1 ? 12 : selectedPosition - 1)
+      : (selectedPosition === 12 ? 1 : selectedPosition + 1);
+
+    chargearray();
+
+    const slot = Array.from(circleArray).find(
+      (item) => Number(item.getAttribute("r")) === selectedPosition
+    );
+
+    slot.focus({ preventScroll: true });
+  } else if (event.key === "Enter") {
+    event.preventDefault();
+
+    if (event.repeat) return;
+
+    if (
+      activePosition === null ||
+      target.closest("#start-button")
+    ) {
+      showMonth();
+      return;
+    }
+
+    const slot = Array.from(circleArray).find(
+      (item) => Number(item.getAttribute("r")) === selectedPosition
+    );
+
+    placeMonth(slot);
+  }
+});
 
       document.addEventListener("keydown", function (event) {
         const tag = event.target.tagName;
@@ -707,6 +774,21 @@
           angle -= 30;
           chargearray();
         }
+      });
+      circleArray.forEach((slot) => {
+        slot.setAttribute("role", "button");
+        slot.setAttribute("tabindex", "0");
+
+        slot.addEventListener("focus", () => {
+          selectedPosition = Number(slot.getAttribute("r"));
+          chargearray();
+        });
+
+        slot.addEventListener("click", () => {
+          selectedPosition = Number(slot.getAttribute("r"));
+          chargearray();
+          placeMonth(slot);
+        });
       });
 
       chargearray();
