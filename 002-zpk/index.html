@@ -1,7 +1,8 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
     <title>शिलाखण्डः , पत्रम् , कर्तरी - zilAkhaNDaH , patram, kartarI</title>
     <link rel="shortcut icon" href="zipaka.png" />
@@ -10,13 +11,24 @@
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
+    <main class="zatam-game-shell rps-makeover">
     <header>
+      <p class="rps-kicker">Zat.am · Play & learn</p>
       <h1>
         <span id="rs">शिलाखण्डः</span> ,<span id="ps"> पत्रम् </span>,
-        <span id="ss">कर्तरी </span><button id="music">Sound On</button>
+        <span id="ss">कर्तरी </span>
       </h1>
+      <button id="music" type="button" class="zatam-game-btn zatam-game-btn-secondary">Sound On</button>
+      <p class="rps-audio-help">
+        Click a Sanskrit word above to hear its pronunciation.
+      </p>
+      <p class="rps-subtitle">Rock, Paper, Scissors</p>
     </header>
-    <br /><br />
+    <section class="rps-arena">
+      <div class="rps-toolbar">
+        <p>You vs. Computer</p>
+      </div>
+    
     <div class="score-board">
       <div id="user-label" class="badge">mama<br />मम</div>
       <div id="computer-label" class="badge">yantram<br />यन्त्रम्</div>
@@ -25,25 +37,30 @@
     <br />
     <div class="result">
       <p>नमस्ते ! Let's play with यन्त्रम्</p>
-      <br />
+      
     </div>
 
     <div class="choices">
       <div class="choice" id="r">
         <img src="zi.png" alt="" height="80" width="80" />
+        <span lang="sa">शिलाखण्डः</span><small>Rock</small>
       </div>
       <div class="choice" id="p">
         <img src="pa.png" alt="" height="80" width="80" />
+        <span lang="sa">पत्रम्</span><small>Paper</small>
       </div>
       <div class="choice" id="s">
         <img src="ka.png" alt="" height="80" width="80" />
+        <span lang="sa">कर्तरी</span><small>Scissors</small>
       </div>
     </div>
     <br />
     <p id="action-message">Make Your Choice.</p>
     <br />
-    modified from # Rock Paper Scissors ❤ by
-    https://github.com/AmanRaj1608/awesome-rock-paper-scissor
+    </section>
+    <section class="rps-rules" aria-label="Rules"><p><strong>How to play</strong></p><p>Rock beats scissors · Scissors beat paper · Paper beats rock</p><p>Click a Sanskrit title word to hear its pronunciation.</p></section>
+    <p class="rps-credit">Adapted from <a href="https://github.com/AmanRaj1608/awesome-rock-paper-scissor">AmanRaj1608’s Rock Paper Scissors</a></p>
+    </main>
     <script src="app.js" charset="utf-8"></script>
     <audio autobuffer preload="auto">
       <source src="r.mp3" />
