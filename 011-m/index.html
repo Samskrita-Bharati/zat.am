@@ -165,8 +165,7 @@
 
             <div id="spin" class="circle-inner">
               <div class="months-centre-content">
-                <span class="months-progress-label">Progress</span>
-
+                
                 <progress
                   id="p"
                   max="12"
@@ -182,7 +181,7 @@
                   class="zatam-game-btn zatam-game-btn-primary"
                   onclick="showMonth()"
                 >
-                  Start
+                  आरम्भ
                 </button>
 
                 <p
@@ -196,15 +195,13 @@
                 <p id="trans" hidden></p>
 
                 <p class="months-mistakes">
-                  Wrong attempts: <strong id="wt">०</strong>
+                  ❌ = <strong id="wt">०</strong>
                 </p>
               </div>
             </div>
-          </div>
+           </div>
 
-          <p id="placement-feedback" class="months-feedback" role="status">
-            Press Start to begin.
-          </p>
+          <p id="placement-feedback" hidden></p>
         </section>
 
         <aside class="months-instructions">
@@ -426,7 +423,7 @@
       }
 
       function showMonth() {
-        if (monthsCompleted || activePosition !== null) return;
+        if (monthsCompleted) return;
 
         if (monthsStartedAt === null) {
           monthsStartedAt = Date.now();
@@ -439,6 +436,7 @@
           });
         }
 
+        activePosition = null;
         stop();
       }
 
@@ -477,7 +475,8 @@
         }
 
         const startButton = document.getElementById("start-button");
-        startButton.hidden = true;
+        startButton.textContent = "आगामिमासः";
+        startButton.hidden = false;
 
         document.getElementById("placement-feedback").textContent =
           "Drag the month into its correct position.";
