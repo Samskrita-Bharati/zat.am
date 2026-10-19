@@ -1,0 +1,28 @@
+.name-generator-card {
+	width: min(100%, 620px);
+	margin: 0 auto;
+	text-align: center;
+}
+
+.name-generator-result {
+	margin: 0;
+	padding: clamp(24px, 7vw, 48px) 16px;
+	border: 1px solid var(--zatam-border);
+	border-radius: var(--zatam-radius);
+	background: var(--zatam-soft);
+	color: var(--zatam-heading);
+	font-size: clamp(1.75rem, 8vw, 3rem);
+	font-weight: 800;
+	line-height: 1.35;
+	text-wrap: balance;
+}
+
+.name-generator-card .zatam-game-btn {
+	width: min(100%, 300px);
+}
+
+@media (max-width: 430px) {
+	.name-generator-result {
+		padding: 24px 12px;
+	}
+}
