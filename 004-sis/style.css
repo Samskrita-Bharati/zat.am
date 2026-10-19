@@ -88,6 +88,7 @@ td.emptyCell {
 #sudokuPuzzle .zatam-game-stats {
 	width: 100%;
 	max-width: 540px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 	margin: 0 auto 12px;
 }
 
