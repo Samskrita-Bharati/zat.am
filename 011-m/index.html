@@ -28,8 +28,11 @@
         </p>
       </header>
 
-      <section class="months-layout zatam-game-play-area">
-        <section class="months-board" aria-label="Months board">
+      <div class="months-layout">
+        <section
+          class="months-board zatam-game-play-area"
+          aria-label="Months board"
+        >
           <div class="circle-big">
             <div
               class="circle one"
@@ -165,7 +168,6 @@
 
             <div id="spin" class="circle-inner">
               <div class="months-centre-content">
-                
                 <progress
                   id="p"
                   max="12"
@@ -199,57 +201,70 @@
                 </p>
               </div>
             </div>
-           </div>
+          </div>
 
           <p id="placement-feedback" hidden></p>
         </section>
 
-        <aside class="months-instructions">
-          <h2>How to play</h2>
+        <aside
+          class="months-instructions"
+          aria-labelledby="months-instructions-title"
+          tabindex="0"
+        >
+          <h2 id="months-instructions-title">How to play</h2>
 
           <ol>
             <li>
               <strong>Start</strong>
-              <span>Press Start to reveal a Sanskrit month.</span>
+              <span>Press आरम्भ to reveal a Sanskrit month.</span>
             </li>
 
             <li>
               <strong>Find its position</strong>
               <span>
-                Count clockwise from the gold position marked १.
-                चैत्रः is the first month.
+                Count clockwise from १. चैत्रः is the first month.
               </span>
             </li>
 
             <li>
-              <strong>Drag and place</strong>
+              <strong>Place the month</strong>
               <span>
-                Drag the month into its correct position.
-                Then press Next month.
+                Drag the displayed month into its correct slot,
+                or tap the slot. An incorrect placement adds one
+                wrong attempt.
               </span>
             </li>
 
             <li>
               <strong>Complete the cycle</strong>
-              <span>Place all twelve months to finish.</span>
+              <span>
+                Press the next-month button to reveal another month.
+                You can also use it to skip the displayed month.
+                Place all twelve months to finish.
+              </span>
             </li>
           </ol>
 
           <p class="months-tip">
-            Use the left and right arrow keys to rotate the ring.
+            <strong>Keyboard controls</strong><br />
+            Press Enter to start. Use the left and right arrow keys to
+            select a slot, then press Enter to place the month.
+            After a correct placement, press Enter to reveal another month.
+            To skip, use Tab to focus the next-month button and press Enter.
           </p>
 
           <p class="months-tip">
+            <strong>Scoring</strong><br />
             Fewer wrong attempts give a higher final score.
-            Twelve correct placements with no mistakes earn 100.
+            Place all twelve months without mistakes to earn 100.
+            Your score is submitted only after completing the game.
           </p>
         </aside>
-      </section>
+      </div>
 
-      <section
+      <dialog
         id="months-result"
         class="zatam-game-result months-result"
-        hidden
         aria-labelledby="months-result-title"
       >
         <h2
@@ -300,7 +315,7 @@
             Play Again
           </button>
         </div>
-      </section>
+      </dialog>
     </main>
 
     <script>
@@ -309,7 +324,6 @@
       var set = Number(urlParams.get("s") || 0);
       var t = urlParams.get("t") || "0";
 
-      // Preserve the original content sets.
       var m = [
         [
           "चैत्रः",
@@ -484,32 +498,34 @@
         setSun("sun.png");
       }
 
-      function allowDrop(ev) {
-        if (monthsCompleted || activePosition === null) return;
+      function allowDrop(event) {
+  if (monthsCompleted || activePosition === null) return;
 
-        ev.preventDefault();
-      }
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "move";
+}
 
-      function drag(ev) {
-        if (monthsCompleted || activePosition === null) {
-          ev.preventDefault();
-          return;
-        }
+function drag(event) {
+  if (monthsCompleted || activePosition === null) {
+    event.preventDefault();
+    return;
+  }
 
-        ev.dataTransfer.setData("text/plain", "new");
-        ev.dataTransfer.effectAllowed = "move";
-      }
+  event.dataTransfer.setData("text/plain", "new");
+  event.dataTransfer.effectAllowed = "move";
+}
 
-      function drop(ev) {
-  ev.preventDefault();
+function drop(event) {
+  event.preventDefault();
 
-  if (ev.dataTransfer.getData("text/plain") !== "new") return;
+  if (event.dataTransfer.getData("text/plain") !== "new") return;
 
-  placeMonth(ev.currentTarget);
+  placeMonth(event.currentTarget);
 }
 
 function placeMonth(slot) {
   if (
+    !slot ||
     monthsCompleted ||
     activePosition === null ||
     slot.dataset.filled === "true"
@@ -518,55 +534,48 @@ function placeMonth(slot) {
   }
 
   const slotPosition = Number(slot.getAttribute("r"));
-        if (slotPosition !== activePosition) {
-          wrongtries++;
 
-          document.getElementById("wt").textContent =
-            devanagari(wrongtries);
+  if (slotPosition !== activePosition) {
+    wrongtries++;
 
-          document.getElementById("placement-feedback").textContent =
-            "Not quite. Try another position.";
+    document.getElementById("wt").textContent =
+      devanagari(wrongtries);
 
-          return;
-        }
+    document.getElementById("placement-feedback").textContent =
+      "Not quite. Try another position.";
 
-        const word = m1[activePosition - 1];
+    return;
+  }
 
-        slot.querySelector(".slot-word").textContent = word;
-        slot.dataset.filled = "true";
-        slot.classList.add("is-filled");
+  const word = m1[activePosition - 1];
 
-        filled.push(word);
+  slot.querySelector(".slot-word").textContent = word;
+  slot.dataset.filled = "true";
+  slot.classList.add("is-filled");
 
-        m2 = m1.filter((month) => !filled.includes(month));
-        activePosition = null;
+  filled.push(word);
+  m2 = m1.filter((month) => !filled.includes(month));
+  activePosition = null;
 
-        document.getElementById("p").value = filled.length;
+  document.getElementById("p").value = filled.length;
+  document.getElementById("progress-text").textContent =
+    devanagari(filled.length) + " / १२";
 
-        document.getElementById("progress-text").textContent =
-          devanagari(filled.length) + " / १२";
+  const source = document.getElementById("new");
+  source.draggable = false;
+  source.hidden = true;
+  source.removeAttribute("pos");
 
-        const source = document.getElementById("new");
-        source.draggable = false;
-        source.hidden = true;
-        source.removeAttribute("pos");
+  document.getElementById("trans").hidden = true;
 
-        document.getElementById("trans").hidden = true;
+  if (filled.length === 12) {
+    completeMonthsGame();
+    return;
+  }
 
-        if (filled.length === 12) {
-          completeMonthsGame();
-          return;
-        }
-
-        const startButton = document.getElementById("start-button");
-        startButton.textContent = "Next month";
-        startButton.hidden = false;
-
-        document.getElementById("placement-feedback").textContent =
-          "Correct! Press Next month to continue.";
-
-        setSun("sun.gif");
-      }
+  // Immediately display the next unplaced month.
+  showMonth();
+}
 
       function completeMonthsGame() {
         if (monthsCompleted) return;
@@ -599,17 +608,10 @@ function placeMonth(slot) {
           " wrong attempts";
 
         const result = document.getElementById("months-result");
-        result.hidden = false;
+        result.showModal();
 
-        document.getElementById("months-result-title").focus();
-
-        result.scrollIntoView({
-          behavior: window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-          ).matches
-            ? "auto"
-            : "smooth",
-          block: "center",
+        document.getElementById("months-result-title").focus({
+          preventScroll: true,
         });
 
         saveMonthsScore();
@@ -622,9 +624,7 @@ function placeMonth(slot) {
 
         const status = document.getElementById("months-save-status");
         const retry = document.getElementById("months-retry");
-        const playAgain = document.getElementById(
-          "months-play-again"
-        );
+        const playAgain = document.getElementById("months-play-again");
 
         status.textContent = "Submitting your score…";
         retry.hidden = true;
@@ -649,13 +649,9 @@ function placeMonth(slot) {
             }
           );
 
-          if (
-            result.ok ||
-            result.reason === "already-submitted"
-          ) {
+          if (result.ok || result.reason === "already-submitted") {
             monthsSaved = true;
-            status.textContent =
-              "Your score has been submitted!";
+            status.textContent = "Your score has been submitted!";
           } else {
             status.textContent =
               result.reason === "not-signed-in"
@@ -681,8 +677,7 @@ function placeMonth(slot) {
 
 function chargearray() {
   circleArray.forEach((circle) => {
-    const circleAngle = Number(circle.dataset.angle);
-    const fixedAngle = 30 + circleAngle;
+    const fixedAngle = 30 + Number(circle.dataset.angle);
     const position = Number(circle.getAttribute("r"));
 
     circle.style.transform =
@@ -690,8 +685,17 @@ function chargearray() {
       `translate(240px) ` +
       `rotate(${-fixedAngle}deg)`;
 
-    circle.classList.toggle("one", position === selectedPosition);
+    circle.classList.toggle(
+      "one",
+      position === selectedPosition
+    );
   });
+}
+
+function getSelectedSlot() {
+  return Array.from(circleArray).find(
+    (slot) => Number(slot.getAttribute("r")) === selectedPosition
+  );
 }
 
 document.addEventListener("keydown", function (event) {
@@ -706,92 +710,65 @@ document.addEventListener("keydown", function (event) {
     return;
   }
 
-  // Keep other buttons and links working normally.
+  const button = target.closest("button");
+
   if (
     target.closest("a") ||
-    (
-      target.closest("button") &&
-      target.closest("button").id !== "start-button"
-    )
+    (button && button.id !== "start-button")
   ) {
     return;
   }
 
-  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+  if (
+    event.key === "ArrowLeft" ||
+    event.key === "ArrowRight"
+  ) {
     event.preventDefault();
 
-    selectedPosition = event.key === "ArrowLeft"
-      ? (selectedPosition === 1 ? 12 : selectedPosition - 1)
-      : (selectedPosition === 12 ? 1 : selectedPosition + 1);
+    selectedPosition =
+      event.key === "ArrowLeft"
+        ? (selectedPosition === 1 ? 12 : selectedPosition - 1)
+        : (selectedPosition === 12 ? 1 : selectedPosition + 1);
 
     chargearray();
+    getSelectedSlot().focus({ preventScroll: true });
+    return;
+  }
 
-    const slot = Array.from(circleArray).find(
-      (item) => Number(item.getAttribute("r")) === selectedPosition
-    );
-
-    slot.focus({ preventScroll: true });
-  } else if (event.key === "Enter") {
+  if (event.key === "Enter") {
     event.preventDefault();
 
     if (event.repeat) return;
 
-    if (
-      activePosition === null ||
-      target.closest("#start-button")
-    ) {
+    if (activePosition === null || button?.id === "start-button") {
       showMonth();
+
+      // Move keyboard control to the selected board position.
+      getSelectedSlot().focus({ preventScroll: true });
       return;
     }
 
-    const slot = Array.from(circleArray).find(
-      (item) => Number(item.getAttribute("r")) === selectedPosition
-    );
-
-    placeMonth(slot);
+    placeMonth(getSelectedSlot());
   }
 });
 
-      document.addEventListener("keydown", function (event) {
-        const tag = event.target.tagName;
+circleArray.forEach((slot) => {
+  slot.setAttribute("role", "button");
+  slot.setAttribute("tabindex", "0");
 
-        if (
-          tag === "INPUT" ||
-          tag === "TEXTAREA" ||
-          tag === "SELECT" ||
-          event.target.isContentEditable ||
-          monthsCompleted
-        ) {
-          return;
-        }
+  slot.addEventListener("focus", () => {
+    selectedPosition = Number(slot.getAttribute("r"));
+    chargearray();
+  });
 
-        if (event.key === "ArrowLeft") {
-          event.preventDefault();
-          angle += 30;
-          chargearray();
-        } else if (event.key === "ArrowRight") {
-          event.preventDefault();
-          angle -= 30;
-          chargearray();
-        }
-      });
-      circleArray.forEach((slot) => {
-        slot.setAttribute("role", "button");
-        slot.setAttribute("tabindex", "0");
+  slot.addEventListener("click", () => {
+    selectedPosition = Number(slot.getAttribute("r"));
+    chargearray();
+    placeMonth(slot);
+  });
+});
 
-        slot.addEventListener("focus", () => {
-          selectedPosition = Number(slot.getAttribute("r"));
-          chargearray();
-        });
-
-        slot.addEventListener("click", () => {
-          selectedPosition = Number(slot.getAttribute("r"));
-          chargearray();
-          placeMonth(slot);
-        });
-      });
-
-      chargearray();
+chargearray();
     </script>
 
     <script type="module" src="../js/navbar-loader.js"></script>

@@ -2,6 +2,11 @@
   max-width: 1200px;
 }
 
+.months-game,
+.months-game * {
+  box-sizing: border-box;
+}
+
 .months-game [hidden] {
   display: none !important;
 }
@@ -10,19 +15,22 @@
   line-height: 1.5;
 }
 
+/* Separate board and instructions panels */
 .months-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 270px;
-  align-items: center;
-  gap: 28px;
-  padding: 28px;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  align-items: start;
+  gap: 24px;
 }
 
-.months-board {
+.months-game .months-board {
   display: grid;
   justify-items: center;
+  align-content: start;
   min-width: 0;
-  padding: 15px 0;
+  min-height: 0;
+  margin: 0;
+  padding: 16px;
 }
 
 /* Board */
@@ -137,7 +145,6 @@
   text-align: center;
 }
 
-.months-progress-label,
 .months-game #progress-text,
 .months-mistakes {
   padding: 3px 9px;
@@ -146,12 +153,6 @@
   color: var(--zatam-navy);
   font-size: 0.8rem;
   font-weight: 700;
-}
-
-.months-progress-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .months-game #p {
@@ -202,18 +203,15 @@
   margin: 0;
 }
 
-.months-feedback {
-  min-height: 24px;
-  margin: 22px 0 0;
-  color: var(--zatam-muted);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  text-align: center;
-}
-
-/* Instructions */
+/* Independently scrollable instructions */
 .months-instructions {
-  padding: 24px;
+  min-width: 0;
+  max-height: 600px;
+  margin: 0;
+  padding: 22px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
   border: 1px solid var(--zatam-border);
   border-radius: var(--zatam-radius-lg);
   background: var(--zatam-soft);
@@ -236,7 +234,7 @@
   color: var(--zatam-navy);
 }
 
-.months-instructions strong {
+.months-instructions li strong {
   display: block;
   margin-bottom: 5px;
   font-size: 0.95rem;
@@ -257,32 +255,78 @@
   line-height: 1.65;
 }
 
-/* Completion */
-.months-result {
-  margin-top: 24px;
+/* Win popup */
+.months-game dialog.months-result {
+  position: fixed;
+  inset: 0;
+  width: min(480px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 28px;
+  overflow-y: auto;
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+  background: var(--zatam-white, #fff);
+  color: var(--zatam-navy);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.months-game dialog.months-result:not([open]) {
+  display: none;
+}
+
+.months-game dialog.months-result::backdrop {
+  background: rgba(15, 23, 42, 0.55);
 }
 
 .months-result .zatam-game-result-title {
   line-height: 1.5;
 }
 
+.months-result .zatam-game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
 /* Smaller screens */
 @media (max-width: 1100px) {
+  .months-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 18px;
+  }
+
+  .months-game .circle-big {
+    zoom: 0.85;
+  }
+
+  .months-instructions {
+    max-height: 510px;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 950px) {
   .months-layout {
     grid-template-columns: 1fr;
   }
 
+  .months-game .circle-big {
+    zoom: 1;
+  }
+
   .months-instructions {
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+    max-height: 280px;
   }
 }
 
 @media (max-width: 700px) {
-  .months-layout {
-    padding: 18px 10px;
-    gap: 20px;
+  .months-game .months-board {
+    padding: 12px 8px;
   }
 
   .months-game .circle-big {
@@ -305,5 +349,64 @@
 @media (max-width: 370px) {
   .months-game .circle-big {
     zoom: 0.45;
+  }
+}@media (min-width: 1101px) {
+  .zatam-game-shell.months-game {
+    width: 80vw;
+    max-width: 1600px;
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+
+  .months-game .months-layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3fr);
+    gap: 24px;
+  }
+
+  .months-game .months-board {
+    padding: 12px;
+  }
+
+  .months-game .circle-big {
+    zoom: 0.85;
+  }
+
+  .months-game .months-instructions {
+    height: 534px;
+    max-height: 534px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1300px) {
+  .months-game .circle-big {
+    zoom: 1;
+  }
+
+  .months-game .months-instructions {
+    height: 624px;
+    max-height: 624px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .months-game .circle-big {
+    zoom: 1.2;
+  }
+
+  .months-game .months-instructions {
+    height: 744px;
+    max-height: 744px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .months-game .circle-big {
+    zoom: 1.35;
+  }
+
+  .months-game .months-instructions {
+    height: 834px;
+    max-height: 834px;
   }
 }
