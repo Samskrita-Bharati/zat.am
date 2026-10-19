@@ -8,10 +8,6 @@
 	margin-right: auto;
 }
 
-#sudokuPuzzle .zatam-game-instructions {
-	text-align: left;
-}
-
 img.logo {
 	display: block;
 	margin-top: 20px;
@@ -77,32 +73,82 @@ td.emptyCell {
 	background-color: var(--zatam-gold);
 }
 
-.mistakeScreen {
-	position: fixed;
-	inset: 0;
-	display: none;
-	z-index: 5500;
+#grid.answer-revealed td {
+	pointer-events: none;
+	cursor: default;
 }
 
-.mistakeScreen .zatam-game-modal {
-	margin: 10vh auto;
+.zatam-sudoku-board-row {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#sudokuPuzzle .zatam-game-stats {
+	width: 100%;
+	max-width: 540px;
+	margin: 0 auto 12px;
 }
 
 .winScreen {
 	position: fixed;
-	inset: 0;
+	top: 16px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: min(calc(100% - 32px), 560px);
 	display: none;
+	place-items: start center;
+	padding: 0;
+	background: transparent;
 	z-index: 5500;
 }
 
 .winScreen .zatam-game-result {
-	margin: 10vh auto;
+	width: 100%;
+	margin: 0 auto;
 }
 
-.mistakeText {
-	margin: 0;
+.zatam-game-result-score-breakdown {
+	margin-top: 18px;
+	padding: 12px 16px;
+	background: var(--zatam-soft);
+	border: 1px solid var(--zatam-border);
+	border-radius: var(--zatam-radius);
+	text-align: left;
+}
+
+.zatam-game-result-score-breakdown p {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 6px 0;
 	color: var(--zatam-text);
-	line-height: 1.6;
+}
+
+.zatam-game-result-score-breakdown strong {
+	white-space: nowrap;
+}
+
+.zatam-game-result-score-breakdown .zatam-game-result-score-total {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid var(--zatam-border);
+	color: var(--zatam-blue);
+	font-weight: 800;
+}
+
+#answerRevealPanel p {
+	margin: 16px 0;
+}
+
+.zatam-sudoku-attempts-flash {
+	animation: sudoku-attempts-flash 0.5s ease-out;
+}
+
+@keyframes sudoku-attempts-flash {
+	0%, 35% { color: var(--zatam-danger); }
+	100% { color: var(--zatam-heading); }
 }
 
 #numPad {

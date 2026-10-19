@@ -23,8 +23,11 @@ https://github.com/artbtjr/Sudoku
   switching between consonants and numerals, and completion checks.
 - New Game reloads the page and generates a new puzzle. Solve reveals that
   puzzle's generated solution.
-- Click the error prompt to dismiss it. After winning, click outside the result
-  panel to start a new game.
+- Each puzzle starts with 80 points, reduced by 10 for each incorrect entry
+  (minimum 0). Completion within five minutes adds 20 points; completion after
+  five and within ten minutes adds 10 points.
+- The timer starts with the first board click. After winning, click outside the
+  result panel to start a new game.
 - The generator does not check whether a puzzle has a unique solution.
 
 3. Data and Caching
@@ -34,6 +37,7 @@ https://github.com/artbtjr/Sudoku
   for the current page session.
 - Reloading the page discards the current progress and generates a new puzzle.
   Saving and restoring progress is not implemented.
+- Score and attempts reset whenever a new game is opened or the page is reloaded.
 - Game code and images are stored as static project files.
 - index.html loads jQuery 1.12.4 from Google Hosted Libraries.
 - No application-level caching or offline storage is implemented.
@@ -82,7 +86,5 @@ theme may affect other games that use it.
 
 - Difficulty selection (Easy, Medium, and Hard).
 - Puzzle generation and validation that guarantees a unique solution.
-- Immediate error feedback or highlighting of duplicate symbols in a row,
-  column, or 3×3 box.
 - Notes mode and progress marking or highlighting tools.
 - Saving and restoring an unfinished game.
