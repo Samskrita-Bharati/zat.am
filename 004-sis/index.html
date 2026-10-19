@@ -2,7 +2,9 @@
 <html>
 	<head>
 
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>सुडोकू!</title>
+		<link href="../shared/game-theme.css" rel="stylesheet" type="text/css">
 		<link href="style.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="sudoku.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><script language="javascript" type="text/javascript">
@@ -10,14 +12,19 @@
 			let nums=["","१","२","३","४","५","६","७","८","९"];
 			var puzzle;
 			var selectedTile;
-			var r, c;
-var numtmod="num";
+			var answerRevealed = false;
+			var retryCountdownInterval = null;
+			var numtmod = "num";
+			var attempts = 0;
+			var puzzleScored = false;
+			var timerStartedAt = null;
+			var timerInterval = null;
 			$(document).ready(function() {
+				updateAttemptsDisplay();
 				init();
 				$("#grid").fadeIn(500);
 				$(".emptyCell").click(function(e) {
-					r = selectedTile.getAttribute('id').charAt(1);
-					c = selectedTile.getAttribute('id').charAt(3);
+					if(answerRevealed) return;
 				    $("#numPad").fadeIn(100);
 				    $("#numPad").offset({left: e.pageX - 78,top: e.pageY - 40});
 				});
@@ -31,10 +38,13 @@ var numtmod="num";
 				$("#np8").click(function() { numberPad(8); });
 				$("#np9").click(function() { numberPad(9); });
 				$("#npx").click(function() { numberPad(0); });
-				$(".mistakeScreen").click(function() {
-					$(".mistakeScreen").fadeOut(100);
+				$(".winScreen").click(function(e) {
+					if(e.target === this && !answerRevealed) newGame();
 				});
 				$("#newGame").click(function() { newGame(); });
+				$("#answerNewGame").click(function() {
+					newGame();
+				});
 				$("#tognum").click(function(){ numtog();});
 				$("#solve").click(function() {
 					$("#numPad").fadeOut(100);
@@ -45,12 +55,7 @@ var numtmod="num";
 
 			function numtog()
 			{
-			//debugger;
-			
-			
-			//if ($("td")[numtc].innerText == "क")
-			//$("td")[numtc].innerText = "1";
-			
+				if(answerRevealed) return;
 				if (numtmod=="num")
 				{
 				for (numtc=0;numtc<81;numtc++)
@@ -121,7 +126,7 @@ var numtmod="num";
 							tile.onclick = tOnClick;
 						}
 						else {
-							tile.style.backgroundColor = "#ecf4f3";
+							tile.style.backgroundColor = "var(--zatam-success-soft)";
 							tile.className = "cell";
 							tile.innerHTML = sa[puzzle.getTileNumber(i, j)];
 						}
@@ -130,6 +135,8 @@ var numtmod="num";
 			}
 
 			function tOnClick() {
+				if(answerRevealed) return;
+				startTimer();
 				if(selectedTile == null) {
 					selectedTile = this;
 					selectedTile.className = "emptyCell selected";
@@ -141,32 +148,51 @@ var numtmod="num";
 			}
 
 			function numberPad(value) {
+				if(answerRevealed || !selectedTile) return;
+				var parts = selectedTile.id.match(/^t(\d+)x(\d+)$/);
+				var row = parseInt(parts[1], 10);
+				var col = parseInt(parts[2], 10);
 				if (numtmod=="num") 
 				   selectedTile.innerHTML = sa[value]
 				else
 				   selectedTile.innerHTML = nums[value];
+				var enteredValue = symbolToValue(selectedTile.innerHTML);
 				deselect();
 				$("#numPad").fadeOut(100);
+				if(value !== 0 && enteredValue !== puzzle.getSolution(row, col)) {
+					attempts++;
+					updateAttemptsDisplay();
+					showEntryError(parts ? document.getElementById("t" + row + "x" + col) : null);
+					return;
+				}
 				if(checkForEmptyCells() === true) {
 					var fGrid = getFinishedGrid();
 					for(var i = 0; i < 9; i++) {
 						for(var j = 0; j < 9; j++) {
 							var t = document.getElementById("t" + i + "x" + j);
 							if(t.classList.contains("emptyCell")) {
-								console.log("outside target")
-								console.log(fGrid);
-								if(puzzle.isValid(fGrid, i, j, sa.indexOf(t.innerHTML))) {
-									//console.log("inside target")
+								if(puzzle.isValid(fGrid, i, j, symbolToValue(t.innerHTML))) {
 									continue;
 								}
 								else {
-									$(".mistakeScreen").fadeIn(100);
+									showEntryError(t);
 									return;
 								}
 							}
 						}
 					}
+					if(!puzzleScored) {
+						var elapsedSeconds = Math.floor((Date.now() - timerStartedAt) / 1000);
+						var baseScore = 80;
+						var errorDeduction = Math.min(baseScore, attempts * 10);
+						var speedBonus = elapsedSeconds <= 300 ? 20 : (elapsedSeconds <= 600 ? 10 : 0);
+						var puzzleScore = Math.max(0, baseScore - errorDeduction) + speedBonus;
+						puzzleScored = true;
+						updateScoreBreakdown(baseScore, errorDeduction, speedBonus, puzzleScore);
+						submitLeaderboardScore(puzzleScore, elapsedSeconds, errorDeduction, speedBonus);
+					}
 					$(".winScreen").fadeIn(100);
+					stopTimer();
 					return;
 				}
 			}
@@ -176,10 +202,98 @@ var numtmod="num";
 				for(var i = 0; i < 9; i++) {
 					fGrid[i] = new Array(9);
 					for(var j = 0; j < 9; j++) {
-						fGrid[i][j] = sa.indexOf(document.getElementById("t" + i + "x" + j).innerHTML);
+						fGrid[i][j] = symbolToValue(document.getElementById("t" + i + "x" + j).innerHTML);
 					}
 				}
 				return fGrid;
+			}
+
+			function symbolToValue(symbol) {
+				var consonantValue = sa.indexOf(symbol);
+				return consonantValue === -1 ? nums.indexOf(symbol) : consonantValue;
+			}
+
+			function updateAttemptsDisplay() {
+				document.getElementById("attempts").innerText = attempts;
+			}
+
+			function updateScoreBreakdown(baseScore, errorDeduction, speedBonus, puzzleScore) {
+				document.getElementById("scoreBase").innerText = baseScore;
+				document.getElementById("scoreErrors").innerText = errorDeduction === 0 ? "0" : "−" + errorDeduction;
+				document.getElementById("scoreSpeedBonus").innerText = "+" + speedBonus;
+				document.getElementById("scoreEarned").innerText = puzzleScore;
+			}
+
+			async function submitLeaderboardScore(score, elapsedSeconds, errorDeduction, speedBonus) {
+				var status = document.getElementById("scoreSaveStatus");
+				status.className = "zatam-game-status zatam-game-status-info";
+				status.textContent = "Saving your score...";
+				if(!window.zatamScore || typeof window.zatamScore.submit !== "function") {
+					status.className = "zatam-game-status zatam-game-status-error";
+					status.textContent = "The leaderboard is not available right now.";
+					return;
+				}
+				try {
+					var result = await window.zatamScore.submit(score, {
+						metrics: {
+							attempts: attempts,
+							errorDeduction: errorDeduction,
+							speedBonus: speedBonus,
+							pointsEarned: Number(document.getElementById("scoreEarned").innerText),
+							gameTimerSeconds: elapsedSeconds
+						}
+					});
+					if(result && result.ok) {
+						status.className = "zatam-game-status zatam-game-status-success";
+						status.textContent = "Score saved to the leaderboard ✓";
+					} else if(result && result.reason === "not-signed-in") {
+						status.className = "zatam-game-status zatam-game-status-info";
+						status.textContent = "Sign in to save your score to the leaderboard.";
+					} else if(result && result.reason === "already-submitted") {
+						status.className = "zatam-game-status zatam-game-status-success";
+						status.textContent = "Score already saved ✓";
+					} else {
+						status.className = "zatam-game-status zatam-game-status-error";
+						status.textContent = "Your score could not be saved.";
+					}
+				} catch(error) {
+					console.error("[004-sis] Score submission failed:", error);
+					status.className = "zatam-game-status zatam-game-status-error";
+					status.textContent = "The leaderboard score could not be saved.";
+				}
+			}
+
+			function startTimer() {
+				if(timerStartedAt !== null) return;
+				timerStartedAt = Date.now();
+				timerInterval = window.setInterval(updateTimerDisplay, 1000);
+				updateTimerDisplay();
+			}
+
+			function stopTimer() {
+				if(timerInterval !== null) window.clearInterval(timerInterval);
+				timerInterval = null;
+			}
+
+			function updateTimerDisplay() {
+				var elapsedSeconds = Math.floor((Date.now() - timerStartedAt) / 1000);
+				var minutes = Math.floor(elapsedSeconds / 60);
+				var seconds = elapsedSeconds % 60;
+				document.getElementById("gameTimer").innerText =
+					String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+			}
+
+			function showEntryError(tile) {
+				var attemptsValue = document.getElementById("attempts");
+				attemptsValue.classList.remove("zatam-sudoku-attempts-flash");
+				void attemptsValue.offsetWidth;
+				attemptsValue.classList.add("zatam-sudoku-attempts-flash");
+				window.setTimeout(function() {
+					attemptsValue.classList.remove("zatam-sudoku-attempts-flash");
+				}, 500);
+				if(tile) {
+					tile.classList.add("zatam-game-status-error");
+				}
 			}
 
 			function checkForEmptyCells() {
@@ -202,59 +316,115 @@ var numtmod="num";
 			}
 
 			function solve() {
+				if(answerRevealed) return;
+				answerRevealed = true;
+				stopTimer();
+				$("#numPad").fadeOut(100);
+				selectedTile = null;
+				var elapsedSeconds = timerStartedAt === null ? 0 : Math.floor((Date.now() - timerStartedAt) / 1000);
+				submitLeaderboardScore(0, elapsedSeconds, 0, 0);
+				document.getElementById("win-title").textContent = "Try again";
+				document.querySelector(".zatam-game-result-message").hidden = true;
+				document.querySelector(".zatam-game-result-score-breakdown").hidden = true;
+				document.getElementById("scoreSaveStatus").hidden = true;
+				document.getElementById("answerRevealPanel").hidden = false;
+				document.getElementById("winScreen").style.display = "grid";
+				startRetryCountdown();
+				document.getElementById("grid").classList.add("answer-revealed");
 				for(var i = 0; i < 9; i++) {
 					for(var j = 0; j < 9; j++) {
 						var tile = document.getElementById("t" + i + "x" + j);
 						tile.innerHTML = sa[puzzle.getSolution(i, j)];
+						tile.onclick = null;
+						tile.className = "cell";
 					}
 				}
+				$("#grid td").off("click");
+			}
+
+			function startRetryCountdown() {
+				var secondsRemaining = 5 * 60;
+				var timerDisplay = document.getElementById("retryCountdown");
+				function updateCountdown() {
+					var minutes = Math.floor(secondsRemaining / 60);
+					var seconds = secondsRemaining % 60;
+					timerDisplay.textContent = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+					if(secondsRemaining <= 0) {
+						window.clearInterval(retryCountdownInterval);
+						retryCountdownInterval = null;
+						return;
+					}
+					secondsRemaining--;
+				}
+				updateCountdown();
+				retryCountdownInterval = window.setInterval(updateCountdown, 1000);
 			}
 		</script>
 	</head>
 
-	<body data-page="games">
+	<body data-page="games" class="zatam-themed-game zatam-game-page">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-		<div class="mistakeScreen">
-			<center class="mistakeText">पुनरपि एकवारं प्रयत्नं कुर्म:</center>
+		<main class="zatam-game-shell">
+		<div id="winScreen" class="winScreen zatam-game-modal-backdrop">
+			<section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="win-title">
+				<h2 id="win-title" class="zatam-game-result-title">Congratulations!</h2>
+				<p class="zatam-game-result-message">अभिनन्दनानि!!!</p>
+				<div class="zatam-game-result-score-breakdown" aria-live="polite">
+					<p><span>Base score</span><strong id="scoreBase">80</strong></p>
+					<p><span>Error deductions</span><strong id="scoreErrors">−0</strong></p>
+					<p><span>Time bonus</span><strong id="scoreSpeedBonus">+0</strong></p>
+					<p class="zatam-game-result-score-total"><span>Points earned</span><strong id="scoreEarned">80</strong></p>
+				</div>
+				<div id="scoreSaveStatus" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite">Checking leaderboard...</div>
+				<div id="answerRevealPanel" hidden>
+					<p class="zatam-game-result-message">New game starts in <strong id="retryCountdown">05:00</strong></p>
+					<button id="answerNewGame" type="button" class="zatam-game-btn zatam-game-btn-primary">Start new game now</button>
+				</div>
+			</section>
 		</div>
-		<div class="winScreen">
-			<center class="winText">अभिनन्दनानि!!!</center>
-		</div>
-		<section id="logosection">
-			<!-- <img class="logo" src="img/sudokuberlogo.png" /> -->
-			<p style="font-size: 60px; margin: -10px -10px; padding: 0px;">सुडोकू</p>
+		<section id="logosection" class="zatam-game-header">
+			<span class="zatam-game-eyebrow">Puzzle Game</span>
+			<!-- <p class="zatam-game-title">सुडोकू</p> -->
+			<img class="logo" src="img/sudokuberlogo.png" />
+			<p class="zatam-game-subtitle">Fill every row, column, and 3×3 box with the correct symbols.</p>
 		</section>
-		<section id="sudokuPuzzle">
+		<div class="zatam-game-instructions">
+			<p>Select an empty square, then choose a symbol. Use the buttons to switch between letters and numbers, start a new puzzle, or reveal the solution.</p>
+		</div>
+		<section id="sudokuPuzzle" class="zatam-game-play-area">
 			<div id='numPad'>
 				<center>
 					<div>
-						<!-- ["क्","ख्","ग","घ्","ङ्","च्","छ्","ज्","झ्","ञ्"] -->
-						<span id="np1" class='padNumbers' value='1'>क</span>
-						<span id="np2" class='padNumbers' value='2'>ख</span>
-						<span id="np3" class='padNumbers' value='3'>ग</span>
-						<span id="np4" class='padNumbers' value='4'>घ</span>
-						<span id="np5" class='padNumbers' value='5'>ङ</span>
+						<span id="np1" class='padNumbers'>क</span>
+						<span id="np2" class='padNumbers'>ख</span>
+						<span id="np3" class='padNumbers'>ग</span>
+						<span id="np4" class='padNumbers'>घ</span>
+						<span id="np5" class='padNumbers'>ङ</span>
 					</div>
 					<div>
-						<span id="np6" class='padNumbers' value='6'>च</span>
-						<span id="np7" class='padNumbers' value='7'>छ</span>
-						<span id="np8" class='padNumbers' value='8'>ज</span>
-						<span id="np9" class='padNumbers' value='9'>झ</span>
-						<span id="npx" class='padNumbers' value='x'>x</span>
+						<span id="np6" class='padNumbers'>च</span>
+						<span id="np7" class='padNumbers'>छ</span>
+						<span id="np8" class='padNumbers'>ज</span>
+						<span id="np9" class='padNumbers'>झ</span>
+						<span id="npx" class='padNumbers' aria-label="Clear selected cell">x</span>
 					</div>
 				</center>
 			</div>
-			<center>
-				<form id="formwrapper">
-					<span id="newGame" class="formbutton">नूतनं सुडोकू (sudoku)</span>
-					<span id="solve" class="formbutton">उत्तरम्</span>
-					<span id="tognum" class="formbutton">व्यञ्जनम्/संख्या अनुवर्तनम् (Toggle letters/numbers)</span>
-				</form>
-			</center>
-			<table class="inner container" align="center" id="grid">
+			<div class="zatam-sudoku-board-row">
+			<div class="zatam-game-stats">
+				<div class="zatam-game-stat zatam-game-attempts" aria-live="polite">
+					<span class="zatam-game-stat-label">Attempts</span>
+					<span class="zatam-game-stat-value" id="attempts">0</span>
+				</div>
+				<div class="zatam-game-stat zatam-game-timer" aria-live="off">
+					<span class="zatam-game-stat-label">Time</span>
+					<span class="zatam-game-stat-value" id="gameTimer">00:00</span>
+				</div>
+			</div>
+			<table class="inner container" id="grid">
 				<tr>
 					<td id='t0x0'></td><td id='t0x1'></td><td id='t0x2'></td>
 					<td id='t0x3'></td><td id='t0x4'></td><td id='t0x5'></td>
@@ -305,7 +475,17 @@ var numtmod="num";
 					<td id='t8x6'></td><td id='t8x7'></td><td id='t8x8'></td>
 				</tr>
 			</table>
+			</div>
 		</section>
+		<div class="zatam-game-actions">
+			<span id="tognum" class="zatam-game-btn zatam-game-btn-primary">व्यञ्जनम्/संख्या अनुवर्तनम् (Toggle letters/numbers)</span>
+			<span id="newGame" class="zatam-game-btn zatam-game-btn-primary">नूतनं सुडोकू (sudoku)</span>
+			<span id="solve" class="zatam-game-btn zatam-game-btn-accent">उत्तरम्</span>
+		</div>
+		<footer>
+			Sudoku Source: https://github.com/artbtjr/Sudoku
+		</footer>
+		</main>
 	
 
     <!-- Shared Zat.am Navbar -->
@@ -313,9 +493,10 @@ var numtmod="num";
       type="module"
       src="../js/navbar-loader.js"
     ></script>
-</body>
+    <script type="module">
+      import { initGameScore } from "../js/game-score.js";
 
-	<footer>
-		Sudoku Source: https://github.com/artbtjr/Sudoku
-	</footer>
+      initGameScore({ gameId: "004-sis", gameName: "सुडोकू" });
+    </script>
+</body>
 </html>
