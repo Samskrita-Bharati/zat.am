@@ -1,371 +1,320 @@
-<!DOCTYPE html>
-<html><head>
-	<title>सोपानसर्पाः च</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
- <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="ss.css" type="text/css" rel="stylesheet">
-<script type="application/javascript" src="ss.js"></script>
-<link rel="icon" type="image/png" href="sopansarpicon.png">
-    <meta name="description" content="sopaanasarpaaH - सोपानसर्पाः"/>
-    <meta property="og:title" content="सोपानसर्पाः" />
-    <meta property="og:url" content="http://www.123kakha.ga/so" />
-    <meta property="og:description" content="सोपानसर्पाः - Ladder & Snakes in Sanskrit" />
-	<meta property="og:type" content="website" />
-    <meta property="og:image:type" content="image/jpeg">
-    <meta name="twitter:card" content="सोपानसर्पाः" />
-    <meta property="og:image" content="sopansarpicon.png"/>
-    <meta property="og:image:width" content="300"/>
-    <meta property="og:image:height" content="300"/>
-</head><body data-page="games">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>सोपानसर्पाः — Snakes & Ladders | Zat.am</title>
+
+    <meta
+      name="description"
+      content="Play सोपानसर्पाः, a Sanskrit Snakes and Ladders game on Zat.am."
+    />
+
+    <meta property="og:title" content="सोपानसर्पाः — Snakes & Ladders" />
+
+    <meta
+      property="og:description"
+      content="A Sanskrit Snakes and Ladders game."
+    />
+
+    <meta property="og:type" content="website" />
+
+    <meta property="og:image" content="sopansarpicon.png" />
+
+    <link rel="icon" type="image/png" href="sopansarpicon.png" />
+
+    <!-- Shared Zat.am game theme -->
+    <link rel="stylesheet" href="../shared/game-theme.css" />
+
+    <!-- Game-specific styles -->
+    <link rel="stylesheet" href="ss.css" />
+
+    <!-- Existing game engine -->
+    <script src="ss.js"></script>
+  </head>
+
+  <body data-page="games" class="zatam-themed-game zatam-ssc-game">
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-<div style="position: relative;">
-    <canvas id="canvas" width="900" height="900"></canvas>
-    <canvas style="display: block;" id="dcanvas" width="900" height="900"></canvas>
-<div id="rtColumn">
-		<div id="controls">
-			<div id="music"><button>Sound On</button></div>
-		</div>
-		<div id="dice" class="" onclick="rollDice()">
-			<h4>Click on the dice to roll.</h4>
-			<img id="dice-anim" src="res/sdice.gif">
-			<div id="dice-static">
+    <main class="ssc-page">
+      <section class="zatam-game-shell ssc-shell">
+        <!-- =================================================
+             GAME HEADER
+             ================================================= -->
 
-				<img src="res/dice2.png">
-			</div>
-		</div>
-		<div id="players">
-			<div class="player">
-				<div class="name">Computer</div>
-				<img class="avatar" src="res/comp.png">
-				<div style="font-size: 12px;" id="compposdiv"> </div>
-			</div>
-			<div class="player">
+        <header class="zatam-game-header ssc-header">
+          <div class="zatam-game-eyebrow">ZAT.AM GAME</div>
 
-				<div class="name">You</div>
-				<img class="avatar" src="res/u.png">
-				<div style="font-size: 12px;" id="uposdiv"> <div>
-			</div>
-		   
-		</div>
-		
+          <h1 class="zatam-game-title">सोपानसर्पाः</h1>
 
+          <p class="zatam-game-subtitle">Sanskrit Snakes &amp; Ladders</p>
+        </header>
 
-	</div>
-</div>
-<script>
-GameEng.init();
-</script>
-<audio autobuffer preload=auto>
-<source src="1.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="2.wav" />
-<source src="2.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="3.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="4.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="5.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="6.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="7.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="8.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="9.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="10.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="11.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="12.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="13.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="14.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="15.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="16.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="17.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="18.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="19.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="20.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="21.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="22.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="23.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="24.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="25.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="26.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="27.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="28.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="29.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="30.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="31.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="32.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="33.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="34.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="35.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="36.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="37.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="38.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="39.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="40.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="41.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="42.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="43.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="44.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="45.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="46.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="47.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="48.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="49.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="50.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="51.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="52.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="53.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="54.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="55.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="56.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="57.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="58.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="59.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="60.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="61.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="62.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="63.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="64.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="65.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="66.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="67.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="68.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="69.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="70.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="71.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="72.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="73.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="74.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="75.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="76.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="77.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="78.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="79.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="80.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="81.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="82.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="83.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="84.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="85.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="86.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="87.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="88.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="89.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="90.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="91.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="92.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="93.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="94.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="95.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="96.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="97.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="98.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="99.mp3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="100.mp3.mp3" />
-</audio>
+        <!-- =================================================
+             INSTRUCTIONS
+             ================================================= -->
 
+        <div class="zatam-game-instructions ssc-instructions">
+          Roll the dice and race the computer to square 100. Climb ladders,
+          avoid snakes, and listen to the Sanskrit number for each square you
+          reach.
+        </div>
+
+        <!-- =================================================
+             GAME LAYOUT
+             ================================================= -->
+
+        <div class="ssc-layout">
+          <!-- ==========================
+               BOARD
+               ========================== -->
+
+          <section
+            class="ssc-board-card"
+            aria-label="Snakes and Ladders game board"
+          >
+            <div class="ssc-board-stage">
+              <!--
+                IMPORTANT:
+                Keep the actual canvas coordinate system at
+                900 × 900.
+
+                CSS scales it visually.
+              -->
+
+              <canvas
+                id="canvas"
+                width="900"
+                height="900"
+                aria-label="Snakes and Ladders board"
+              ></canvas>
+
+              <!--
+                Existing loading / intro overlay.
+              -->
+
+              <canvas
+                id="dcanvas"
+                width="900"
+                height="900"
+                aria-hidden="true"
+              ></canvas>
+            </div>
+          </section>
+
+          <!-- ==========================
+               CONTROLS
+               ========================== -->
+
+          <aside
+            id="rtColumn"
+            class="ssc-side-panel"
+            aria-label="Game controls"
+          >
+            <div class="ssc-panel-heading">
+              <div>
+                <span class="ssc-panel-kicker"> GAME CONTROLS </span>
+
+                <h2>Your Turn</h2>
+              </div>
+            </div>
+
+            <!-- Dice -->
+
+            <div
+              id="dice"
+              class="ssc-dice-card"
+              role="button"
+              tabindex="0"
+              aria-label="Roll the dice"
+            >
+              <h4>Click the dice to roll</h4>
+
+              <div class="ssc-dice-visual">
+                <img
+                  id="dice-anim"
+                  src="res/sdice.gif"
+                  alt=""
+                  aria-hidden="true"
+                />
+
+                <div id="dice-static">
+                  <img src="res/dice2.png" alt="Dice" />
+                </div>
+              </div>
+
+              <span class="ssc-dice-help"> Roll Dice </span>
+            </div>
+
+            <!-- Players -->
+
+            <div id="players" class="ssc-players">
+              <div class="player">
+                <div class="ssc-player-top">
+                  <img class="avatar" src="res/comp.png" alt="" />
+
+                  <div>
+                    <div class="ssc-player-label">OPPONENT</div>
+
+                    <div class="name">Computer</div>
+                  </div>
+                </div>
+
+                <div
+                  id="compposdiv"
+                  class="ssc-player-position"
+                  aria-live="polite"
+                >
+                  Waiting to start…
+                </div>
+              </div>
+
+              <div class="player player-you">
+                <div class="ssc-player-top">
+                  <img class="avatar" src="res/u.png" alt="" />
+
+                  <div>
+                    <div class="ssc-player-label">PLAYER</div>
+
+                    <div class="name">You</div>
+                  </div>
+                </div>
+
+                <div
+                  id="uposdiv"
+                  class="ssc-player-position"
+                  aria-live="polite"
+                >
+                  Waiting to start…
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+
+            <div id="controls" class="ssc-actions">
+              <div id="music">
+                <button type="button" class="ssc-control-button">
+                  🔊 Sound On
+                </button>
+              </div>
+
+              <button
+                type="button"
+                class="ssc-control-button ssc-restart-button"
+                onclick="window.location.reload()"
+              >
+                ↻ Restart Game
+              </button>
+            </div>
+
+            <p class="ssc-note">The first player is selected randomly.</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <!-- =====================================================
+         AUDIO
+         =====================================================
+
+         The original page contained 100 separate <audio>
+         elements.
+
+         We generate exactly the same collection here to keep
+         the HTML cleaner.
+
+         Move the existing files into:
+
+         003-ssc/audio/
+
+         Keep their current filenames.
+         ===================================================== -->
+
+    <div id="ssc-audio-container" hidden aria-hidden="true"></div>
+
+    <script>
+      (function createNumberAudio() {
+        const container = document.getElementById("ssc-audio-container");
+
+        for (let number = 1; number <= 100; number++) {
+          const audio = document.createElement("audio");
+
+          audio.preload = "auto";
+
+          /*
+            Number 2 originally provided both
+            a WAV and MP3 source.
+          */
+          if (number === 2) {
+            const wavSource = document.createElement("source");
+
+            wavSource.src = "audio/2.wav";
+
+            wavSource.type = "audio/wav";
+
+            audio.appendChild(wavSource);
+          }
+
+          const mp3Source = document.createElement("source");
+
+          mp3Source.src = "audio/" + number + ".mp3.mp3";
+
+          mp3Source.type = "audio/mpeg";
+
+          audio.appendChild(mp3Source);
+
+          container.appendChild(audio);
+        }
+      })();
+    </script>
+
+    <!-- =====================================================
+         GAME INITIALIZATION
+         ===================================================== -->
+
+    <script>
+      /*
+       * RESPONSIVE FIX
+       *
+       * The legacy game engine tried to resize the canvas
+       * according to document.body.clientHeight and also
+       * repositioned the side controls using that height.
+       *
+       * That caused the page to grow/change size while the
+       * browser window was being resized.
+       *
+       * The internal game coordinate system remains 900×900.
+       * CSS now handles visual responsiveness.
+       */
+
+      GameEng.setCanvasSize = function () {
+        // Intentionally empty.
+        // Responsive sizing is handled by ss.css.
+      };
+
+      /*
+       * Start the existing game engine.
+       */
+      GameEng.init();
+
+      /*
+       * Small keyboard-accessibility improvement for the dice.
+       */
+      const dice = document.getElementById("dice");
+
+      dice.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          dice.click();
+        }
+      });
+    </script>
 
     <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
-</body>
+    <script type="module" src="../js/navbar-loader.js"></script>
+  </body>
 </html>

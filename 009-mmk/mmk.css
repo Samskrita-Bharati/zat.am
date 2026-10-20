@@ -358,16 +358,30 @@
     width: calc(100% - 16px);
   }
 
+  .zatam-memory-game .zatam-game-header {
+    margin-bottom: 14px;
+  }
+
   .zatam-memory-game .zatam-game-title {
     font-size: 1.8rem;
   }
 
   .zatam-memory-game .zatam-game-subtitle {
+    margin-top: 6px;
     font-size: 0.92rem;
   }
 
   .zatam-memory-game .zatam-game-instructions {
+    margin-bottom: 14px;
     padding: 13px 14px;
+  }
+
+  .zatam-memory-game .zatam-game-stats {
+    margin-bottom: 12px;
+  }
+
+  .memory-progress-wrapper {
+    margin-bottom: 12px;
   }
 
   .zatam-memory-game .memory-play-area {
@@ -376,7 +390,6 @@
 
   #tbl {
     width: 100%;
-
     border-spacing: 3px;
   }
 
@@ -393,7 +406,6 @@
     padding: 3px;
 
     font-size: 0.7rem;
-
     line-height: 1.15;
   }
 

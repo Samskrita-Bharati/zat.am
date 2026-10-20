@@ -586,7 +586,21 @@
 
 @media (max-width: 430px) {
   .zatam-game-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .zatam-game-stat {
+    padding: 12px 8px;
+  }
+
+  .zatam-game-stat-label {
+    font-size: 0.7rem;
+  }
+
+  .zatam-game-stat-value {
+    font-size: 1.15rem;
   }
 
   .zatam-game-actions {
