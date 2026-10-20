@@ -1,348 +1,318 @@
 <html>
-  <head>
-    <title>संस्कृतम् Minesweeper</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-    <style>
-      BODY {
-        background: black;
-        color: #dddddd;
-        font-family: courier new;
-        text-align: center;
-      }
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+<style>
+BODY {
+  background: black;
+  color: #DDDDDD;
+  font-family: courier new;
+  text-align: center;
+}
 
-      H1 {
-        text-align: center;
-        font-size: 14pt;
-        font-weight: normal;
-      }
-      #grid {
-        margin-left: auto;
-        margin-right: auto;
-      }
+H1 {
+  text-align: center;
+  font-size: 14pt;
+  font-weight: normal;
+}
+#grid {
+  margin-left: auto;
+  margin-right: auto;
+}
 
-      #grid TR TD {
-        border: 1px solid white;
-        background: #999999;
-        width: 24px;
-        height: 24px;
-        text-align: center;
-      }
+#grid TR TD{
+  border:1px solid white;
+  background: #999999;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+}
 
-      #grid TR TD.clicked {
-        background: #333333;
-      }
+#grid TR TD.clicked {
+    background: #333333;
+}
 
-      #grid TR TD.mine {
-        background: #ff0000;
-      }
+#grid TR TD.mine {
+    background: #FF0000;
+}
 
-      BUTTON {
-        margin: 12px;
-      }
-      #gm {
-        background-color: red;
-      }
+BUTTON {
+  margin: 12px;
+}
+#gm{
+background-color:red}
 
-      .checkbox label {
-        background-color: red;
-        border-radius: 50px;
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-        cursor: pointer;
-        display: block;
-        position: relative;
-        height: 30px;
-        width: 150px;
-        user-select: none;
-        transform: rotate(0deg);
-        transition: background-color 1s ease-in;
-      }
+.checkbox label {
+	background-color: red;
+	border-radius: 50px;
+   	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+	display: block;
+	position: relative;
+	height: 30px;
+	width: 150px;
+	user-select: none;
+	transform: rotate(0deg);
+	transition: background-color 1s ease-in;
+}
 
-      .checkbox label .ball {
-        background-color: #f1f1f1;
-        border-radius: 40%;
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.75);
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        width: 40px;
-        height: 20px;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        color: black;
-      }
+.checkbox label .ball {
+	background-color: #f1f1f1;
+	border-radius: 40%;
+   	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.75);
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 40px;
+	height: 20px;
+	text-align:center;
+	font-size:18px;
+	font-weight:bold;
+	color:black;
+}
 
-      .checkbox #ckb {
-        display: none;
-      }
+.checkbox #ckb {
+	display: none;
+}
 
-      .checkbox #ckb.active:not(:checked) + label {
-        background-color: red;
-        animation: uncheck 1.5s ease-in forwards;
-      }
+.checkbox #ckb.active:not(:checked) + label {
+	background-color: red;
+	animation: uncheck 1.5s ease-in forwards;
+}
 
-      @keyframes uncheck {
-        0% {
-          transform: rotate(0deg);
-        }
+@keyframes uncheck {
+	0% {
+		transform: rotate(0deg);
+	}
+	
+	25%, 50% {
+		transform: rotate(-20deg);
+	}
+	
+	100% {
+		transform: rotate(0deg);
+	}
+}
 
-        25%,
-        50% {
-          transform: rotate(-20deg);
-        }
+.checkbox #ckb.active:not(:checked) + label .ball {
+	animation: moveBallLeft 1.5s ease-in forwards;
+}
 
-        100% {
-          transform: rotate(0deg);
-        }
-      }
+@keyframes moveBallLeft {
+	0%, 25% {
+		transform: translateX(100px);
+	}
+	
+	50%, 100% {
+		transform: translateX(0px);
+	}
+}
 
-      .checkbox #ckb.active:not(:checked) + label .ball {
-        animation: moveBallLeft 1.5s ease-in forwards;
-      }
+.checkbox #ckb.active:checked + label {
+	background-color: #4cd137;
+	animation: check 1.5s ease-in forwards;
+}
 
-      @keyframes moveBallLeft {
-        0%,
-        25% {
-          transform: translateX(100px);
-        }
+@keyframes check {
+	0% {
+		transform: rotate(0deg);
+	}
+	
+	25%, 50% {
+		transform: rotate(20deg);
+	}
+	
+	100% {
+		transform: rotate(0deg);
+	}
+}
 
-        50%,
-        100% {
-          transform: translateX(0px);
-        }
-      }
+.checkbox #ckb.active:checked + label .ball {
+/* 	left: 105px; */
+	animation: moveBallRight 2s ease-in forwards;
+}
 
-      .checkbox #ckb.active:checked + label {
-        background-color: #4cd137;
-        animation: check 1.5s ease-in forwards;
-      }
+@keyframes moveBallRight {
+	0%, 25% {
+		transform: translateX(0px);
+	}
+	
+	50%, 100% {
+		transform: translateX(100px);
+	}
+}
 
-      @keyframes check {
-        0% {
-          transform: rotate(0deg);
-        }
 
-        25%,
-        50% {
-          transform: rotate(20deg);
-        }
+</style>
 
-        100% {
-          transform: rotate(0deg);
-        }
-      }
+</head>
+<body data-page="games">
 
-      .checkbox #ckb.active:checked + label .ball {
-        /* 	left: 105px; */
-        animation: moveBallRight 2s ease-in forwards;
-      }
-
-      @keyframes moveBallRight {
-        0%,
-        25% {
-          transform: translateX(0px);
-        }
-
-        50%,
-        100% {
-          transform: translateX(100px);
-        }
-      }
-    </style>
-  </head>
-  <body data-page="games">
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-    <h1>संस्कृतम् Minesweeper</h1>
-    <progress id="mss" value="0" max="80">0%</progress>
-    <table id="grid"></table>
-    <progress id="gm" value="0" max="20" style="display: none">0%</progress>
-    <br />
-    <center>
-      <div class="checkbox">
-        <input type="checkbox" id="ckb" />
-        <label for="ckb">
-          <div class="ball">१०</div>
-        </label>
-      </div>
-    </center>
-    <button onclick="generateGrid()">पुनः - Again</button>
-    <br />
-    <p>
-      Based on minesweeper game by 101computing.net
-      <script>
-        function chg() {
-          checkbox.classList.add("active");
-          if (document.getElementsByClassName("ball")[0].innerHTML == "७") {
-            document.getElementsByClassName("ball")[0].innerHTML = "१०";
-            siz = 10;
-          } else {
-            document.getElementsByClassName("ball")[0].innerHTML = "७";
-            siz = 7;
-          }
-          generateGrid();
-        }
-        const checkbox = document.getElementById("ckb");
+<H1>संस्कृतम्  Minesweeper</H1>
+<progress id="mss" value="0" max="80"> 0% </progress>
+<table id=grid>
+</table>
+<progress id="gm" value="0" max="20" style="display:none"> 0% </progress>
+<br>
+<center>
+<div class="checkbox">
+	<input type="checkbox" id="ckb"/>
+	<label for="ckb">
+		<div class="ball">१०</div>
+	</label>
+</div>
+</center>
+<BUTTON onclick="generateGrid();">पुनः - Again</BUTTON>
+<br>
+<p> Based on minesweeper game by 101computing.net
+<script>
+function chg() {
+	checkbox.classList.add('active');
+	if (document.getElementsByClassName('ball')[0].innerHTML=="७") {
+	document.getElementsByClassName('ball')[0].innerHTML="१०"; siz=10;}
+	else {
+	document.getElementsByClassName('ball')[0].innerHTML="७";siz=7;}
+	generateGrid();
+}
+const checkbox = document.getElementById('ckb');
 
-        checkbox.addEventListener("change", chg);
-        const urlParams = new URLSearchParams(window.location.search);
-        var siz = urlParams.get("s");
-        //var d = parseInt(getQueryStringValue("d"));
-        if ((siz && siz == 10) || siz == 7) {
-        } else siz = 10;
+checkbox.addEventListener('change', chg);
+	const urlParams = new URLSearchParams(window.location.search);
+var siz = urlParams.get('s');
+	//var d = parseInt(getQueryStringValue("d"));
+if (siz && (siz == 10) || (siz == 7)) {
+}
+else
+	siz=10;
 
-        document.addEventListener("contextmenu", (event) =>
-          event.preventDefault(),
-        );
-        //minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
-        var grid = document.getElementById("grid");
-        var testMode = false; //Turn this variable to true to see where the mines are
-        generateGrid();
-        if (siz == 7) chg();
-        function generateGrid() {
-          document.getElementById("mss").value = 0;
-          document.getElementById("mss").max = parseInt(
-            siz * siz - (siz * siz) / 5,
-          );
-          document.getElementById("gm").value = 0;
-          grid.innerHTML = "";
-          for (var i = 0; i < siz; i++) {
-            row = grid.insertRow(i);
-            for (var j = 0; j < siz; j++) {
-              cell = row.insertCell(j);
-              cell.onmousedown = function (ev) {
-                if (ev.button == 2) {
-                  markCell(this);
-                  //ev.returnValue = false;ev.preventDefault();return false;
-                } else clickCell(this);
-              };
-              var mine = document.createAttribute("data-mine");
-              mine.value = "false";
-              cell.setAttributeNode(mine);
-            }
-          }
-          addMines();
-        }
+document.addEventListener('contextmenu', event => event.preventDefault());
+//minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
+var grid = document.getElementById("grid");
+var testMode = false; //Turn this variable to true to see where the mines are
+generateGrid();
+if (siz==7) chg();
+function generateGrid() {
+  document.getElementById("mss").value=0;
+  document.getElementById("mss").max=parseInt((siz*siz)-(siz*siz)/5)
+  document.getElementById("gm").value=0;
+  grid.innerHTML="";
+  for (var i=0; i<siz; i++) {
+    row = grid.insertRow(i);
+    for (var j=0; j<siz; j++) {
+      cell = row.insertCell(j);
+      cell.onmousedown = function(ev) { if (ev.button==2) {
+	  markCell(this);
+	  //ev.returnValue = false;ev.preventDefault();return false;
+	  } 
+	  else clickCell(this); 
+	  };
+      var mine = document.createAttribute("data-mine");       
+      mine.value = "false";             
+      cell.setAttributeNode(mine);
+    }
+  }
+  addMines();
+}
 
-        function addMines() {
-          //Add mines randomly
-          for (var i = 0; i < parseInt((siz * siz) / 5); i++) {
-            var row = Math.floor((Math.random() * 10) % siz);
-            var col = Math.floor((Math.random() * 10) % siz);
-            var cell = grid.rows[row].cells[col];
-            //	if (cell.innerHTML=="X") cell.innerHTML="y" ;else cell.innerHTML="X";
-            //if (cell.getAttribute("data-mine")) console.log("repeat");
-            cell.setAttribute("data-mine", "true");
-            if (testMode) cell.innerHTML = "X";
-          }
-        }
+function addMines() {
+  //Add mines randomly
+  for (var i=0; i<parseInt((siz*siz)/5); i++) {
+    var row = Math.floor((Math.random() * 10) % siz);
+    var col = Math.floor((Math.random() * 10) % siz);
+    var cell = grid.rows[row].cells[col];
+//	if (cell.innerHTML=="X") cell.innerHTML="y" ;else cell.innerHTML="X";
+	 //if (cell.getAttribute("data-mine")) console.log("repeat");
+    cell.setAttribute("data-mine","true");
+    if (testMode) cell.innerHTML="X";
+  }
+}
 
-        function revealMines() {
-          //Highlight all mines in red
-          for (var i = 0; i < siz; i++) {
-            for (var j = 0; j < siz; j++) {
-              var cell = grid.rows[i].cells[j];
-              if (cell.getAttribute("data-mine") == "true")
-                cell.style.backgroundColor = "#FF0000";
-            }
-          }
-        }
+function revealMines() {
+    //Highlight all mines in red
+    for (var i=0; i<siz; i++) {
+      for(var j=0; j<siz; j++) {
+        var cell = grid.rows[i].cells[j];
+        if (cell.getAttribute("data-mine")=="true") cell.style.backgroundColor="#FF0000";
+      }
+    }
+}
 
-        function checkLevelCompletion() {
-          var levelComplete = true;
-          for (var i = 0; i < siz; i++) {
-            for (var j = 0; j < siz; j++) {
-              if (
-                grid.rows[i].cells[j].getAttribute("data-mine") == "false" &&
-                grid.rows[i].cells[j].innerHTML == ""
-              )
-                levelComplete = false;
-            }
-          }
-          if (levelComplete) {
-            alert("जयः 🙂");
-            revealMines();
-          }
+function checkLevelCompletion() {
+  var levelComplete = true;
+    for (var i=0; i<siz; i++) {
+      for(var j=0; j<siz; j++) {
+        if ((grid.rows[i].cells[j].getAttribute("data-mine")=="false") && (grid.rows[i].cells[j].innerHTML=="")) levelComplete=false;
+      }
+  }
+  if (levelComplete) {
+    alert("जयः 🙂");
+    revealMines();
+	 
+  }
+}
+function markCell(cell) {
+if (cell.style.backgroundColor=="tomato")
+{
+cell.style.backgroundColor="";
+document.getElementById("gm").value-=1;
+}
+else
+{
+document.getElementById("gm").value+=1;
+cell.style.backgroundColor="tomato";
+}
+}
+function clickCell(cell) {
+cell.style.backgroundColor="";
+  //Check if the end-user clicked on a mine
+  if (cell.getAttribute("data-mine")=="true") {
+    revealMines();
+    alert("पराजयः 🙁");
+	for (var i=0; i<siz; i++) {
+	for (var j=0; j<siz; j++) {
+      var cell = grid.rows[i].cells[j];
+      cell.onclick = "" }
+	  }
+  } else {
+  if (cell.className!="clicked")
+  document.getElementById("mss").value+=1;
+    cell.className="clicked";
+	
+    //Count and display the number of adjacent mines
+    var mineCount=0;
+    var cellRow = cell.parentNode.rowIndex;
+    var cellCol = cell.cellIndex;
+    //alert(cellRow + " " + cellCol);
+    for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,siz-1); i++) {
+      for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,siz-1); j++) {
+        if (grid.rows[i].cells[j].getAttribute("data-mine")=="true") mineCount++;
+      }
+    }
+    if (mineCount==0) cell.innerHTML=" ";
+	else
+	cell.innerHTML=Sanscript.t(String(mineCount),'iast', 'devanagari')
+    if (mineCount==0) { 
+      //Reveal all adjacent cells as they do not have a mine
+      for (var i=Math.max(cellRow-1,0); i<=Math.min(cellRow+1,siz-1); i++) {
+        for(var j=Math.max(cellCol-1,0); j<=Math.min(cellCol+1,siz-1); j++) {
+          //Recursive Call
+          if (grid.rows[i].cells[j].innerHTML=="") clickCell(grid.rows[i].cells[j]);
         }
-        function markCell(cell) {
-          if (cell.style.backgroundColor == "tomato") {
-            cell.style.backgroundColor = "";
-            document.getElementById("gm").value -= 1;
-          } else {
-            document.getElementById("gm").value += 1;
-            cell.style.backgroundColor = "tomato";
-          }
-        }
-        function clickCell(cell) {
-          cell.style.backgroundColor = "";
-          //Check if the end-user clicked on a mine
-          if (cell.getAttribute("data-mine") == "true") {
-            revealMines();
-            alert("पराजयः 🙁");
-            for (var i = 0; i < siz; i++) {
-              for (var j = 0; j < siz; j++) {
-                var cell = grid.rows[i].cells[j];
-                cell.onclick = "";
-              }
-            }
-          } else {
-            if (cell.className != "clicked")
-              document.getElementById("mss").value += 1;
-            cell.className = "clicked";
+      }
+    }
+    checkLevelCompletion();
+  }
+}
+</script>
 
-            //Count and display the number of adjacent mines
-            var mineCount = 0;
-            var cellRow = cell.parentNode.rowIndex;
-            var cellCol = cell.cellIndex;
-            //alert(cellRow + " " + cellCol);
-            for (
-              var i = Math.max(cellRow - 1, 0);
-              i <= Math.min(cellRow + 1, siz - 1);
-              i++
-            ) {
-              for (
-                var j = Math.max(cellCol - 1, 0);
-                j <= Math.min(cellCol + 1, siz - 1);
-                j++
-              ) {
-                if (grid.rows[i].cells[j].getAttribute("data-mine") == "true")
-                  mineCount++;
-              }
-            }
-            if (mineCount == 0) cell.innerHTML = " ";
-            else
-              cell.innerHTML = Sanscript.t(
-                String(mineCount),
-                "iast",
-                "devanagari",
-              );
-            if (mineCount == 0) {
-              //Reveal all adjacent cells as they do not have a mine
-              for (
-                var i = Math.max(cellRow - 1, 0);
-                i <= Math.min(cellRow + 1, siz - 1);
-                i++
-              ) {
-                for (
-                  var j = Math.max(cellCol - 1, 0);
-                  j <= Math.min(cellCol + 1, siz - 1);
-                  j++
-                ) {
-                  //Recursive Call
-                  if (grid.rows[i].cells[j].innerHTML == "")
-                    clickCell(grid.rows[i].cells[j]);
-                }
-              }
-            }
-            checkLevelCompletion();
-          }
-        }
-      </script>
 
-      <!-- Shared Zat.am Navbar -->
-      <script type="module" src="../js/navbar-loader.js"></script>
-    </p>
-  </body>
+    <!-- Shared Zat.am Navbar -->
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
+</body>
 </html>
