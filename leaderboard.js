@@ -136,307 +136,70 @@ async function generateLeaderboardData(gameHistories) {
   const scoringSystem = getScoringSystem();
   const start = startDate;
   const end = endDate;
-  const selectedGame = gameSelect.value || currentGame || "Global";
 
-  /*
-  =====================================================
-  PLAYER DATA
-  =====================================================
-
-  Individual game:
-  - Keep the player's BEST attempt only.
-
-  Global:
-  - Keep the player's BEST attempt from EACH game.
-  - Add those best scores together.
-
-  Example:
-
-  Memory best = 90
-  Sudoku best = 85
-  Typing best = 100
-
-  Global score = 275
-
-  Replaying Memory 20 times does NOT add 20 scores.
-  =====================================================
-  */
-
-  const players = {};
-
-  gameHistories.forEach(({ score, timePlayed, timestamp, uid, gameId }) => {
-    /*
-      -----------------------------------------------
-      DATE FILTER
-      -----------------------------------------------
-      */
-
-    if (!timestamp || timestamp < start || timestamp > end) {
-      return;
-    }
-
-    if (!uid) {
-      return;
-    }
-
-    const numericScore = Number(score);
-    const numericTime = Number(timePlayed) || 0;
-
-    if (!Number.isFinite(numericScore)) {
-      return;
-    }
-
-    /*
-      -----------------------------------------------
-      CREATE PLAYER
-      -----------------------------------------------
-      */
-
-    if (!players[uid]) {
-      players[uid] = {
-        uid,
-
-        totalScore: 0,
-
-        /*
-          Keep total time across attempts because
-          "Time Played" is a separate leaderboard mode.
-          */
-
-        totalTimePlayed: 0,
-
-        /*
-          Used as a score tie-breaker.
-          */
-
-        bestTimePlayed: 0,
-
-        latestTimestamp: timestamp,
-
-        /*
-          Internal object used while calculating scores.
-          */
-
-        bestByGame: {},
-      };
-    }
-
-    const player = players[uid];
-
-    player.totalTimePlayed += numericTime;
-
-    if (timestamp > player.latestTimestamp) {
-      player.latestTimestamp = timestamp;
-    }
-
-    /*
-      =====================================================
-      GLOBAL LEADERBOARD
-      =====================================================
-
-      Only new records with a real gameId can be safely
-      included.
-
-      Old Global BP26 records did not store which game
-      generated the score, so "legacy" records are not
-      used for the new normalized Global score.
-      =====================================================
-      */
-
-    if (selectedGame === "Global") {
-      if (!gameId || gameId === "legacy") {
-        return;
+  const leaderboardData = Object.values(
+    gameHistories.reduce((acc, { score, timePlayed, timestamp, uid }) => {
+      // time filtering
+      if (!timestamp || timestamp < start || timestamp > end) {
+        return acc;
       }
 
-      const previousBest = player.bestByGame[gameId];
+      // use playerUID as key
+      const key = uid;
+      if (!key) return acc;
 
-      /*
-        Better score wins.
-
-        If the score is tied, the faster completed
-        attempt becomes the player's best attempt.
-        */
-
-      if (
-        !previousBest ||
-        numericScore > previousBest.score ||
-        (numericScore === previousBest.score &&
-          numericTime < previousBest.timePlayed)
-      ) {
-        player.bestByGame[gameId] = {
-          score: numericScore,
-          timePlayed: numericTime,
-          timestamp,
+      if (!acc[key]) {
+        acc[key] = {
+          uid: key,
+          totalScore: 0,
+          totalTimePlayed: 0,
+          latestTimestamp: timestamp,
         };
       }
 
-      return;
-    }
+      acc[key].totalScore += score;
+      acc[key].totalTimePlayed += timePlayed;
 
-    /*
-      =====================================================
-      INDIVIDUAL GAME LEADERBOARD
-      =====================================================
-
-      We already know which game was selected, so old
-      per-game history records are still supported.
-      =====================================================
-      */
-
-    const previousBest = player.bestByGame[selectedGame];
-
-    if (
-      !previousBest ||
-      numericScore > previousBest.score ||
-      (numericScore === previousBest.score &&
-        numericTime < previousBest.timePlayed)
-    ) {
-      player.bestByGame[selectedGame] = {
-        score: numericScore,
-        timePlayed: numericTime,
-        timestamp,
-      };
-    }
-  });
-
-  /*
-  =====================================================
-  BUILD FINAL PLAYER RESULTS
-  =====================================================
-  */
-
-  let leaderboardData = Object.values(players)
-    .map((player) => {
-      const bestGames = Object.values(player.bestByGame);
-
-      /*
-      Player may contain only old Global legacy records.
-
-      We cannot safely assign those records to games,
-      so exclude them from the normalized Global score.
-      */
-
-      if (selectedGame === "Global" && bestGames.length === 0) {
-        return null;
+      if (timestamp >= acc[key].latestTimestamp) {
+        acc[key].latestTimestamp = timestamp;
       }
 
-      /*
-      Global:
-      sum one best score per game.
-
-      Individual:
-      there will only be one best game result.
-      */
-
-      player.totalScore = bestGames.reduce(
-        (total, result) => total + result.score,
-        0,
-      );
-
-      /*
-      Combined best-attempt time is used only as a
-      tie-breaker for equal scores.
-      */
-
-      player.bestTimePlayed = bestGames.reduce(
-        (total, result) => total + result.timePlayed,
-        0,
-      );
-
-      player.gamesCount = bestGames.length;
-
-      /*
-      Remove temporary internal calculation data.
-      */
-
-      delete player.bestByGame;
-
-      return player;
-    })
-    .filter(Boolean);
-
-  /*
-  =====================================================
-  SORT
-  =====================================================
-  */
-
-  leaderboardData.sort((a, b) => {
-    /*
-    Existing "Time Played" leaderboard option.
-
-    This intentionally continues to represent total
-    participation time across attempts.
-    */
-
+      return acc;
+    }, {}),
+  ).sort((a, b) => {
     if (scoringSystem === "totalTimePlayed") {
       return b.totalTimePlayed - a.totalTimePlayed;
     }
-
-    /*
-    SCORE RANKING
-
-    1. Higher score
-    2. If tied -> lower best completion time
-    3. If still tied -> most recent result
-    */
-
-    if (b.totalScore !== a.totalScore) {
-      return b.totalScore - a.totalScore;
-    }
-
-    if (a.bestTimePlayed !== b.bestTimePlayed) {
-      return a.bestTimePlayed - b.bestTimePlayed;
-    }
-
-    return b.latestTimestamp - a.latestTimestamp;
+    return b.totalScore - a.totalScore;
   });
 
-  /*
-  =====================================================
-  FORMAT DISPLAY TIME
-  =====================================================
-  */
-
-  leaderboardData.forEach((player) => {
+  // reformat totalTimePlayed into readable format
+  leaderboardData.map((player) => {
     player.totalTimePlayed = formatSeconds(player.totalTimePlayed);
   });
 
-  /*
-  =====================================================
-  ADD USER PROFILE INFORMATION
-  =====================================================
-  */
-
+  // associate names and locations with each uid
   const userCache = {};
-
   const dataWithUserProfile = await Promise.all(
     leaderboardData.map(async (record) => {
       const uid = record.uid;
-
-      if (!uid) {
-        return {
-          ...record,
-          username: "Unknown Player",
-          location: "Unknown",
-        };
-      }
+      if (!uid)
+        return { ...record, username: "Unknown Player", location: "Unknown" };
 
       if (!userCache[uid]) {
         const profile = await getUserProfile(uid);
-
         userCache[uid] = profile;
       }
 
       return {
         ...record,
         username: userCache[uid].name,
-
         location: userCache[uid].location,
       };
     }),
   );
 
+  //console.log("dataWithUserProfile:", dataWithUserProfile);
   return dataWithUserProfile;
 }
 
