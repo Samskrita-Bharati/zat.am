@@ -18,7 +18,7 @@
 
 import { menu } from "../app.js";
 
-const ZATAM_GA_ID = "G-1QD88MYKWG";
+const ZATAM_GA_ID = "G-1BQ8752E44";
 
 const projectRoot = new URL("../", import.meta.url);
 

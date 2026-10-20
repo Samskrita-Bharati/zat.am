@@ -1,119 +1,816 @@
-* {
-    font-family: Arial, Verdana;
-    font-size: 17px;
+/* ==========================================================
+   003-SSC — सोपानसर्पाः
+   Snakes & Ladders
+   ==========================================================
+
+   The internal canvas remains 900 × 900.
+
+   Responsive sizing is handled entirely with CSS so the
+   original board coordinates and animations continue to work.
+   ========================================================== */
+
+/* ==========================================================
+   PAGE
+   ========================================================== */
+
+.zatam-ssc-game {
+  margin: 0;
+
+  background: #fffaf2;
+
+  color: var(--zatam-heading, #09264a);
 }
-#canvas {
-    width: 900px;
-    height: 900px;
+
+.ssc-page {
+  width: 100%;
+
+  padding: 30px 16px 48px;
+
+  box-sizing: border-box;
 }
+
+.ssc-shell {
+  width: min(100%, 1240px);
+
+  margin: 0 auto;
+}
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.ssc-header {
+  text-align: center;
+
+  margin-bottom: 22px;
+}
+
+.ssc-header .zatam-game-eyebrow {
+  margin-bottom: 6px;
+
+  color: var(--zatam-coral, #f16945);
+
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+.ssc-header .zatam-game-title {
+  margin: 0;
+
+  color: var(--zatam-heading, #09264a);
+
+  font-size: clamp(2rem, 4vw, 2.8rem);
+
+  font-weight: 800;
+
+  line-height: 1.15;
+}
+
+.ssc-header .zatam-game-subtitle {
+  margin: 8px 0 0;
+
+  color: var(--zatam-muted, #687789);
+
+  font-size: 1rem;
+}
+
+/* ==========================================================
+   INSTRUCTIONS
+   ========================================================== */
+
+.ssc-instructions {
+  margin: 0 0 24px;
+
+  padding: 16px 18px;
+
+  border: 1px solid var(--zatam-border, #eadfce);
+
+  border-left: 4px solid var(--zatam-gold, #f6b23b);
+
+  border-radius: 14px;
+
+  background: #fff8e9;
+
+  color: var(--zatam-heading, #09264a);
+
+  font-size: 0.98rem;
+
+  line-height: 1.55;
+
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   MAIN GAME LAYOUT
+   ========================================================== */
+
+.ssc-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 720px)
+    minmax(250px, 280px);
+
+  justify-content: center;
+  align-items: start;
+
+  gap: 24px;
+}
+
+/* ==========================================================
+   BOARD CARD
+   ========================================================== */
+
+.ssc-board-card {
+  min-width: 0;
+
+  padding: 12px;
+
+  border: 1px solid var(--zatam-border, #eadfce);
+
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  box-shadow: 0 10px 28px rgba(11, 43, 79, 0.08);
+
+  box-sizing: border-box;
+}
+
+/*
+  The wrapper determines the visual board size.
+
+  The two actual canvases remain 900 × 900 internally.
+*/
+
+.ssc-board-stage {
+  position: relative;
+
+  width: 100%;
+  max-width: 720px;
+
+  aspect-ratio: 1 / 1;
+
+  margin: 0 auto;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+}
+
+/* ==========================================================
+   CANVASES
+   ========================================================== */
+
+#canvas,
 #dcanvas {
-    width: 900px;
-    height: 900px;
-    background: black;
-    position: absolute;
-    top: 0;
-    left: 0;
+  position: absolute;
+
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
 }
-#dice  {
-    width: 194px; 
-    height: 185px; 
-    background: transparent url('res/table.png') no-repeat left 45px;
-	margin-left:20px;
+
+#canvas {
+  z-index: 1;
+
+  background: #ffffff;
 }
-#dice h4{
-    font-size: 15px;
-    text-indent: 20px;
+
+#dcanvas {
+  z-index: 2;
+
+  background: #000000;
 }
-#dice-anim {
-    margin-top: 2.5em; margin-left: 60px; display: none;
+
+/* ==========================================================
+   SIDE PANEL
+   ========================================================== */
+
+#rtColumn {
+  position: static;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  box-sizing: border-box;
 }
+
+.ssc-side-panel {
+  padding: 18px;
+
+  border: 1px solid var(--zatam-border, #eadfce);
+
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  box-shadow: 0 10px 28px rgba(11, 43, 79, 0.08);
+}
+
+.ssc-panel-heading {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.ssc-panel-heading h2 {
+  margin: 3px 0 0;
+
+  color: var(--zatam-heading, #09264a);
+
+  font-size: 1.25rem;
+}
+
+.ssc-panel-kicker {
+  color: var(--zatam-muted, #687789);
+
+  font-size: 0.67rem;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+/* ==========================================================
+   DICE
+   ========================================================== */
+
+#dice {
+  width: 100%;
+  height: auto;
+
+  min-height: 190px;
+
+  margin: 0;
+
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  border: 1px solid var(--zatam-border, #eadfce);
+
+  border-radius: 16px;
+
+  background: #fffaf2;
+
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+#dice:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--zatam-gold, #f6b23b);
+
+  box-shadow: 0 8px 18px rgba(11, 43, 79, 0.08);
+}
+
+#dice:focus-visible {
+  outline: 3px solid rgba(47, 109, 255, 0.25);
+
+  outline-offset: 3px;
+}
+
+#dice h4 {
+  margin: 0;
+
+  padding: 0;
+
+  color: var(--zatam-heading, #09264a);
+
+  font-size: 0.92rem;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.ssc-dice-visual {
+  min-height: 74px;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
+#dice-anim,
 #dice-static {
-    margin-top: 3.6em; margin-left: 60px;
+  margin: 0;
 }
+
+#dice-anim {
+  display: none;
+
+  width: 72px;
+  height: 72px;
+
+  object-fit: contain;
+}
+
+#dice-static {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
 #dice-static img {
-    cursor: pointer;
+  display: block;
+
+  width: 72px;
+  height: 72px;
+
+  object-fit: contain;
+
+  cursor: pointer;
 }
+
 #dice.roll #dice-anim {
-    display: block;
+  display: block;
 }
+
 #dice.roll #dice-static {
-    display: none;
+  display: none;
 }
-.hide {
-    display: none;
+
+.ssc-dice-help {
+  padding: 7px 12px;
+
+  border-radius: 999px;
+
+  background: var(--zatam-heading, #09264a);
+
+  color: #ffffff;
+
+  font-size: 0.78rem;
+  font-weight: 700;
 }
-#emotions {
-    display: none;
-}
-#emotions img{
-    cursor: pointer;
-    width: 140px;
-    height: 145px;
-}
-#messenger {
-    display: none;
-}
-#message {
-    background: lightblue;
-    border: 1px solid blue;
-    width: 320px;
-    height: 360px;
-    overflow: auto;
-    -moz-border-radius: 4px;
-}
-#send input {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    height: 25px;
-}
-#send input.txt {
-    width: 250px;
-    border: 1px solid blue;
-    border-top: 0;
-    margin-top: 0px;
-}
-#send input.btn {
-    width: 73px;
-    border: 1px solid blue;
-    border-top: 0;
-    margin-left: -1px;
-    font-weight: bold;
-    padding-bottom: 2px;
-}
-#intro {
-}
-#intro p{
-    padding: 1px;
-    margin: 1px;
-    font-weight: bold;
-}
-#intro a{
-    display: block;
-    margin: 0 auto;
-    text-align: center;
-}
+
+/* ==========================================================
+   PLAYERS
+   ========================================================== */
+
 #players {
-    font-weight: bold;
-    margin: 0 auto;
-    text-align: center;
-    width: 100px;
+  width: 100%;
+
+  margin: 0;
+
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 10px;
+
+  text-align: left;
+
+  font-weight: 400;
 }
+
 #players .player {
-    margin-bottom: 10px;
-	margin-top:20px;
+  margin: 0;
+
+  padding: 12px;
+
+  border: 1px solid var(--zatam-border, #eadfce);
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
 }
-#controls{
-    margin-left:61px;
-	margin-top:20px;
+
+#players .player-you {
+  border-color: rgba(47, 109, 255, 0.28);
+
+  background: rgba(47, 109, 255, 0.035);
+}
+
+.ssc-player-top {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+#players .avatar {
+  width: 52px;
+  height: 52px;
+
+  flex: 0 0 52px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  background: #ffffff;
+
+  border: 2px solid var(--zatam-border, #eadfce);
+}
+
+#players .name {
+  color: var(--zatam-heading, #09264a);
+
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.ssc-player-label {
+  margin-bottom: 2px;
+
+  color: var(--zatam-muted, #687789);
+
+  font-size: 0.62rem;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+.ssc-player-position {
+  min-height: 32px;
+
+  margin-top: 9px;
+
+  padding: 8px 9px;
+
+  border-radius: 9px;
+
+  background: #fffaf2;
+
+  color: var(--zatam-heading, #09264a);
+
+  font-size: 0.72rem;
+  line-height: 1.35;
+
+  overflow-wrap: anywhere;
+
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   CONTROLS
+   ========================================================== */
+
+#controls {
+  width: 100%;
+
+  margin: 0;
+
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 8px;
 }
 
 #controls button {
-    width: 120px;
-    margin-bottom: 30px;
+  width: 100%;
+
+  margin: 0;
 }
-#rtColumn {
-	position: absolute;
-    left: 980px;
-    top: 0px;
+
+.ssc-control-button {
+  min-height: 44px;
+
+  padding: 10px 14px;
+
+  border: 1px solid var(--zatam-heading, #09264a);
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  color: var(--zatam-heading, #09264a);
+
+  font: inherit;
+
+  font-size: 0.84rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.ssc-control-button:hover {
+  background: var(--zatam-heading, #09264a);
+
+  color: #ffffff;
+
+  transform: translateY(-1px);
+}
+
+.ssc-restart-button {
+  border-color: var(--zatam-border, #eadfce);
+}
+
+.ssc-note {
+  margin: 0;
+
+  color: var(--zatam-muted, #687789);
+
+  font-size: 0.74rem;
+
+  line-height: 1.45;
+
+  text-align: center;
+}
+
+/* ==========================================================
+   LEGACY / UNUSED ELEMENT SUPPORT
+   ========================================================== */
+
+.hide {
+  display: none;
+}
+
+#emotions,
+#messenger {
+  display: none;
+}
+
+#message {
+  width: 100%;
+  max-width: 320px;
+
+  height: 360px;
+
+  overflow: auto;
+
+  border: 1px solid var(--zatam-blue, #2f6dff);
+
+  border-radius: 8px;
+
+  background: #ffffff;
+}
+
+#send input {
+  margin: 0;
+
+  padding: 0;
+
+  height: 25px;
+}
+
+#intro p {
+  margin: 1px;
+
+  padding: 1px;
+
+  font-weight: 700;
+}
+
+#intro a {
+  display: block;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 1100px) {
+  .ssc-layout {
+    grid-template-columns: minmax(0, 820px);
+
+    gap: 18px;
+  }
+
+  .ssc-side-panel {
+    display: grid;
+
+    grid-template-columns:
+      minmax(200px, 0.8fr)
+      minmax(0, 1.2fr);
+
+    align-items: start;
+
+    gap: 14px;
+  }
+
+  .ssc-panel-heading {
+    grid-column: 1 / -1;
+  }
+
+  #dice {
+    grid-row: span 2;
+  }
+
+  #players {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #controls,
+  .ssc-note {
+    grid-column: 2;
+  }
+}
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 700px) {
+  .ssc-page {
+    padding: 26px 10px 40px;
+  }
+
+  .ssc-header {
+    margin-bottom: 16px;
+  }
+
+  .ssc-header .zatam-game-title {
+    font-size: 1.85rem;
+  }
+
+  .ssc-header .zatam-game-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .ssc-instructions {
+    margin-bottom: 14px;
+
+    padding: 13px 14px;
+
+    font-size: 0.9rem;
+
+    border-radius: 12px;
+  }
+
+  .ssc-layout {
+    gap: 12px;
+  }
+
+  .ssc-board-card {
+    padding: 6px;
+
+    border-radius: 14px;
+  }
+
+  .ssc-board-stage {
+    border-radius: 9px;
+  }
+
+  .ssc-side-panel {
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 13px;
+
+    gap: 11px;
+
+    border-radius: 14px;
+  }
+
+  #dice {
+    min-height: 140px;
+
+    padding: 12px;
+
+    gap: 7px;
+  }
+
+  #dice-anim,
+  #dice-static img {
+    width: 58px;
+    height: 58px;
+  }
+
+  .ssc-dice-visual {
+    min-height: 60px;
+  }
+
+  #players {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+  }
+
+  #players .player {
+    padding: 9px;
+  }
+
+  .ssc-player-top {
+    gap: 7px;
+  }
+
+  #players .avatar {
+    width: 40px;
+    height: 40px;
+
+    flex-basis: 40px;
+  }
+
+  #players .name {
+    font-size: 0.82rem;
+  }
+
+  .ssc-player-label {
+    font-size: 0.56rem;
+  }
+
+  .ssc-player-position {
+    min-height: 28px;
+
+    margin-top: 7px;
+
+    padding: 6px 7px;
+
+    font-size: 0.64rem;
+  }
+
+  #controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ssc-control-button {
+    min-height: 42px;
+
+    padding: 9px 8px;
+
+    font-size: 0.76rem;
+  }
+}
+
+/* ==========================================================
+   SMALL MOBILE
+   ========================================================== */
+
+@media (max-width: 430px) {
+  .ssc-page {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .ssc-header .zatam-game-title {
+    font-size: 1.65rem;
+  }
+
+  .ssc-instructions {
+    font-size: 0.84rem;
+  }
+
+  .ssc-board-card {
+    padding: 4px;
+  }
+
+  .ssc-side-panel {
+    padding: 11px;
+  }
+
+  #players .player {
+    padding: 8px;
+  }
+
+  #players .avatar {
+    width: 34px;
+    height: 34px;
+
+    flex-basis: 34px;
+  }
+
+  .ssc-player-position {
+    font-size: 0.6rem;
+  }
 }
