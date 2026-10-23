@@ -1,261 +1,838 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>अन्वेषणम्</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+
     <script src="./js/transliteration.js"></script>
-    <script
-      type="text/javascript"
-      src="https://unpkg.com/papaparse@latest/papaparse.min.js"
-    ></script>
+
+    <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+
     <link rel="stylesheet" href="./css/fndstyle.css" />
-    <!-- Header CSS -->
     <link rel="stylesheet" href="./css/header.css" />
   </head>
 
-<body>
-  <script type="module" src="/auth/api/middleware.js"></script>
-  <!-- Header Placeholder -->
-  <div id="header-placeholder"></div>
-  <script type="module" src="../js/bilingual-toggle.js"></script>
-  <!-- Load Header -->
-  <script src="js/load-header.js"></script>
-  <center>
-    <h3>Find <span style="position:relative;color:tomato;z-index:99" id="tofind"></span> ... ❌ = <span id="wt">०</span>
-    </h3>
-  </center>
-  <div id="svgdiv">
-  </div>
-  <p></p>
+  <body class="bp26-find-it">
+    <script type="module" src="/auth/api/middleware.js"></script>
 
-  <!-- ✅ Celebration overlay (inline) -->
-  <div id="bp26CelebrateOverlay">
-    <div class="bp26CelebrateBox">
-      <div class="bp26Sparkles">✨🎉✨</div>
-      <div id="bp26CelebrateTitle" style="font-weight:700;font-size:18px;margin-bottom:6px;">
-        Submitted ✅
+    <div id="header-placeholder"></div>
+
+    <script type="module" src="../js/bilingual-toggle.js"></script>
+
+    <script src="./js/load-header.js"></script>
+
+    <main class="find-game-shell">
+      <section class="game-intro" aria-labelledby="gameTitle">
+        <p class="game-eyebrow">BodhaPlay 2026</p>
+
+        <h1 id="gameTitle">Find It <span>(अन्वेषणम्)</span></h1>
+
+        <p class="game-description">
+          Listen to or read the word, then find the matching picture. Find five
+          different items to complete the game.
+        </p>
+      </section>
+
+      <section class="game-panel">
+        <div class="target-panel">
+          <span class="target-label">Find</span>
+
+          <div id="tofind" class="target-word">
+            <span class="loading-text">Loading game…</span>
+          </div>
+        </div>
+
+        <div class="score-panel" aria-label="Game scoring">
+          <div class="score-stat">
+            <span class="score-stat-label">Progress</span>
+            <strong id="progressValue">0 / 5</strong>
+          </div>
+
+          <div class="score-stat">
+            <span class="score-stat-label">Accuracy Score</span>
+            <strong> <span id="accuracyValue">0</span> / 90 </strong>
+          </div>
+
+          <div class="score-stat">
+            <span class="score-stat-label">Wrong Clicks</span>
+            <strong id="wrongValue">0</strong>
+          </div>
+
+          <div class="score-stat">
+            <span class="score-stat-label">Time</span>
+            <strong id="timeValue">00:00</strong>
+          </div>
+
+          <div class="score-stat score-stat-bonus">
+            <span class="score-stat-label">Potential Time Bonus</span>
+            <strong id="bonusValue">+10</strong>
+          </div>
+        </div>
+
+        <details class="scoring-help">
+          <summary>How scoring works</summary>
+
+          <div class="scoring-help-content">
+            <p>
+              <strong>Accuracy:</strong> up to 90 points. Each of the five items
+              is worth 18 points, and each wrong click deducts 3 points from
+              that item.
+            </p>
+
+            <p>
+              <strong>Time bonus:</strong> up to 10 extra points based on your
+              total completion time.
+            </p>
+
+            <div class="bonus-table" aria-label="Time bonus thresholds">
+              <span>45 sec or less</span>
+              <strong>+10</strong>
+
+              <span>46–60 sec</span>
+              <strong>+8</strong>
+
+              <span>61–75 sec</span>
+              <strong>+6</strong>
+
+              <span>76–90 sec</span>
+              <strong>+4</strong>
+
+              <span>91–120 sec</span>
+              <strong>+2</strong>
+
+              <span>Over 120 sec</span>
+              <strong>+0</strong>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section
+        id="svgdiv"
+        class="image-grid"
+        aria-label="Picture choices"
+      ></section>
+    </main>
+
+    <div
+      id="bp26CelebrateOverlay"
+      class="celebration-overlay"
+      aria-hidden="true"
+    >
+      <div
+        class="celebration-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bp26CelebrateTitle"
+      >
+        <div class="bp26Sparkles" aria-hidden="true">✨🎉✨</div>
+
+        <h2 id="bp26CelebrateTitle">Game Complete!</h2>
+
+        <p id="bp26CelebrateSub">Great job!</p>
+
+        <div class="final-score-grid">
+          <div>
+            <span>Accuracy</span>
+            <strong id="finalAccuracy">0 / 90</strong>
+          </div>
+
+          <div>
+            <span>Time Bonus</span>
+            <strong id="finalBonus">+0</strong>
+          </div>
+
+          <div>
+            <span>Final Score</span>
+            <strong id="finalScore">0 / 100</strong>
+          </div>
+
+          <div>
+            <span>Time</span>
+            <strong id="finalTime">00:00</strong>
+          </div>
+        </div>
+
+        <p id="saveStatus" class="save-status"></p>
+
+        <div class="celebration-actions">
+          <button
+            id="playAgainBtn"
+            class="bp26Btn bp26BtnPrimary"
+            type="button"
+          >
+            Play Again
+          </button>
+
+          <button id="bp26CelebrateClose" class="bp26Btn" type="button">
+            Close
+          </button>
+        </div>
       </div>
-      <div id="bp26CelebrateSub" style="font-size:14px;color:#374151;">
-        Nice work!
-      </div>
-      <button id="bp26CelebrateClose" class="bp26Btn">Close</button>
     </div>
-  </div>
 
-</body>
+    <script type="module">
+      import {
+        initGameScore,
+        resetGameScore,
+        submitGameScore,
+      } from "../js/game-score.js";
 
-<script>
-    /* ---------------------------
-       Celebration (inline)
-    --------------------------- */
-    function bp26Celebrate({ title="Submitted ✅", subtitle="Nice work!", score=null } = {}) {
-      const overlay = document.getElementById("bp26CelebrateOverlay");
-      const t = document.getElementById("bp26CelebrateTitle");
-      const s = document.getElementById("bp26CelebrateSub");
+      const GAME_ID = "bp26-Game3";
+      const GAME_NAME = "Find It (अन्वेषणम्)";
 
-      t.textContent = title;
-      s.textContent = score === null ? subtitle : `${subtitle}  Score: ${score} ✨`;
+      const WORDS_PER_SET = 15;
+      const TARGETS_PER_GAME = 5;
+      const POINTS_PER_TARGET = 18;
+      const WRONG_CLICK_PENALTY = 3;
 
-      overlay.style.display = "flex";
-      bp26BurstConfetti(70);
+      const DATA_URL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
 
-      setTimeout(() => { overlay.style.display = "none"; }, 3000);
-    }
+      const OPENMOJI_BASE = "https://openmoji.org/data/color/svg/";
 
-    function bp26BurstConfetti(count=60) {
-      for (let i = 0; i < count; i++) {
-        const c = document.createElement("div");
-        c.className = "bp26Confetti";
-        c.style.left = Math.random() * 100 + "vw";
-        c.style.width = (6 + Math.random() * 8) + "px";
-        c.style.height = (6 + Math.random() * 8) + "px";
-        c.style.background = `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`;
-        c.style.transform = `translateY(0) rotate(${Math.random() * 180}deg)`;
-        c.style.animationDuration = (800 + Math.random() * 600) + "ms";
-        document.body.appendChild(c);
-        setTimeout(() => c.remove(), 6000);
+      const translit = window.bp26Translit;
+
+      const targetScript = translit?.getTargetScript?.() || null;
+
+      const urlParams = new URLSearchParams(window.location.search);
+
+      const requestedSet = Number.parseInt(urlParams.get("s"), 10);
+
+      const requestedSetIndex =
+        Number.isFinite(requestedSet) && requestedSet >= 0 ? requestedSet : 0;
+
+      const elements = {
+        target: document.getElementById("tofind"),
+
+        grid: document.getElementById("svgdiv"),
+
+        progress: document.getElementById("progressValue"),
+
+        accuracy: document.getElementById("accuracyValue"),
+
+        wrong: document.getElementById("wrongValue"),
+
+        time: document.getElementById("timeValue"),
+
+        bonus: document.getElementById("bonusValue"),
+
+        overlay: document.getElementById("bp26CelebrateOverlay"),
+
+        close: document.getElementById("bp26CelebrateClose"),
+
+        playAgain: document.getElementById("playAgainBtn"),
+
+        finalAccuracy: document.getElementById("finalAccuracy"),
+
+        finalBonus: document.getElementById("finalBonus"),
+
+        finalScore: document.getElementById("finalScore"),
+
+        finalTime: document.getElementById("finalTime"),
+
+        saveStatus: document.getElementById("saveStatus"),
+      };
+
+      let items = [];
+      let activeSetIndex = requestedSetIndex;
+
+      let targetQueue = [];
+      let currentTargetIndex = null;
+
+      let completedTargets = 0;
+      let accuracyScore = 0;
+
+      let totalWrongClicks = 0;
+      let wrongForCurrentTarget = 0;
+
+      let disabledChoices = new Set();
+      let foundChoices = new Set();
+
+      let sessionStartedAt = 0;
+      let elapsedSeconds = 0;
+      let timerId = null;
+
+      let gameFinished = false;
+      let sessionActive = false;
+      let scorerInitialized = false;
+
+      /*
+       * One shared audio player.
+       *
+       * Audio never plays automatically.
+       * The player must press the speaker button
+       * beside the current word.
+       */
+      const targetAudio = new Audio();
+      targetAudio.preload = "auto";
+
+      function getTimeBonus(seconds) {
+        if (seconds <= 45) return 10;
+        if (seconds <= 60) return 8;
+        if (seconds <= 75) return 6;
+        if (seconds <= 90) return 4;
+        if (seconds <= 120) return 2;
+
+        return 0;
       }
-    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const closeBtn = document.getElementById("bp26CelebrateClose");
-      const overlay = document.getElementById("bp26CelebrateOverlay");
-      if (closeBtn) closeBtn.addEventListener("click", () => overlay.style.display = "none");
-      if (overlay) overlay.addEventListener("click", (e) => {
-        if (e.target === overlay) overlay.style.display = "none";
-      });
-    });
-  </script>
+      function formatTime(totalSeconds) {
+        const safeSeconds = Math.max(0, Number(totalSeconds) || 0);
 
-<script>
-  const BP26_GAME_ID = "bp26-Game3";
-  const BP26_DAY_NUM = 5;
+        const minutes = Math.floor(safeSeconds / 60);
 
-  var secs = 0;
-  function countSecs(elem) {
-    secs++;
-  }
+        const seconds = safeSeconds % 60;
 
-  var wpp = 15; // words per page
-  const translit = window.bp26Translit;
-  const tScript = translit.getTargetScript();
+        return `${String(minutes).padStart(
+          2,
+          "0",
+        )}:${String(seconds).padStart(2, "0")}`;
+      }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  var set = urlParams.get("s");
-  if (!set || isNaN(set)) set = 0;
-  var tofind = parseInt((Math.random() * 100) % wpp);
-  var wt = 1;
+      function shuffle(values) {
+        const copy = [...values];
 
-  let gameFinished = false;
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
 
-  // higher is better. Uses: time + wrong attempts
-  // wrongAttempts = (attempts - 1)
-  function computeScore(attempts, seconds) {
-    const wrongAttempts = Math.max(0, attempts - 1);
-    // 100 is the initialized score, penalties reduce it from there
-    const score = 100 - (wrongAttempts * 5) - Math.floor(seconds / 2);
-    return Math.max(0, Math.floor(score));
-  }
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
 
-  // submitting to firebase
-  async function submitScoreNow(finalScore) {
-    console.log("[BP26] submitScoreNow()", {
-      game: BP26_GAME_ID,
-      day: BP26_DAY_NUM,
-      finalScore
-    });
+        return copy;
+      }
 
-    if (typeof window.reportScore !== "function") {
-      console.warn("[BP26] reportScore() not found. Check that ./js/bp26-score.js is loading.");
-      return;
-    }
+      function getImageUrl(rawValue) {
+        const value = String(rawValue || "").trim();
 
-    try {
-      await window.reportScore(finalScore);
-      console.log("[BP26] ✅ reportScore success");
-    } catch (err) {
-      console.error("[BP26] ❌ reportScore failed", err);
-    }
-  }
+        if (value.length === 4 || value.length === 5) {
+          return `${OPENMOJI_BASE}${value}.svg`;
+        }
 
-  var chk = async function (id) {
-    if (gameFinished) return;
+        return value;
+      }
 
-    if (id == tofind) {
-      document.getElementById(id).style["background"] = "green";
-      document.getElementById(id).style["border"] = "1px solid green";
+      function updateStats() {
+        elements.progress.textContent = `${completedTargets} / ${TARGETS_PER_GAME}`;
 
-      // compute score at win-time
-      // wt is attempt counter(starts at 1, increments each try)
-      const attempts = wt; // attempts taken
-      const finalScore = computeScore(attempts, secs);
+        elements.accuracy.textContent = String(accuracyScore);
 
-      console.log("[BP26] WIN", { attempts, secs, finalScore });
+        elements.wrong.textContent = String(totalWrongClicks);
 
-      gameFinished = true;
-      // always submit when finished
-      await submitScoreNow(finalScore);
+        elements.time.textContent = formatTime(elapsedSeconds);
 
-      // ✅ celebration (user WILL see it)
-        bp26Celebrate({
-          title: "Game Finished ✅",
-          subtitle: `Great job! `,
-          score: finalScore
+        elements.bonus.textContent = `+${getTimeBonus(elapsedSeconds)}`;
+      }
+
+      function updateTimer() {
+        if (!sessionStartedAt || gameFinished) {
+          return;
+        }
+
+        elapsedSeconds = Math.max(
+          0,
+          Math.floor((Date.now() - sessionStartedAt) / 1000),
+        );
+
+        updateStats();
+      }
+
+      function startTimer() {
+        stopTimer();
+
+        sessionStartedAt = Date.now();
+        elapsedSeconds = 0;
+
+        updateStats();
+
+        timerId = window.setInterval(updateTimer, 250);
+      }
+
+      function stopTimer() {
+        if (timerId !== null) {
+          window.clearInterval(timerId);
+          timerId = null;
+        }
+
+        updateTimer();
+      }
+
+      function resetChoiceStates() {
+        disabledChoices.clear();
+        wrongForCurrentTarget = 0;
+
+        elements.grid
+          .querySelectorAll(".image-option")
+          .forEach((button, index) => {
+            button.classList.remove("is-wrong");
+
+            if (foundChoices.has(index)) {
+              button.disabled = true;
+
+              button.classList.add("is-correct");
+            } else {
+              button.disabled = false;
+
+              button.classList.remove("is-correct");
+            }
+          });
+      }
+
+      function playTargetAudio() {
+        if (currentTargetIndex === null) {
+          return;
+        }
+
+        const item = items[currentTargetIndex];
+
+        if (!item?.audioUrl) {
+          return;
+        }
+
+        try {
+          targetAudio.pause();
+
+          targetAudio.src = item.audioUrl;
+
+          targetAudio.currentTime = 0;
+
+          const playPromise = targetAudio.play();
+
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch((error) => {
+              console.warn("[Find It] Audio playback failed", error);
+            });
+          }
+        } catch (error) {
+          console.warn("[Find It] Audio playback failed", error);
+        }
+      }
+
+      function renderTarget() {
+        const item = items[currentTargetIndex];
+
+        if (!item) {
+          return;
+        }
+
+        elements.target.replaceChildren();
+
+        const audioButton = document.createElement("button");
+
+        audioButton.type = "button";
+
+        audioButton.className = "audio-button";
+
+        audioButton.setAttribute("aria-label", "Play target word audio");
+
+        audioButton.textContent = "🔊";
+
+        audioButton.addEventListener("click", playTargetAudio);
+
+        const word = document.createElement("span");
+
+        word.className = "target-word-text";
+
+        word.textContent = item.word;
+
+        elements.target.append(audioButton, word);
+
+        if (targetScript && translit) {
+          const converted = translit.transliterate(item.word, "devanagari");
+
+          if (converted && converted !== item.word) {
+            const translation = document.createElement("span");
+
+            translation.className = "target-transliteration";
+
+            translation.textContent = `= ${converted}`;
+
+            elements.target.appendChild(translation);
+          }
+        }
+      }
+
+      function moveToNextTarget() {
+        resetChoiceStates();
+
+        currentTargetIndex = targetQueue[completedTargets];
+
+        renderTarget();
+        updateStats();
+      }
+
+      function getCurrentTargetScore() {
+        return Math.max(
+          0,
+          POINTS_PER_TARGET - wrongForCurrentTarget * WRONG_CLICK_PENALTY,
+        );
+      }
+
+      async function handleChoice(choiceIndex, button) {
+        if (
+          !sessionActive ||
+          gameFinished ||
+          currentTargetIndex === null ||
+          button.disabled
+        ) {
+          return;
+        }
+
+        /*
+         * Wrong picture.
+         */
+        if (choiceIndex !== currentTargetIndex) {
+          if (disabledChoices.has(choiceIndex)) {
+            return;
+          }
+
+          disabledChoices.add(choiceIndex);
+
+          wrongForCurrentTarget += 1;
+          totalWrongClicks += 1;
+
+          button.disabled = true;
+
+          button.classList.add("is-wrong");
+
+          updateStats();
+
+          return;
+        }
+
+        /*
+         * Correct picture.
+         */
+        foundChoices.add(choiceIndex);
+
+        button.disabled = true;
+
+        button.classList.remove("is-wrong");
+
+        button.classList.add("is-correct");
+
+        accuracyScore += getCurrentTargetScore();
+
+        completedTargets += 1;
+
+        updateStats();
+
+        /*
+         * All five targets found.
+         */
+        if (completedTargets >= TARGETS_PER_GAME) {
+          await finishGame();
+
+          return;
+        }
+
+        moveToNextTarget();
+      }
+
+      async function finishGame() {
+        if (sessionStartedAt) {
+          elapsedSeconds = Math.max(
+            0,
+            Math.floor((Date.now() - sessionStartedAt) / 1000),
+          );
+        }
+
+        gameFinished = true;
+        sessionActive = false;
+
+        targetAudio.pause();
+
+        stopTimer();
+        updateStats();
+
+        const timeBonus = getTimeBonus(elapsedSeconds);
+
+        const finalScore = Math.min(100, accuracyScore + timeBonus);
+
+        elements.grid.querySelectorAll(".image-option").forEach((button) => {
+          button.disabled = true;
         });
-    }
-    else {
-      document.getElementById(id).style["background"] = "pink";
-      document.getElementById(id).style["border"] = "1px dotted red";
-      $("#wt").html(translit.numberToDevanagari(wt++));
-    }
-  }
 
-  document.addEventListener('DOMContentLoaded', function () {
+        elements.target.innerHTML =
+          '<span class="finished-target">All 5 items found! ✓</span>';
 
-    // prompt name + set game/day
-    // This must happen as the game starts.
-    if (typeof window.bp26Init === "function") {
-      window.bp26Init({ game: BP26_GAME_ID, day: BP26_DAY_NUM });
-      console.log("[BP26] bp26Init called", { game: BP26_GAME_ID, day: BP26_DAY_NUM });
-    } else {
-      console.warn("[BP26] bp26Init not found yet (bp26-score.js might not be loaded yet).");
-    }
+        elements.finalAccuracy.textContent = `${accuracyScore} / 90`;
 
-    timer = setInterval('countSecs("timer")', 1000);
-    countSecs("timer");
+        elements.finalBonus.textContent = `+${timeBonus}`;
 
-    var lnk = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
-    Papa.parse(lnk, {
-      download: true,
-      header: true,
-      complete: populateWlist
-    })
-  })
+        elements.finalScore.textContent = `${finalScore} / 100`;
 
-  function populateWlist(fildat) {
-    fullist = fildat.data;
-    if (set > fildat.data.length / wpp) set = 0;
+        elements.finalTime.textContent = formatTime(elapsedSeconds);
 
-    var openmojibase = "https://openmoji.org/data/color/svg/";
-    var image = [];
-    var words = [];
-    var aud = [];
-    var imglnk = "";
+        elements.saveStatus.textContent = "Saving score…";
 
-    for (i = 0; i < wpp; i++) {
-      words.push(fullist[(set * wpp) + i].padam);
+        showCelebration();
 
-      if (fullist[(set * wpp) + i]["Imaage link"].length == 4 || fullist[(set * wpp) + i]["Imaage link"].length == 5)
-        imglnk = openmojibase + fullist[(set * wpp) + i]["Imaage link"] + ".svg";
-      else
-        imglnk = fullist[(set * wpp) + i]["Imaage link"];
+        try {
+          const result = await submitGameScore(finalScore, {
+            result: "completed",
 
-      image.push(imglnk);
-      aud.push(fullist[(set * wpp) + i]["alnk"]);
-    }
+            metrics: {
+              targetsCompleted: completedTargets,
 
-    console.log("[BP26] Loaded set", { set, tofind, word: words[tofind], audio: aud[tofind] });
+              wrongAttempts: totalWrongClicks,
 
-    $("#tofind").html("<button id=" + tofind + " onclick='musicelements[this.id].play()';>🔊</button> " + words[tofind]);
+              accuracyScore,
 
-    if (tScript)
-      $("#tofind").append(" = " + translit.transliterate(words[tofind], 'devanagari'));
+              timeBonus,
 
-    $.each(words, function (i, v) {
-      imglnk = image[i];
-      alnk = aud[i];
+              set: activeSetIndex,
+            },
+          });
 
-      var img = '';
-      positiontop = (Math.random() * (window.visualViewport.height - 121)) + 30;
-      positionright = Math.random() * (window.visualViewport.width - 121);
-      zindex = i;
+          if (result?.ok) {
+            elements.saveStatus.textContent =
+              "Score saved to the leaderboard ✓";
+          } else if (result?.reason === "not-signed-in") {
+            elements.saveStatus.textContent =
+              "Sign in to save this score to the leaderboard.";
+          } else {
+            elements.saveStatus.textContent =
+              "Score calculated, but it was not saved.";
+          }
+        } catch (error) {
+          console.error("[Find It] Score submission failed", error);
 
-      img += '<img id="' + i + '" src="' + imglnk +
-        '" style="top: ' + positiontop + 'px;' +
-        'right: ' + positionright + 'px;' +
-        'z-index: ' + zindex +
-        ';" width="121" onclick="chk(this.id)">';
+          elements.saveStatus.textContent =
+            "Score calculated, but saving failed.";
+        }
+      }
 
-      document.getElementById('svgdiv').innerHTML += img +
-        "<audio id=" + i + " src=" + alnk + " preload='auto'></audio>";
-    });
+      function showCelebration() {
+        elements.overlay.classList.add("is-visible");
 
-    musicelements = document.getElementsByTagName("audio");
+        elements.overlay.setAttribute("aria-hidden", "false");
 
-    // autoplay target audio once
-    try {
-      musicelements[tofind].play();
-    } catch (e) {
-      console.warn("[BP26] autoplay blocked", e);
-    }
-  }
-</script>
+        burstConfetti(70);
 
-<script type="module" src="./js/bp26-score.js"></script>
+        elements.playAgain.focus();
+      }
 
+      function hideCelebration() {
+        elements.overlay.classList.remove("is-visible");
 
+        elements.overlay.setAttribute("aria-hidden", "true");
+      }
+
+      function burstConfetti(count = 60) {
+        for (let i = 0; i < count; i += 1) {
+          const confetti = document.createElement("div");
+
+          confetti.className = "bp26Confetti";
+
+          confetti.style.left = `${Math.random() * 100}vw`;
+
+          confetti.style.width = `${6 + Math.random() * 8}px`;
+
+          confetti.style.height = `${6 + Math.random() * 8}px`;
+
+          confetti.style.background = `hsl(${Math.floor(
+            Math.random() * 360,
+          )}, 90%, 60%)`;
+
+          confetti.style.animationDuration = `${800 + Math.random() * 600}ms`;
+
+          document.body.appendChild(confetti);
+
+          window.setTimeout(() => confetti.remove(), 2000);
+        }
+      }
+
+      function prepareTargetQueue() {
+        const allIndexes = items.map((_, index) => index);
+
+        targetQueue = shuffle(allIndexes).slice(0, TARGETS_PER_GAME);
+      }
+
+      function startSession({ replay = false } = {}) {
+        hideCelebration();
+
+        /*
+         * Stop audio from the previous game
+         * before starting another session.
+         */
+        targetAudio.pause();
+        targetAudio.currentTime = 0;
+
+        sessionActive = true;
+
+        completedTargets = 0;
+        accuracyScore = 0;
+
+        totalWrongClicks = 0;
+        wrongForCurrentTarget = 0;
+
+        currentTargetIndex = null;
+
+        elapsedSeconds = 0;
+        sessionStartedAt = 0;
+
+        gameFinished = false;
+
+        disabledChoices.clear();
+        foundChoices.clear();
+
+        prepareTargetQueue();
+        resetChoiceStates();
+
+        if (!scorerInitialized) {
+          initGameScore({
+            gameId: GAME_ID,
+            gameName: GAME_NAME,
+          });
+
+          scorerInitialized = true;
+        } else if (replay) {
+          resetGameScore();
+        }
+
+        startTimer();
+
+        moveToNextTarget();
+      }
+
+      function renderImageGrid() {
+        elements.grid.replaceChildren();
+
+        const loadPromises = items.map((item, index) => {
+          const button = document.createElement("button");
+
+          button.type = "button";
+
+          button.className = "image-option";
+
+          button.setAttribute("aria-label", `Picture option ${index + 1}`);
+
+          const img = document.createElement("img");
+
+          img.src = item.imageUrl;
+
+          img.alt = "";
+
+          img.loading = "eager";
+
+          img.decoding = "async";
+
+          button.appendChild(img);
+
+          button.disabled = true;
+
+          button.addEventListener("click", () => handleChoice(index, button));
+
+          elements.grid.appendChild(button);
+
+          return new Promise((resolve) => {
+            if (img.complete) {
+              resolve();
+
+              return;
+            }
+
+            img.addEventListener("load", resolve, {
+              once: true,
+            });
+
+            img.addEventListener("error", resolve, {
+              once: true,
+            });
+          });
+        });
+
+        return Promise.all(loadPromises);
+      }
+
+      function buildItems(rows, setIndex) {
+        const maxSetIndex = Math.max(
+          0,
+          Math.ceil(rows.length / WORDS_PER_SET) - 1,
+        );
+
+        const safeSetIndex = setIndex <= maxSetIndex ? setIndex : 0;
+
+        activeSetIndex = safeSetIndex;
+
+        const start = safeSetIndex * WORDS_PER_SET;
+
+        const selectedRows = rows.slice(start, start + WORDS_PER_SET);
+
+        return selectedRows
+          .map((row) => ({
+            word: String(row?.padam || "").trim(),
+
+            imageUrl: getImageUrl(row?.["Imaage link"]),
+
+            audioUrl: String(row?.alnk || "").trim(),
+          }))
+          .filter((item) => item.word && item.imageUrl);
+      }
+
+      function loadGameData() {
+        return new Promise((resolve, reject) => {
+          Papa.parse(DATA_URL, {
+            download: true,
+
+            header: true,
+
+            complete: (result) => resolve(result.data || []),
+
+            error: reject,
+          });
+        });
+      }
+
+      async function initGame() {
+        elements.close.addEventListener("click", hideCelebration);
+
+        elements.playAgain.addEventListener("click", () =>
+          startSession({
+            replay: true,
+          }),
+        );
+
+        elements.overlay.addEventListener("click", (event) => {
+          if (event.target === elements.overlay) {
+            hideCelebration();
+          }
+        });
+
+        try {
+          const rows = await loadGameData();
+
+          items = buildItems(rows, requestedSetIndex);
+
+          if (items.length < TARGETS_PER_GAME) {
+            throw new Error(
+              "Not enough valid vocabulary items were loaded for this set.",
+            );
+          }
+
+          await renderImageGrid();
+
+          /*
+           * Start only after all picture
+           * choices are ready.
+           */
+          startSession();
+        } catch (error) {
+          console.error("[Find It] Game could not be loaded", error);
+
+          elements.target.innerHTML =
+            '<span class="error-text">Unable to load this game. Please refresh the page and try again.</span>';
+        }
+      }
+
+      initGame();
+    </script>
+  </body>
 </html>
