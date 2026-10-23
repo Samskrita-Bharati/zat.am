@@ -12,6 +12,41 @@ function hideLoadingPopup() {
     document.getElementById("loadingPopup").style.display = "none";
 }
 
+const nakshatras = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
+    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
+    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
+    "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+];
+
+const nakshatras_dn = [
+  "अश्विनी","भरणी","कृत्तिका","रोहिणी","मृगशिर","आर्द्रा","पुनर्वसु","पुष्य","आश्लेषा","मघा",
+  "पूर्व फाल्गुनी","उत्तर फाल्गुनी","हस्त","चित्रा","स्वाति","विशाखा","अनुराधा","ज्येष्ठा",
+  "मूल","पूर्व आषाढा", "उत्तर आषाढा","श्रवण","धनिष्ठा","शतभिष","पूर्व भाद्रपदा","उत्तर भाद्रपदा","रेवती"
+];
+
+const rashis = [
+    "Aries", "Taurus", "Gemini", "Cancer",
+    "Leo", "Virgo", "Libra", "Scorpio",
+    "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+];
+
+const rashis_dn = [
+  "मेष","वृषभ","मिथुन","कर्क","सिंह","कन्या","तुला","वृश्चिक","धनु","मकर","कुंभ","मीन"
+];
+
+const maasas = [
+    "Chaitra", "Vaishakha", "Jyeshtha", "Ashadha",
+    "Shravana", "Bhadrapada", "Ashwina", "Kartika",
+    "Margashirsha", "Pausha", "Magha", "Phalguna"
+];
+
+const maasas_dn = [
+  "चैत्र","वैशाख","ज्येष्ठ","आषाढ़","श्रावण","भाद्रपद","अश्विन","कार्तिक","मार्गशीर्ष","पौष","माघ","फाल्गुन"
+];
+
+
 async function fetchPanchang(dateInput, callback) {
   // var dateInput = document.getElementById("dateToSolve").value;
   	// let validDate = dateInput.toISOString().split('T')[0];
@@ -50,6 +85,52 @@ async function fetchPanchang(dateInput, callback) {
 }
 
 // fetchPanchang(onSvgLoad);
+
+function computePanchangLocally(userInpDate) {
+  panchang_data = {};
+  const now = userInpDate;//new Date();
+
+  // --- Sun's tropical ecliptic longitude (0–360°) ---
+  const sunEcl = Astronomy.SunPosition(now);
+  const sunLon = sunEcl.elon;          // degrees, 0–360, tropical
+
+  // --- Moon's ecliptic longitude (0–360°) ---
+  const moonEcl = Astronomy.EclipticGeoMoon(now);
+  const moonLon = moonEcl.lon;         // degrees, 0–360, tropical
+
+  // Convert tropical → sidereal (Lahiri ayanamsha ≈ 23.857° as of 2000)
+  // Lahiri ayanamsha increases ~50.3"/year from 23°51' at J2000.0
+  const J2000 = new Date('2000-01-01T12:00:00Z');
+  const yearsSinceJ2000 = (now - J2000) / (365.25 * 24 * 3600 * 1000);
+  const ayanamsha = 23.857 + (yearsSinceJ2000) * (50.29 / 3600); // approx
+  
+  const siderealSun  = ((sunLon  - ayanamsha) % 360 + 360) % 360;
+  const siderealMoon = ((moonLon - ayanamsha) % 360 + 360) % 360;
+
+  // --- Panchang elements ---
+  const solarMonth   = Math.floor(sunLon  / 30);        // 0–11 
+  const nakshatra    = Math.floor(siderealMoon / (360 / 27)); // 0–26 (Ashwini…Revati)
+  const lunarZodiac  = Math.floor(siderealMoon / 30);         // 0–11 (Chandra Rashi)
+
+ //
+  panchang_data.nakshatra_num = nakshatra;
+  panchang_data.maasa_num = solarMonth;
+  panchang_data.raashi_num = lunarZodiac;
+
+  panchang_data.nakshatra = nakshatras[nakshatra];
+  panchang_data.maasa = maasas[solarMonth];
+  panchang_data.rashi = rashis[lunarZodiac];
+	
+  panchang_data.नक्षत्र = nakshatras_dn[nakshatra];
+  panchang_data.मासा = maasas_dn[solarMonth];
+  panchang_data.राशि = rashis_dn[lunarZodiac];
+	
+  document.getElementById('nakshatra').innerHTML = `नक्षत्रम् = ${panchang_data.नक्षत्र} &nbsp;&nbsp;&nbsp;&nbsp; Asterism: ${panchang_data.nakshatra}`;
+  document.getElementById('raashi').innerHTML = `चंद्र राशि: = ${panchang_data.राशि} &nbsp;&nbsp;&nbsp;&nbsp; Lunar Zodiac: ${panchang_data.rashi}`;
+  document.getElementById('maasa').innerHTML = `सूर्य मास: = ${panchang_data.मासा} &nbsp;&nbsp;&nbsp;&nbsp; Solar month: ${panchang_data.maasa}`;
+  
+  return { solarMonth, nakshatra, lunarZodiac };
+}
 
 const handleDropdownClicked = (event) => {
 	const menuOverlay = document.getElementById("menuOverlay");
@@ -266,7 +347,6 @@ const textColorNoSol = "white";
 const labelTextSol = "A solution exists";
 const labelSolFound = "Solution found";
 const pcsList = ["sSpcs","sLpcs","Qpcs","bSpcs","lSpcs","bLpcs","Ipcs","Cpcs","eLpcs","Tpcs"];
-const solutionsServerURI = "//olivierrt.pythonanywhere.com/dailycalendarpuzzlesolver";
 const gridStep = 100;
 const alignFactor = 3;
 const constViewBoxHeight = 1100;
@@ -290,7 +370,6 @@ var hexPcsPos;
 var formAction;
 var httpReqDate;
 var httpReqSide;
-var xmlHttpReq = new XMLHttpRequest();
 var isHttpReqForEnd = false;
 var checkButtonCaption;
 // Variable for clock management
@@ -445,9 +524,11 @@ function updatePcbcolor() {
 
 function dateChanged(date){
 	let newDate = new Date(date);
-  let validDate = newDate.toISOString().split('T')[0];
+    let validDate = newDate.toISOString().split('T')[0];
 	// updSquaresPos(newDate);
-  fetchPanchang(validDate, updSquaresPos);
+	computePanchangLocally(new Date(validDate));
+	hideLoadingPopup(); // Always hide popup after fetch
+    updSquaresPos();
 }
 
 function updSquaresPos(){
@@ -657,7 +738,9 @@ function onSvgLoad() {
 	}
 	// Place the grey squares in puzzle corresponding to selected date
 	dateInput.value = validDate;
-  fetchPanchang(validDate, updSquaresPos);
+	computePanchangLocally(new Date(dateInput.value));
+	hideLoadingPopup(); // Always hide popup after fetch
+    updSquaresPos();
 	// updSquaresPos(validDate);
 	// read pieces colors from URL
 	var newColor;
@@ -908,7 +991,7 @@ function updateSolutionMessage(msg,displaySolBtn = true) {
 }
 
 chkBtn = document.getElementById("check");
-chkBtn.style.display = 'none';
+// chkBtn.style.display = 'none';
 
 function startChkBtnAnimation() {
 	// unicode char 003C is less than character starting html tags
@@ -922,24 +1005,22 @@ function stopChkBtnAnimation() {
 	chkBtn.innerHTML = checkButtonCaption;
 }
 
-// Function call upon response from server about the request sent by checkSol
-function httpRequestEnded() {
-	if ( isHttpReqForEnd == false ) {
-		// Stop check button animation
-		stopChkBtnAnimation();
-	}
+// Called with the locally-computed solver response (see checkSol()) to update
+// the Check/Solution UI. Used both for an explicit "Check" click and for the
+// automatic check fired by checkIfPuzzleSolved() once every piece is placed.
+function processSolverResponse(requestResponse) {
 
 	// count the number of placed pcs in returned hex string
 	var nbPcsPlaced = nbPcs;
-	requestResponse = xmlHttpReq.responseText;
 	if ( hexPcsPos.match(/ff/g) ) {
 		nbPcsPlaced = pcsList.length -  (hexPcsPos.match(/ff/g)).length;
 	}
 
-	//console.log("http request with PcsPos=" + hexPcsPos  + " date: " + httpReqDate + " side: " + httpReqSide + " get response : " + requestResponse);
+	//console.log("solving for PcsPos=" + hexPcsPos  + " date: " + httpReqDate + " side: " + httpReqSide + " got solution : " + requestResponse);
 
-	// null is not more a possible answer from the server since it has been updated
-	if ( requestResponse == "null" ){
+	// null means the local solver found no solution for this date (see solver.js;
+	// happens for a small fraction of dates -- proven unsolvable with this piece set)
+	if ( requestResponse == null ){
 		if ( isHttpReqForEnd == false ) {
 			updateSolutionMessage(labelTextNoSol);
 			solution = null;
@@ -1019,16 +1100,11 @@ function checkSol() {
 
 	hexPcsPos = getHexPcsPos();
 
-	var requestResponse = null;
-	// manage the protocol because http request are blocked on https pages and vice-versa
-	var theUrl = location.protocol + solutionsServerURI + "?date=" + httpReqDate + "&side=" + httpReqSide + "&pcspos=" + hexPcsPos + "&action=check";
-	xmlHttpReq.open( "GET", theUrl, true); // false for synchronous request
-	xmlHttpReq.onload = httpRequestEnded;
-	// xmlHttpReq.send( null );
-	if ( isHttpReqForEnd == false ) {
-		// start animation of "check" button to show that the request has been taken into account
-		// startChkBtnAnimation();
-	}
+	// Solve locally (see solver.js) instead of querying an external solver server.
+	var requestResponse = PanchangSolver.solvePanchang(
+		panchang_data.maasa_num, panchang_data.nakshatra_num, panchang_data.raashi_num
+	);
+	processSolverResponse(requestResponse);
 }
 
 function roundToGrid(value) {
