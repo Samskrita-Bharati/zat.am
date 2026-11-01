@@ -13,6 +13,26 @@
   min-width: 0;
 }
 
+.vowel-paint #leaderboard-status { margin: 16px 0 0; font-size: 15px; }
+.vowel-paint #retry-score { margin-top: 12px; }
+.vowel-paint button:disabled { opacity: 0.6; cursor: wait; }
+
+.vowel-paint .paint-sidebar { display: grid; gap: 20px; min-width: 0; }
+.vowel-paint .paint-personal-score { margin: 0; }
+.vowel-paint .paint-score-value { font-size: 32px; font-weight: 700; margin: 12px 0; }
+.vowel-paint #letters-completed { font-size: 18px; }
+.vowel-paint .paint-score-note { color: var(--zatam-muted); line-height: 1.6; }
+.vowel-paint .paint-stats { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 24px; margin-bottom: 16px; }
+.vowel-paint #paint-time { font-variant-numeric: tabular-nums; }
+.vowel-paint .paint-result-stats { display: grid; gap: 10px; margin: 16px 0 24px; }
+.vowel-paint .paint-result-stats > div { display: flex; justify-content: space-between; gap: 24px; }
+.vowel-paint .paint-result-stats dd { margin: 0; font-weight: 700; }
+.vowel-paint .paint-best-stats { display: grid; gap: 12px; margin: 16px 0; font-size: 18px; }
+.vowel-paint .paint-best-stats > div { display: flex; justify-content: space-between; gap: 12px; }
+.vowel-paint .paint-best-stats dd { margin: 0; font-weight: 700; }
+.vowel-paint #best-time { font-variant-numeric: tabular-nums; }
+.vowel-paint #save-status, .vowel-paint #game-load-status { color: var(--zatam-danger); }
+
 .vowel-paint .vowel-options {
   display: flex;
   flex-wrap: wrap;

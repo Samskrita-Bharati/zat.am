@@ -1,11 +1,36 @@
 /* Adapted from https://github.com/codepo8/letterpaint */
-(function () {
+(async function () {
   "use strict";
 
   var container = document.getElementById("container");
   var canvas = document.getElementById("paint-canvas");
   var context = canvas.getContext("2d", { willReadFrequently: true });
-  var chars = Array.from(document.getElementById("chars").textContent.trim());
+  var response = await fetch("letters.json");
+  if (!response.ok) throw new Error("Could not load letters.json");
+  var config = await response.json();
+  if (!Array.isArray(config.letters) || !config.letters.length ||
+      config.letters.some(function (value) { return typeof value !== "string" || !value.trim(); }) ||
+      new Set(config.letters).size !== config.letters.length) {
+    throw new Error("Invalid vowel list in letters.json");
+  }
+  var chars = config.letters;
+  if (!config.levelIds || chars.some(function (vowel) {
+    return typeof config.levelIds[vowel] !== "string" || !config.levelIds[vowel].trim();
+  }) || new Set(chars.map(function (vowel) { return config.levelIds[vowel]; })).size !== chars.length) {
+    throw new Error("Each vowel needs a unique, stable level ID in letters.json");
+  }
+  var scoreApi = null;
+  var scoreApiError = "";
+  try {
+    scoreApi = await import("../js/game-score.js");
+    if (typeof scoreApi.initGameScore !== "function" || typeof scoreApi.submitGameScore !== "function") {
+      throw new Error("Shared scoring is unavailable");
+    }
+  } catch (scoreError) {
+    scoreApi = null;
+    console.warn("[Vowel Paint] Could not load shared scoring.", scoreError);
+    scoreApiError = "We couldn’t connect to the leaderboard. Your result is still available here.";
+  }
   var intro = document.getElementById("intro");
   var win = document.getElementById("win");
   var error = document.getElementById("error");
@@ -24,9 +49,195 @@
   var paintColour = [240, 240, 240];
   var completionThreshold = 0.98;
 
+  // Only completed attempts are persisted; unfinished drawings start fresh.
   var completedLetters = new Set();
+  var bestScores = new Map();
+  var storageKey = "zatam:026-sp:personal-bests:v1";
+  var attemptStartedAt = null;
+  var timerInterval = null;
+  var attemptScoringReady = false;
+  var completedAttempt = null;
+  var submittingScore = false;
+  var leaderboardStatus = document.getElementById("leaderboard-status");
+  var retryScoreButton = document.getElementById("retry-score");
   var vowelOptions = document.getElementById("vowel-options");
   var vowelButtons = [];
+
+  function loadProgress() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+      if (!saved || ![1, 2, 3].includes(saved.version) || !Array.isArray(saved.bests)) return;
+      saved.bests.forEach(function (best) {
+        if (!best || !chars.includes(best.letter) || !Number.isInteger(best.score) ||
+            best.score < 0 || best.score > 100 || !Number.isFinite(best.seconds) ||
+            best.seconds < 0 || !Number.isFinite(best.coverage) ||
+            best.coverage < 60 || best.coverage > 100) return;
+        var expected = saved.version === 1
+          ? Math.round(best.coverage * 0.8 + 20 * Math.max(0, 1 - best.seconds / 120))
+          : saved.version === 2
+            ? Math.round(best.coverage * 0.4 + 60 * Math.max(0, 1 - best.seconds / 120))
+            : calculateScore(best.coverage, best.seconds);
+        if (best.score !== expected) return;
+        bestScores.set(best.letter, { letter: best.letter, score: calculateScore(best.coverage, best.seconds), seconds: best.seconds, coverage: best.coverage });
+        completedLetters.add(best.letter);
+      });
+      if (saved.version !== 3) saveProgress();
+    } catch (error) {
+      document.getElementById("save-status").textContent = "Saved progress could not be read. New completions will try to save again.";
+    }
+  }
+
+  function saveProgress() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({ version: 3, bests: Array.from(bestScores.values()) }));
+      document.getElementById("save-status").textContent = "";
+    } catch (error) {
+      document.getElementById("save-status").textContent = "Browser storage is unavailable. This attempt is shown, but may not survive reload.";
+    }
+  }
+
+  function updatePersonalBest() {
+    var total = 0;
+    bestScores.forEach(function (best) { total += best.score; });
+    document.getElementById("personal-score").textContent = bestScores.size ? Math.round(total / bestScores.size) + " / 100" : "— / 100";
+    document.getElementById("letters-completed").textContent = bestScores.size + " / " + chars.length + " letters completed";
+    var best = bestScores.get(letter);
+    document.getElementById("best-letter").textContent = letter || "—";
+    document.getElementById("best-score").textContent = best ? best.score + " / 100" : "—";
+    document.getElementById("best-time").textContent = best ? formatTime(best.seconds) : "—";
+    document.getElementById("best-coverage").textContent = best ? best.coverage.toFixed(1) + "%" : "—";
+    document.getElementById("best-status").textContent = best ? "" : "Complete this vowel to save a personal best.";
+  }
+
+  function formatTime(seconds) {
+    var total = Math.floor(seconds);
+    return String(Math.floor(total / 60)).padStart(2, "0") + ":" + String(total % 60).padStart(2, "0");
+  }
+
+  function elapsedSeconds() {
+    return attemptStartedAt === null ? 0 : Math.max(0, (performance.now() - attemptStartedAt) / 1000);
+  }
+
+  function stopTimer() {
+    if (timerInterval !== null) clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
+  function resetAttempt() {
+    stopTimer();
+    attemptStartedAt = null;
+    attemptScoringReady = false;
+    completedAttempt = null;
+    leaderboardStatus.textContent = "";
+    retryScoreButton.hidden = true;
+    document.getElementById("paint-time").textContent = "00:00";
+    document.getElementById("paint-coverage").textContent = "0%";
+  }
+
+  function startTimer() {
+    if (attemptStartedAt !== null) return;
+    attemptStartedAt = performance.now();
+    if (scoreApi) {
+      try {
+        scoreApi.initGameScore({
+          gameId: "026-sp",
+          gameName: "स्वराः Paint",
+          levelId: config.levelIds[letter],
+          levelName: "Vowel " + letter
+        });
+        attemptScoringReady = true;
+      } catch (scoreError) {
+        console.warn("[Vowel Paint] Could not initialize shared scoring.", scoreError);
+        scoreApiError = "We couldn’t prepare leaderboard saving. Your result is still available here.";
+      }
+    }
+    timerInterval = setInterval(function () {
+      document.getElementById("paint-time").textContent = formatTime(elapsedSeconds());
+    }, 250);
+  }
+
+  function calculateScore(coveragePercent, seconds) {
+    return Math.max(0, Math.min(100, Math.round(100 * (1 - Math.max(0, seconds) / 120))));
+  }
+
+  function recordCompletion(coveragePercent) {
+    var seconds = elapsedSeconds();
+    var score = calculateScore(coveragePercent, seconds);
+    stopTimer();
+    document.getElementById("paint-time").textContent = formatTime(seconds);
+    document.getElementById("result-time").textContent = formatTime(seconds);
+    document.getElementById("result-coverage").textContent = coveragePercent.toFixed(1) + "%";
+    document.getElementById("result-score").textContent = score + " / 100";
+    var previous = bestScores.get(letter);
+    if (!previous || score > previous.score ||
+        (score === previous.score && (seconds < previous.seconds ||
+          (seconds === previous.seconds && coveragePercent > previous.coverage)))) {
+      bestScores.set(letter, { letter: letter, score: score, seconds: seconds, coverage: coveragePercent });
+    }
+    saveProgress();
+    updatePersonalBest();
+    completedAttempt = {
+      vowel: letter,
+      levelId: config.levelIds[letter],
+      levelName: "Vowel " + letter,
+      score: score,
+      seconds: seconds,
+      coverage: coveragePercent,
+      saved: false
+    };
+  }
+
+  function setSubmissionBusy(busy) {
+    submittingScore = busy;
+    reloadButton.disabled = busy;
+    win.querySelector("button").disabled = busy;
+    retryScoreButton.disabled = busy;
+    vowelButtons.forEach(function (button) { button.disabled = busy; });
+  }
+
+  async function submitCompletedScore() {
+    var attempt = completedAttempt;
+    if (!attempt || attempt.saved || submittingScore) return;
+    if (!scoreApi || !attemptScoringReady) {
+      leaderboardStatus.textContent = scoreApiError || "We couldn’t connect to the leaderboard. Please try again later.";
+      retryScoreButton.hidden = true;
+      return;
+    }
+    setSubmissionBusy(true);
+    retryScoreButton.hidden = true;
+    leaderboardStatus.textContent = "Saving score to leaderboard…";
+    try {
+      var result = await scoreApi.submitGameScore(attempt.score, {
+        result: "completed",
+        levelId: attempt.levelId,
+        levelName: attempt.levelName,
+        metrics: {
+          // Older shared scorers store these fields from metrics; the current
+          // scorer also accepts the explicit levelId/levelName options above.
+          levelId: attempt.levelId,
+          levelName: attempt.levelName,
+          vowel: attempt.vowel,
+          paintedPercentage: attempt.coverage,
+          tracingSeconds: attempt.seconds,
+          scoringMethod: "time-only-v1"
+        }
+      });
+      if (result && (result.ok || result.reason === "already-submitted")) {
+        attempt.saved = true;
+        leaderboardStatus.textContent = "Score saved to leaderboard.";
+      } else {
+        leaderboardStatus.textContent = result && result.reason === "not-signed-in"
+          ? "Sign in to Zat.am, then retry to save this score."
+          : "Score was not saved. Please retry.";
+        retryScoreButton.hidden = false;
+      }
+    } catch (scoreError) {
+      leaderboardStatus.textContent = "Could not save to leaderboard. Your result is still shown; please retry.";
+      retryScoreButton.hidden = false;
+    } finally {
+      setSubmissionBusy(false);
+    }
+  }
 
   function updateVowels() {
     vowelButtons.forEach(function (button, index) {
@@ -37,6 +248,7 @@
       button.setAttribute("aria-pressed", String(vowel === letter));
       button.setAttribute("aria-label", vowel + (complete ? ": completed, play again" : ": practise"));
     });
+    updatePersonalBest();
   }
 
   chars.forEach(function (vowel) {
@@ -115,8 +327,11 @@
     }
   }
 
-  function paintLetter(sameLetter) {
+  function paintLetter(sameLetter, isRetry) {
+    if (submittingScore) return;
     stopStroke();
+    if (!isRetry) resetAttempt();
+    else document.getElementById("paint-coverage").textContent = "0%";
     letter = sameLetter || chars[Math.floor(Math.random() * chars.length)];
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -261,10 +476,14 @@
     for (var i = 0; i < mask.length; i++) {
       if (mask[i] && distance[i] <= tolerance) covered++;
     }
+    var coveragePercent = actuallyPainted / letterPixels * 100;
+    document.getElementById("paint-coverage").textContent = coveragePercent.toFixed(1) + "%";
     if (actuallyPainted / letterPixels >= 0.6 &&
         covered / letterPixels >= completionThreshold) {
+      recordCompletion(coveragePercent);
       setState("win");
       playFeedback(true);
+      submitCompletedScore();
     }
   }
 
@@ -272,6 +491,7 @@
     if (state !== "play" || activePointer !== null || !event.isPrimary || event.button !== 0) return;
     event.preventDefault();
     prepareAudio();
+    startTimer();
     activePointer = event.pointerId;
     canvas.setPointerCapture(activePointer);
     paint(pointFromEvent(event));
@@ -303,7 +523,7 @@
   });
   error.querySelector("button").addEventListener("click", function () {
     prepareAudio();
-    paintLetter(letter);
+    paintLetter(letter, true);
   });
   win.querySelector("button").addEventListener("click", function () {
     prepareAudio();
@@ -317,12 +537,21 @@
     if (sound) prepareAudio();
     else { winSound.pause(); winSound.currentTime = 0; }
   });
+  retryScoreButton.addEventListener("click", submitCompletedScore);
 
+  loadProgress();
   paintLetter();
   setState("intro");
+  intro.querySelector("button").disabled = false;
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
       if (state === "intro") { paintLetter(letter); setState("intro"); }
     });
   }
-}());
+}()).catch(function (loadError) {
+  console.warn("[Vowel Paint] Could not initialize the game.", loadError);
+  document.getElementById("game-load-status").textContent = "We couldn’t load the vowels. Please try again.";
+  var retry = document.getElementById("retry-load");
+  retry.hidden = false;
+  retry.addEventListener("click", function () { window.location.reload(); });
+});
