@@ -13,6 +13,42 @@
   min-width: 0;
 }
 
+.vowel-paint .vowel-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.vowel-paint .vowel-options button {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 8px;
+  border: 1px solid var(--zatam-border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--zatam-navy);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.vowel-paint .vowel-options button.is-complete {
+  background: #e9f7ee;
+  color: #176334;
+  border-color: #278247;
+}
+
+.vowel-paint .vowel-options button[aria-pressed="true"] {
+  outline: 3px solid var(--zatam-navy);
+  outline-offset: 2px;
+}
+
+.vowel-paint .vowel-options button:focus-visible {
+  outline: 3px solid var(--zatam-gold);
+  outline-offset: 3px;
+}
+
 .vowel-paint .paint-toolbar {
   display: flex;
   justify-content: space-between;

@@ -24,6 +24,33 @@
   var paintColour = [240, 240, 240];
   var completionThreshold = 0.98;
 
+  var completedLetters = new Set();
+  var vowelOptions = document.getElementById("vowel-options");
+  var vowelButtons = [];
+
+  function updateVowels() {
+    vowelButtons.forEach(function (button, index) {
+      var vowel = chars[index];
+      var complete = completedLetters.has(vowel);
+      button.textContent = vowel + (complete ? " ✓" : "");
+      button.className = complete ? "is-complete" : "";
+      button.setAttribute("aria-pressed", String(vowel === letter));
+      button.setAttribute("aria-label", vowel + (complete ? ": completed, play again" : ": practise"));
+    });
+  }
+
+  chars.forEach(function (vowel) {
+    var button = document.createElement("button");
+    button.type = "button";
+    button.lang = "sa";
+    button.addEventListener("click", function () {
+      prepareAudio();
+      paintLetter(vowel);
+    });
+    vowelOptions.appendChild(button);
+    vowelButtons.push(button);
+  });
+
   // A stable bitmap lets CSS resize the board without clearing a trace.
   canvas.width = 800;
   canvas.height = 800;
@@ -45,6 +72,8 @@
     win.hidden = next !== "win";
     error.hidden = next !== "error";
     reloadButton.disabled = next === "intro";
+    if (next === "win") completedLetters.add(letter);
+    updateVowels();
   }
 
   function prepareAudio() {
