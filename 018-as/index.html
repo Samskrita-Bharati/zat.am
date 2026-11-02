@@ -3,6 +3,9 @@
 <head>
 <title>सुभाषितम् game</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="../shared/game-theme.css">
+<link rel="stylesheet" href="../shared/ordering-game-theme.css">
 <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 <style>
 body {
@@ -176,12 +179,20 @@ var s=["भाषासु मुख्या मधुरा दिव्या
 ]
 var correctCards = 0;
 var triesElement;
+var gameHintElement;
+var selectedCard = null;
 $( init );
 const urlParams = new URLSearchParams(window.location.search);
-var snum = urlParams.get('snum');
-if (!snum || snum<0 || snum>=s.length)
-   snum=parseInt(Math.random()*100)%s.length;
-  var words=s[snum].split(' ');
+var requestedSnum = urlParams.get('snum');
+var parsedSnum = Number(requestedSnum);
+var playableVerseIndexes = s.reduce(function(indexes, verse, index) {
+  if (typeof verse === 'string' && verse.trim()) indexes.push(index);
+  return indexes;
+}, []);
+var snum = Number.isInteger(parsedSnum) && playableVerseIndexes.indexOf(parsedSnum) !== -1
+  ? parsedSnum
+  : playableVerseIndexes[Math.floor(Math.random() * playableVerseIndexes.length)];
+var words=s[snum].trim().split(/\s+/).filter(Boolean);
 function randomArrayShuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
   while (0 !== currentIndex) {
@@ -206,16 +217,51 @@ function shuffle() {
 })
 }
 
+function displayNumber(number) {
+  return Sanscript.t(String(number), 'iast', 'devanagari');
+}
+
+function updateGameHint(message) {
+  if (gameHintElement) gameHintElement.textContent = message;
+}
+
+function selectCard(card) {
+  if (card.hasClass('correct')) return;
+
+  if (selectedCard && selectedCard[0] === card[0]) {
+    card.removeClass('selected');
+    selectedCard = null;
+    updateGameHint('Card selection cleared. Choose a number card to continue.');
+    return;
+  }
+
+  $('#cardPile > div').removeClass('selected');
+  selectedCard = card.addClass('selected');
+  updateGameHint('Card ' + displayNumber(card.data('number')) + ' selected. Choose the matching saying segment.');
+}
+
+function selectSlot(slot) {
+  if (slot.data('matched')) return;
+
+  if (!selectedCard) {
+    updateGameHint('Choose a number card first, then choose its matching saying segment.');
+    return;
+  }
+
+  matchCardToSlot(slot, selectedCard);
+}
+
 function init() {
 triesElement=document.getElementById("nowt");
+gameHintElement=document.getElementById("gameHint");
+numberOfWrongTries=0;
+selectedCard=null;
 triesElement.innerHTML = "❌ = 0";
+  updateGameHint('Drag a number card, or select one and then select its matching saying segment.');
   // Hide the success message
   $('#successMessage').hide();
   $('#successMessage').css( {
-    left: '580px',
-    top: '250px',
-    width: 0,
-    height: 0
+    opacity: 0
   } );
 
   // Reset the game
@@ -223,69 +269,110 @@ triesElement.innerHTML = "❌ = 0";
   $('#cardPile').html( '' );
   $('#cardSlots').html( '' );
 
-  // Create the pile of shuffled cards
-  var numbers = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15 ];
-  var terms = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10','11','12','13','14','15' ];
-
-  <!--numbers.sort( function() { return Math.random() - .5 } );-->
-
+  // Create one number card for every word in the saying.
   for ( var i=0; i<words.length; i++ ) {
-    $('<div>' + terms[i] + ' - ' + Sanscript.t(terms[i],'iast', 'devanagari') + '</div>').data( 'number', numbers[i] ).attr( 'id', 'card'+numbers[i] ).appendTo( '#cardPile' ).draggable( {    
-      stack: '#cardPile div',
-      cursor: 'move',
-      revert: true
-    } );
+    var cardNumber = i + 1;
+    var card = $('<div></div>')
+      .addClass('ordering-number-card')
+      .text(cardNumber + ' - ' + displayNumber(cardNumber))
+      .data('number', cardNumber)
+      .attr({
+        id: 'card' + cardNumber,
+        role: 'button',
+        tabindex: 0,
+        draggable: 'true',
+        'aria-label': 'Number card ' + displayNumber(cardNumber)
+      })
+      .appendTo('#cardPile');
+
+    card.on('click', function() {
+      selectCard($(this));
+    }).on('keydown', function(event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        selectCard($(this));
+      }
+    }).on('dragstart', function(event) {
+      var nativeEvent = event.originalEvent || event;
+      nativeEvent.dataTransfer.setData('text/plain', this.id);
+      nativeEvent.dataTransfer.effectAllowed = 'move';
+      $(this).addClass('dragging');
+    }).on('dragend', function() {
+      $(this).removeClass('dragging');
+    });
   }
 
   // Create the card slots
-//  var words = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten' ];
+  for ( var j=1; j<=words.length; j++ ) {
+    var slotText = words[j-1] + ' - ' + Sanscript.t(words[j-1], 'devanagari', 'iast');
+    var slot = $('<div class="sonum"></div>')
+      .text(slotText)
+      .data('number', j)
+      .attr({
+        role: 'button',
+        tabindex: 0,
+        'aria-label': 'Saying segment ' + displayNumber(j)
+      })
+      .appendTo('#cardSlots');
 
-    for ( var i=1; i<=words.length; i++ ) {
-    $('<div class=sonum>' + words[i-1]  + ' - ' + Sanscript.t(words[i-1], 'devanagari','iast') + '</div>').data( 'number', i ).appendTo( '#cardSlots' ).droppable( {
-      accept: '#cardPile div',
-      hoverClass: 'hovered',
-      drop: handleCardDrop
-    } );
+    slot.on('click', function() {
+      selectSlot($(this));
+    }).on('keydown', function(event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        selectSlot($(this));
+      }
+    }).on('dragover', function(event) {
+      event.preventDefault();
+      $(this).addClass('hovered');
+    }).on('dragleave', function() {
+      $(this).removeClass('hovered');
+    }).on('drop', function(event) {
+      event.preventDefault();
+      var nativeEvent = event.originalEvent || event;
+      var card = $('#' + nativeEvent.dataTransfer.getData('text/plain'));
+      $(this).removeClass('hovered');
+      if (card.length) matchCardToSlot($(this), card);
+    });
   }
   shuffle();
 }
 
-function handleCardDrop( event, ui ) {
-  var slotNumber = $(this).data( 'number' );
-  var cardNumber = ui.draggable.data( 'number' );
+function matchCardToSlot(slot, card) {
+  var slotNumber = slot.data('number');
+  var cardNumber = card.data('number');
+  $('#cardPile > div').removeClass('selected');
+  selectedCard = null;
 
   // If the card was dropped to the correct slot,
   // change the card colour, position it directly
   // on top of the slot, and prevent it being dragged
   // again
   if ( slotNumber == cardNumber ) {
-ui.draggable.append(' ) '+$(this).html());
-    ui.draggable.addClass( 'correct' );
-    ui.draggable.draggable( 'disable' );
-    $(this).droppable( 'disable' );
-    ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
-    ui.draggable.draggable( 'option', 'revert', false );
+    card.append(' ✓');
+    card.addClass('correct').attr({ tabindex: -1, 'aria-disabled': 'true' });
+    card.attr('draggable', 'false');
+    slot.addClass('matched').data('matched', true).attr({ tabindex: -1, 'aria-disabled': 'true' }).empty().append(card);
     correctCards++;
+    updateGameHint('Correct match ✓');
   } 
   else
   {
    numberOfWrongTries+=1;
   triesElement.innerHTML = "❌ = " + Sanscript.t(String(numberOfWrongTries),'iast', 'devanagari');
+  updateGameHint('That is not a match. Try another card and saying segment.');
   }
   
   // If all the cards have been placed correctly then display a message
   // and reset the cards for another go
 
   if ( correctCards == words.length ) {
-  $('#successMessage').append('<br>'+s[snum]);
-    $('#successMessage').show();
-    $('#successMessage').animate( {
-      left: '380px',
-      top: '200px',
-      width: '600px',
-      height: '100px',
+    $('#successMessage .completion-reference').remove();
+    $('<p class="completion-reference"></p>').text(s[snum]).appendTo('#successMessage');
+    $('#successMessage').stop(true, true).css('opacity', 0).show().animate( {
       opacity: 1
-    } );
+    }, 180 );
+    updateGameHint('Saying complete!');
   }
 
 }
@@ -293,31 +380,46 @@ ui.draggable.append(' ) '+$(this).html());
 </script>
 
 </head>
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game zatam-ordering-game">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-<div class="wideBox">
-  <h2>Arrange सुभाषितम् in order!</h2>
-  <h3 id="nowt" style="float:right">❌ = 0</h3>
-</div>
+<main class="zatam-game-shell ordering-game-shell">
+  <header class="zatam-game-header ordering-game-header">
+    <p class="mangalam">॥ श्रीः ॥</p>
+    <span class="zatam-game-eyebrow">क्रमक्रीडा</span>
+    <h1 class="zatam-game-title">सुभाषितम्</h1>
+    <p class="zatam-game-subtitle">Arrange each saying in its proper order.</p>
+  </header>
 
-<div id="content">
-  <div id="cardPile"> </div>
-  <div id="cardSlots"> </div>
+  <section class="zatam-game-instructions ordering-game-instructions" aria-label="How to play">
+    <p>Drag a Sanskrit-number card onto the matching part of the saying, or tap a card and then its matching saying segment. Complete every match to reveal the full subhāṣita.</p>
+  </section>
 
-  <div id="successMessage">
+  <section class="zatam-game-stats ordering-game-stats" aria-label="Game progress">
+    <div class="zatam-game-stat">
+      <span class="zatam-game-stat-label">Wrong tries</span>
+      <span id="nowt" class="zatam-game-stat-value">❌ = 0</span>
+    </div>
+  </section>
+
+  <p id="gameHint" class="ordering-selection-status" role="status" aria-live="polite">
+    Drag a number card, or select one and then select its matching saying segment.
+  </p>
+
+  <section id="content" class="zatam-game-play-area ordering-game-board" aria-label="Subhāṣita ordering game">
+    <div id="cardPile" aria-label="Number cards"></div>
+    <div id="cardSlots" aria-label="Saying slots"></div>
+  </section>
+
+  <section id="successMessage" class="ordering-result" role="status" aria-live="polite">
     <h2>उत्तमम् !  uttamam :)</h2>
-    <button onclick="init()">पुनः (punaH) Again</button>
-  </div>
+    <button class="zatam-game-btn zatam-game-btn-primary" type="button" onclick="init()">पुनः (punaH) Again</button>
+  </section>
 
-</div>
-
-<br>
-<br>
-<br>
-  <p>Original Project & Concept &copy; Elated.com </p>
+  <footer class="ordering-footer">Original project and concept © Elated.com</footer>
+</main>
 
 
 
