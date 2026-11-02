@@ -180,6 +180,7 @@ var s=["भाषासु मुख्या मधुरा दिव्या
 var correctCards = 0;
 var triesElement;
 var gameHintElement;
+var verseProgressElement;
 var selectedCard = null;
 $( init );
 const urlParams = new URLSearchParams(window.location.search);
@@ -193,6 +194,26 @@ var snum = Number.isInteger(parsedSnum) && playableVerseIndexes.indexOf(parsedSn
   ? parsedSnum
   : playableVerseIndexes[Math.floor(Math.random() * playableVerseIndexes.length)];
 var words=s[snum].trim().split(/\s+/).filter(Boolean);
+
+function updateVerseProgress() {
+  if (!verseProgressElement) return;
+
+  verseProgressElement.textContent = 'Shloka ' +
+    (playableVerseIndexes.indexOf(snum) + 1) +
+    ' of ' + playableVerseIndexes.length;
+}
+
+function goToNextVerse() {
+  var currentVersePosition = playableVerseIndexes.indexOf(snum);
+  var nextVerseIndex = playableVerseIndexes[
+    (currentVersePosition + 1) % playableVerseIndexes.length
+  ];
+  var nextUrl = new URL(window.location.href);
+
+  nextUrl.searchParams.set('snum', nextVerseIndex);
+  window.location.assign(nextUrl.toString());
+}
+
 function randomArrayShuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
   while (0 !== currentIndex) {
@@ -254,9 +275,11 @@ function selectSlot(slot) {
 function init() {
 triesElement=document.getElementById("nowt");
 gameHintElement=document.getElementById("gameHint");
+verseProgressElement=document.getElementById("verseProgress");
 numberOfWrongTries=0;
 selectedCard=null;
 triesElement.innerHTML = "❌ = 0";
+  updateVerseProgress();
   updateGameHint('Drag a number card, or select one and then select its matching saying segment.');
   // Hide the success message
   $('#successMessage').hide();
@@ -399,10 +422,18 @@ function matchCardToSlot(slot, card) {
 
   <section class="zatam-game-stats ordering-game-stats" aria-label="Game progress">
     <div class="zatam-game-stat">
+      <span class="zatam-game-stat-label">Current shloka</span>
+      <span id="verseProgress" class="zatam-game-stat-value">Shloka 1 of 16</span>
+    </div>
+    <div class="zatam-game-stat">
       <span class="zatam-game-stat-label">Wrong tries</span>
       <span id="nowt" class="zatam-game-stat-value">❌ = 0</span>
     </div>
   </section>
+
+  <div class="zatam-game-actions">
+    <button class="zatam-game-btn zatam-game-btn-secondary" type="button" onclick="goToNextVerse()">Next shloka</button>
+  </div>
 
   <p id="gameHint" class="ordering-selection-status" role="status" aria-live="polite">
     Drag a number card, or select one and then select its matching saying segment.
