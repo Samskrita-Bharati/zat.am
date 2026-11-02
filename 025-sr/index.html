@@ -1,4 +1,4 @@
-npm run build<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <title> सङ्क्षेपरामायणम्</title>
@@ -269,19 +269,19 @@ triesElement.innerHTML = "❌ = 0";
       })
       .appendTo('#cardPile');
 
-    card.on('click', function() {
+    card.bind('click', function() {
       selectCard($(this));
-    }).on('keydown', function(event) {
+    }).bind('keydown', function(event) {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         selectCard($(this));
       }
-    }).on('dragstart', function(event) {
+    }).bind('dragstart', function(event) {
       var nativeEvent = event.originalEvent || event;
       nativeEvent.dataTransfer.setData('text/plain', this.id);
       nativeEvent.dataTransfer.effectAllowed = 'move';
       $(this).addClass('dragging');
-    }).on('dragend', function() {
+    }).bind('dragend', function() {
       $(this).removeClass('dragging');
     });
   }
@@ -299,19 +299,19 @@ triesElement.innerHTML = "❌ = 0";
       })
       .appendTo('#cardSlots');
 
-    slot.on('click', function() {
+    slot.bind('click', function() {
       selectSlot($(this));
-    }).on('keydown', function(event) {
+    }).bind('keydown', function(event) {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         selectSlot($(this));
       }
-    }).on('dragover', function(event) {
+    }).bind('dragover', function(event) {
       event.preventDefault();
       $(this).addClass('hovered');
-    }).on('dragleave', function() {
+    }).bind('dragleave', function() {
       $(this).removeClass('hovered');
-    }).on('drop', function(event) {
+    }).bind('drop', function(event) {
       event.preventDefault();
       var nativeEvent = event.originalEvent || event;
       var card = $('#' + nativeEvent.dataTransfer.getData('text/plain'));
