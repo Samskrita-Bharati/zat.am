@@ -179,7 +179,17 @@ var s=["भाषासु मुख्या मधुरा दिव्या
 var correctCards = 0;
 var gameHintElement;
 var verseProgressElement;
+var scoreElement;
+var timerElement;
+var matchesElement;
+var resultScoreElement;
+var resultDetailsElement;
+var scoreSaveStatusElement;
 var selectedCard = null;
+var gameActive = true;
+var hasStarted = false;
+var elapsedSeconds = 0;
+var timerId = null;
 $( init );
 const urlParams = new URLSearchParams(window.location.search);
 var requestedSnum = urlParams.get('snum');
@@ -192,6 +202,95 @@ var snum = Number.isInteger(parsedSnum) && playableVerseIndexes.indexOf(parsedSn
   ? parsedSnum
   : playableVerseIndexes[Math.floor(Math.random() * playableVerseIndexes.length)];
 var words=s[snum].trim().split(/\s+/).filter(Boolean);
+
+function devanagari(value) {
+  return Sanscript.t(String(value), 'iast', 'devanagari');
+}
+
+function formatTime(totalSeconds) {
+  var minutes = Math.floor(totalSeconds / 60);
+  var seconds = String(totalSeconds % 60).padStart(2, '0');
+
+  return devanagari(minutes) + ':' + devanagari(seconds);
+}
+
+function calculateScore() {
+  var parSeconds = Math.max(30, words.length * 15);
+  var overtime = Math.max(0, elapsedSeconds - parSeconds);
+
+  return Math.max(0, Math.min(100, 100 - Math.floor(overtime / 6)));
+}
+
+function updateStats() {
+  if (scoreElement) scoreElement.textContent = String(calculateScore());
+  if (timerElement) timerElement.textContent = formatTime(elapsedSeconds);
+  if (matchesElement) matchesElement.textContent = correctCards + ' / ' + words.length;
+}
+
+function startTimer() {
+  if (hasStarted || !gameActive) return;
+
+  hasStarted = true;
+  if (window.orderingGameScore) window.orderingGameScore.reset();
+  timerId = window.setInterval(function() {
+    elapsedSeconds += 1;
+    updateStats();
+  }, 1000);
+}
+
+function stopTimer() {
+  if (!timerId) return;
+
+  window.clearInterval(timerId);
+  timerId = null;
+}
+
+function showResult(finalScore) {
+  resultScoreElement.textContent = finalScore + ' / 100';
+  resultDetailsElement.textContent = 'You ordered all ' + words.length +
+    ' parts of this shloka in ' + formatTime(elapsedSeconds) + '.';
+  scoreSaveStatusElement.className = 'zatam-game-status zatam-game-status-info';
+  scoreSaveStatusElement.textContent = 'Saving your score...';
+  $('#successMessage').stop(true, true).css('opacity', 0).show().animate({
+    opacity: 1
+  }, 180);
+}
+
+async function saveCompletedScore(finalScore) {
+  if (!window.orderingGameScore) {
+    scoreSaveStatusElement.textContent = 'Game complete! Sign in to save future scores to the leaderboard.';
+    return;
+  }
+
+  try {
+    var result = await window.orderingGameScore.submit(finalScore, {
+      metrics: {
+        shlokaNumber: playableVerseIndexes.indexOf(snum) + 1,
+        totalShlokas: playableVerseIndexes.length,
+        segments: words.length,
+        matches: correctCards,
+        gameTimerSeconds: elapsedSeconds
+      }
+    });
+
+    if (result.ok) {
+      scoreSaveStatusElement.className = 'zatam-game-status zatam-game-status-success';
+      scoreSaveStatusElement.textContent = 'Score saved to the leaderboard ✓';
+    } else if (result.reason === 'not-signed-in') {
+      scoreSaveStatusElement.textContent = 'Game complete! Sign in to save future scores to the leaderboard.';
+    } else if (result.reason === 'already-submitted') {
+      scoreSaveStatusElement.className = 'zatam-game-status zatam-game-status-success';
+      scoreSaveStatusElement.textContent = 'Score already saved ✓';
+    } else {
+      scoreSaveStatusElement.className = 'zatam-game-status zatam-game-status-error';
+      scoreSaveStatusElement.textContent = 'Game complete, but the score could not be saved.';
+    }
+  } catch (error) {
+    console.error('[018-as] Score submission failed:', error);
+    scoreSaveStatusElement.className = 'zatam-game-status zatam-game-status-error';
+    scoreSaveStatusElement.textContent = 'Game complete, but the leaderboard score could not be saved.';
+  }
+}
 
 function updateVerseProgress() {
   if (!verseProgressElement) return;
@@ -245,6 +344,7 @@ function updateGameHint(message) {
 }
 
 function selectCard(card) {
+  startTimer();
   if (card.hasClass('correct')) return;
 
   if (selectedCard && selectedCard[0] === card[0]) {
@@ -260,6 +360,7 @@ function selectCard(card) {
 }
 
 function selectSlot(slot) {
+  startTimer();
   if (slot.data('matched')) return;
 
   if (!selectedCard) {
@@ -273,8 +374,19 @@ function selectSlot(slot) {
 function init() {
 gameHintElement=document.getElementById("gameHint");
 verseProgressElement=document.getElementById("verseProgress");
+scoreElement=document.getElementById("scoreValue");
+timerElement=document.getElementById("timerValue");
+matchesElement=document.getElementById("matchesValue");
+resultScoreElement=document.getElementById("resultScore");
+resultDetailsElement=document.getElementById("resultDetails");
+scoreSaveStatusElement=document.getElementById("scoreSaveStatus");
+stopTimer();
+gameActive=true;
+hasStarted=false;
+elapsedSeconds=0;
 selectedCard=null;
   updateVerseProgress();
+  updateStats();
   updateGameHint('Drag a number card, or select one and then select its matching saying segment.');
   // Hide the success message
   $('#successMessage').hide();
@@ -284,6 +396,7 @@ selectedCard=null;
 
   // Reset the game
   correctCards = 0;
+  updateStats();
   $('#cardPile').html( '' );
   $('#cardSlots').html( '' );
 
@@ -357,6 +470,7 @@ selectedCard=null;
 }
 
 function matchCardToSlot(slot, card) {
+  if (!gameActive) return;
   var slotNumber = slot.data('number');
   var cardNumber = card.data('number');
   $('#cardPile > div').removeClass('selected');
@@ -383,11 +497,12 @@ function matchCardToSlot(slot, card) {
   // and reset the cards for another go
 
   if ( correctCards == words.length ) {
-    $('#successMessage .completion-reference').remove();
-    $('<p class="completion-reference"></p>').text(s[snum]).appendTo('#successMessage');
-    $('#successMessage').stop(true, true).css('opacity', 0).show().animate( {
-      opacity: 1
-    }, 180 );
+    gameActive = false;
+    stopTimer();
+    var finalScore = calculateScore();
+    updateStats();
+    showResult(finalScore);
+    void saveCompletedScore(finalScore);
     updateGameHint('Saying complete!');
   }
 
@@ -414,9 +529,24 @@ function matchCardToSlot(slot, card) {
   </section>
 
   <section class="zatam-game-stats ordering-game-stats" aria-label="Game progress">
+    <div class="zatam-game-stat zatam-game-score">
+      <span class="zatam-game-stat-label">Score</span>
+      <span id="scoreValue" class="zatam-game-stat-value">100</span>
+      <span class="ordering-game-stat-note">final score on completion</span>
+    </div>
     <div class="zatam-game-stat">
       <span class="zatam-game-stat-label">Current shloka</span>
       <span id="verseProgress" class="zatam-game-stat-value">Shloka 1 of 16</span>
+    </div>
+    <div class="zatam-game-stat">
+      <span class="zatam-game-stat-label">Time</span>
+      <span id="timerValue" class="zatam-game-stat-value">०:००</span>
+      <span class="ordering-game-stat-note">starts on first card</span>
+    </div>
+    <div class="zatam-game-stat">
+      <span class="zatam-game-stat-label">Matches</span>
+      <span id="matchesValue" class="zatam-game-stat-value">0 / 0</span>
+      <span class="ordering-game-stat-note">complete every match</span>
     </div>
   </section>
 
@@ -431,6 +561,9 @@ function matchCardToSlot(slot, card) {
 
   <section id="successMessage" class="ordering-result" role="status" aria-live="polite">
     <h2>उत्तमम् !  uttamam :)</h2>
+    <div id="resultScore" class="zatam-game-result-score">100 / 100</div>
+    <p id="resultDetails" class="zatam-game-result-message"></p>
+    <p id="scoreSaveStatus" class="zatam-game-status zatam-game-status-info">Checking leaderboard...</p>
     <button class="zatam-game-btn zatam-game-btn-primary" type="button" onclick="init()">पुनः (punaH) Again</button>
   </section>
 
@@ -438,6 +571,24 @@ function matchCardToSlot(slot, card) {
 </main>
 
 
+
+    <script type="module">
+      import {
+        initGameScore,
+        resetGameScore,
+        submitGameScore,
+      } from "../js/game-score.js";
+
+      initGameScore({
+        gameId: "018-as",
+        gameName: "सुभाषितम्",
+      });
+
+      window.orderingGameScore = {
+        reset: resetGameScore,
+        submit: submitGameScore,
+      };
+    </script>
 
     <!-- Shared Zat.am Navbar -->
     <script

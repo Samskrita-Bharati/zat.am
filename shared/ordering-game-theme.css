@@ -23,8 +23,16 @@ body.zatam-themed-game.zatam-ordering-game {
 }
 
 .ordering-game-stats {
-  width: min(100%, 15rem);
+  width: min(100%, 52rem);
   margin-inline: auto;
+}
+
+.ordering-game-stat-note {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--zatam-muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
 }
 
 .ordering-game-board {
