@@ -159,7 +159,6 @@ h1, h2, h3, h4 {
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
 <script type="text/javascript">
-var numberOfWrongTries=0;
 var s=["भाषासु मुख्या मधुरा दिव्या गीर्वाणभारती। तत्रापि मधुरं काव्यं तस्मादपि सुभाषितम्॥",
 "पृथिव्यां त्रीणि रत्नानि जलमन्नं सुभाषितम्। मूढै: पाषाणखण्डेषु रत्नसंज्ञा विधीयते॥",
 "अञ्जलिस्थानि पुष्पाणि वासयन्ति करद्वयम्। अहो सुमनसां प्रीति: वामदक्षिणयो: समा॥",	
@@ -178,7 +177,6 @@ var s=["भाषासु मुख्या मधुरा दिव्या
 "यावत् तिष्ठन्ति गिरयो यावच्चन्द्रदिवाकरौ। यावत् वहन्ति सरितः तावत् स्थास्यन्ति संस्कृतम्॥",
 ]
 var correctCards = 0;
-var triesElement;
 var gameHintElement;
 var verseProgressElement;
 var selectedCard = null;
@@ -273,12 +271,9 @@ function selectSlot(slot) {
 }
 
 function init() {
-triesElement=document.getElementById("nowt");
 gameHintElement=document.getElementById("gameHint");
 verseProgressElement=document.getElementById("verseProgress");
-numberOfWrongTries=0;
 selectedCard=null;
-triesElement.innerHTML = "❌ = 0";
   updateVerseProgress();
   updateGameHint('Drag a number card, or select one and then select its matching saying segment.');
   // Hide the success message
@@ -381,8 +376,6 @@ function matchCardToSlot(slot, card) {
   } 
   else
   {
-   numberOfWrongTries+=1;
-  triesElement.innerHTML = "❌ = " + Sanscript.t(String(numberOfWrongTries),'iast', 'devanagari');
   updateGameHint('That is not a match. Try another card and saying segment.');
   }
   
@@ -424,10 +417,6 @@ function matchCardToSlot(slot, card) {
     <div class="zatam-game-stat">
       <span class="zatam-game-stat-label">Current shloka</span>
       <span id="verseProgress" class="zatam-game-stat-value">Shloka 1 of 16</span>
-    </div>
-    <div class="zatam-game-stat">
-      <span class="zatam-game-stat-label">Wrong tries</span>
-      <span id="nowt" class="zatam-game-stat-value">❌ = 0</span>
     </div>
   </section>
 
