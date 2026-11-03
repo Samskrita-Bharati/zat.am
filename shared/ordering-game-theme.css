@@ -296,12 +296,33 @@ body.zatam-themed-game.zatam-ordering-game {
   }
 }
 
+@media (max-width: 600px) {
+  .zatam-ordering-game #cardPile {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .zatam-ordering-game #cardPile > div {
+    min-height: 3.35rem;
+    padding: 0.55rem 0.25rem;
+    font-size: 0.84rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 760px) and (min-height: 600px) and (pointer: coarse) {
+  .zatam-ordering-game #cardPile {
+    position: sticky;
+    top: 0.65rem;
+    z-index: 1;
+    box-shadow: var(--zatam-shadow);
+  }
+}
+
 @media (max-width: 430px) {
   .ordering-game-shell {
     width: min(calc(100% - 1rem), 1100px);
   }
 
-  .zatam-ordering-game #cardPile,
   .zatam-ordering-game #cardSlots {
     grid-template-columns: minmax(0, 1fr);
     padding: 0.65rem;
