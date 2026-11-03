@@ -66,7 +66,9 @@
             <button id="fwRetry" type="button" onclick="window.location.reload()">Try again</button>
           </div>
 
-          <div id="liveScore">Score: —</div>
+          <div id="liveScore">Time: — · Score: —</div>
+          <p id="fwSaveStatus" role="status"></p>
+          <a id="fwNext" class="zatam-game-btn" hidden>Next difficulty</a>
 
           <div id="finishMessage">।। शुभमस्तु ।।</div>
 
@@ -104,14 +106,14 @@
           <div id="hintLink" class="fw-panel">
             <h2>Help</h2>
             <div>
-              <a onclick="showHint1()" href="#">
+              <a onclick="showHint1(); return false;" href="#">
                 <img src="imgs/hint.png" alt="help" />
-                नामपदानि ..
+                नामपदानि .. <span>(−10 points)</span>
               </a>
 
-              <a onclick="showHint2()" href="#">
+              <a onclick="showHint2(); return false;" href="#">
                 <img src="imgs/hint2.png" alt="help" />
-                .. कानि ???
+                .. कानि ??? <span>(−20 points)</span>
               </a>
             </div>
 
@@ -127,7 +129,8 @@
             <ol>
               <li>Select Start, then find a word and select its first अक्षर.</li>
               <li>Look right, down, or diagonally down and right. Found words are highlighted.</li>
-              <li>Use the first hint to list the words. The second hint shows the words hidden in this board in bold.</li>
+              <li>A click that finds no new word costs 1 point. Correct clicks cost nothing.</li>
+              <li>The first hint costs 10 points and unlocks the second hint, which costs 20 points. Each hint is charged once.</li>
               <li>Choose a difficulty to play a new board, or select पुनः to replay.</li>
             </ol>
           </section>
@@ -273,8 +276,6 @@
     ================================================== -->
 
     <script>
-      const BP26_GAME = "bp26-Game4";
-      const BP26_DAY = 4;
       var wpp = 15;
       var answers = [];
       var wlist = [];
@@ -283,7 +284,11 @@
       var nc = 0;
       var N_WORDS_TO_FIND = 5;
       var isGameFinished = false;
-      let score = 0;
+      const BP26_GAME = "bp26-Game4";
+      const BP26_DAY = 4;
+      let penalties = 0;
+      let startedAt = 0;
+      const usedHints = new Set();
       let scoreInterval = null;
       let hasStarted = false;
       const liveScoreEl = document.getElementById("liveScore");
@@ -291,6 +296,35 @@
       const tScript = translit.getTargetScript();
 
       const urlParams = new URLSearchParams(window.location.search);
+
+      const level = ({
+        "5": { id: "1", name: "Easy", seconds: 60, next: "7" },
+        "7": { id: "2", name: "Medium", seconds: 120, next: "10" },
+      })[urlParams.get("size")] || { id: "3", name: "Hard", seconds: 180 };
+
+      function elapsedSeconds() {
+        return Math.floor((performance.now() - startedAt) / 1000);
+      }
+
+      function currentScore(seconds = elapsedSeconds()) {
+        return Math.round(100 * Math.max(0, level.seconds - seconds - penalties) / level.seconds);
+      }
+
+      function renderScore() {
+        const remaining = Math.max(0, level.seconds - elapsedSeconds());
+        const clock = Math.floor(remaining / 60) + ":" + String(remaining % 60).padStart(2, "0");
+        liveScoreEl.textContent = "Time: " + clock + " · Score: " + currentScore() + " / 100";
+      }
+
+      function useHint(id, cost) {
+        if (!hasStarted || isGameFinished || (id === 2 && !usedHints.has(1))) return false;
+        if (!usedHints.has(id)) {
+          usedHints.add(id);
+          penalties += cost;
+          renderScore();
+        }
+        return true;
+      }
 
       var data = urlParams.get("d");
 
@@ -342,27 +376,9 @@
         var MAX_MARKER_IDX = 6;
 
         function initScoreByDifficulty() {
-          const size = urlParams.get("size");
-
-          if (size == 10) {
-            score = 200;
-          } else if (size == 7) {
-            score = 100;
-          } else if (size == 5) {
-            score = 50;
-          } else {
-            score = 200;
-          }
-
-          liveScoreEl.textContent = "Score: " + Math.round(score);
-
-          scoreInterval = setInterval(() => {
-            score -= 0.6;
-
-            if (score < 0) score = 0;
-
-            liveScoreEl.textContent = "Score: " + Math.round(score);
-          }, 1000);
+          startedAt = performance.now();
+          renderScore();
+          scoreInterval = setInterval(renderScore, 250);
         }
 
         var main = function () {
@@ -460,13 +476,8 @@
 
           nAnswersDiscovered += foundNow;
 
-          if (foundNow > 0) {
-            score += foundNow * 10;
-          } else {
-            score = Math.max(0, score - 1);
-          }
-
-          liveScoreEl.textContent = "Score: " + Math.round(score);
+          if (!foundNow) penalties += 1;
+          renderScore();
 
           $("#nFound").text(String.fromCharCode(0x0966 + nAnswersDiscovered));
 
@@ -475,31 +486,47 @@
 
             clearInterval(scoreInterval);
 
-            const finalScore = Math.round(score);
-
-            liveScoreEl.textContent = "Final Score: " + finalScore;
-
-            let submitOk = true;
-
-            try {
-              if (window.reportScore) {
-                await window.reportScore(finalScore);
-              }
-            } catch (err) {
-              submitOk = false;
-
-              console.error("Score submit failed:", err);
+            const completedIn = elapsedSeconds();
+            const finalScore = currentScore(completedIn);
+            liveScoreEl.textContent = "Final Score: " + finalScore + " / 100";
+            const next = document.getElementById("fwNext");
+            if (level.next) {
+              const url = new URL(location.href);
+              url.searchParams.set("size", level.next);
+              url.hash = "";
+              next.href = url.href;
+              next.hidden = false;
             }
+            bp26Celebrate({ title: "Finished ✅", score: finalScore });
+            const status = document.getElementById("fwSaveStatus");
+            try {
+              const { initGameScore, submitGameScore } =
+                await import("../js/game-score.js");
 
-            bp26Celebrate({
-              title: submitOk ? "Score Submitted ✅" : "Finished ✅",
+              const config = initGameScore({
+                gameId: "bp26-fw",
+                gameName: "Word Search",
+                levelId: level.id,
+                levelName: level.name,
+              });
 
-              subtitle: submitOk
-                ? "Great job!"
-                : "Saved locally (Firebase not ready)",
+              if (String(config?.levelId) !== level.id) {
+                throw new Error("The shared scorer did not confirm the difficulty.");
+              }
 
-              score: finalScore,
-            });
+              const saved = await submitGameScore(finalScore, {
+                result: "completed",
+                metrics: {
+                  elapsedSeconds: completedIn,
+                  clicks: nc,
+                  hints: usedHints.size,
+                },
+              });
+              status.textContent = saved?.ok ? "Score saved." : "Score could not be saved.";
+            } catch (error) {
+              status.textContent = "Score could not be saved.";
+              console.error(error);
+            }
 
             $("#finishMessage").append("<br>AFTER " + nc + " clicks!");
 
@@ -1137,6 +1164,7 @@
       }
 
       function showHint1() {
+        if (!useHint(1, 10)) return;
         $("#lead2").html("");
 
         for (var i = 0; i < wordList.length; i++) {
@@ -1155,6 +1183,7 @@
       }
 
       function showHint2() {
+        if (!useHint(2, 20)) return;
         $("#lead2").html("");
 
         for (var i = 0; i < wordList.length; i++) {

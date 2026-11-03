@@ -145,7 +145,7 @@ body.fw-page {
 }
 
 #fwGameShell .fw-instructions {
-  max-height: 170px;
+  max-height: 320px;
   overflow-y: auto;
   line-height: 1.55;
 }
@@ -206,3 +206,38 @@ body.fw-page {
 }
 
 #fwGameShell #fwStart:disabled { opacity: .55; }
+
+/* Keep the completion status and action aligned with the final score. */
+#fwGameShell #fwSaveStatus {
+  margin: 0 0 8px;
+  color: var(--zatam-muted);
+  text-align: center;
+  font-size: .875rem;
+}
+
+#fwGameShell #fwSaveStatus:empty,
+#fwGameShell #fwNext[hidden] {
+  display: none;
+}
+
+#fwGameShell #fwNext:not([hidden]) {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 0 auto 12px;
+  padding: 8px 16px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--zatam-navy);
+  color: var(--zatam-white);
+  text-decoration: none;
+}
+
+#fwGameShell #fwNext:hover { background: var(--zatam-heading); }
+
+#fwGameShell #fwNext:focus-visible {
+  outline: 2px solid var(--zatam-blue);
+  outline-offset: 3px;
+}
