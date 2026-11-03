@@ -190,6 +190,7 @@ var gameActive = true;
 var hasStarted = false;
 var elapsedSeconds = 0;
 var timerId = null;
+var wrongMatches = 0;
 $( init );
 const urlParams = new URLSearchParams(window.location.search);
 var requestedSnum = urlParams.get('snum');
@@ -217,8 +218,10 @@ function formatTime(totalSeconds) {
 function calculateScore() {
   var parSeconds = Math.max(30, words.length * 15);
   var overtime = Math.max(0, elapsedSeconds - parSeconds);
+  var timePenalty = Math.floor(overtime / 6);
+  var mistakePenalty = wrongMatches * 5;
 
-  return Math.max(0, Math.min(100, 100 - Math.floor(overtime / 6)));
+  return Math.max(0, Math.min(100, 100 - timePenalty - mistakePenalty));
 }
 
 function updateStats() {
@@ -248,7 +251,8 @@ function stopTimer() {
 function showResult(finalScore) {
   resultScoreElement.textContent = finalScore + ' / 100';
   resultDetailsElement.textContent = 'You ordered all ' + words.length +
-    ' parts of this shloka in ' + formatTime(elapsedSeconds) + '.';
+    ' parts of this shloka in ' + formatTime(elapsedSeconds) +
+    ' with ' + wrongMatches + (wrongMatches === 1 ? ' incorrect match.' : ' incorrect matches.');
   scoreSaveStatusElement.className = 'zatam-game-status zatam-game-status-info';
   scoreSaveStatusElement.textContent = 'Saving your score...';
   $('#successMessage').stop(true, true).css('opacity', 0).show().animate({
@@ -269,6 +273,7 @@ async function saveCompletedScore(finalScore) {
         totalShlokas: playableVerseIndexes.length,
         segments: words.length,
         matches: correctCards,
+        wrongMatches: wrongMatches,
         gameTimerSeconds: elapsedSeconds
       }
     });
@@ -384,6 +389,7 @@ stopTimer();
 gameActive=true;
 hasStarted=false;
 elapsedSeconds=0;
+wrongMatches=0;
 selectedCard=null;
   updateVerseProgress();
   updateStats();
@@ -490,6 +496,8 @@ function matchCardToSlot(slot, card) {
   } 
   else
   {
+  wrongMatches += 1;
+  updateStats();
   updateGameHint('That is not a match. Try another card and saying segment.');
   }
   
