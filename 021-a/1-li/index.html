@@ -2,6 +2,8 @@
   <head>
     <title>अन्वेषणम् — 1-li</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../../shared/game-theme.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <script src="../data.json"></script>
     <style>
       html,
@@ -11,10 +13,10 @@
       }
       svg {
         position: relative;
-        left: 25%;
-        top: 25%;
-        width: 50%;
-        height: 50%;
+        left: 10%;
+        top: 5%;
+        width: 80%;
+        height: 80%;
       }
       text {
         cursor: pointer;
@@ -22,24 +24,19 @@
     </style>
   </head>
   <body>
-    <center>
-      <p>
-        Find<span id="msg"></span> <a href="#" onclick="showall()">I give up!</a
-        ><span id="remain"></span>
-      </p>
-    </center>
+    <div class="mode-ui">
+      <div class="zatam-game-actions mode-controls">
+        <p class="zatam-game-status zatam-game-status-info mode-status">Find<span id="msg"></span><span id="remain" class="mode-remaining"></span></p>
+        <button class="zatam-game-btn zatam-game-btn-primary" type="button" onclick="showall()">I give up!</button>
+        <button class="zatam-game-btn zatam-game-btn-secondary" type="button" onclick="restartGame()">Restart</button>
+      </div>
+    </div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1000 1000"
       version="1.1"
       overflow="auto"
     >
-      <defs>
-        <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="red" />
-          <stop offset="100%" stop-color="blue" />
-        </linearGradient>
-      </defs>
       <!-- 
     Johan Karlsson, 2020
     https://twitter.com/DonKarlssonSan 
@@ -56,138 +53,76 @@
 */
       const urlParams = new URLSearchParams(window.location.search);
       var set = urlParams.get("s");
-      if (!set || isNaN(set) || set > nums.length) set = 0;
-      ("use strict");
+      if (!set || isNaN(set) || set >= nums.length) set = 0;
       var minvalue = Infinity;
       var val = "";
       var found = 0;
+      var wrong = 0;
+      var gameCompleted = false;
+      var gameTime = "00:00";
+      var gameStartedAt = null;
+      var gameTimerInterval = null;
+      function startGameTimer() {
+        if (gameStartedAt !== null) return;
+        gameStartedAt = Date.now();
+        gameTimerInterval = window.setInterval(updateGameTimer, 1000);
+        updateGameTimer();
+      }
+      function updateGameTimer() {
+        var elapsed = Math.floor((Date.now() - gameStartedAt) / 1000);
+        gameTime = String(Math.floor(elapsed / 60)).padStart(2, "0") + ":" + String(elapsed % 60).padStart(2, "0");
+        publishGameStats();
+      }
+      function publishGameStats() {
+        window.parent.postMessage({ type: "anveshan-stats", found, time: gameTime, errors: wrong }, "*");
+      }
+      function finishGame() {
+        gameCompleted = true;
+        stopGameTimer();
+        var elapsedSeconds = gameStartedAt === null ? 0 : Math.floor((Date.now() - gameStartedAt) / 1000);
+        gameTime = String(Math.floor(elapsedSeconds / 60)).padStart(2, "0") + ":" + String(elapsedSeconds % 60).padStart(2, "0");
+        publishGameStats();
+        window.parent.postMessage({ type: "anveshan-complete", found, errors: wrong, elapsedSeconds, time: gameTime }, "*");
+      }
+      function stopGameTimer() {
+        if (gameTimerInterval !== null) window.clearInterval(gameTimerInterval);
+        gameTimerInterval = null;
+      }
+      function restartGame() {
+        window.location.reload();
+      }
       let texts = [];
       let counts = [];
-      for (i = 0; i < nums.length; i++)
-        for (j = 0; j < nums[i].length; j++) counts[nums[i][j]] = 0;
+      nums[set].forEach((character) => {
+        counts[character] = 0;
+      });
       class Vector {
         constructor(x, y) {
           this.x = x;
           this.y = y;
         }
 
-        add(v) {
-          return new Vector(this.x + v.x, this.y + v.y);
-        }
-
-        addTo(v) {
-          this.x += v.x;
-          this.y += v.y;
-        }
-
         sub(v) {
           return new Vector(this.x - v.x, this.y - v.y);
-        }
-
-        subFrom(v) {
-          this.x -= v.x;
-          this.y -= v.y;
-        }
-
-        mult(n) {
-          return new Vector(this.x * n, this.y * n);
-        }
-
-        multTo(n) {
-          this.x *= n;
-          this.y *= n;
-          return this;
-        }
-
-        div(n) {
-          return new Vector(this.x / n, this.y / n);
-        }
-
-        setAngle(angle) {
-          var length = this.getLength();
-          this.x = Math.cos(angle) * length;
-          this.y = Math.sin(angle) * length;
-        }
-
-        setLength(length) {
-          var angle = this.getAngle();
-          this.x = Math.cos(angle) * length;
-          this.y = Math.sin(angle) * length;
-          return this;
-        }
-
-        getAngle() {
-          return Math.atan2(this.y, this.x);
         }
 
         getLength() {
           return Math.hypot(this.x, this.y);
         }
 
-        getLengthSq() {
-          return this.x * this.x + this.y * this.y;
-        }
-
-        distanceTo(v) {
-          return this.sub(v).getLength();
-        }
-
-        copy() {
-          return new Vector(this.x, this.y);
-        }
-
         equals(v) {
           return this.x == v.x && this.y == v.y;
         }
-
-        rotate(angle) {
-          return new Vector(
-            this.x * Math.cos(angle) - this.y * Math.sin(angle),
-            this.x * Math.sin(angle) + this.y * Math.cos(angle),
-          );
-        }
-
-        rotateAround(v, angle) {
-          let x =
-            (this.x - v.x) * Math.cos(angle) -
-            (v.y - this.y) * Math.sin(angle) +
-            v.x;
-          let y =
-            (v.y - this.y) * Math.cos(angle) +
-            (this.x - v.x) * Math.sin(angle) +
-            v.y;
-          return new Vector(x, y);
-        }
-
-        lerp(v, t) {
-          let delta = v.sub(this).mult(t);
-          return this.add(delta);
-        }
-
-        lerpTo(v, t) {
-          let delta = v.sub(this).mult(t);
-          this.addTo(delta);
-        }
-
-        moveTowards(v, length) {
-          let delta = v.sub(this).setLength(length);
-          return this.add(delta);
-        }
-
-        toString() {
-          return `${this.x},${this.y}`;
-        }
       }
 
-      var colors = [
-        "violet",
-        "indigo",
-        "blue",
-        "green",
-        "yellow",
-        "orange",
-        "red",
-      ];
+      const getThemeColor = (name) =>
+        getComputedStyle(document.documentElement)
+          .getPropertyValue(`--zatam-${name}`)
+          .trim();
+      var colors = ["gold", "coral", "blue", "muted", "success"].map(getThemeColor);
+      const correctStroke = getThemeColor("blue");
+      const incorrectStroke = getThemeColor("coral");
+      const successFill = getThemeColor("success-soft");
       /*
   Johan Karlsson, 2020
   https://twitter.com/DonKarlssonSan
@@ -213,31 +148,6 @@
 
         vertexes() {
           return [this.a, this.b, this.c];
-        }
-
-        vertexesAsString() {
-          return this.vertexes()
-            .map((vertex) => `${vertex.x}, ${vertex.y}`)
-            .join(", ");
-        }
-
-        draw(groupElement) {
-          let polygon = document.createElementNS(svgNs, "polygon");
-          polygon.setAttribute("points", this.vertexesAsString());
-          polygon.setAttribute("fill", "none");
-          polygon.setAttribute("stroke-linecap", "round");
-          polygon.setAttribute("stroke-linejoin", "round");
-          groupElement.appendChild(polygon);
-        }
-
-        getPoints(p1, p2, nrOfPoints) {
-          let points = [];
-          let delta = p1.sub(p2).div(nrOfPoints + 1);
-          for (let i = 1; i < nrOfPoints + 1; i++) {
-            let currentPos = p2.add(delta.mult(i));
-            points.push(currentPos);
-          }
-          return points;
         }
 
         edges() {
@@ -286,13 +196,6 @@
           return false;
         }
 
-        get centroid() {
-          if (!this._centroid) {
-            this._centroid = this.a.add(this.b).add(this.c).div(3);
-          }
-          return this._centroid;
-        }
-
         get circumcenter() {
           if (this._circumcenter) {
             return this._circumcenter;
@@ -322,10 +225,6 @@
                 (this.b.x - this.a.x));
           this._circumcenter = new Vector(x, y);
           return this._circumcenter;
-        }
-
-        circumradius() {
-          return this.circumcenter.sub(this.a).getLength();
         }
 
         pointIsInsideCircumcircle(point) {
@@ -455,12 +354,6 @@
           let lineElement = createLineElement(line);
           groupElement.appendChild(lineElement);
         });
-        /*  lines.forEach(line => {
-    let textElement = createTextElement(line);
-    groupElement.appendChild(textElement);
-  });
-  */
-
         texts.forEach((txt) => {
           if (
             txt.x > 10 &&
@@ -473,15 +366,12 @@
           }
         });
 
-        // debugger;
         for (i = 0; i < nums[set].length; i++) {
           if (counts[nums[set][i]] < minvalue) {
             minvalue = counts[nums[set][i]];
             val = nums[set][i];
           }
         }
-        //console.log(minvalue);
-        //console.log(" - "+val);
         document.getElementById("msg").innerHTML =
           " " + minvalue + " instances of <strong>" + val + "</strong>";
       }
@@ -494,7 +384,7 @@
         lineElement.setAttribute("y2", line.y2);
         lineElement.setAttribute(
           "stroke",
-          colors[Math.floor(Math.random() * 7)],
+          colors[Math.floor(Math.random() * colors.length)],
         );
         return lineElement;
       }
@@ -503,6 +393,7 @@
         let textElement = document.createElementNS(svgNs, "text");
         textElement.setAttribute("x", txt.x);
         textElement.setAttribute("y", txt.y);
+        textElement.setAttribute("fill", getThemeColor("text"));
         textElement.onclick = abc;
         textElement.innerHTML =
           nums[set][Math.floor(Math.random() * nums[set].length)];
@@ -510,35 +401,33 @@
         return textElement;
       }
       var abc = function (evt) {
+        if (gameCompleted) return;
+        startGameTimer();
         if (evt.target.innerHTML == val) {
           evt.target.onclick = "";
-          evt.target.setAttribute("stroke", "blue");
+          evt.target.setAttribute("stroke", correctStroke);
+          evt.target.setAttribute("fill", successFill);
           found++;
+          publishGameStats();
           document.getElementById("remain").innerHTML =
             " Still to find : " + (minvalue - found);
           if (found >= minvalue) {
-            var msg = "उत्तमम् ! You found all!";
-            window.alert(msg);
-            var ask = confirm("पुनः ? Press 'ok' to play again");
-            if (ask) {
-              location.reload();
-            }
+            finishGame();
             txtnods = document.querySelectorAll("text");
             for (var i = 0; i < txtnods.length; i++) {
               txtnods[i].onclick = "";
             }
           }
         } else {
-          evt.target.setAttribute("stroke", "red");
-          //console.log("to find " + (minvalue - found));
+          evt.target.setAttribute("stroke", incorrectStroke);
+          wrong++;
+          publishGameStats();
         }
       };
 
       function setup() {
         svg = document.querySelector("svg");
-        //document.addEventListener("click", draw);
         document.addEventListener("keydown", onKeyDown);
-        //window.addEventListener("resize", onResize);
         onResize();
       }
 
@@ -573,14 +462,10 @@
       function showall() {
         txtnods = document.querySelectorAll("text");
         for (var i = 0; i < txtnods.length; i++) {
-          //debugger;
-
           if (txtnods[i].innerHTML == val)
-            if (txtnods[i].getAttribute("stroke") != "blue") {
-              txtnods[i].setAttribute("stroke", "url(#linear)");
+            if (txtnods[i].getAttribute("stroke") != correctStroke) {
+              txtnods[i].setAttribute("stroke", getThemeColor("danger"));
               txtnods[i].setAttribute("stroke-width", "2.5");
-              //txtnods[i].classList.add("blinkclass");
-              //txtnods[i].setAttribute("stroke","tomato");
             }
         }
       }
@@ -591,7 +476,7 @@
           group.remove();
         }
         group = document.createElementNS(svgNs, "g");
-        group.setAttribute("stroke", "black");
+        group.setAttribute("stroke", getThemeColor("navy"));
 
         let pointList = getRandomPoints();
 

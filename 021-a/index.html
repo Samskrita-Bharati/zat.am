@@ -1,92 +1,86 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>अन्वेषणम्</title>
-
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
-    />
-
-    <!-- Game Styles -->
+    <link rel="stylesheet" href="../shared/game-theme.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-
-  <body class="anveshan-page" data-page="games">
-    <!-- =========================================
-         SHARED ZAT.AM NAVBAR
-    ========================================== -->
-
+  <body class="zatam-themed-game" data-page="games">
     <div id="navbar-mount"></div>
 
-    <!-- =========================================
-         GAME CONTENT
-    ========================================== -->
+    <main class="zatam-game-shell anveshan-shell">
+      <section class="zatam-game-header">
+        <span class="zatam-game-eyebrow">Sanskrit Learning Activity</span>
+        <h1 class="zatam-game-title">अन्वेषणम्</h1>
+        <p class="zatam-game-subtitle">
+          Find the target symbol hidden among the others as quickly and accurately as you can.
+        </p>
+      </section>
 
-    <main class="anveshan-main">
-      <!-- =====================================
-           HERO
-      ====================================== -->
-
-      <section class="anveshan-hero">
-        <div class="anveshan-hero-icon">🔎</div>
-
-        <div class="anveshan-hero-copy">
-          <span class="anveshan-eyebrow"> Sanskrit Learning Game </span>
-
-          <h1>अन्वेषणम्</h1>
-
-          <p>
-            Explore the activities below and continue your Sanskrit learning
-            journey.
-          </p>
+      <section class="zatam-game-stats anveshan-stats" aria-label="Game stats">
+        <div class="zatam-game-stat zatam-game-score">
+          <span class="zatam-game-stat-label">Score</span>
+          <span class="zatam-game-stat-value" id="game-score">0</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">Time</span>
+          <span class="zatam-game-stat-value" id="game-time">00:00</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">❌</span>
+          <span class="zatam-game-stat-value" id="game-errors">0</span>
+        </div>
+        <div class="zatam-game-stat anveshan-set-stat">
+          <label class="zatam-game-stat-label" for="character-set-select">Character set</label>
+          <select class="zatam-game-stat-value" id="character-set-select" aria-label="Choose a character set"></select>
         </div>
       </section>
 
-      <!-- =====================================
-           GAME MENU
-      ====================================== -->
+      <section class="zatam-game-play-area anveshan-play-area" aria-label="Selected game mode">
+        <iframe
+          id="game-frame"
+          title="Lines mode"
+          src="1-li/index.html"
+          allow="fullscreen"
+        ></iframe>
+      </section>
 
-      <section class="menu">
-        <!-- Title -->
-
-        <div class="title">
-          <span class="section-eyebrow"> Choose an Activity </span>
-
-          <h2>अन्वेषणम्</h2>
-
-          <div class="underline"></div>
-
-          <p class="section-description">
-            Select a category or activity to begin.
-          </p>
-        </div>
-
-        <!-- Filter Buttons -->
-
-        <div class="btn-container"></div>
-
-        <!-- Game Cards -->
-
-        <div class="section-center"></div>
+      <section class="mode-picker" aria-label="Choose a game mode">
+        <button class="zatam-game-btn zatam-game-btn-primary mode-button" type="button" data-src="1-li/index.html" data-name="Lines" aria-pressed="true">Lines</button>
+        <button class="zatam-game-btn zatam-game-btn-secondary mode-button" type="button" data-src="2-ci/index.html" data-name="Circles" aria-pressed="false">Circles</button>
+        <button class="zatam-game-btn zatam-game-btn-secondary mode-button" type="button" data-src="3-he/index.html" data-name="Hexagons" aria-pressed="false">Hexagons</button>
       </section>
     </main>
 
-    <!-- =========================================
-         GAME JAVASCRIPT
-    ========================================== -->
+    <div id="completion-modal" class="zatam-game-modal-backdrop anveshan-completion" hidden>
+      <section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="completion-title">
+        <h2 id="completion-title" class="zatam-game-result-title">Congratulations!</h2>
+        <p class="zatam-game-result-message">You found all the target symbols!</p>
+        <div class="zatam-game-result-score-breakdown" aria-live="polite">
+          <p><span>Correct finds</span><strong id="result-correct">+0</strong></p>
+          <p><span>Incorrect clicks</span><strong id="result-errors">−0</strong></p>
+          <p><span>Time bonus</span><strong id="result-time-bonus">+0</strong></p>
+          <p id="result-cap-row" hidden><span>Score cap adjustment</span><strong id="result-cap">−0</strong></p>
+          <p id="result-floor-row" hidden><span>Minimum score adjustment</span><strong id="result-floor">+0</strong></p>
+          <p class="zatam-game-result-score-total"><span>Points earned</span><strong id="result-score">0</strong></p>
+        </div>
+        <div id="score-save-status" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite">Saving your score...</div>
+        <div class="zatam-game-actions">
+          <button id="play-again" class="zatam-game-btn zatam-game-btn-primary" type="button">Play again</button>
+        </div>
+      </section>
+    </div>
 
-    <script src="app.js"></script>
-
-    <!-- =========================================
-         SHARED ZAT.AM NAVBAR
-    ========================================== -->
-
+    <script src="data.json"></script>
+    <script src="score-config.js"></script>
+    <script src="app.js" defer></script>
     <script type="module" src="../js/navbar-loader.js"></script>
+    <script type="module">
+      import { initGameScore } from "../js/game-score.js";
+
+      initGameScore({ gameId: "021-a", gameName: "अन्वेषणम्" });
+    </script>
   </body>
 </html>

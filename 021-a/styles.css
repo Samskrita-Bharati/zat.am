@@ -1,703 +1,185 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Roboto:400,500,700&display=swap");
-
-/* =====================================================
-   PAGE VARIABLES
-===================================================== */
-
-.anveshan-page {
-  --anv-navy: #0b2b4f;
-  --anv-navy-dark: #09264a;
-
-  --anv-text: #24394f;
-  --anv-muted: #687789;
-
-  --anv-gold: #f6b23b;
-  --anv-gold-dark: #b85c00;
-
-  --anv-coral: #f16945;
-
-  --anv-blue: #315fd9;
-
-  --anv-cream: #fffaf2;
-  --anv-cream-soft: #fff7e8;
-
-  --anv-white: #ffffff;
-
-  --anv-border: #eadfce;
-  --anv-border-soft: #f0e9de;
-
-  --anv-shadow: 0 5px 16px rgba(11, 43, 79, 0.07);
-
-  --anv-shadow-hover: 0 15px 32px rgba(11, 43, 79, 0.14);
+.mode-ui {
+	padding: 12px;
+	text-align: center;
 }
 
-/* =====================================================
-   PAGE RESET
-   Scoped so it DOES NOT affect shared navbar
-===================================================== */
-
-.anveshan-main,
-.anveshan-main *,
-.anveshan-main *::before,
-.anveshan-main *::after {
-  box-sizing: border-box;
+.mode-controls {
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 0;
+	overflow-x: auto;
 }
 
-body.anveshan-page {
-  margin: 0;
-
-  background: #fffaf2;
-
-  color: var(--anv-navy-dark);
-
-  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+.mode-status {
+	flex: 0 0 auto;
+	min-width: 0;
+	width: fit-content;
+	max-width: 100%;
+	margin: 0;
+	white-space: nowrap;
 }
 
-/* =====================================================
-   MAIN WRAPPER
-===================================================== */
-
-.anveshan-main {
-  width: 100%;
-
-  max-width: 1280px;
-
-  margin: 0 auto;
-
-  padding: 34px 42px 56px;
+.mode-controls .zatam-game-btn {
+	flex: 0 0 auto;
+	width: auto;
 }
 
-/* =====================================================
-   HERO
-===================================================== */
-
-.anveshan-hero {
-  display: flex;
-
-  align-items: center;
-
-  gap: 26px;
-
-  margin-bottom: 34px;
-
-  padding: 28px 30px;
-
-  background: linear-gradient(135deg, #ffffff 0%, #fff7e8 100%);
-
-  border: 1px solid var(--anv-border);
-
-  border-radius: 22px;
-
-  box-shadow: var(--anv-shadow);
+.mode-remaining {
+	margin: 8px 0;
 }
 
-.anveshan-hero-icon {
-  width: 82px;
-  height: 82px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  background: #ffffff;
-
-  border: 1px solid var(--anv-border);
-
-  border-radius: 22px;
-
-  box-shadow: 0 5px 14px rgba(11, 43, 79, 0.06);
-
-  font-size: 42px;
+.anveshan-shell {
+	--zatam-content-width: 1180px;
 }
 
-.anveshan-hero-copy {
-  min-width: 0;
+.mode-picker {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 12px;
+	margin: 18px auto 0;
 }
 
-.anveshan-eyebrow {
-  display: block;
-
-  margin-bottom: 6px;
-
-  color: var(--anv-gold-dark);
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.08em;
-
-  text-transform: uppercase;
+.mode-button {
+	min-width: 132px;
 }
 
-.anveshan-hero h1 {
-  margin: 0 0 8px;
-
-  color: var(--anv-navy);
-
-  font-size: 44px;
-
-  font-weight: 800;
-
-  line-height: 1.15;
+.anveshan-stats {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	max-width: 860px;
+	margin: 0 auto 14px;
 }
 
-.anveshan-hero p {
-  max-width: 620px;
-
-  margin: 0;
-
-  color: var(--anv-text);
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  line-height: 1.55;
+.anveshan-set-stat {
+	min-width: 0;
 }
 
-/* =====================================================
-   MENU SECTION
-===================================================== */
-
-.menu {
-  width: 100%;
-
-  padding: 0;
+#character-set-select {
+	width: 100%;
+	min-width: 0;
+	padding: 6px 28px 6px 10px;
+	color: var(--zatam-heading);
+	font: 700 1rem/1.2 var(--zatam-font);
+	background: var(--zatam-white);
+	border: 1px solid var(--zatam-border);
+	border-radius: var(--zatam-radius-sm);
 }
 
-/* =====================================================
-   SECTION TITLE
-===================================================== */
-
-.title {
-  max-width: 700px;
-
-  margin: 0 auto 24px;
-
-  text-align: center;
+#character-set-select:focus-visible {
+	outline: 3px solid var(--zatam-blue);
+	outline-offset: 2px;
 }
 
-.section-eyebrow {
-  display: block;
-
-  margin-bottom: 6px;
-
-  color: var(--anv-gold-dark);
-
-  font-size: 11px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.08em;
-
-  text-transform: uppercase;
+.anveshan-play-area {
+	margin-top: 0;
+	padding: 12px;
 }
 
-.title h2 {
-  margin: 0 0 10px;
-
-  color: var(--anv-navy);
-
-  font-size: 34px;
-
-  font-weight: 800;
-
-  line-height: 1.2;
+.anveshan-completion[hidden] {
+	display: none;
 }
 
-.underline {
-  width: 62px;
-
-  height: 4px;
-
-  margin: 0 auto 12px;
-
-  background: var(--anv-gold);
-
-  border-radius: 999px;
+.anveshan-completion .zatam-game-result {
+	margin: auto;
 }
 
-.section-description {
-  margin: 0;
-
-  color: var(--anv-muted);
-
-  font-size: 14px;
-
-  font-weight: 600;
+.zatam-game-result-score-breakdown {
+	margin-top: 18px;
+	padding: 12px 16px;
+	background: var(--zatam-soft);
+	border: 1px solid var(--zatam-border);
+	border-radius: var(--zatam-radius);
+	text-align: left;
 }
 
-/* =====================================================
-   FILTER BUTTONS
-===================================================== */
-
-.btn-container {
-  min-height: 10px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  flex-wrap: wrap;
-
-  gap: 10px;
-
-  margin-bottom: 28px;
+.zatam-game-result-score-breakdown p {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 6px 0;
+	color: var(--zatam-text);
 }
 
-.filter-btn {
-  min-height: 40px;
-
-  padding: 0 17px;
-
-  background: #ffffff;
-
-  color: var(--anv-navy);
-
-  border: 1px solid var(--anv-border);
-
-  border-radius: 12px;
-
-  box-shadow: 0 3px 9px rgba(11, 43, 79, 0.05);
-
-  font-family: "Open Sans", Arial, sans-serif;
-
-  font-size: 13px;
-
-  font-weight: 800;
-
-  letter-spacing: normal;
-
-  text-transform: none;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+.zatam-game-result-score-breakdown [hidden] {
+	display: none;
 }
 
-.filter-btn:hover {
-  transform: translateY(-2px);
-
-  background: var(--anv-navy);
-
-  color: #ffffff;
-
-  border-color: var(--anv-navy);
-
-  box-shadow: 0 7px 16px rgba(11, 43, 79, 0.13);
+.zatam-game-result-score-breakdown strong {
+	white-space: nowrap;
 }
 
-.filter-btn.active {
-  background: var(--anv-navy);
-
-  color: #ffffff;
-
-  border-color: var(--anv-navy);
+.zatam-game-result-score-breakdown .zatam-game-result-score-total {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid var(--zatam-border);
+	color: var(--zatam-blue);
+	font-weight: 800;
 }
 
-/* =====================================================
-   CARD GRID
-===================================================== */
-
-.section-center {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-
-  gap: 22px;
+#game-frame {
+	display: block;
+	width: 100%;
+	height: clamp(560px, 76vh, 840px);
+	border: 0;
+	border-radius: var(--zatam-radius);
+	background: var(--zatam-white);
 }
-
-/* =====================================================
-   GAME CARD
-===================================================== */
-
-.menu-item {
-  min-width: 0;
-
-  overflow: hidden;
-
-  display: flex;
-
-  flex-direction: column;
-
-  background: #ffffff;
-
-  border: 1px solid var(--anv-border);
-
-  border-radius: 18px;
-
-  box-shadow: var(--anv-shadow);
-
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    border-color 0.22s ease;
-}
-
-.menu-item:hover {
-  transform: translateY(-5px);
-
-  border-color: #e4d2b6;
-
-  box-shadow: var(--anv-shadow-hover);
-}
-
-/* =====================================================
-   CARD IMAGE
-===================================================== */
-
-.menu-item .photo {
-  width: 100%;
-
-  height: 205px;
-
-  display: block;
-
-  object-fit: cover;
-
-  background: #f5f2ec;
-
-  border: none;
-
-  border-radius: 0;
-}
-
-/* =====================================================
-   CARD INFORMATION
-===================================================== */
-
-.item-info {
-  min-width: 0;
-
-  flex: 1;
-
-  display: flex;
-
-  flex-direction: column;
-
-  padding: 18px 18px 17px;
-}
-
-/* =====================================================
-   CARD HEADER
-===================================================== */
-
-.item-info header {
-  display: flex;
-
-  align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 12px;
-
-  margin: 0;
-
-  padding: 0 0 12px;
-
-  background: transparent;
-
-  border: none;
-
-  border-bottom: 1px solid var(--anv-border-soft);
-}
-
-.item-info h4 {
-  min-width: 0;
-
-  margin: 0;
-
-  color: var(--anv-navy);
-
-  font-family: "Open Sans", Arial, sans-serif;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  line-height: 1.35;
-
-  letter-spacing: normal;
-
-  text-transform: none;
-}
-
-/* =====================================================
-   OLD "PRICE" FIELD
-   Styled like Zat.am badge
-===================================================== */
-
-.price {
-  flex-shrink: 0;
-
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
-  min-height: 27px;
-
-  margin: 0 !important;
-
-  padding: 4px 9px;
-
-  background: var(--anv-cream-soft);
-
-  color: var(--anv-gold-dark) !important;
-
-  border: 1px solid #f0dab1;
-
-  border-radius: 999px;
-
-  font-size: 11px !important;
-
-  font-weight: 800 !important;
-}
-
-/* =====================================================
-   DESCRIPTION
-===================================================== */
-
-.item-text {
-  margin: 13px 0 0;
-
-  padding: 0;
-
-  color: var(--anv-muted);
-
-  font-size: 13px;
-
-  font-weight: 600;
-
-  line-height: 1.55;
-}
-
-/* =====================================================
-   LINKS INSIDE CARDS
-===================================================== */
-
-.menu-item a {
-  color: var(--anv-navy);
-
-  text-decoration: none;
-}
-
-.menu-item a:hover {
-  color: var(--anv-blue);
-}
-
-/* =====================================================
-   IF CARD ITSELF CONTAINS BUTTONS
-===================================================== */
-
-.menu-item .btn {
-  min-height: 38px;
-
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
-  margin-top: 16px;
-
-  padding: 0 15px;
-
-  background: var(--anv-navy);
-
-  color: #ffffff;
-
-  border: 1px solid var(--anv-navy);
-
-  border-radius: 11px;
-
-  box-shadow: none;
-
-  font-family: "Open Sans", Arial, sans-serif;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  letter-spacing: normal;
-
-  text-transform: none;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.menu-item .btn:hover {
-  transform: translateY(-2px);
-
-  background: var(--anv-navy);
-
-  color: #ffffff;
-
-  box-shadow: 0 6px 14px rgba(11, 43, 79, 0.16);
-}
-
-/* =====================================================
-   OPTIONAL BACKGROUND WATERMARK
-===================================================== */
-
-.anveshan-page::before {
-  content: "";
-
-  width: 190px;
-  height: 190px;
-
-  position: fixed;
-
-  right: 28px;
-  bottom: 20px;
-
-  background: url("शत.म्.png") center / contain no-repeat;
-
-  opacity: 0.035;
-
-  pointer-events: none;
-
-  z-index: 0;
-}
-
-.anveshan-main {
-  position: relative;
-
-  z-index: 1;
-}
-
-/* =====================================================
-   TABLET
-===================================================== */
-
-@media (max-width: 1000px) {
-  .section-center {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* =====================================================
-   SMALL TABLET
-===================================================== */
-
-@media (max-width: 760px) {
-  .anveshan-main {
-    padding: 26px 18px 42px;
-  }
-
-  .anveshan-hero {
-    align-items: flex-start;
-
-    padding: 22px;
-
-    gap: 18px;
-  }
-
-  .anveshan-hero-icon {
-    width: 66px;
-    height: 66px;
-
-    border-radius: 18px;
-
-    font-size: 34px;
-  }
-
-  .anveshan-hero h1 {
-    font-size: 36px;
-  }
-
-  .title h2 {
-    font-size: 30px;
-  }
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media (max-width: 620px) {
-  .anveshan-main {
-    padding: 22px 14px 36px;
-  }
+	.anveshan-shell {
+		width: min(calc(100% - 20px), var(--zatam-content-width));
+		padding-top: 24px;
+	}
 
-  .anveshan-hero {
-    flex-direction: column;
-  }
+	.mode-picker {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 8px;
+	}
 
-  .anveshan-hero-icon {
-    width: 60px;
-    height: 60px;
+	.anveshan-stats {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 
-    font-size: 31px;
-  }
+	.mode-button {
+		min-width: 0;
+		width: 100%;
+		padding-inline: 8px;
+		font-size: 0.85rem;
+	}
 
-  .anveshan-hero h1 {
-    font-size: 32px;
-  }
+	.anveshan-play-area {
+		padding: 8px;
+	}
 
-  .anveshan-hero p {
-    font-size: 14px;
-  }
-
-  .section-center {
-    grid-template-columns: 1fr;
-
-    gap: 16px;
-  }
-
-  .menu-item .photo {
-    height: 210px;
-  }
-
-  .btn-container {
-    gap: 8px;
-  }
-
-  .filter-btn {
-    min-height: 38px;
-
-    padding: 0 13px;
-
-    font-size: 12px;
-  }
+	#game-frame {
+		height: max(68vh, 540px);
+	}
 }
 
-/* =====================================================
-   VERY SMALL MOBILE
-===================================================== */
+@media (max-width: 600px) {
+	.mode-controls {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		width: 100%;
+		align-items: stretch;
+		overflow: visible;
+	}
 
-@media (max-width: 420px) {
-  .anveshan-hero {
-    padding: 19px;
-  }
+	.mode-controls button {
+		width: 100%;
+	}
 
-  .anveshan-hero h1 {
-    font-size: 29px;
-  }
-
-  .title h2 {
-    font-size: 27px;
-  }
-
-  .item-info {
-    padding: 16px;
-  }
-
-  .item-info h4 {
-    font-size: 16px;
-  }
+	.mode-status {
+		grid-column: 1 / -1;
+		grid-row: 2;
+		width: 100%;
+		justify-self: stretch;
+		box-sizing: border-box;
+		white-space: normal;
+	}
 }

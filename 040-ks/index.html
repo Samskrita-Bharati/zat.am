@@ -1,40 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
 कः समयः ? kaH samayaH ?
 </title>
+<link rel="stylesheet" href="../shared/game-theme.css">
+<link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 </head>
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-<center>
-<canvas id="canvas" width="400" height="400"
->
-</canvas>
-<br>
-<button id="golive" onclick="golive()">Show live समयः</button>
-<button onclick="updtxt()">Update (approx.) समयः</button>
-<br>
-<p id="samayaH"></p>
-</center>
+<main class="zatam-game-shell">
+  <section class="zatam-game-header">
+    <span class="zatam-game-eyebrow">Sanskrit Clock</span>
+    <h1 class="zatam-game-title">कः समयः?</h1>
+    <p class="zatam-game-subtitle">Learn to read and say the time in Sanskrit.</p>
+  </section>
+  <section class="zatam-game-instructions clock-instructions" aria-label="Instructions">
+    <p>Change the clock time with the dropdowns, then click <strong>Update</strong>.</p>
+    <p>Click <strong>Show live</strong> to switch to the current time.</p>
+  </section>
+  <section class="zatam-game-play-area clock-card" aria-label="Sanskrit clock">
+    <canvas id="canvas" width="400" height="400" aria-label="Clock showing the current time"></canvas>
+    <p class="time-reading-label">समयः</p>
+    <p id="samayaH" class="zatam-game-result-message" aria-live="polite"></p>
+    <div class="clock-control-row">
+      <div class="clock-time-controls" aria-label="Choose a specific time">
+        <label>
+          <span>Hour</span>
+          <select id="hour-select" aria-label="Hour"></select>
+        </label>
+        <span class="clock-time-separator" aria-hidden="true">:</span>
+        <label>
+          <span>Minute</span>
+          <select id="minute-select" aria-label="Minute"></select>
+        </label>
+      </div>
+      <button class="zatam-game-btn zatam-game-btn-secondary" type="button" onclick="updateSelectedTime()">Update (approx.) समयः</button>
+    </div>
+    <div class="zatam-game-actions clock-live-actions">
+      <button id="golive" class="zatam-game-btn zatam-game-btn-primary" type="button" onclick="golive()">Show live समयः</button>
+    </div>
+  </section>
+</main>
 <script>
-let curr=false;
-var hh = parseInt(getQueryStringValue("hh"));
-if (!hh || isNaN(hh) || hh>23 || hh<0) curr=true;
-var mm = parseInt(getQueryStringValue("mm"));
-if (!mm || isNaN(mm) || mm>59 || mm<0)
-   if (!curr) mm = 0 ; else curr = true;
+const urlParams = new URLSearchParams(window.location.search);
+const requestedHour = Number(urlParams.get("hh"));
+const requestedMinute = Number(urlParams.get("mm"));
+const hasFixedTime = urlParams.has("hh") && urlParams.has("mm") &&
+  Number.isInteger(requestedHour) && requestedHour >= 0 && requestedHour <= 23 &&
+  Number.isInteger(requestedMinute) && requestedMinute >= 0 && requestedMinute <= 59;
+let curr = !hasFixedTime;
+let hh = hasFixedTime ? requestedHour : new Date().getHours();
+let mm = hasFixedTime ? requestedMinute : new Date().getMinutes();
+
+const hourSelect = document.getElementById("hour-select");
+const minuteSelect = document.getElementById("minute-select");
+for (let value = 1; value <= 12; value++) {
+  const option = document.createElement("option");
+  option.value = String(value);
+  option.textContent = String(value);
+  hourSelect.appendChild(option);
+}
+for (let value = 0; value < 60; value++) {
+  const option = document.createElement("option");
+  option.value = String(value);
+  option.textContent = String(value).padStart(2, "0");
+  minuteSelect.appendChild(option);
+}
+hourSelect.value = String(hh % 12 || 12);
+minuteSelect.value = String(mm);
+
+function updateTimeUrl() {
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.set("hh", String(hh));
+  nextUrl.searchParams.set("mm", String(mm));
+  window.history.replaceState(null, "", nextUrl.toString());
+}
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let radius = canvas.height / 2;
 ctx.translate(radius, radius);
 radius = radius * 0.90;
-if (curr) setInterval(drawClock, 1000); 
+let clockInterval = null;
+if (curr) clockInterval = setInterval(drawClock, 1000);
   else 
 { drawClock();
  updtxt();}
@@ -123,14 +178,30 @@ function drawHand(ctx, pos, length, width) {
     ctx.rotate(-pos);
 }
 
+function updateSelectedTime()
+{
+const baseHour = curr ? new Date().getHours() : hh;
+const hourPeriod = Math.floor(baseHour / 12);
+const selectedHour = Number(hourSelect.value) % 12;
+hh = hourPeriod * 12 + selectedHour;
+mm = Number(minuteSelect.value);
+curr = false;
+updateTimeUrl();
+drawClock();
+updtxt();
+}
+
 function updtxt()
 {
-samayaH = "";
+let samayaH = "";
+let hr;
+let min;
 
 if (curr)	
  {
-  hr=clkhr=new Date().getHours();
-  min = new Date().getMinutes();
+  const now = new Date();
+  hr = now.getHours();
+  min = now.getMinutes();
 }
 else
 {
@@ -197,31 +268,22 @@ else
        break;
      }
      samayaH+="-वादनम्";
-document.getElementById("samayaH").innerHTML = "<b>"+samayaH+"</b>";
+document.getElementById("samayaH").textContent = samayaH;
 }
 
-function getQueryStringValue(key) {
-  return decodeURIComponent(
-    window.location.search.replace(
-      new RegExp(
-        "^(?:.*[&\\?]" +
-          encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") +
-          "(?:\\=([^&]*))?)?.*$",
-        "i"
-      ),
-      "$1"
-    )
-  );
-}
 function golive()
 {
- if (!curr)
- {
-  curr=true;
-  setInterval(drawClock, 1000);
-  updtxt()
- }
-document.getElementById("golive").disabled=true;
+ curr=true;
+ const liveUrl = new URL(window.location.href);
+ liveUrl.searchParams.delete("hh");
+ liveUrl.searchParams.delete("mm");
+ window.history.replaceState(null, "", liveUrl.toString());
+ const now = new Date();
+ hourSelect.value = String(now.getHours() % 12 || 12);
+ minuteSelect.value = String(now.getMinutes());
+ if (!clockInterval) clockInterval = setInterval(drawClock, 1000);
+drawClock();
+updtxt();
 }
 </script>
 

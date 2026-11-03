@@ -1,79 +1,313 @@
-﻿body 
-{
-    background-color: #fff;
-    overflow: hidden;   
-    margin: 0;
+body {
+  overflow-x: hidden;
 }
 
-.logo
-{
-    overflow: hidden;   
-    position: absolute;
-    left: 50%;
-    margin: 0 0 0 -516px;
-    display: none;
+.zatam-game-header {
+  margin-bottom: 18px;
 }
 
-canvas
-{
-    overflow: hidden;   
-    position: absolute;
+.puzzle-card {
+  padding: 12px;
 }
 
-.puzzle-image
-{
-    overflow: hidden;   
-    position: absolute;
-    left: 50%;
-    top: 50%;
+.puzzle-stats {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(220px, 1.5fr);
+  margin-bottom: 12px;
+}
+
+.puzzle-set-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#word-set-select {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 6px 30px 6px 10px;
+  color: var(--zatam-heading);
+  font: 700 1rem/1.2 var(--zatam-font);
+  background: var(--zatam-white);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-sm);
+}
+
+#word-set-select:focus-visible {
+  outline: 3px solid var(--zatam-blue);
+  outline-offset: 2px;
+}
+
+.play-area {
+  position: relative;
+  width: 100%;
+  height: clamp(420px, 68vh, 720px);
+  overflow: hidden;
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: none;
+  width: min(920px, 90%);
+  height: auto;
+  transform: translate(-50%, -50%);
+}
+
+.puzzle-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  max-width: calc(100% - 112px);
+  max-height: calc(100% - 24px);
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+
+.winScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 5500;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: rgba(9, 38, 74, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.winScreen.is-visible {
+  display: grid;
+}
+
+.winScreen .zatam-game-result {
+  margin: auto;
+}
+
+.winScreen #play-again {
+  margin-top: 14px;
+}
+
+.charms {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 82px;
+  height: auto;
+  padding: 12px 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+  box-shadow: var(--zatam-shadow-sm);
+}
+
+.puzzle-hint {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 50%;
+  max-width: calc(100% - 120px);
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+#hintword-text {
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.puzzle-hint:hover #hintword-text,
+.puzzle-hint:focus-within #hintword-text {
+  opacity: 1;
 }
 
 .zoomIn,
 .zoomOut,
-.help
-{
-    z-index: 100;
-    position: absolute;
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-.charms
-{
-    overflow: hidden;   
-    position: absolute;
-    background: #ccc;
-    opacity: 0.7;
-    right: 0%;
-    height: 100%;
-    width: 96px;    
+.help {
+  position: static;
+  display: block;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  object-fit: contain;
+  opacity: 0.78;
+  cursor: pointer;
+  transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .zoomIn:hover,
 .zoomOut:hover,
-.help:hover
-{
-    opacity: 1.0;
+.help:hover {
+  opacity: 1;
+  transform: scale(1.06);
 }
 
-.help
-{
-    right: 0%;
-    top: 50%;
-    margin: -150px 25px 0 0;
+.zoomIn:focus-visible,
+.zoomOut:focus-visible,
+.help:focus-visible {
+  outline: 3px solid var(--zatam-blue);
+  outline-offset: 2px;
 }
 
-.zoomIn
-{
-    right: 0%;
-    top: 50%;
-    margin: -50px 25px 0 0;
+.preview-mode .puzzle-image {
+  left: calc(50% - 48px);
 }
 
-.zoomOut
-{
-    right: 0%;
-    top: 50%;
-    margin: 50px 25px 0 0;
+.preview-mode .puzzle-hint {
+  display: none;
 }
 
+@media (max-width: 700px) {
+  .zatam-game-header {
+    margin-bottom: 16px;
+  }
+
+  .zatam-game-instructions {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+  }
+
+  .puzzle-card {
+    padding: 12px;
+  }
+
+  .puzzle-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .puzzle-set-stat {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .zatam-game-score {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .zatam-game-timer {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .zatam-game-stat {
+    padding: 12px 10px;
+  }
+
+  .zatam-game-stat-label {
+    font-size: 0.75rem;
+  }
+
+  .zatam-game-stat-value {
+    font-size: 1.05rem;
+  }
+
+  #word-set-select {
+    width: 100%;
+    padding-right: 22px;
+    padding-left: 6px;
+    font-size: 0.9rem;
+  }
+
+  .play-area {
+    height: 68vh;
+    height: clamp(340px, 68svh, 560px);
+    min-height: 340px;
+  }
+
+  .charms {
+    top: auto;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    padding: 6px 8px;
+  }
+
+  .zoomIn,
+  .zoomOut,
+  .help {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .preview-mode .charms {
+    justify-content: flex-end;
+  }
+
+  .preview-mode .puzzle-image {
+    top: calc(50% - 24px);
+    left: 50%;
+    max-width: calc(100% - 24px);
+    max-height: calc(100% - 80px);
+  }
+}
+
+@media (max-width: 430px) {
+  .puzzle-card {
+    padding: 8px;
+  }
+
+  .play-area {
+    height: 62vh;
+    height: clamp(300px, 62svh, 480px);
+    min-height: 300px;
+  }
+
+  .charms {
+    right: 6px;
+    bottom: 6px;
+    left: 6px;
+    gap: 6px;
+    padding: 5px 6px;
+  }
+}
+
+@media (max-width: 380px) {
+  .play-area {
+    height: 58vh;
+    height: clamp(280px, 58svh, 420px);
+    min-height: 280px;
+  }
+
+  .charms {
+    gap: 4px;
+  }
+
+  .zoomIn,
+  .zoomOut,
+  .help {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+  }
+}

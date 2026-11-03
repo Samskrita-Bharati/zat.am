@@ -61,6 +61,8 @@ const state = {
   initialized: false,
   gameId: null,
   gameName: null,
+  levelId: null,
+  levelName: null,
   runStartedAt: Date.now(),
   submitted: false,
 };
@@ -90,6 +92,25 @@ function normalizeGameName(value) {
   return String(value || fallback)
     .trim()
     .slice(0, 120);
+}
+
+
+function normalizeOptionalLevelId(value) {
+  if (value === undefined || value === null || value === "") {
+    return null;
+  }
+
+  const levelId = String(value).trim().slice(0, 80);
+  return levelId || null;
+}
+
+function normalizeOptionalLevelName(value) {
+  if (value === undefined || value === null || value === "") {
+    return null;
+  }
+
+  const levelName = String(value).trim().slice(0, 120);
+  return levelName || null;
 }
 
 function normalizeScore(value) {
@@ -214,9 +235,16 @@ async function ensureLeaderboardParents(gameId, gameName) {
 // PUBLIC INITIALIZATION
 // =====================================================
 
-export function initGameScore({ gameId, gameName } = {}) {
+export function initGameScore({
+  gameId,
+  gameName,
+  levelId = null,
+  levelName = null,
+} = {}) {
   state.gameId = normalizeGameId(gameId);
   state.gameName = normalizeGameName(gameName);
+  state.levelId = normalizeOptionalLevelId(levelId);
+  state.levelName = normalizeOptionalLevelName(levelName);
   state.runStartedAt = Date.now();
   state.submitted = false;
   state.initialized = true;
@@ -224,11 +252,15 @@ export function initGameScore({ gameId, gameName } = {}) {
   console.info("[Zat.am Score] Initialized", {
     gameId: state.gameId,
     gameName: state.gameName,
+    levelId: state.levelId,
+    levelName: state.levelName,
   });
 
   return {
     gameId: state.gameId,
     gameName: state.gameName,
+    levelId: state.levelId,
+    levelName: state.levelName,
   };
 }
 
@@ -238,6 +270,7 @@ export function resetGameScore() {
 
   console.info("[Zat.am Score] New run started", {
     gameId: state.gameId,
+    levelId: state.levelId,
   });
 }
 
@@ -359,7 +392,12 @@ export function clampScore(value) {
 
 export async function submitGameScore(
   score,
-  { result = "completed", metrics = {} } = {},
+  {
+    result = "completed",
+    levelId = undefined,
+    levelName = undefined,
+    metrics = {},
+  } = {},
 ) {
   if (!state.initialized || !state.gameId) {
     throw new Error(
@@ -411,13 +449,45 @@ export async function submitGameScore(
 
   const cleanMetrics = sanitizeMetrics(metrics);
 
+  /*
+  Level support is optional and backward compatible.
+
+  Priority:
+  1. levelId / levelName passed directly to submitGameScore()
+  2. levelId / levelName provided during initGameScore()
+  3. metrics.levelId / metrics.levelName for existing game integrations
+
+  Games without levels continue to store null level values.
+  */
+  const resolvedLevelId = normalizeOptionalLevelId(
+    levelId !== undefined
+      ? levelId
+      : state.levelId !== null
+        ? state.levelId
+        : cleanMetrics.levelId,
+  );
+
+  const resolvedLevelName = normalizeOptionalLevelName(
+    levelName !== undefined
+      ? levelName
+      : state.levelName !== null
+        ? state.levelName
+        : cleanMetrics.levelName,
+  );
+
+  /*
+  Put sanitized custom metrics first so they cannot overwrite
+  protected shared fields such as gameId or completion metadata.
+  */
   const attemptMeta = {
+    ...cleanMetrics,
     gameId: state.gameId,
     gameName: state.gameName,
+    levelId: resolvedLevelId,
+    levelName: resolvedLevelName,
     result: String(result || "completed").slice(0, 40),
     elapsedSeconds,
     completedAt,
-    ...cleanMetrics,
   };
 
   await ensureLeaderboardParents(state.gameId, state.gameName);
@@ -463,6 +533,8 @@ export async function submitGameScore(
 
   console.info("[Zat.am Score] Score saved", {
     gameId: state.gameId,
+    levelId: resolvedLevelId,
+    levelName: resolvedLevelName,
     score: finalScore,
     elapsedSeconds,
     uid: user.uid,
@@ -471,6 +543,8 @@ export async function submitGameScore(
   return {
     ok: true,
     gameId: state.gameId,
+    levelId: resolvedLevelId,
+    levelName: resolvedLevelName,
     score: finalScore,
     elapsedSeconds,
   };
@@ -504,6 +578,8 @@ if (typeof window !== "undefined") {
         initialized: state.initialized,
         gameId: state.gameId,
         gameName: state.gameName,
+        levelId: state.levelId,
+        levelName: state.levelName,
         runStartedAt: state.runStartedAt,
         submitted: state.submitted,
       };

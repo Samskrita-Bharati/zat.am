@@ -1,11 +1,33 @@
-var url = new URL(location.href);
-var playerid = url.searchParams.get("id");
 // Copyright (c) 2014 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 // extract from chromium source code by @liuwayong
 (function () {
     'use strict';
+    var scoreConfig = window.TREX_SCORE_CONFIG || {
+        secondsPerAward: 1,
+        pointsPerAward: 1,
+        minimumScore: 0,
+        maximumScore: 100
+    };
+
+    function calculateScore(elapsedMs) {
+        var secondsPerAward = Math.max(1, Number(scoreConfig.secondsPerAward) || 1);
+        var pointsPerAward = Math.max(0, Number(scoreConfig.pointsPerAward) || 0);
+        var minimumScore = Math.max(0, Number(scoreConfig.minimumScore) || 0);
+        var maximumScore = Math.max(minimumScore, Number(scoreConfig.maximumScore) || 0);
+        var elapsedSeconds = Math.floor(elapsedMs / 1000);
+        var score = Math.floor(elapsedSeconds / secondsPerAward) * pointsPerAward;
+        return Math.min(maximumScore, Math.max(minimumScore, score));
+    }
+
+    function formatElapsedTime(totalSeconds) {
+        var minutes = Math.floor(totalSeconds / 60);
+        var seconds = totalSeconds % 60;
+        return String(minutes).padStart(2, '0') + ':' +
+            String(seconds).padStart(2, '0');
+    }
+
     /**
      * T-Rex runner.
      * @param {string} outerContainerId Outer containing element id.
@@ -23,7 +45,6 @@ var playerid = url.searchParams.get("id");
         this.outerContainerEl = document.querySelector(outerContainerId);
         this.containerEl = null;
         this.snackbarEl = null;
-        this.detailsButton = this.outerContainerEl.querySelector('#details-button');
 
         this.config = opt_config || Runner.config;
 
@@ -53,6 +74,10 @@ var playerid = url.searchParams.get("id");
         this.inverted = false;
         this.invertTimer = 0;
         this.resizeTimerId_ = null;
+        this.touchHoldTimer_ = null;
+        this.touchHoldActive_ = false;
+        this.touchStartedOnCrash_ = false;
+        this.scoreSubmissionAttempt_ = 0;
 
         this.playCount = 0;
 
@@ -125,9 +150,7 @@ var playerid = url.searchParams.get("id");
         MOBILE_SPEED_COEFFICIENT: 1.2,
         RESOURCE_TEMPLATE_ID: 'audio-resources',
         SPEED: 6,
-        SPEED_DROP_COEFFICIENT: 3,
-        ARCADE_MODE_INITIAL_TOP_POSITION: 35,
-        ARCADE_MODE_TOP_POSITION_PERCENT: 0.1
+        SPEED_DROP_COEFFICIENT: 3
     };
 
 
@@ -146,15 +169,13 @@ var playerid = url.searchParams.get("id");
      * @enum {string}
      */
     Runner.classes = {
-        ARCADE_MODE: 'arcade-mode',
         CANVAS: 'runner-canvas',
         CONTAINER: 'runner-container',
         CRASHED: 'crashed',
         ICON: 'icon-offline',
         INVERTED: 'inverted',
         SNACKBAR: 'snackbar',
-        SNACKBAR_SHOW: 'snackbar-show',
-        TOUCH_CONTROLLER: 'controller'
+        SNACKBAR_SHOW: 'snackbar-show'
     };
 
 
@@ -225,6 +246,7 @@ var playerid = url.searchParams.get("id");
         MOUSEUP: 'mouseup',
         RESIZE: 'resize',
         TOUCHEND: 'touchend',
+        TOUCHCANCEL: 'touchcancel',
         TOUCHSTART: 'touchstart',
         VISIBILITY: 'visibilitychange',
         BLUR: 'blur',
@@ -357,7 +379,6 @@ var playerid = url.searchParams.get("id");
             // Hide the static icon.
             document.querySelector('.' + Runner.classes.ICON).style.visibility =
                 'hidden';
-			document.getElementById("messageBox").style.visibility="hidden";
             this.adjustDimensions();
             this.setSpeed();
 
@@ -366,7 +387,7 @@ var playerid = url.searchParams.get("id");
 
             // Player canvas container.
             this.canvas = createCanvas(this.containerEl, this.dimensions.WIDTH,
-                this.dimensions.HEIGHT, Runner.classes.PLAYER);
+                this.dimensions.HEIGHT, Runner.classes.CANVAS);
 
             this.canvasCtx = this.canvas.getContext('2d');
             this.canvasCtx.fillStyle = '#f7f7f7';
@@ -386,24 +407,11 @@ var playerid = url.searchParams.get("id");
 
             this.outerContainerEl.appendChild(this.containerEl);
 
-            if (IS_MOBILE) {
-                this.createTouchController();
-            }
-
             this.startListening();
             this.update();
 
             window.addEventListener(Runner.events.RESIZE,
                 this.debounceResize.bind(this));
-        },
-
-        /**
-         * Create the touch controller. A div that covers whole screen.
-         */
-        createTouchController: function () {
-            this.touchController = document.createElement('div');
-            this.touchController.className = Runner.classes.TOUCH_CONTROLLER;
-            this.outerContainerEl.appendChild(this.touchController);
         },
 
         /**
@@ -423,16 +431,11 @@ var playerid = url.searchParams.get("id");
             clearInterval(this.resizeTimerId_);
             this.resizeTimerId_ = null;
 
-            var boxStyles = window.getComputedStyle(this.outerContainerEl);
-            var padding = Number(boxStyles.paddingLeft.substr(0,
-                boxStyles.paddingLeft.length - 2));
-
-            this.dimensions.WIDTH = this.outerContainerEl.offsetWidth - padding * 2;
-            this.dimensions.WIDTH = Math.min(DEFAULT_WIDTH, this.dimensions.WIDTH); //Arcade Mode
-            if (this.activated) {
-                this.setArcadeModeContainerScale();
-            }
-            
+            // Keep the runner's original 600x150 coordinate space. CSS scales the
+            // complete canvas to the responsive play area, preserving the ground,
+            // background, and dinosaur alignment at every viewport width.
+            this.dimensions.WIDTH = DEFAULT_WIDTH;
+            this.dimensions.HEIGHT = Runner.defaultDimensions.HEIGHT;
             // Redraw the elements back onto the canvas.
             if (this.canvas) {
                 this.canvas.width = this.dimensions.WIDTH;
@@ -449,7 +452,7 @@ var playerid = url.searchParams.get("id");
                 if (this.playing || this.crashed || this.paused) {
                     this.containerEl.style.width = this.dimensions.WIDTH + 'px';
                     this.containerEl.style.height = this.dimensions.HEIGHT + 'px';
-                    this.distanceMeter.update(0, Math.ceil(this.distanceRan));
+                    this.distanceMeter.update(0, calculateScore(this.runningTime));
                     this.stop();
                 } else {
                     this.tRex.draw(0, 0);
@@ -490,9 +493,6 @@ var playerid = url.searchParams.get("id");
                 this.containerEl.style.webkitAnimation = 'intro .4s ease-out 1 both';
                 this.containerEl.style.width = this.dimensions.WIDTH + 'px';
 
-                // if (this.touchController) {
-                //     this.outerContainerEl.appendChild(this.touchController);
-                // }
                 this.playing = true;
                 this.activated = true;
             } else if (this.crashed) {
@@ -505,12 +505,14 @@ var playerid = url.searchParams.get("id");
          * Update the game status to started.
          */
         startGame: function () {
-            this.setArcadeMode();
             this.runningTime = 0;
             this.playingIntro = false;
             this.tRex.playingIntro = false;
             this.containerEl.style.webkitAnimation = '';
             this.playCount++;
+            if (window.zatamScore && typeof window.zatamScore.reset === 'function') {
+                window.zatamScore.reset();
+            }
 
             // Handle tabbing off the page. Pause the current game.
             document.addEventListener(Runner.events.VISIBILITY,
@@ -576,8 +578,19 @@ var playerid = url.searchParams.get("id");
                     this.gameOver();
                 }
 
+                var currentScore = calculateScore(this.runningTime);
                 var playAchievementSound = this.distanceMeter.update(deltaTime,
-                    Math.ceil(this.distanceRan));
+                    currentScore);
+
+                var scoreDisplay = document.getElementById('game-score');
+                var timeDisplay = document.getElementById('game-time');
+                if (scoreDisplay) {
+                    scoreDisplay.textContent = String(currentScore);
+                }
+                if (timeDisplay) {
+                    var elapsedSeconds = Math.floor(this.runningTime / 1000);
+                    timeDisplay.textContent = formatElapsedTime(elapsedSeconds);
+                }
 
                 if (playAchievementSound) {
                     this.playSound(this.soundFx.SCORE);
@@ -626,6 +639,7 @@ var playerid = url.searchParams.get("id");
                         break;
                     case events.KEYUP:
                     case events.TOUCHEND:
+                    case events.TOUCHCANCEL:
                     case events.MOUSEUP:
                         this.onKeyUp(e);
                         break;
@@ -641,16 +655,17 @@ var playerid = url.searchParams.get("id");
             document.addEventListener(Runner.events.KEYDOWN, this);
             document.addEventListener(Runner.events.KEYUP, this);
 
-            if (IS_MOBILE) {
-                // Mobile only touch devices.
-                this.touchController.addEventListener(Runner.events.TOUCHSTART, this);
-                this.touchController.addEventListener(Runner.events.TOUCHEND, this);
-                this.containerEl.addEventListener(Runner.events.TOUCHSTART, this);
+            if (IS_TOUCH_ENABLED) {
+                // Listen across the full game panel, including the ground below the runner.
+                this.outerContainerEl.addEventListener(Runner.events.TOUCHSTART, this, { passive: false });
+                this.outerContainerEl.addEventListener(Runner.events.TOUCHEND, this, { passive: false });
+                this.outerContainerEl.addEventListener(Runner.events.TOUCHCANCEL, this, { passive: false });
             } else {
                 // Mouse.
                 document.addEventListener(Runner.events.MOUSEDOWN, this);
                 document.addEventListener(Runner.events.MOUSEUP, this);
             }
+
         },
 
         /**
@@ -660,10 +675,10 @@ var playerid = url.searchParams.get("id");
             document.removeEventListener(Runner.events.KEYDOWN, this);
             document.removeEventListener(Runner.events.KEYUP, this);
 
-            if (IS_MOBILE) {
-                this.touchController.removeEventListener(Runner.events.TOUCHSTART, this);
-                this.touchController.removeEventListener(Runner.events.TOUCHEND, this);
-                this.containerEl.removeEventListener(Runner.events.TOUCHSTART, this);
+            if (IS_TOUCH_ENABLED) {
+                this.outerContainerEl.removeEventListener(Runner.events.TOUCHSTART, this);
+                this.outerContainerEl.removeEventListener(Runner.events.TOUCHEND, this);
+                this.outerContainerEl.removeEventListener(Runner.events.TOUCHCANCEL, this);
             } else {
                 document.removeEventListener(Runner.events.MOUSEDOWN, this);
                 document.removeEventListener(Runner.events.MOUSEUP, this);
@@ -675,14 +690,35 @@ var playerid = url.searchParams.get("id");
          * @param {Event} e
          */
         onKeyDown: function (e) {
-            // Prevent native page scrolling whilst tapping on mobile.
-            if (IS_MOBILE && this.playing) {
+            var isGameControlKey = Runner.keycodes.JUMP[e.keyCode] ||
+                Runner.keycodes.DUCK[e.keyCode];
+            var isEditableTarget = e.target && (e.target.isContentEditable ||
+                /INPUT|TEXTAREA|SELECT/.test(e.target.tagName));
+
+            // Space and arrow keys control the game and should never scroll the page.
+            if (isGameControlKey && !isEditableTarget) {
                 e.preventDefault();
             }
 
-            if (e.target != this.detailsButton) {
-                if (!this.crashed && (Runner.keycodes.JUMP[e.keyCode] ||
-                    e.type == Runner.events.TOUCHSTART)) {
+            // Touch events are registered non-passively so the page stays in place.
+            if (e.type === Runner.events.TOUCHSTART || e.type === Runner.events.TOUCHEND) {
+                e.preventDefault();
+            }
+
+            if (e.type === Runner.events.TOUCHSTART) {
+                if (this.crashed && e.currentTarget === this.outerContainerEl) {
+                    this.touchStartedOnCrash_ = true;
+                    this.restart();
+                    return;
+                }
+
+                this.touchHoldActive_ = false;
+                clearTimeout(this.touchHoldTimer_);
+                this.touchHoldTimer_ = setTimeout(function () {
+                    this.touchHoldTimer_ = null;
+                    if (this.crashed) return;
+
+                    this.touchHoldActive_ = true;
                     if (!this.playing) {
                         this.loadSounds();
                         this.playing = true;
@@ -691,16 +727,34 @@ var playerid = url.searchParams.get("id");
                             errorPageController.trackEasterEgg();
                         }
                     }
-                    //  Play sound effect and jump on starting the game for the first time.
-                    if (!this.tRex.jumping && !this.tRex.ducking) {
-                        this.playSound(this.soundFx.BUTTON_PRESS);
-                        this.tRex.startJump(this.currentSpeed);
+
+                    if (this.tRex.jumping) {
+                        this.tRex.setSpeedDrop();
+                    } else {
+                        this.tRex.setDuck(true);
+                    }
+                }.bind(this), 100);
+
+                return;
+            }
+
+            if (!this.crashed && (Runner.keycodes.JUMP[e.keyCode] ||
+                e.type == Runner.events.TOUCHSTART ||
+                (e.type == Runner.events.MOUSEDOWN &&
+                    this.outerContainerEl.contains(e.target)))) {
+                if (!this.playing) {
+                    this.loadSounds();
+                    this.playing = true;
+                    this.update();
+                    if (window.errorPageController) {
+                        errorPageController.trackEasterEgg();
                     }
                 }
 
-                if (this.crashed && e.type == Runner.events.TOUCHSTART &&
-                    e.currentTarget == this.containerEl) {
-                    this.restart();
+                // Play sound effect and jump on the first input.
+                if (!this.tRex.jumping && !this.tRex.ducking) {
+                    this.playSound(this.soundFx.BUTTON_PRESS);
+                    this.tRex.startJump(this.currentSpeed);
                 }
             }
 
@@ -722,10 +776,45 @@ var playerid = url.searchParams.get("id");
          * @param {Event} e
          */
         onKeyUp: function (e) {
+            if (e.type === Runner.events.TOUCHEND ||
+                e.type === Runner.events.TOUCHCANCEL) {
+                e.preventDefault();
+                clearTimeout(this.touchHoldTimer_);
+                this.touchHoldTimer_ = null;
+
+                if (this.touchStartedOnCrash_) {
+                    this.touchStartedOnCrash_ = false;
+                    return;
+                }
+
+                if (this.touchHoldActive_) {
+                    this.touchHoldActive_ = false;
+                    this.tRex.speedDrop = false;
+                    if (!this.crashed && !this.tRex.jumping) this.tRex.setDuck(false);
+                    return;
+                }
+
+                if (e.type === Runner.events.TOUCHCANCEL || this.crashed) return;
+
+                // A short touch is a tap: start the game and jump on release.
+                if (!this.playing) {
+                    this.loadSounds();
+                    this.playing = true;
+                    this.update();
+                    if (window.errorPageController) {
+                        errorPageController.trackEasterEgg();
+                    }
+                }
+                if (!this.tRex.jumping && !this.tRex.ducking) {
+                    this.playSound(this.soundFx.BUTTON_PRESS);
+                    this.tRex.startJump(this.currentSpeed);
+                }
+            }
+
             var keyCode = String(e.keyCode);
             var isjumpKey = Runner.keycodes.JUMP[keyCode] ||
                 e.type == Runner.events.TOUCHEND ||
-                e.type == Runner.events.MOUSEDOWN;
+                e.type == Runner.events.MOUSEUP;
 
             if (this.isRunning() && isjumpKey) {
                 this.tRex.endJump();
@@ -800,13 +889,69 @@ var playerid = url.searchParams.get("id");
             }
 
             // Update the high score.
-            if (this.distanceRan > this.highestScore) {
-                this.highestScore = Math.ceil(this.distanceRan);
+            var finalScore = calculateScore(this.runningTime);
+            if (finalScore > this.highestScore) {
+                this.highestScore = finalScore;
                 this.distanceMeter.setHighScore(this.highestScore);
             }
 
+            this.showGameOverModal(finalScore);
+
             // Reset the time clock.
             this.time = getTimeStamp();
+        },
+
+        showGameOverModal: function (finalScore) {
+            var modal = document.getElementById('game-over-modal');
+            var scoreDisplay = document.getElementById('result-score');
+            var timeDisplay = document.getElementById('result-time');
+            var status = document.getElementById('score-save-status');
+            var elapsedSeconds = Math.floor(this.runningTime / 1000);
+
+            if (!modal || !scoreDisplay || !timeDisplay || !status) return;
+
+            scoreDisplay.textContent = String(finalScore);
+            timeDisplay.textContent = formatElapsedTime(elapsedSeconds);
+            modal.hidden = false;
+            document.getElementById('play-again').focus();
+
+            status.className = 'zatam-game-status zatam-game-status-info';
+            status.textContent = 'Saving your score...';
+            var submissionAttempt = ++this.scoreSubmissionAttempt_;
+
+            if (!window.zatamScore || typeof window.zatamScore.submit !== 'function') {
+                status.className = 'zatam-game-status zatam-game-status-error';
+                status.textContent = 'The leaderboard is not available right now.';
+                return;
+            }
+
+            window.zatamScore.submit(finalScore, {
+                metrics: {
+                    pointsEarned: finalScore,
+                    gameTimerSeconds: elapsedSeconds,
+                    survivalTimeSeconds: elapsedSeconds
+                }
+            }).then(function (result) {
+                if (submissionAttempt !== this.scoreSubmissionAttempt_) return;
+                if (result && result.ok) {
+                    status.className = 'zatam-game-status zatam-game-status-success';
+                    status.textContent = 'Score saved to the leaderboard ✓';
+                } else if (result && result.reason === 'not-signed-in') {
+                    status.className = 'zatam-game-status zatam-game-status-info';
+                    status.textContent = 'Sign in to save your score to the leaderboard.';
+                } else if (result && result.reason === 'already-submitted') {
+                    status.className = 'zatam-game-status zatam-game-status-success';
+                    status.textContent = 'Score already saved ✓';
+                } else {
+                    status.className = 'zatam-game-status zatam-game-status-error';
+                    status.textContent = 'Your score could not be saved.';
+                }
+            }.bind(this)).catch(function (error) {
+                if (submissionAttempt !== this.scoreSubmissionAttempt_) return;
+                console.error('[043-trs] Score submission failed:', error);
+                status.className = 'zatam-game-status zatam-game-status-error';
+                status.textContent = 'The leaderboard score could not be saved.';
+            }.bind(this));
         },
 
         stop: function () {
@@ -828,6 +973,13 @@ var playerid = url.searchParams.get("id");
 
         restart: function () {
             if (!this.raqId) {
+                var gameOverModal = document.getElementById('game-over-modal');
+                if (gameOverModal) gameOverModal.hidden = true;
+                this.scoreSubmissionAttempt_++;
+                if (window.zatamScore && typeof window.zatamScore.reset === 'function') {
+                    window.zatamScore.reset();
+                }
+
                 this.playCount++;
                 this.runningTime = 0;
                 this.playing = true;
@@ -844,35 +996,6 @@ var playerid = url.searchParams.get("id");
                 this.invert(true);
                 this.update();
             }
-        },
-        
-        /**
-         * Hides offline messaging for a fullscreen game only experience.
-         */
-        setArcadeMode() {
-            document.body.classList.add(Runner.classes.ARCADE_MODE);
-            this.setArcadeModeContainerScale();
-        },
-
-        /**
-         * Sets the scaling for arcade mode.
-         */
-        setArcadeModeContainerScale() {
-            const windowHeight = window.innerHeight;
-            const scaleHeight = windowHeight / this.dimensions.HEIGHT;
-            const scaleWidth = window.innerWidth / this.dimensions.WIDTH;
-            const scale = Math.max(1, Math.min(scaleHeight, scaleWidth));
-            const scaledCanvasHeight = this.dimensions.HEIGHT * scale;
-            // Positions the game container at 10% of the available vertical window
-            // height minus the game container height.
-            const translateY = Math.ceil(Math.max(0, (windowHeight - scaledCanvasHeight -
-                                                      Runner.config.ARCADE_MODE_INITIAL_TOP_POSITION) *
-                                                  Runner.config.ARCADE_MODE_TOP_POSITION_PERCENT)) *
-                  window.devicePixelRatio;
-
-            const cssScale = scale;
-            this.containerEl.style.transform =
-                'scale(' + cssScale + ') translateY(' + translateY + 'px)';
         },
         
         /**
@@ -2045,18 +2168,18 @@ var playerid = url.searchParams.get("id");
 
         /**
          * Update the distance meter.
-         * @param {number} distance
+         * @param {number} score
          * @param {number} deltaTime
          * @return {boolean} Whether the acheivement sound fx should be played.
          */
-        update: function (deltaTime, distance) {
+        update: function (deltaTime, score) {
             var paint = true;
             var playSound = false;
 
             if (!this.acheivement) {
-                distance = this.getActualDistance(distance);
+                score = Math.max(0, Math.floor(score));
                 // Score has gone beyond the initial digit count.
-                if (distance > this.maxScore && this.maxScoreUnits ==
+                if (score > this.maxScore && this.maxScoreUnits ==
                     this.config.MAX_DISTANCE_UNITS) {
                     this.maxScoreUnits++;
                     this.maxScore = parseInt(this.maxScore + '9');
@@ -2064,9 +2187,9 @@ var playerid = url.searchParams.get("id");
                     this.distance = 0;
                 }
 
-                if (distance > 0) {
+                if (score > 0) {
                     // Acheivement unlocked
-                    if (distance % this.config.ACHIEVEMENT_DISTANCE == 0) {
+                    if (score % this.config.ACHIEVEMENT_DISTANCE == 0) {
                         // Flash score and play sound.
                         this.acheivement = true;
                         this.flashTimer = 0;
@@ -2075,7 +2198,7 @@ var playerid = url.searchParams.get("id");
 
                     // Create a string representation of the distance with leading 0.
                     var distanceStr = (this.defaultString +
-                        distance).substr(-this.maxScoreUnits);
+                        score).substr(-this.maxScoreUnits);
                     this.digits = distanceStr.split('');
                 } else {
                     this.digits = this.defaultString.split('');
@@ -2125,16 +2248,15 @@ var playerid = url.searchParams.get("id");
         /**
          * Set the highscore as a array string.
          * Position of char in the sprite: H - 10, I - 11.
-         * @param {number} distance Distance ran in pixels.
+         * @param {number} score Current score.
          */
-        setHighScore: function (distance) {
-            distance = this.getActualDistance(distance);
+        setHighScore: function (score) {
             var highScoreStr = (this.defaultString +
-                distance).substr(-this.maxScoreUnits);
+                score).substr(-this.maxScoreUnits);
 
             this.highScore = ['10', '11', ''].concat(highScoreStr.split(''));
 
-localStorage["trexsamszatamhs"]=distance;
+localStorage["trexsamszatamhs"] = score;
 
         },
 
@@ -2752,7 +2874,10 @@ localStorage["trexsamszatamhs"]=distance;
 
 
 function onDocumentLoad() {
-    new Runner('.interstitial-wrapper');
+    var runner = new Runner('.interstitial-wrapper');
+    document.getElementById('play-again').addEventListener('click', function () {
+        runner.restart();
+    });
 }
 
 document.addEventListener('DOMContentLoaded', onDocumentLoad);

@@ -1,6 +1,8 @@
 <head>
   <title>अन्वेषणम् — 2-ci</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../shared/game-theme.css">
+<link rel="stylesheet" href="../styles.css">
 <script src="../data.json"></script>
 <style>
 html, body {
@@ -11,7 +13,7 @@ circle{
 stroke-width : 3;
 }
 circle:hover{
-fill:white;
+fill:var(--zatam-border);
 }
 svg {
   position: relative;
@@ -22,61 +24,80 @@ svg {
 }
 text{
 cursor:pointer;
+fill:var(--zatam-white);
+font-size:1.35em;
+font-weight:700;
 }
 </style>
 </head>
 <body>
-<center>
-<p>Find<span id=msg></span> <a href="#" onclick=showall()>I give up!</a><span id="remain"></span> ❌ = <span id="wt">0<span></p></center>
+<div class="mode-ui">
+<div class="zatam-game-actions mode-controls">
+  <p class="zatam-game-status zatam-game-status-info mode-status">Find<span id="msg"></span><span id="remain" class="mode-remaining"></span></p>
+  <button class="zatam-game-btn zatam-game-btn-primary" type="button" onclick="showall()">I give up!</button>
+  <button class="zatam-game-btn zatam-game-btn-secondary" type="button" onclick="restartGame()">Restart</button>
+</div>
+</div>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" version="1.1" overflow="hidden">
-<defs>
-    <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="red"/>
-      <stop offset="100%" stop-color="blue"/>
-    </linearGradient>
-  </defs>
 </svg>
 <script>
 "use strict";
 const urlParams = new URLSearchParams(window.location.search);
 var set = urlParams.get('s');
 
-let texts = [];
 var found=0;
- var numa = ['\u0966','\u0967','\u0968','\u0969','\u096a','\u096b','\u096c','\u096d','\u096e','\u096f'];
 
  if (!set || isNaN(set) || set>=nums.length)
 	set=0;
- var colors=['violet','indigo','blue','green','yellow','orange','red'];
+ const getThemeColor = (name) => getComputedStyle(document.documentElement)
+   .getPropertyValue(`--zatam-${name}`).trim();
+ var colors = ["gold", "coral", "blue", "muted", "success"].map(getThemeColor);
+ const correctStroke = getThemeColor("blue");
+ const incorrectStroke = getThemeColor("coral");
+ const successFill = getThemeColor("success-soft");
+ const dangerSoftFill = getThemeColor("danger-soft");
+ const getCircleForSymbol = (symbol) => Array.from(document.querySelectorAll("circle")).find((circle) =>
+   circle.getAttribute("cx") === symbol.getAttribute("x") &&
+   circle.getAttribute("cy") === symbol.getAttribute("y")
+ );
 const svgNs = "http://www.w3.org/2000/svg";
 let svg;
 let w;
 let wt=0;
+let gameStartedAt=null;
+let gameTimerInterval=null;
+let gameCompleted=false;
+function currentGameTime(){let elapsed=gameStartedAt===null?0:Math.floor((Date.now()-gameStartedAt)/1000);return String(Math.floor(elapsed/60)).padStart(2,"0")+":"+String(elapsed%60).padStart(2,"0");}
+function startGameTimer(){if(gameStartedAt!==null)return;gameStartedAt=Date.now();gameTimerInterval=window.setInterval(updateGameTimer,1000);updateGameTimer();}
+function updateGameTimer(){publishGameStats();}
+function publishGameStats(time=currentGameTime()){window.parent.postMessage({type:"anveshan-stats",found,time,errors:wt},"*");}
+function stopGameTimer(){if(gameTimerInterval!==null)window.clearInterval(gameTimerInterval);gameTimerInterval=null;}
+function finishGame(){gameCompleted=true;stopGameTimer();let elapsedSeconds=gameStartedAt===null?0:Math.floor((Date.now()-gameStartedAt)/1000);let time=currentGameTime();publishGameStats(time);window.parent.postMessage({type:"anveshan-complete",found,errors:wt,elapsedSeconds,time},"*");}
+function restartGame(){window.location.reload();}
 let h;
-let gc=0;
 let counts=[];
 var minvalue = Infinity; 
 var val="";
-for (var i=0;i<nums.length;i++) 
-  for (var j=0;j<nums[i].length;j++)
-     counts[nums[i][j]]=0;
+nums[set].forEach((character) => {
+  counts[character] = 0;
+});
 
 var tclick=function(evt) { 
+if(gameCompleted)return;
+startGameTimer();
 if (evt.target.innerHTML==val) 
 {
 evt.target.onclick="";
-evt.target.setAttribute("stroke","blue");
+evt.target.setAttribute("stroke",correctStroke);
+const correctCircle = getCircleForSymbol(evt.target);
+if (correctCircle) correctCircle.setAttribute("fill", successFill);
 found++;
+publishGameStats();
   document.getElementById("remain").innerHTML = " Still to find : "
   + (minvalue - found);
 if (found >= minvalue) 
 {
-  msg = "उत्तमम् ! You found all!";
-	window.alert(msg);
-    var ask=confirm("पुनः ? Press 'ok' to play again");
-    if (ask){
-       location.reload();
-    }
+  finishGame();
   var txtnods=document.querySelectorAll("text");
 for (var i=0;i<txtnods.length;i++){
   txtnods[i].onclick="";
@@ -85,25 +106,41 @@ for (var i=0;i<txtnods.length;i++){
 }
 else 
 {
-evt.target.setAttribute("stroke","red");
+evt.target.setAttribute("stroke",incorrectStroke);
+const incorrectCircle = getCircleForSymbol(evt.target);
+if (incorrectCircle) incorrectCircle.setAttribute("fill", dangerSoftFill);
 wt++;
-document.getElementById("wt").innerHTML = wt;
+publishGameStats();
 }
 };
 
 function getRandomPoints() {
   let pointList = [];
-  let div = Math.random() * 3000 + 1000;
-  let nrOfPoints = w * h / div;
-  for(let i = 0; i < nrOfPoints; i++) {
-    pointList.push({x: Math.random() * w, y: Math.random() * h});
+  const targetCount = Math.floor((w * h) / 2800);
+  let attempts = 0;
+  const maxAttempts = targetCount * 40;
+
+  while(pointList.length < targetCount && attempts < maxAttempts) {
+    attempts++;
+    const r = Math.floor(Math.random() * 31) + 4;
+    const point = {
+      x: r + Math.random() * (w - 2 * r),
+      y: r + Math.random() * (h - 2 * r),
+      r,
+    };
+    const overlaps = pointList.some((other) =>
+      Math.hypot(point.x - other.x, point.y - other.y) < (r + other.r) * 0.9,
+    );
+
+    if(!overlaps) pointList.push(point);
   }
+
   return pointList;
 }
 
-function drawGs(groupElement, points) {
+function drawGs(groupElement, labelLayer, points) {
   points.forEach(circ => {
-    let circElement = createGElement(circ);
+    let circElement = createGElement(circ, labelLayer);
     groupElement.appendChild(circElement);
   });
   
@@ -117,31 +154,29 @@ function drawGs(groupElement, points) {
 document.getElementById("msg").innerHTML = " " + minvalue + " instances of <strong>" + val + "</strong>";
 }
 
-function createGElement(circ) {
-gc++;
+function createGElement(circ, labelLayer) {
 let gElement = document.createElementNS(svgNs, "g");
-gElement.setAttribute("id", gc);
-let r=Math.floor(Math.random() * 25);
+let r=circ.r;
   let circElement = document.createElementNS(svgNs, "circle");
   circElement.setAttribute("cx", circ.x);
   circElement.setAttribute("cy", circ.y);
   circElement.setAttribute("r", r);
-  circElement.setAttribute("fill", colors[Math.floor(Math.random() * 7)]);
+  circElement.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
   
   gElement.appendChild(circElement);
   
- if (r>12)
+ if (r>18)
  {
   let textElement = document.createElementNS(svgNs, "text");
   textElement.setAttribute("x", circ.x);
   textElement.setAttribute("y", circ.y);
   textElement.setAttribute("text-anchor","middle");
-   textElement.setAttribute("fill","black");
-    textElement.setAttribute("stroke","white");
+   textElement.setAttribute("fill", getThemeColor("text"));
+    textElement.setAttribute("stroke", getThemeColor("white"));
   textElement.onclick=tclick;
   textElement.innerHTML=nums[set][Math.floor(Math.random() * nums[set].length)];
  counts[textElement.innerHTML]++;
- gElement.appendChild(textElement);
+ labelLayer.appendChild(textElement);
   }  
   return gElement;
 }
@@ -150,9 +185,9 @@ function showall()
 let txtnods=document.querySelectorAll("text");
 for (var i=0;i<txtnods.length;i++){
   if (txtnods[i].innerHTML == val)
-     if (txtnods[i].getAttribute("stroke") != "blue")
+     if (txtnods[i].getAttribute("stroke") != correctStroke)
 	 {
-	 	     txtnods[i].setAttribute("stroke","url(#linear)");
+             txtnods[i].setAttribute("stroke", getThemeColor("danger"));
 			 txtnods[i].setAttribute("stroke-width","2.5");
 		 }
 }
@@ -190,18 +225,18 @@ function download() {
 }
 
 function draw() {
-texts = [];
-  let group = document.querySelector("g");
-  if(group) {
-    group.remove();
-  }
-  group = document.createElementNS(svgNs, "g");
-  group.setAttribute("stroke", "black");
+  document.querySelectorAll("#bubble-layer, #symbol-layer").forEach(layer => layer.remove());
+  let group = document.createElementNS(svgNs, "g");
+  group.setAttribute("id", "bubble-layer");
+  group.setAttribute("stroke", getThemeColor("navy"));
+  let labelLayer = document.createElementNS(svgNs, "g");
+  labelLayer.setAttribute("id", "symbol-layer");
   
   let pointList = getRandomPoints();  
 
-  drawGs(group, pointList);
+  drawGs(group, labelLayer, pointList);
   svg.appendChild(group);
+  svg.appendChild(labelLayer);
 }
 
 setup();

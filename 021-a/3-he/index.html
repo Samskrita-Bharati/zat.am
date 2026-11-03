@@ -3,6 +3,8 @@
 <head>
   <title>अन्वेषणम् — 3-he</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../shared/game-theme.css">
+<link rel="stylesheet" href="../styles.css">
 <script src="../data.json"></script>
 <style>
 svg {
@@ -13,73 +15,82 @@ svg {
   height: 80%;
 }
 polygon{
-#fill:orange;
-stroke:blue;
+stroke:var(--zatam-navy);
 stroke-width:2}
 polygon:hover{
-fill:#e2e2e2}
+fill:var(--zatam-border)}
 text{
 cursor:pointer;
 stroke-width:2;
+fill:var(--zatam-white);
+font-size:1.35em;
+font-weight:700;
 }
 text:hover{
-stroke:black;
+stroke:var(--zatam-navy);
 font-size:2.5em;
-#stroke-width:3;
 }
 </style>
 </head>
 <body>
-<center>
-<p>Find<span id=msg></span> <a href="#" onclick=showall()>I give up!</a><span id="remain"></span> ❌ = <span id="wt">0<span></p></center>
+<div class="mode-ui">
+<div class="zatam-game-actions mode-controls">
+  <p class="zatam-game-status zatam-game-status-info mode-status">Find<span id="msg"></span><span id="remain" class="mode-remaining"></span></p>
+  <button class="zatam-game-btn zatam-game-btn-primary" type="button" onclick="showall()">I give up!</button>
+  <button class="zatam-game-btn zatam-game-btn-secondary" type="button" onclick="restartGame()">Restart</button>
+</div>
+</div>
 <svg id="s" >
-<defs>
-    <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="red"/>
-      <stop offset="100%" stop-color="blue"/>
-    </linearGradient>
-  </defs>
 </svg>
-<p id="pts"></p>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 var r = parseInt(urlParams.get('r'));
 var inp=urlParams.get('inp');
- var colors=['violet','indigo','blue','green','yellow','orange','red'];
+ const getThemeColor = (name) => getComputedStyle(document.documentElement)
+   .getPropertyValue(`--zatam-${name}`).trim();
+ var colors = ["gold", "coral", "blue", "muted", "success"].map(getThemeColor);
+ const correctStroke = getThemeColor("blue");
+ const incorrectStroke = getThemeColor("coral");
+ const successFill = getThemeColor("success-soft");
+ const dangerSoftFill = getThemeColor("danger-soft");
  var set = urlParams.get('s');
  var found=wt=0;
+var gameStartedAt=null;
+var gameTimerInterval=null;
+var gameCompleted=false;
+function currentGameTime(){var elapsed=gameStartedAt===null?0:Math.floor((Date.now()-gameStartedAt)/1000);return String(Math.floor(elapsed/60)).padStart(2,"0")+":"+String(elapsed%60).padStart(2,"0");}
+function startGameTimer(){if(gameStartedAt!==null)return;gameStartedAt=Date.now();gameTimerInterval=window.setInterval(updateGameTimer,1000);updateGameTimer();}
+function updateGameTimer(){publishGameStats();}
+function publishGameStats(time=currentGameTime()){window.parent.postMessage({type:"anveshan-stats",found,time,errors:wt},"*");}
+function stopGameTimer(){if(gameTimerInterval!==null)window.clearInterval(gameTimerInterval);gameTimerInterval=null;}
+function finishGame(){gameCompleted=true;stopGameTimer();var elapsedSeconds=gameStartedAt===null?0:Math.floor((Date.now()-gameStartedAt)/1000);var time=currentGameTime();publishGameStats(time);window.parent.postMessage({type:"anveshan-complete",found,errors:wt,elapsedSeconds,time},"*");}
+function restartGame(){window.location.reload();}
  if (!set || isNaN(set) || set>=nums.length)
 	set=0;
-if (inp != null)
-{
-//debugger;
-  nums[set]=inp.split("");
-  }
+if (inp != null) nums[set] = inp.split("");
 if (!r || isNaN(r))
 {
-//r=40;
-//r = parseInt(((Math.random() * 100)%3)*10)+30;
 r = parseInt(Math.random() * 100);
 r=r%3;
 r=r*10;
 r=r+30;
 }
 var tclick=function(obj) { 
+if(gameCompleted)return;
+startGameTimer();
 if (obj.innerHTML==val) 
 {
 obj.onclick="";
-obj.setAttribute("stroke","blue");
+obj.setAttribute("stroke",correctStroke);
+const correctHexagon = obj.parentElement.querySelector("polygon");
+if (correctHexagon) correctHexagon.setAttribute("fill", successFill);
 found++;
+publishGameStats();
   document.getElementById("remain").innerHTML = " Still to find : "
   + (minvalue - found);
 if (found >= minvalue) 
 {
-msg = "उत्तमम् ! You found all!";
-	window.alert(msg);
-    var ask=confirm("पुनः ? Press 'ok' to play again");
-    if (ask){
-       location.reload();
-    }
+  finishGame();
   var txtnods=document.querySelectorAll("text");
 for (var i=0;i<txtnods.length;i++){
   txtnods[i].onclick="";
@@ -88,24 +99,20 @@ for (var i=0;i<txtnods.length;i++){
 }
 else 
 {
-obj.setAttribute("stroke","red");
+obj.setAttribute("stroke",incorrectStroke);
+const incorrectHexagon = obj.parentElement.querySelector("polygon");
+if (incorrectHexagon) incorrectHexagon.setAttribute("fill", dangerSoftFill);
 wt++;
-document.getElementById("wt").innerHTML = wt;
+publishGameStats();
 }
 };
 let counts=[];
 var minvalue = Infinity; 
 var val="";
-for (i=0;i<nums.length;i++) 
-  for (j=0;j<nums[i].length;j++)
-     counts[nums[i][j]]=0;
-// counts['०']=counts['१']=counts['२']=counts['३']=counts['४']=counts['५']=counts['६']=counts['७']=counts['८']=counts['९']=0;
-// counts['क']= counts['ख']= counts['ग']= counts['घ']=counts['च']=counts['छ']= counts['ज']= counts['झ']=counts['ट']= counts['ठ']= counts['ड']= counts['ढ']= counts['ण']= 0;
-//console.log(r);
-var ptstxt=iText="";
-counter=0;
+nums[set].forEach((character) => {
+  counts[character] = 0;
+});
 const a = 2 * Math.PI / 6;
-//const r = 50;
 
 function drawGrid(width, height) {
   for (let y = r; y + r * Math.sin(a) < height; y += r * Math.sin(a)) {
@@ -116,39 +123,35 @@ function drawGrid(width, height) {
 }
 
 function drawHexagon(x, y) {
-  ptstxt="";
-  counter++;
- iText="<g id='"+counter+"'>"; 
+  let pointsText = "";
+  let groupMarkup = "<g>";
+  let x2;
+  let y2;
   for (let i = 0; i < 6; i++) {
-  ptstxt+=parseInt(x + r * Math.cos(a * i))+ ","+ parseInt(y + r * Math.sin(a * i)) + " ";
+  pointsText+=parseInt(x + r * Math.cos(a * i))+ ","+ parseInt(y + r * Math.sin(a * i)) + " ";
     x2=parseInt(x + r * Math.cos(a * i));
     y2=parseInt(y + r * Math.sin(a * i));
   }
 
-iText+="<polygon onclick=ch(this) points='"+ptstxt+"' fill='"+colors[Math.floor(Math.random() * 7)]+"'/>";
-iText+="<line x1='"+parseInt(x)+"' y1='"+parseInt(y)+"' x2='"+x2+"' y2='"+y2+"' stroke=black ></line>";
-iText+="<line x1='"+parseInt(x)+"' y1='"+parseInt(y)+"' x2='"+(x-r)+"' y2='"+y+"' stroke=black ></line>";
-tnum=nums[set][Math.floor(Math.random() * nums[set].length)];
-iText+="<text text-anchor=middle onclick=tclick(this) x='"+parseInt(x)+"' y='"+parseInt(y)+"' fill='"+colors[Math.floor(Math.random() * 7)]+"' >"+tnum+"</text>";
-counts[tnum]++;
-iText+="</g>";
- document.getElementById('s').innerHTML+=iText; 
+  const symbol = nums[set][Math.floor(Math.random() * nums[set].length)];
+  groupMarkup+="<polygon points='"+pointsText+"' fill='"+colors[Math.floor(Math.random() * colors.length)]+"'/>";
+  groupMarkup+="<line x1='"+parseInt(x)+"' y1='"+parseInt(y)+"' x2='"+x2+"' y2='"+y2+"' stroke='"+getThemeColor("navy")+"'></line>";
+  groupMarkup+="<line x1='"+parseInt(x)+"' y1='"+parseInt(y)+"' x2='"+(x-r)+"' y2='"+y+"' stroke='"+getThemeColor("navy")+"'></line>";
+  groupMarkup+="<text text-anchor=middle onclick=tclick(this) x='"+parseInt(x)+"' y='"+parseInt(y)+"' fill='"+getThemeColor("text")+"' >"+symbol+"</text></g>";
+  counts[symbol]++;
+  document.getElementById("s").insertAdjacentHTML("beforeend", groupMarkup);
 }
 function showall()
 {
 let txtnods=document.querySelectorAll("text");
 for (var i=0;i<txtnods.length;i++){
   if (txtnods[i].innerHTML == val)
-     if (txtnods[i].getAttribute("stroke") != "blue")
+     if (txtnods[i].getAttribute("stroke") != correctStroke)
 	 {
-	 	     txtnods[i].setAttribute("stroke","url(#linear)");
+             txtnods[i].setAttribute("stroke", getThemeColor("danger"));
 			 txtnods[i].setAttribute("stroke-width","2.5");
 		 }
 }
-}
-function ch(obj)
-{
-console.log(obj.points[0]);
 }
 w = window.innerWidth/1.5;
   h = window.innerHeight/1.5;
