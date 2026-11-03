@@ -14,6 +14,8 @@ body {
   margin: 0;
   padding: 0;
   color: #083763;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 #container {
@@ -45,6 +47,7 @@ input {
 .settings-select {
   margin-bottom: 20px;
   padding-left: 10px;
+  min-height: 44px;
 }
 
 .center {
@@ -53,14 +56,15 @@ input {
 
 img {
   display: block;
-  height: 250px;
-  width: 250px;
+  width: min(250px, 100%);
+  height: auto;
+  max-height: 250px;
   margin: auto auto -20px auto;
 
 }
 
 audio {
-  width: 300px;
+  width: min(300px, 100%);
   margin: 0 auto;
   display: table;
   height: 40px;
@@ -197,6 +201,7 @@ button.w3-btn {
   color: white;
   margin: 8px;
   border: solid transparent;
+  min-height: 44px;
 }
 
 button.textAnswer {
@@ -211,9 +216,21 @@ button.end-button {
 .copyright {
   text-align: center;
   font-size: 80%;
-  width: 600px;
+  width: min(100%, 600px);
   margin: auto;
   margin-top: 20px;
+}
+
+#buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+#buttons br {
+  flex-basis: 100%;
+  height: 0;
 }
 
 .progress-bg {
@@ -280,7 +297,8 @@ div.score {
 @media (max-width: 618px) {
 
   .audioInQuiz>audio {
-    width: 20%;
+    width: 100%;
+    min-width: 4.5rem;
   }
 
   .quiz {
@@ -297,8 +315,7 @@ div.score {
   }
 
   .copyright {
-    max-width: 400px;
-    font-size: 50%;
+    font-size: 0.72rem;
   }
 
   img {
@@ -307,6 +324,15 @@ div.score {
 
   #container {
     font-size: 13px;
+  }
+
+  button.w3-btn {
+    margin: 0.35rem;
+  }
+
+  input.textAnswer,
+  textarea.textAnswer {
+    font-size: 16px;
   }
 }
 
