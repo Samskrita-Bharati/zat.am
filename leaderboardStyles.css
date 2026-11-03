@@ -1,12 +1,3 @@
-/* =====================================================
-   ZAT.AM LEADERBOARD
-   Zat.am-2 inspired layout
-===================================================== */
-
-/* =====================================================
-   PAGE
-===================================================== */
-
 html {
   min-height: 100%;
 }
@@ -28,9 +19,7 @@ body.leaderboard-page {
   box-sizing: border-box;
 }
 
-/* =====================================================
-   SPARKLE CANVAS
-===================================================== */
+/*  SPARKLE CANVAS */
 
 #sparkleCanvas {
   position: fixed;
@@ -45,9 +34,7 @@ body.leaderboard-page {
   z-index: 20;
 }
 
-/* =====================================================
-   PAGE CONTAINER
-===================================================== */
+/* PAGE CONTAINER */
 
 .lb-page {
   width: 100%;
@@ -62,9 +49,7 @@ body.leaderboard-page {
   z-index: 1;
 }
 
-/* =====================================================
-   HERO
-===================================================== */
+/* HERO */
 
 .lb-hero {
   display: flex;
@@ -182,9 +167,7 @@ body.leaderboard-page {
   box-shadow: 0 6px 16px rgba(11, 43, 79, 0.12);
 }
 
-/* =====================================================
-   MAIN LAYOUT
-===================================================== */
+/* MAIN LAYOUT */
 
 .lb-layout {
   display: grid;
@@ -202,9 +185,7 @@ body.leaderboard-page {
   min-width: 0;
 }
 
-/* =====================================================
-   COMMON CARDS
-===================================================== */
+/* COMMON CARDS */
 
 .lb-filter-card,
 .leaderboard-card,
@@ -219,9 +200,7 @@ body.leaderboard-page {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* =====================================================
-   SECTION HEADINGS
-===================================================== */
+/* SECTION HEADINGS */
 
 .lb-section-heading {
   display: flex;
@@ -266,9 +245,7 @@ body.leaderboard-page {
   text-align: right;
 }
 
-/* =====================================================
-   FILTER CARD
-===================================================== */
+/* FILTER CARD */
 
 .lb-filter-card {
   margin-bottom: 26px;
@@ -340,9 +317,7 @@ body.leaderboard-page {
   box-shadow: 0 0 0 3px rgba(246, 178, 59, 0.14);
 }
 
-/* =====================================================
-   SCORING TOGGLE
-===================================================== */
+/* SCORING TOGGLE */
 
 .lb-score-toggle {
   min-height: 42px;
@@ -401,17 +376,13 @@ body.leaderboard-page {
   color: white;
 }
 
-/* =====================================================
-   RANKING SECTION
-===================================================== */
+/* RANKING SECTION */
 
 .lb-ranking-section {
   margin-bottom: 26px;
 }
 
-/* =====================================================
-   PODIUM
-===================================================== */
+/* PODIUM */
 
 .podium {
   min-height: 260px;
@@ -553,9 +524,7 @@ body.leaderboard-page {
   font-weight: 800;
 }
 
-/* =====================================================
-   LEADERBOARD CARD
-===================================================== */
+/* LEADERBOARD CARD */
 
 .leaderboard-card {
   overflow: hidden;
@@ -583,9 +552,7 @@ body.leaderboard-page {
   font-weight: 800;
 }
 
-/* =====================================================
-   GENERATED LEADERBOARD ROWS
-===================================================== */
+/* GENERATED LEADERBOARD ROWS */
 
 #leaderboard {
   width: 100%;
@@ -680,9 +647,7 @@ body.leaderboard-page {
   white-space: nowrap;
 }
 
-/* =====================================================
-   PAGINATION
-===================================================== */
+/* PAGINATION */
 
 .pagination {
   min-height: 64px;
@@ -750,9 +715,7 @@ body.leaderboard-page {
   color: #0b2b4f;
 }
 
-/* =====================================================
-   SIDEBAR
-===================================================== */
+/* SIDEBAR */
 
 .lb-sidebar {
   display: flex;
@@ -791,9 +754,7 @@ body.leaderboard-page {
   line-height: 1.5;
 }
 
-/* =====================================================
-   SIDEBAR TIPS
-===================================================== */
+/* SIDEBAR TIPS */
 
 .lb-tip-list {
   display: flex;
@@ -841,17 +802,13 @@ body.leaderboard-page {
   line-height: 1.4;
 }
 
-/* =====================================================
-   COMPETITION CARD
-===================================================== */
+/* COMPETITION CARD */
 
 .lb-competition-card {
   background: linear-gradient(145deg, #ffffff, #fff7e8);
 }
 
-/* =====================================================
-   ADMIN PANEL
-===================================================== */
+/* ADMIN PANEL */
 
 .admin-panel {
   text-align: left !important;
@@ -910,9 +867,7 @@ body.leaderboard-page {
   line-height: 1.4;
 }
 
-/* =====================================================
-   TOGGLE SWITCH
-===================================================== */
+/* TOGGLE SWITCH */
 
 .toggle-switch {
   width: 44px;
@@ -974,9 +929,7 @@ body.leaderboard-page {
   transform: translateX(20px);
 }
 
-/* =====================================================
-   BOTTOM INFORMATION
-===================================================== */
+/* BOTTOM INFORMATION */
 
 .bottom-info {
   display: grid;
@@ -1023,9 +976,7 @@ body.leaderboard-page {
   line-height: 1.4;
 }
 
-/* =====================================================
-   TABLET
-===================================================== */
+/* TABLET */
 
 @media (max-width: 1100px) {
   .lb-layout {
@@ -1063,9 +1014,7 @@ body.leaderboard-page {
   }
 }
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* MOBILE */
 
 @media (max-width: 700px) {
   .lb-page {
@@ -1170,9 +1119,7 @@ body.leaderboard-page {
   }
 }
 
-/* =====================================================
-   SMALL MOBILE
-===================================================== */
+/* SMALL MOBILE */
 
 @media (max-width: 460px) {
   .lb-hero-actions {
@@ -1226,5 +1173,647 @@ body.leaderboard-page {
 
   .page-info {
     font-size: 10px;
+  }
+}
+
+.lb-view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #eadfce;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(11, 43, 79, 0.05);
+}
+
+.lb-view-tab {
+  min-height: 42px;
+  padding: 0 18px;
+  background: transparent;
+  color: #536175;
+  border: 0;
+  border-radius: 11px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.lb-view-tab:hover {
+  background: #fff7e8;
+  color: #0b2b4f;
+}
+
+.lb-view-tab.is-active {
+  background: #0b2b4f;
+  color: #fff;
+}
+
+.lb-view-tab:focus-visible,
+.lb-text-action:focus-visible {
+  outline: 3px solid rgba(246, 178, 59, 0.35);
+  outline-offset: 2px;
+}
+
+/* Filters now contain Game, Level, Date, Period and Ranking By. */
+.lb-controls {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.lb-scoring-field {
+  min-width: 0;
+  grid-column: span 2;
+}
+
+.lb-score-toggle {
+  width: 100%;
+  min-width: 0;
+}
+
+.lb-score-option span {
+  min-width: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+.lb-field select:disabled,
+.lb-field input[type="date"]:disabled {
+  background: #f4f1eb;
+  color: #8a8f97;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+/* TABLES */
+
+.leaderboard-table-header {
+  display: grid;
+  gap: 12px;
+  align-items: center;
+  padding: 15px 18px;
+  background: #fff;
+  color: #263755;
+  border-bottom: 1px solid #eee5d8;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.leaderboard-table-header-overall {
+  grid-template-columns:
+    70px
+    minmax(180px, 1.5fr)
+    minmax(105px, 0.8fr)
+    minmax(105px, 0.8fr)
+    minmax(95px, 0.7fr);
+}
+
+.leaderboard-table-header-game,
+.leaderboard-table-header-history {
+  grid-template-columns:
+    64px
+    minmax(165px, 1.35fr)
+    minmax(140px, 1.1fr)
+    minmax(105px, 0.85fr)
+    minmax(90px, 0.7fr)
+    minmax(90px, 0.7fr);
+}
+
+.leaderboard-table-header-history {
+  grid-template-columns:
+    minmax(160px, 1.25fr)
+    minmax(150px, 1.15fr)
+    minmax(105px, 0.8fr)
+    minmax(75px, 0.6fr)
+    minmax(80px, 0.6fr)
+    minmax(105px, 0.85fr);
+}
+
+#leaderboard .row {
+  min-height: 70px;
+  display: grid;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid #f0e9de;
+  transition: background 0.2s ease;
+}
+
+#leaderboard .row:last-child {
+  border-bottom: 0;
+}
+
+#leaderboard .row:hover {
+  background: #fffaf2;
+}
+
+#leaderboard .row-overall {
+  grid-template-columns:
+    70px
+    minmax(180px, 1.5fr)
+    minmax(105px, 0.8fr)
+    minmax(105px, 0.8fr)
+    minmax(95px, 0.7fr);
+}
+
+#leaderboard .row-game {
+  grid-template-columns:
+    64px
+    minmax(165px, 1.35fr)
+    minmax(140px, 1.1fr)
+    minmax(105px, 0.85fr)
+    minmax(90px, 0.7fr)
+    minmax(90px, 0.7fr);
+}
+
+#leaderboard .row-history {
+  grid-template-columns:
+    minmax(160px, 1.25fr)
+    minmax(150px, 1.15fr)
+    minmax(105px, 0.8fr)
+    minmax(75px, 0.6fr)
+    minmax(80px, 0.6fr)
+    minmax(105px, 0.85fr);
+}
+
+#leaderboard .rank {
+  color: #0b2b4f;
+  font-size: 17px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.player-cell {
+  min-width: 0;
+}
+
+.player-cell strong,
+.player-cell span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-cell strong {
+  color: #0b2b4f;
+  font-size: 14px;
+}
+
+.player-cell span {
+  margin-top: 4px;
+  color: #65738a;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.game-name,
+.level-name,
+.history-date,
+.time,
+.games-count,
+.result {
+  min-width: 0;
+  overflow: hidden;
+  color: #263755;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+}
+
+.game-name,
+.level-name,
+.history-date {
+  white-space: normal;
+  line-height: 1.35;
+}
+
+#leaderboard .score {
+  color: #b85c00;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.games-count,
+.time {
+  color: #536175;
+}
+
+.lb-result-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 9px;
+  background: #eef7ee;
+  color: #2f6f3e;
+  border: 1px solid #d4ead7;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.lb-empty-state {
+  padding: 42px 24px;
+  color: #65738a;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* SIDEBAR - MY RANK */
+
+.lb-side-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.lb-side-heading h3 {
+  margin: 0;
+}
+
+.lb-rank-icon {
+  flex-shrink: 0;
+  font-size: 28px;
+}
+
+.lb-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 2px 0 15px;
+  border-bottom: 1px solid #f0e9de;
+}
+
+.lb-avatar {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: #fff3cf;
+  color: #0b2b4f;
+  border: 1px solid #efd69c;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.lb-profile-copy {
+  min-width: 0;
+}
+
+.lb-profile-copy strong,
+.lb-profile-copy span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lb-profile-copy strong {
+  color: #0b2b4f;
+  font-size: 14px;
+}
+
+.lb-profile-copy span {
+  margin-top: 3px;
+  color: #65738a;
+  font-size: 11px;
+}
+
+.lb-my-rank-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.lb-my-rank-stats > div {
+  min-width: 0;
+  padding: 10px 6px;
+  background: #fffaf2;
+  border: 1px solid #f0e4d2;
+  border-radius: 11px;
+  text-align: center;
+}
+
+.lb-my-rank-stats strong,
+.lb-my-rank-stats span {
+  display: block;
+}
+
+.lb-my-rank-stats strong {
+  overflow: hidden;
+  color: #0b2b4f;
+  font-size: 18px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+}
+
+.lb-my-rank-stats span {
+  margin-top: 4px;
+  color: #65738a;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.lb-my-rank-hint {
+  margin: 12px 0 0;
+  color: #65738a;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.lb-signed-out-message,
+.lb-history-empty {
+  padding: 14px;
+  background: #fffaf2;
+  color: #65738a;
+  border: 1px dashed #dfd2c0;
+  border-radius: 11px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* SIDEBAR - RECENT HISTORY */
+
+.lb-text-action {
+  flex-shrink: 0;
+  padding: 4px 0;
+  background: transparent;
+  color: #315fd9;
+  border: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lb-history-preview-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-history-preview-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid #f0e9de;
+}
+
+.lb-history-preview-item:first-child {
+  border-top: 0;
+}
+
+.lb-history-preview-copy {
+  min-width: 0;
+}
+
+.lb-history-preview-copy strong,
+.lb-history-preview-copy span,
+.lb-history-preview-copy small {
+  display: block;
+}
+
+.lb-history-preview-copy strong {
+  overflow: hidden;
+  color: #0b2b4f;
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lb-history-preview-copy span {
+  margin-top: 2px;
+  color: #8b4b10;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.lb-history-preview-copy small {
+  margin-top: 3px;
+  color: #7a8491;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.lb-history-preview-score {
+  flex-shrink: 0;
+  color: #b85c00;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+/* ADMIN */
+
+.lb-admin-context {
+  margin: 0 0 4px !important;
+  color: #65738a !important;
+  font-size: 11px !important;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1180px) {
+  .lb-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lb-scoring-field {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 1100px) {
+  .lb-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 880px) {
+  .leaderboard-card {
+    overflow-x: auto;
+  }
+
+  .leaderboard-table-header-overall,
+  #leaderboard .row-overall {
+    min-width: 720px;
+  }
+
+  .leaderboard-table-header-game,
+  #leaderboard .row-game {
+    min-width: 840px;
+  }
+
+  .leaderboard-table-header-history,
+  #leaderboard .row-history {
+    min-width: 820px;
+  }
+}
+
+@media (max-width: 700px) {
+  .lb-view-tabs {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .lb-view-tab {
+    width: 100%;
+  }
+
+  .lb-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .lb-scoring-field {
+    grid-column: auto;
+  }
+
+  .lb-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-panel {
+    grid-column: auto;
+  }
+
+  .lb-my-rank-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .lb-my-rank-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .lb-my-rank-stats > div {
+    text-align: left;
+    padding: 10px 12px;
+  }
+
+  .lb-my-rank-stats strong,
+  .lb-my-rank-stats span {
+    display: inline;
+  }
+
+  .lb-my-rank-stats span {
+    margin-left: 6px;
+  }
+}
+
+/* ALL-GAMES GROUPED LEADERBOARD */
+
+.leaderboard-table-header-game-all,
+#leaderboard .row-game-all {
+  grid-template-columns:
+    92px
+    minmax(190px, 1.55fr)
+    minmax(105px, 0.75fr)
+    minmax(95px, 0.7fr);
+}
+
+.lb-game-group-heading {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 18px;
+  background: #fff8eb;
+  color: #0b2b4f;
+  border-top: 1px solid #eadfce;
+  border-bottom: 1px solid #eadfce;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+#leaderboard .lb-game-group-heading:first-child {
+  border-top: 0;
+}
+
+.lb-game-group-icon {
+  flex-shrink: 0;
+  font-size: 15px;
+}
+
+#leaderboard .row-game-all .score,
+#leaderboard .row-game-all .time {
+  text-align: left;
+}
+
+@media (max-width: 880px) {
+  .leaderboard-table-header-game-all,
+  #leaderboard .row-game-all,
+  .lb-game-group-heading {
+    min-width: 650px;
+  }
+}
+
+/* ALL-GAMES GROUPED LEADERBOARD */
+
+.leaderboard-table-header-game-all,
+#leaderboard .row-game-all {
+  grid-template-columns:
+    92px
+    minmax(190px, 1.55fr)
+    minmax(105px, 0.75fr)
+    minmax(95px, 0.7fr);
+}
+
+.lb-game-group-heading {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 18px;
+  background: #fff8eb;
+  color: #0b2b4f;
+  border-top: 1px solid #eadfce;
+  border-bottom: 1px solid #eadfce;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+#leaderboard .lb-game-group-heading:first-child {
+  border-top: 0;
+}
+
+.lb-game-group-icon {
+  flex-shrink: 0;
+  font-size: 15px;
+}
+
+#leaderboard .row-game-all .score,
+#leaderboard .row-game-all .time {
+  text-align: left;
+}
+
+@media (max-width: 880px) {
+  .leaderboard-table-header-game-all,
+  #leaderboard .row-game-all,
+  .lb-game-group-heading {
+    min-width: 650px;
   }
 }

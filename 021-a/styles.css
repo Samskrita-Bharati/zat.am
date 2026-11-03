@@ -1,3 +1,37 @@
+.mode-ui {
+	padding: 12px;
+	text-align: center;
+}
+
+.mode-controls {
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 0;
+	overflow-x: auto;
+}
+
+.mode-status {
+	flex: 0 0 auto;
+	min-width: 0;
+	width: fit-content;
+	max-width: 100%;
+	margin: 0;
+	white-space: nowrap;
+}
+
+.mode-controls .zatam-game-btn {
+	flex: 0 0 auto;
+	width: auto;
+}
+
+.mode-remaining {
+	margin: 8px 0;
+}
+
 .anveshan-shell {
 	--zatam-content-width: 1180px;
 }
@@ -15,9 +49,29 @@
 }
 
 .anveshan-stats {
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	max-width: 620px;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	max-width: 860px;
 	margin: 0 auto 14px;
+}
+
+.anveshan-set-stat {
+	min-width: 0;
+}
+
+#character-set-select {
+	width: 100%;
+	min-width: 0;
+	padding: 6px 28px 6px 10px;
+	color: var(--zatam-heading);
+	font: 700 1rem/1.2 var(--zatam-font);
+	background: var(--zatam-white);
+	border: 1px solid var(--zatam-border);
+	border-radius: var(--zatam-radius-sm);
+}
+
+#character-set-select:focus-visible {
+	outline: 3px solid var(--zatam-blue);
+	outline-offset: 2px;
 }
 
 .anveshan-play-area {
@@ -87,6 +141,10 @@
 		gap: 8px;
 	}
 
+	.anveshan-stats {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
 	.mode-button {
 		min-width: 0;
 		width: 100%;
@@ -100,5 +158,28 @@
 
 	#game-frame {
 		height: max(68vh, 540px);
+	}
+}
+
+@media (max-width: 600px) {
+	.mode-controls {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		width: 100%;
+		align-items: stretch;
+		overflow: visible;
+	}
+
+	.mode-controls button {
+		width: 100%;
+	}
+
+	.mode-status {
+		grid-column: 1 / -1;
+		grid-row: 2;
+		width: 100%;
+		justify-self: stretch;
+		box-sizing: border-box;
+		white-space: normal;
 	}
 }

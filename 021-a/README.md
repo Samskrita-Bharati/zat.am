@@ -15,8 +15,8 @@ round in the current mode. The timer starts on the first symbol click.
 
 ## Scoring
 
-- Each correct find earns 10 points.
-- Each incorrect click deducts 5 points.
+- Each correct find earns 5 points.
+- Each incorrect click deducts 2 points.
 - The completion bonus is +20 under 1 minute, +10 from 1 to under 2 minutes,
   and 0 at 2 minutes or longer.
 - The final score is limited to the configured minimum and maximum (currently
@@ -36,7 +36,7 @@ save a leaderboard entry.
   dialog.
 - `app.js` — Loads modes, updates status, calculates scores, and submits
   completed scores.
-- `styles.css` — Entry page and responsive layout styles.
+- `styles.css` — Entry page, responsive layout, and shared mode controls.
 - `score-config.js` — Shared scoring configuration for all modes.
 - `data.json` — Symbol sets used in the game.
 - `1-li/index.html`, `2-ci/index.html`, `3-he/index.html` — Lines, Circles,

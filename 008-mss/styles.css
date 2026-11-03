@@ -1,0 +1,331 @@
+:root {
+  --mine-cell: #dfe8f2;
+  --mine-cell-hover: #cfddec;
+  --mine-cell-open: #fffdf8;
+  --mine-board: #0b2b4f;
+}
+
+body.zatam-minesweeper-game {
+  min-width: 0;
+  font-family: var(--zatam-font);
+}
+
+.minesweeper-page {
+  width: min(calc(100% - 1.5rem), 960px);
+}
+
+.minesweeper-header .mangalam {
+  margin: 0 0 0.35rem;
+  color: var(--zatam-coral);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.minesweeper-instructions {
+  text-align: left;
+}
+
+.minesweeper-instructions summary {
+  color: var(--zatam-heading);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.minesweeper-instructions p {
+  margin-top: 0.75rem;
+}
+
+.minesweeper-stats .zatam-game-stat {
+  display: grid;
+  place-items: center;
+}
+
+.minesweeper-stat-note {
+  display: block;
+  margin-top: 0.55rem;
+  color: var(--zatam-muted);
+  font-size: 0.78rem;
+}
+
+.minesweeper-layout {
+  display: grid;
+  grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 1.75rem);
+  align-items: start;
+}
+
+.minesweeper-controls {
+  position: sticky;
+  top: calc(var(--zatam-navbar-height, 76px) + 1rem);
+}
+
+.control-copy {
+  margin: 0 0 1rem;
+  color: var(--zatam-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.control-copy--small {
+  margin: 1rem 0 0;
+  font-size: 0.8rem;
+}
+
+.size-options {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.size-button {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.size-button span {
+  color: var(--zatam-muted);
+  font-size: 0.8rem;
+}
+
+.size-button[aria-pressed="true"] {
+  color: var(--zatam-white);
+  background: var(--zatam-navy);
+  border-color: var(--zatam-navy);
+}
+
+.size-button[aria-pressed="true"] span {
+  color: #dce9ff;
+}
+
+.minesweeper-play-area {
+  margin-top: 0;
+}
+
+.board-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.board-heading h2 {
+  margin: 0.25rem 0 0;
+  color: var(--zatam-heading);
+  font-size: 1.25rem;
+}
+
+.board-kicker {
+  color: var(--zatam-coral);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mine-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.42rem 0.65rem;
+  color: var(--zatam-navy);
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mine-key-icon {
+  color: var(--zatam-coral);
+}
+
+.mark-mode-button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.mark-mode-button:hover,
+.mark-mode-button:focus-visible {
+  border-color: var(--zatam-gold);
+  color: var(--zatam-navy);
+}
+
+.mark-mode-button[aria-pressed="true"] {
+  border-color: var(--zatam-gold);
+  background: #fff0cf;
+  color: var(--zatam-navy);
+}
+
+.board-wrap {
+  display: grid;
+  width: min(100%, 30rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  overflow: hidden;
+  padding: clamp(0.4rem, 2vw, 0.7rem);
+  background: var(--mine-board);
+  border-radius: var(--zatam-radius);
+  box-shadow: inset 0 0 0 3px rgb(255 255 255 / 10%);
+  place-items: center;
+}
+
+#grid {
+  --board-size: 10;
+  display: grid;
+  grid-template-columns: repeat(var(--board-size), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--board-size), minmax(0, 1fr));
+  gap: clamp(2px, 0.6vw, 4px);
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+}
+
+#grid .mine-cell {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  padding: 0;
+  color: var(--zatam-heading);
+  background: var(--mine-cell);
+  border: 0;
+  border-radius: clamp(3px, 0.7vw, 6px);
+  box-shadow: inset 0 -2px 0 rgb(9 38 74 / 18%);
+  font-family: var(--zatam-font);
+  font-size: clamp(0.85rem, 3vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  appearance: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+#grid .mine-cell:hover:not(.clicked):not(.marked) {
+  background: var(--mine-cell-hover);
+  transform: translateY(-1px);
+}
+
+#grid .mine-cell:focus-visible {
+  outline: 3px solid var(--zatam-gold);
+  outline-offset: 2px;
+}
+
+#grid .mine-cell.clicked {
+  color: var(--zatam-heading);
+  background: var(--mine-cell-open);
+  box-shadow: inset 0 0 0 1px rgb(11 43 79 / 9%);
+  cursor: default;
+}
+
+#grid .mine-cell[data-nearby="1"] { color: #2764c8; }
+#grid .mine-cell[data-nearby="2"] { color: #21804b; }
+#grid .mine-cell[data-nearby="3"] { color: #c2413b; }
+#grid .mine-cell[data-nearby="4"] { color: #7142b5; }
+
+#grid .mine-cell.marked {
+  color: var(--zatam-white);
+  background: var(--zatam-coral);
+  box-shadow: inset 0 -2px 0 rgb(122 34 24 / 25%);
+}
+
+#grid .mine-cell.mine {
+  color: var(--zatam-white);
+  background: #c2413b;
+  box-shadow: inset 0 -2px 0 rgb(122 34 24 / 25%);
+}
+
+#grid.is-finished .mine-cell:not(.mine):not(.clicked) {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.minesweeper-play-area .zatam-game-status {
+  margin: 1rem 0 0;
+}
+
+.minesweeper-actions {
+  margin-top: 1.5rem;
+}
+
+.game-footer {
+  margin-top: 1.4rem;
+  color: var(--zatam-muted);
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+.game-footer a {
+  color: var(--zatam-navy);
+}
+
+@media (max-width: 720px) {
+  .minesweeper-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .minesweeper-controls {
+    position: static;
+  }
+
+  .size-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .minesweeper-page {
+    width: min(calc(100% - 1rem), 960px);
+  }
+
+  .minesweeper-header .zatam-game-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .minesweeper-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .minesweeper-stats .zatam-game-stat {
+    padding: 0.7rem 0.35rem;
+  }
+
+  .minesweeper-stats .zatam-game-stat-label {
+    font-size: 0.62rem;
+    letter-spacing: 0;
+  }
+
+  .minesweeper-stats .zatam-game-stat-value {
+    font-size: 1rem;
+  }
+
+  .minesweeper-stat-note {
+    display: none;
+  }
+
+  .zatam-game-play-area {
+    padding: 0.8rem;
+  }
+
+  .board-heading h2 {
+    font-size: 1.08rem;
+  }
+
+  .mine-key {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.72rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #grid .mine-cell {
+    transition: none;
+  }
+
+  #grid .mine-cell:hover:not(.clicked):not(.marked) {
+    transform: none;
+  }
+}

@@ -2,6 +2,7 @@
   <title>अन्वेषणम् — 2-ci</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../../shared/game-theme.css">
+<link rel="stylesheet" href="../styles.css">
 <script src="../data.json"></script>
 <style>
 html, body {
@@ -27,11 +28,6 @@ fill:var(--zatam-white);
 font-size:1.35em;
 font-weight:700;
 }
-.mode-ui { padding: 12px; text-align: center; }
-.mode-controls { flex-wrap: nowrap; flex-direction: row; align-items: center; gap: 12px; margin-top: 0; overflow-x: auto; justify-content: center; }
-.mode-status { flex: 0 0 auto; min-width: 0; width: fit-content; max-width: 100%; margin: 0; white-space: nowrap; }
-.mode-controls .zatam-game-btn { flex: 0 0 auto; width: auto; }
-.mode-remaining { margin: 8px 0; }
 </style>
 </head>
 <body>
@@ -82,9 +78,9 @@ let h;
 let counts=[];
 var minvalue = Infinity; 
 var val="";
-for (var i=0;i<nums.length;i++) 
-  for (var j=0;j<nums[i].length;j++)
-     counts[nums[i][j]]=0;
+nums[set].forEach((character) => {
+  counts[character] = 0;
+});
 
 var tclick=function(evt) { 
 if(gameCompleted)return;

@@ -4,54 +4,53 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"
+      content="width=device-width, initial-scale=1"
     />
-    <title>t-rex runner in संस्कृतम्</title>
+    <title>संस्कृत T-Rex Runner</title>
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../shared/game-theme.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans"
       rel="stylesheet"
     />
-    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script src="score-config.js"></script>
     <script src="index.js"></script>
   </head>
 
-  <body
-    id="t"
-    class="offline"
-<<<<<<< HEAD
-    onload="
-      zatamhs = localStorage['trexsamszatamhs']
-        ? localStorage['trexsamszatamhs']
-        : 0;
-      alert(
-        'Your HighScore is : ' +
-          Sanscript.t(String(zatamhs), 'iast', 'devanagari'),
-      );
-    " data-page="games">
-
-    <!-- Shared Zat.am Navbar -->
+  <body id="t" class="offline zatam-themed-game zatam-game-page" data-page="games">
     <div id="navbar-mount"></div>
-
-    <div id="messageBox" class="sendmessage">
-      <h1
-        style="
-          text-align: center;
-          font-family: &quot;Open Sans&quot;, sans-serif;
-        "
-      >
-=======
-    onload="zatamhs=(localStorage['trexsamszatamhs'])?localStorage['trexsamszatamhs']:0;alert('Your HighScore is : ' + Sanscript.t(String(zatamhs),'iast','devanagari'));"
-  >
-    <!-- Auth Middleware-->
-    <script type="module" src="/auth/api/middleware.js"></script>
-    <div id="messageBox" class="sendmessage">
-      <h1 style="text-align: center; font-family: 'Open Sans', sans-serif">
->>>>>>> patrick/Patrick-auth-merge
-        कृपया Space नोदयतु
-      </h1>
-      <div class="niokbutton" onclick="okbuttonsend()"></div>
-    </div>
+    <main class="zatam-game-shell">
+      <div id="game-over-modal" class="zatam-game-modal-backdrop trex-game-over-modal" role="presentation" hidden>
+        <section class="zatam-game-result trex-game-over-card" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+          <h2 id="game-over-title" class="zatam-game-result-title">Run complete</h2>
+          <p class="zatam-game-result-message">You survived <strong id="result-time">00:00</strong>.</p>
+          <p class="zatam-game-result-score"><strong id="result-score">0</strong> points</p>
+          <div id="score-save-status" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite">Saving your score...</div>
+          <div class="zatam-game-actions">
+            <button id="play-again" class="zatam-game-btn zatam-game-btn-primary" type="button">Play again</button>
+          </div>
+        </section>
+      </div>
+      <header class="zatam-game-header">
+        <span class="zatam-game-eyebrow">Arcade Game</span>
+        <h1 class="zatam-game-title">त्रयः धावकः</h1>
+        <p class="zatam-game-subtitle">Run, jump, and duck to set a new high score.</p>
+      </header>
+      <section class="zatam-game-instructions" aria-label="How to play">
+        <p>Press Space or ↑ to jump, ↓ to duck, and Enter to restart.</p>
+        <p>On touch screens, tap the game area to jump or press and hold to duck.</p>
+      </section>
+      <section class="zatam-game-stats trex-stats" aria-label="Game stats">
+        <div class="zatam-game-stat zatam-game-score">
+          <span class="zatam-game-stat-label">Score</span>
+          <span class="zatam-game-stat-value" id="game-score">0</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">Time</span>
+          <span class="zatam-game-stat-value" id="game-time">00:00</span>
+        </div>
+      </section>
+      <section class="zatam-game-play-area trex-play-area" aria-label="T-Rex runner game">
     <div id="main-frame-error" class="interstitial-wrapper">
       <div id="main-content">
         <div class="icon icon-offline" alt=""></div>
@@ -81,32 +80,16 @@
         </template>
       </div>
     </div>
-    <p
-      id="sendingText"
-      style="
-        text-align: center;
-        font-family: Arial, Helvetica, sans-serif;
-        display: none;
-      "
-    >
-      Saving highscore...
-    </p>
-  
-
-    <!-- Shared Zat.am Navbar -->
+      </section>
+    </main>
     <script
       type="module"
       src="../js/navbar-loader.js"
     ></script>
-</body>
+    <script type="module">
+      import { initGameScore } from "../js/game-score.js";
 
-  <script>
-    document.onkeydown = function (evt) {
-      evt = evt || window.event;
-      if (evt.keyCode == 32) {
-        var box = document.getElementById("messageBox");
-        box.style.visibility = "hidden";
-      }
-    };
-  </script>
+      initGameScore({ gameId: "043-trs", gameName: "त्रयः धावकः" });
+    </script>
+  </body>
 </html>

@@ -3,6 +3,7 @@
     <title>अन्वेषणम् — 1-li</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../../shared/game-theme.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <script src="../data.json"></script>
     <style>
       html,
@@ -20,11 +21,6 @@
       text {
         cursor: pointer;
       }
-      .mode-ui { padding: 12px; text-align: center; }
-      .mode-controls { flex-wrap: nowrap; flex-direction: row; align-items: center; gap: 12px; margin-top: 0; overflow-x: auto; justify-content: center; }
-      .mode-status { flex: 0 0 auto; min-width: 0; width: fit-content; max-width: 100%; margin: 0; white-space: nowrap; }
-      .mode-controls .zatam-game-btn { flex: 0 0 auto; width: auto; }
-      .mode-remaining { margin: 8px 0; }
     </style>
   </head>
   <body>
@@ -57,8 +53,7 @@
 */
       const urlParams = new URLSearchParams(window.location.search);
       var set = urlParams.get("s");
-      if (!set || isNaN(set) || set > nums.length) set = 0;
-      ("use strict");
+      if (!set || isNaN(set) || set >= nums.length) set = 0;
       var minvalue = Infinity;
       var val = "";
       var found = 0;
@@ -98,8 +93,9 @@
       }
       let texts = [];
       let counts = [];
-      for (i = 0; i < nums.length; i++)
-        for (j = 0; j < nums[i].length; j++) counts[nums[i][j]] = 0;
+      nums[set].forEach((character) => {
+        counts[character] = 0;
+      });
       class Vector {
         constructor(x, y) {
           this.x = x;
@@ -431,9 +427,7 @@
 
       function setup() {
         svg = document.querySelector("svg");
-        //document.addEventListener("click", draw);
         document.addEventListener("keydown", onKeyDown);
-        //window.addEventListener("resize", onResize);
         onResize();
       }
 
@@ -472,8 +466,6 @@
             if (txtnods[i].getAttribute("stroke") != correctStroke) {
               txtnods[i].setAttribute("stroke", getThemeColor("danger"));
               txtnods[i].setAttribute("stroke-width", "2.5");
-              //txtnods[i].classList.add("blinkclass");
-              //txtnods[i].setAttribute("stroke","tomato");
             }
         }
       }

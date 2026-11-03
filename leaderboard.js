@@ -6,382 +6,669 @@ import {
   writeBatch,
   setDoc,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
 import { auth, db } from "./auth/api/firebase-config.js";
-import { checkFetchRequirements, getRawData } from "./leaderboard-utils.js";
 
-// local start, end, and game variables for comparing with newly selected start, end and game
-// used for detecting if leaderboard needs to fetch new db documents or not
-let startDate;
-let endDate;
-let currentGame;
+import {
+  getLeaderboardGames,
+  getRawData,
+  migrateLegacyBp26Labels,
+} from "./leaderboard-utils.js";
 
-// filters
+// =====================================================
+// PAGE STATE
+// =====================================================
+
+const state = {
+  activeView: "overall",
+  currentUser: null,
+  currentRawData: [],
+  allTimeGlobalHistory: [],
+  leaderboardData: [],
+  currentPage: 1,
+  perPage: 10,
+  games: [],
+  gameMap: new Map(),
+  profileCache: new Map(),
+  levelOptionsCache: new Map(),
+  legacyBp26LabelsMigrated: false,
+};
+
+// =====================================================
+// ELEMENTS
+// =====================================================
+
 const gameSelect = document.getElementById("gameSelect");
+const levelSelect = document.getElementById("levelSelect");
 const timeSelect = document.getElementById("timeFilter");
 const seasonDate = document.getElementById("seasonDate");
+const scoringField = document.getElementById("scoringField");
+const filterTitle = document.getElementById("filterTitle");
+const filterRangeDisplay = document.getElementById("filterRangeDisplay");
+
+const rankingSection = document.getElementById("rankingSection");
+const rankingTitle = document.getElementById("rankingTitle");
+
+const leaderboardTableHeader = document.getElementById(
+  "leaderboardTableHeader",
+);
+const leaderboard = document.getElementById("leaderboard");
+const leaderboardEmpty = document.getElementById("leaderboardEmpty");
+const pagination = document.getElementById("pagination");
+
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const pageNum = document.getElementById("pageNum");
+const totalPages = document.getElementById("totalPages");
+
+const myRankSignedOut = document.getElementById("myRankSignedOut");
+const myRankContent = document.getElementById("myRankContent");
+const myRankAvatar = document.getElementById("myRankAvatar");
+const myRankName = document.getElementById("myRankName");
+const myRankEmail = document.getElementById("myRankEmail");
+const myRankPosition = document.getElementById("myRankPosition");
+const myRankScore = document.getElementById("myRankScore");
+const myRankScoreLabel = document.getElementById("myRankScoreLabel");
+const myRankContext = document.getElementById("myRankContext");
+const myRankContextLabel = document.getElementById("myRankContextLabel");
+const myRankHint = document.getElementById("myRankHint");
+
+const recentHistorySignedOut = document.getElementById(
+  "recentHistorySignedOut",
+);
+const recentHistoryList = document.getElementById("recentHistoryList");
+const viewAllHistoryBtn = document.getElementById("viewAllHistoryBtn");
+
+const adminPanel = document.getElementById("adminPanel");
+const adminContext = document.getElementById("adminContext");
+const statusToggle = document.getElementById("statusToggle");
+const resetBtn = document.getElementById("resetBtn");
+const resetHint = document.getElementById("resetHint");
+
+// =====================================================
+// GENERAL HELPERS
+// =====================================================
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
 function getScoringSystem() {
-  return document.querySelector('input[name="scoringSystem"]:checked')?.value;
+  return (
+    document.querySelector('input[name="scoringSystem"]:checked')?.value ||
+    "totalScore"
+  );
 }
 
-// Get the date range selected from HTML
-function getFilterRange(mode, pickedDate) {
-  const base = pickedDate ? new Date(pickedDate + "T00:00:00") : new Date();
-  const pickedStart = new Date(base).setHours(0, 0, 0, 0);
-
-  if (mode === "allDates") {
-    console.log(
-      "%c Range Filtered: ALL DATES",
-      "color: blue; font-weight: bold;",
-    );
-    return { newStart: 0, newEnd: Date.now() };
-  }
-
-  let newStart = 0;
-  let newEnd = Infinity;
-
-  switch (mode) {
-    case "daily":
-      newStart = pickedStart;
-      newEnd = pickedStart + 86400000 - 1; // 24小时
-      break;
-    case "weekly":
-      // Get the day in week of selected day
-      const day = base.getDay();
-
-      // Get the monday date of selected week
-      const sunday = new Date(base);
-      sunday.setDate(base.getDate() - day);
-      newStart = sunday.setHours(0, 0, 0, 0);
-
-      // Get the sunday date of selected week
-      const saturday = new Date(sunday);
-      saturday.setDate(sunday.getDate() + 6);
-      newEnd = saturday.setHours(23, 59, 59, 999);
-      break;
-    case "monthly":
-      // The 1st day to the last daye of selected month
-      newStart = new Date(base.getFullYear(), base.getMonth(), 1).getTime();
-      newEnd =
-        new Date(base.getFullYear(), base.getMonth() + 1, 1).getTime() - 1;
-      break;
-  }
-
-  const sDate = new Date(newStart).toLocaleString();
-  const eDate = new Date(newEnd).toLocaleString();
-
-  console.log(
-    `%c Range Filtered [${mode}]:`,
-    "color: green; font-weight: bold;",
-    `\nStart: ${sDate}\nEnd:   ${eDate}`,
-  );
-  return { newStart, newEnd };
-}
-
-// fetch all game histories for selected game and the current month
-async function fetchGameHistories(selectedGame) {
-  let fetchNeeded = true; //true by default
-  let rawData;
-  const { newStart, newEnd } = getFilterRange(
-    timeSelect.value,
-    seasonDate.value,
-  );
-  fetchNeeded = checkFetchRequirements(
-    startDate,
-    endDate,
-    newStart,
-    newEnd,
-    currentGame,
-    selectedGame,
-  );
-  console.log("document fetch needed?", fetchNeeded);
-  startDate = newStart;
-  endDate = newEnd;
-  currentGame = selectedGame;
-  if (fetchNeeded) {
-    rawData = await getRawData(newStart, newEnd, selectedGame);
-    return rawData;
-  }
-  return;
-}
-
-async function getUserProfile(uid) {
-  const userDocRef = doc(db, "users", uid, "public", "profile");
-  const userSnap = await getDoc(userDocRef);
-
-  if (userSnap.exists()) {
-    const data = userSnap.data();
-    const location = (data.location || "").split(/[，,]/);
-    return {
-      name: data.name || "Unknown Player",
-      location: location[location.length - 1].trim() || "Unknown",
-    };
-  }
-  return { name: "Unknown Player", location: "Unknown" };
+function formatNumberOrDash(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number.toLocaleString() : "—";
 }
 
 function formatSeconds(totalSeconds) {
-  const seconds = Math.floor(totalSeconds);
+  const safe = Math.max(0, Number(totalSeconds) || 0);
+  const seconds = Math.floor(safe);
 
   const hrs = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
 
-  return `${hrs}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  if (hrs > 0) {
+    return `${hrs}:${String(mins).padStart(2, "0")}:${String(secs).padStart(
+      2,
+      "0",
+    )}`;
+  }
+
+  return `${mins}:${String(secs).padStart(2, "0")}`;
 }
 
-// generates usable leaderboard data from game histories
-async function generateLeaderboardData(gameHistories) {
-  const scoringSystem = getScoringSystem();
-  const start = startDate;
-  const end = endDate;
-  const selectedGame = gameSelect.value || currentGame || "Global";
+function formatDateTime(timestamp) {
+  if (!Number.isFinite(Number(timestamp))) {
+    return "—";
+  }
 
-  /*
-  =====================================================
-  PLAYER DATA
-  =====================================================
+  return new Date(Number(timestamp)).toLocaleString([], {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
 
-  Individual game:
-  - Keep the player's BEST attempt only.
+function maskEmail(email) {
+  const value = String(email || "").trim();
 
-  Global:
-  - Keep the player's BEST attempt from EACH game.
-  - Add those best scores together.
+  if (!value.includes("@")) {
+    return value || "Signed in";
+  }
 
-  Example:
+  const [local, domain] = value.split("@");
 
-  Memory best = 90
-  Sudoku best = 85
-  Typing best = 100
+  if (!local) {
+    return `***@${domain}`;
+  }
 
-  Global score = 275
+  if (local.length === 1) {
+    return `${local}***@${domain}`;
+  }
 
-  Replaying Memory 20 times does NOT add 20 scores.
-  =====================================================
-  */
+  return `${local[0]}***${local.at(-1)}@${domain}`;
+}
 
-  const players = {};
+function getInitials(name) {
+  const parts = String(name || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2);
 
-  gameHistories.forEach(({ score, timePlayed, timestamp, uid, gameId }) => {
-    /*
-      -----------------------------------------------
-      DATE FILTER
-      -----------------------------------------------
-      */
+  if (parts.length === 0) return "?";
 
-    if (!timestamp || timestamp < start || timestamp > end) {
-      return;
+  return parts.map((part) => part[0]?.toUpperCase() || "").join("");
+}
+
+function getGameName(record) {
+  if (record?.gameName) {
+    return record.gameName;
+  }
+
+  return state.gameMap.get(record?.gameId) || record?.gameId || "Unknown Game";
+}
+
+function hasLevel(record) {
+  return !
+    (record?.levelId === null ||
+      record?.levelId === undefined ||
+      record?.levelId === "") ||
+    Boolean(record?.levelName);
+}
+
+function getLevelKey(record) {
+  return record?.levelId === null ||
+    record?.levelId === undefined ||
+    record?.levelId === ""
+    ? "__no_level__"
+    : String(record.levelId);
+}
+
+function getLevelDisplay(record) {
+  if (record?.levelName) {
+    return record.levelName;
+  }
+
+  if (
+    record?.levelId === null ||
+    record?.levelId === undefined ||
+    record?.levelId === ""
+  ) {
+    return "—";
+  }
+
+  return `Level ${record.levelId}`;
+}
+
+function isBetterAttempt(candidate, current) {
+  if (!current) return true;
+
+  if (candidate.score !== current.score) {
+    return candidate.score > current.score;
+  }
+
+  if (candidate.timePlayed !== current.timePlayed) {
+    return candidate.timePlayed < current.timePlayed;
+  }
+
+  return candidate.timestamp > current.timestamp;
+}
+
+function getFilterRange(mode, pickedDate) {
+  const base = pickedDate ? new Date(`${pickedDate}T00:00:00`) : new Date();
+  const pickedStart = new Date(base).setHours(0, 0, 0, 0);
+
+  if (mode === "allDates") {
+    return {
+      newStart: 0,
+      newEnd: Date.now(),
+    };
+  }
+
+  let newStart = 0;
+  let newEnd = Date.now();
+
+  switch (mode) {
+    case "daily": {
+      newStart = pickedStart;
+      newEnd = pickedStart + 86400000 - 1;
+      break;
     }
 
-    if (!uid) {
-      return;
+    case "weekly": {
+      const day = base.getDay();
+      const sunday = new Date(base);
+      sunday.setDate(base.getDate() - day);
+      newStart = sunday.setHours(0, 0, 0, 0);
+
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+      newEnd = saturday.setHours(23, 59, 59, 999);
+      break;
     }
 
-    const numericScore = Number(score);
-    const numericTime = Number(timePlayed) || 0;
-
-    if (!Number.isFinite(numericScore)) {
-      return;
+    case "monthly": {
+      newStart = new Date(base.getFullYear(), base.getMonth(), 1).getTime();
+      newEnd =
+        new Date(base.getFullYear(), base.getMonth() + 1, 1).getTime() - 1;
+      break;
     }
+  }
 
-    /*
-      -----------------------------------------------
-      CREATE PLAYER
-      -----------------------------------------------
-      */
+  return { newStart, newEnd };
+}
 
-    if (!players[uid]) {
-      players[uid] = {
-        uid,
+function updateRangeDisplay() {
+  if (timeSelect.value === "allDates") {
+    filterRangeDisplay.textContent = "Showing: All Time Records";
+    return;
+  }
 
-        totalScore: 0,
+  const { newStart, newEnd } = getFilterRange(
+    timeSelect.value,
+    seasonDate.value,
+  );
 
-        /*
-          Keep total time across attempts because
-          "Time Played" is a separate leaderboard mode.
-          */
+  filterRangeDisplay.textContent = `Showing: ${new Date(
+    newStart,
+  ).toLocaleDateString()} — ${new Date(newEnd).toLocaleDateString()}`;
+}
 
-        totalTimePlayed: 0,
+function filterRawDataByRange(rawData) {
+  const { newStart, newEnd } = getFilterRange(
+    timeSelect.value,
+    seasonDate.value,
+  );
 
-        /*
-          Used as a score tie-breaker.
-          */
+  return rawData.filter(
+    (record) =>
+      Number.isFinite(record.timestamp) &&
+      record.timestamp >= newStart &&
+      record.timestamp <= newEnd,
+  );
+}
 
-        bestTimePlayed: 0,
+// =====================================================
+// USER PROFILE
+// =====================================================
 
-        latestTimestamp: timestamp,
+async function getUserProfile(uid) {
+  if (!uid) {
+    return {
+      name: "Unknown Player",
+      location: "Unknown",
+    };
+  }
 
-        /*
-          Internal object used while calculating scores.
-          */
+  if (state.profileCache.has(uid)) {
+    return state.profileCache.get(uid);
+  }
 
-        bestByGame: {},
+  const userDocRef = doc(db, "users", uid, "public", "profile");
+  const userSnap = await getDoc(userDocRef);
+
+  let profile = {
+    name: "Unknown Player",
+    location: "Unknown",
+  };
+
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    const locationParts = String(data.location || "").split(/[，,]/);
+
+    profile = {
+      name: data.name || "Unknown Player",
+      location:
+        locationParts[locationParts.length - 1]?.trim() || "Unknown",
+    };
+  }
+
+  state.profileCache.set(uid, profile);
+
+  return profile;
+}
+
+async function attachProfiles(rows) {
+  return Promise.all(
+    rows.map(async (row) => {
+      const profile = await getUserProfile(row.uid);
+
+      return {
+        ...row,
+        username: profile.name,
+        location: profile.location,
       };
-    }
+    }),
+  );
+}
 
-    const player = players[uid];
+// =====================================================
+// GAME + LEVEL FILTERS
+// =====================================================
 
-    player.totalTimePlayed += numericTime;
+async function loadGameOptions() {
+  state.games = await getLeaderboardGames();
+  state.gameMap = new Map(state.games.map((game) => [game.id, game.name]));
 
-    if (timestamp > player.latestTimestamp) {
-      player.latestTimestamp = timestamp;
-    }
+  const sortByName = (a, b) =>
+    a.name.localeCompare(b.name, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
 
-    /*
-      =====================================================
-      GLOBAL LEADERBOARD
-      =====================================================
+  const bp26Games = state.games
+    .filter((game) => game.id.startsWith("bp26-"))
+    .sort(sortByName);
 
-      Only new records with a real gameId can be safely
-      included.
+  const zatamGames = state.games
+    .filter((game) => !game.id.startsWith("bp26-"))
+    .sort(sortByName);
 
-      Old Global BP26 records did not store which game
-      generated the score, so "legacy" records are not
-      used for the new normalized Global score.
-      =====================================================
-      */
+  const renderOption = (game, { prefixBp26 = false } = {}) => {
+    const label = prefixBp26 ? `BP26 — ${game.name}` : game.name;
 
-    if (selectedGame === "Global") {
-      if (!gameId || gameId === "legacy") {
-        return;
-      }
+    return `<option value="${escapeHtml(game.id)}">${escapeHtml(label)}</option>`;
+  };
 
-      const previousBest = player.bestByGame[gameId];
+  const optionGroups = ['<option value="all">All Games</option>'];
 
-      /*
-        Better score wins.
+  if (bp26Games.length > 0) {
+    optionGroups.push(`
+      <optgroup label="BP26 Competition">
+        ${bp26Games
+          .map((game) => renderOption(game, { prefixBp26: true }))
+          .join("")}
+      </optgroup>
+    `);
+  }
 
-        If the score is tied, the faster completed
-        attempt becomes the player's best attempt.
-        */
+  if (zatamGames.length > 0) {
+    optionGroups.push(`
+      <optgroup label="Zat.am Games">
+        ${zatamGames.map((game) => renderOption(game)).join("")}
+      </optgroup>
+    `);
+  }
 
-      if (
-        !previousBest ||
-        numericScore > previousBest.score ||
-        (numericScore === previousBest.score &&
-          numericTime < previousBest.timePlayed)
-      ) {
-        player.bestByGame[gameId] = {
-          score: numericScore,
-          timePlayed: numericTime,
-          timestamp,
-        };
-      }
+  gameSelect.innerHTML = optionGroups.join("");
+}
 
+async function getKnownLevelsForGame(gameId) {
+  if (!gameId || gameId === "all") {
+    return [];
+  }
+
+  if (state.levelOptionsCache.has(gameId)) {
+    return state.levelOptionsCache.get(gameId);
+  }
+
+  const attempts = await getRawData(0, Date.now(), gameId);
+  const levels = new Map();
+
+  attempts.forEach((record) => {
+    const key = getLevelKey(record);
+
+    if (key === "__no_level__") {
       return;
     }
 
-    /*
-      =====================================================
-      INDIVIDUAL GAME LEADERBOARD
-      =====================================================
-
-      We already know which game was selected, so old
-      per-game history records are still supported.
-      =====================================================
-      */
-
-    const previousBest = player.bestByGame[selectedGame];
-
-    if (
-      !previousBest ||
-      numericScore > previousBest.score ||
-      (numericScore === previousBest.score &&
-        numericTime < previousBest.timePlayed)
-    ) {
-      player.bestByGame[selectedGame] = {
-        score: numericScore,
-        timePlayed: numericTime,
-        timestamp,
-      };
+    if (!levels.has(key)) {
+      levels.set(key, {
+        id: String(record.levelId),
+        name: getLevelDisplay(record),
+      });
     }
   });
 
-  /*
-  =====================================================
-  BUILD FINAL PLAYER RESULTS
-  =====================================================
-  */
+  const sortedLevels = [...levels.values()].sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    }),
+  );
 
-  let leaderboardData = Object.values(players)
+  state.levelOptionsCache.set(gameId, sortedLevels);
+
+  return sortedLevels;
+}
+
+async function refreshLevelOptions() {
+  const selectedGame = gameSelect.value;
+
+  if (!selectedGame || selectedGame === "all") {
+    levelSelect.innerHTML = '<option value="all">All Levels</option>';
+    levelSelect.value = "all";
+    levelSelect.disabled = true;
+    return;
+  }
+
+  const levels = await getKnownLevelsForGame(selectedGame);
+
+  if (levels.length === 0) {
+    levelSelect.innerHTML = '<option value="all">No Levels</option>';
+    levelSelect.value = "all";
+    levelSelect.disabled = true;
+    return;
+  }
+
+  const previousValue = levelSelect.value;
+
+  levelSelect.innerHTML = [
+    '<option value="all">All Levels</option>',
+    ...levels.map(
+      (level) =>
+        `<option value="${escapeHtml(level.id)}">${escapeHtml(
+          level.name,
+        )}</option>`,
+    ),
+  ].join("");
+
+  levelSelect.disabled = false;
+
+  if (levels.some((level) => level.id === previousValue)) {
+    levelSelect.value = previousValue;
+  } else {
+    levelSelect.value = "all";
+  }
+}
+
+// =====================================================
+// DATA FETCHING
+// =====================================================
+
+function getSourceGameForCurrentView() {
+  if (state.activeView === "overall") {
+    return "Global";
+  }
+
+  return gameSelect.value === "all" ? "Global" : gameSelect.value;
+}
+
+async function fetchCurrentRawData() {
+  const sourceGame = getSourceGameForCurrentView();
+  const { newStart, newEnd } = getFilterRange(
+    timeSelect.value,
+    seasonDate.value,
+  );
+
+  state.currentRawData = await getRawData(newStart, newEnd, sourceGame);
+}
+
+async function loadAllTimeGlobalHistory() {
+  state.allTimeGlobalHistory = await getRawData(0, Date.now(), "Global");
+}
+
+// =====================================================
+// OVERALL LEADERBOARD
+// =====================================================
+
+async function generateOverallLeaderboard(rawData) {
+  const scoringSystem = getScoringSystem();
+  const players = new Map();
+
+  filterRawDataByRange(rawData).forEach((record) => {
+    if (!record.uid || !record.gameId || record.gameId === "legacy") {
+      return;
+    }
+
+    const score = Number(record.score);
+    const timePlayed = Number(record.timePlayed) || 0;
+
+    if (!Number.isFinite(score)) {
+      return;
+    }
+
+    if (!players.has(record.uid)) {
+      players.set(record.uid, {
+        uid: record.uid,
+        totalTimePlayed: 0,
+        latestTimestamp: record.timestamp,
+        bestByGameLevel: new Map(),
+      });
+    }
+
+    const player = players.get(record.uid);
+
+    player.totalTimePlayed += timePlayed;
+    player.latestTimestamp = Math.max(
+      player.latestTimestamp,
+      record.timestamp,
+    );
+
+    /*
+    OVERALL MULTI-LEVEL RULE
+
+    1. Keep only the player's best attempt for each distinct
+       Game + Level combination.
+    2. For each game, average those distinct level-best scores.
+    3. Round that game contribution to the nearest whole number.
+    4. Sum the per-game contributions for the player's Overall Score.
+
+    A game without levels still has just one "__no_level__" bucket,
+    so its contribution remains its single best score.
+
+    If a game has real level-tagged attempts, an older untagged attempt
+    is ignored for that game's Overall average rather than being treated
+    as an extra fake level.
+    */
+    const levelKey = getLevelKey(record);
+    const playerGameLevelKey = `${record.gameId}::${levelKey}`;
+    const previousBest = player.bestByGameLevel.get(playerGameLevelKey);
+
+    const candidate = {
+      gameId: record.gameId,
+      levelKey,
+      score,
+      timePlayed,
+      timestamp: record.timestamp,
+    };
+
+    if (isBetterAttempt(candidate, previousBest)) {
+      player.bestByGameLevel.set(playerGameLevelKey, candidate);
+    }
+  });
+
+  let rows = [...players.values()]
     .map((player) => {
-      const bestGames = Object.values(player.bestByGame);
+      const attemptsByGame = new Map();
 
-      /*
-      Player may contain only old Global legacy records.
+      [...player.bestByGameLevel.values()].forEach((attempt) => {
+        if (!attemptsByGame.has(attempt.gameId)) {
+          attemptsByGame.set(attempt.gameId, []);
+        }
 
-      We cannot safely assign those records to games,
-      so exclude them from the normalized Global score.
-      */
+        attemptsByGame.get(attempt.gameId).push(attempt);
+      });
 
-      if (selectedGame === "Global" && bestGames.length === 0) {
+      const gameContributions = [];
+
+      attemptsByGame.forEach((attempts, gameId) => {
+        const taggedLevels = attempts.filter(
+          (attempt) => attempt.levelKey !== "__no_level__",
+        );
+
+        const attemptsToAverage =
+          taggedLevels.length > 0 ? taggedLevels : attempts;
+
+        if (attemptsToAverage.length === 0) {
+          return;
+        }
+
+        const scoreAverage =
+          attemptsToAverage.reduce(
+            (sum, attempt) => sum + attempt.score,
+            0,
+          ) / attemptsToAverage.length;
+
+        const contributionScore = Math.round(scoreAverage);
+        const contributionTime = attemptsToAverage.reduce(
+          (sum, attempt) => sum + attempt.timePlayed,
+          0,
+        );
+
+        const latestTimestamp = Math.max(
+          ...attemptsToAverage.map((attempt) => attempt.timestamp),
+        );
+
+        gameContributions.push({
+          gameId,
+          score: contributionScore,
+          timePlayed: contributionTime,
+          latestTimestamp,
+          levelsCount: attemptsToAverage.length,
+        });
+      });
+
+      if (gameContributions.length === 0) {
         return null;
       }
 
-      /*
-      Global:
-      sum one best score per game.
-
-      Individual:
-      there will only be one best game result.
-      */
-
-      player.totalScore = bestGames.reduce(
-        (total, result) => total + result.score,
+      const totalScore = gameContributions.reduce(
+        (sum, game) => sum + game.score,
         0,
       );
 
-      /*
-      Combined best-attempt time is used only as a
-      tie-breaker for equal scores.
-      */
-
-      player.bestTimePlayed = bestGames.reduce(
-        (total, result) => total + result.timePlayed,
+      const bestTimePlayed = gameContributions.reduce(
+        (sum, game) => sum + game.timePlayed,
         0,
       );
 
-      player.gamesCount = bestGames.length;
-
-      /*
-      Remove temporary internal calculation data.
-      */
-
-      delete player.bestByGame;
-
-      return player;
+      return {
+        uid: player.uid,
+        totalScore,
+        totalTimePlayed: player.totalTimePlayed,
+        totalTimePlayedDisplay: formatSeconds(player.totalTimePlayed),
+        bestTimePlayed,
+        bestTimePlayedDisplay: formatSeconds(bestTimePlayed),
+        latestTimestamp: player.latestTimestamp,
+        gamesCount: gameContributions.length,
+        gameContributions,
+      };
     })
     .filter(Boolean);
 
-  /*
-  =====================================================
-  SORT
-  =====================================================
-  */
-
-  leaderboardData.sort((a, b) => {
-    /*
-    Existing "Time Played" leaderboard option.
-
-    This intentionally continues to represent total
-    participation time across attempts.
-    */
-
+  rows.sort((a, b) => {
     if (scoringSystem === "totalTimePlayed") {
-      return b.totalTimePlayed - a.totalTimePlayed;
-    }
-
-    /*
-    SCORE RANKING
-
-    1. Higher score
-    2. If tied -> lower best completion time
-    3. If still tied -> most recent result
-    */
-
-    if (b.totalScore !== a.totalScore) {
+      if (b.totalTimePlayed !== a.totalTimePlayed) {
+        return b.totalTimePlayed - a.totalTimePlayed;
+      }
+    } else if (b.totalScore !== a.totalScore) {
       return b.totalScore - a.totalScore;
     }
 
@@ -392,362 +679,738 @@ async function generateLeaderboardData(gameHistories) {
     return b.latestTimestamp - a.latestTimestamp;
   });
 
-  /*
-  =====================================================
-  FORMAT DISPLAY TIME
-  =====================================================
-  */
+  rows = rows.map((row, index) => ({
+    ...row,
+    rank: index + 1,
+  }));
 
-  leaderboardData.forEach((player) => {
-    player.totalTimePlayed = formatSeconds(player.totalTimePlayed);
+  return attachProfiles(rows);
+}
+
+// =====================================================
+// GAME + LEVEL LEADERBOARD
+// =====================================================
+
+async function generateGameLeaderboard(rawData) {
+  const scoringSystem = getScoringSystem();
+  const selectedGame = gameSelect.value;
+  const selectedLevel = levelSelect.value;
+
+  const bestByPlayerGameLevel = new Map();
+  const totalsByPlayerGameLevel = new Map();
+
+  filterRawDataByRange(rawData).forEach((record) => {
+    if (!record.uid || !record.gameId || record.gameId === "legacy") {
+      return;
+    }
+
+    if (selectedGame !== "all" && record.gameId !== selectedGame) {
+      return;
+    }
+
+    const levelKey = getLevelKey(record);
+
+    if (
+      selectedGame !== "all" &&
+      selectedLevel !== "all" &&
+      levelKey !== selectedLevel
+    ) {
+      return;
+    }
+
+    const groupKey = `${record.gameId}::${levelKey}`;
+    const playerKey = `${record.uid}::${groupKey}`;
+
+    const score = Number(record.score);
+    const timePlayed = Number(record.timePlayed) || 0;
+
+    if (!Number.isFinite(score)) {
+      return;
+    }
+
+    const totalTime = totalsByPlayerGameLevel.get(playerKey) || 0;
+    totalsByPlayerGameLevel.set(playerKey, totalTime + timePlayed);
+
+    const current = bestByPlayerGameLevel.get(playerKey);
+    const candidate = {
+      uid: record.uid,
+      gameId: record.gameId,
+      gameName: getGameName(record),
+      levelId: record.levelId,
+      levelName: record.levelName,
+      levelKey,
+      groupKey,
+      score,
+      timePlayed,
+      timestamp: record.timestamp,
+      result: record.meta?.result || "completed",
+    };
+
+    if (isBetterAttempt(candidate, current)) {
+      bestByPlayerGameLevel.set(playerKey, candidate);
+    }
   });
 
-  /*
-  =====================================================
-  ADD USER PROFILE INFORMATION
-  =====================================================
-  */
+  const groups = new Map();
 
-  const userCache = {};
+  [...bestByPlayerGameLevel.entries()].forEach(([playerKey, attempt]) => {
+    const row = {
+      ...attempt,
+      totalScore: attempt.score,
+      bestScore: attempt.score,
+      bestTimePlayed: attempt.timePlayed,
+      totalTimePlayed: totalsByPlayerGameLevel.get(playerKey) || 0,
+    };
 
-  const dataWithUserProfile = await Promise.all(
-    leaderboardData.map(async (record) => {
-      const uid = record.uid;
+    if (!groups.has(row.groupKey)) {
+      groups.set(row.groupKey, []);
+    }
 
-      if (!uid) {
-        return {
-          ...record,
-          username: "Unknown Player",
-          location: "Unknown",
-        };
+    groups.get(row.groupKey).push(row);
+  });
+
+  const rankedRows = [];
+
+  groups.forEach((rows) => {
+    rows.sort((a, b) => {
+      if (scoringSystem === "totalTimePlayed") {
+        if (b.totalTimePlayed !== a.totalTimePlayed) {
+          return b.totalTimePlayed - a.totalTimePlayed;
+        }
+      } else if (b.bestScore !== a.bestScore) {
+        return b.bestScore - a.bestScore;
       }
 
-      if (!userCache[uid]) {
-        const profile = await getUserProfile(uid);
-
-        userCache[uid] = profile;
+      if (a.bestTimePlayed !== b.bestTimePlayed) {
+        return a.bestTimePlayed - b.bestTimePlayed;
       }
 
-      return {
-        ...record,
-        username: userCache[uid].name,
+      return b.timestamp - a.timestamp;
+    });
 
-        location: userCache[uid].location,
-      };
-    }),
-  );
+    rows.forEach((row, index) => {
+      rankedRows.push({
+        ...row,
+        rank: index + 1,
+        timeDisplay:
+          scoringSystem === "totalTimePlayed"
+            ? formatSeconds(row.totalTimePlayed)
+            : formatSeconds(row.bestTimePlayed),
+      });
+    });
+  });
 
-  return dataWithUserProfile;
+  rankedRows.sort((a, b) => {
+    const gameCompare = a.gameName.localeCompare(b.gameName, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
+
+    if (gameCompare !== 0) {
+      return gameCompare;
+    }
+
+    const levelCompare = getLevelDisplay(a).localeCompare(
+      getLevelDisplay(b),
+      undefined,
+      {
+        numeric: true,
+        sensitivity: "base",
+      },
+    );
+
+    if (levelCompare !== 0) {
+      return levelCompare;
+    }
+
+    return a.rank - b.rank;
+  });
+
+  return attachProfiles(rankedRows);
 }
 
-// default leaderboard settings
-let gameHistories = await fetchGameHistories("Global");
-// empty time range means today's daily
-let leaderboardData = await generateLeaderboardData(gameHistories);
+// =====================================================
+// PERSONAL HISTORY
+// =====================================================
 
-// upon game selection change, fetch game history for selected game,
-// generate new leaderboard array,
-// re-render leaderboard and change to 1st page
-gameSelect.addEventListener("change", async (e) => {
-  const rawData = await fetchGameHistories(e.target.value);
-  if (rawData !== undefined) {
-    gameHistories = rawData;
-  }
-  leaderboardData = await generateLeaderboardData(gameHistories);
-  render();
-  changePage(1);
-  // check reset button status
-  checkResetEligibility();
-  // sync toggle status
-  syncToggleStatus(gameSelect.value);
-});
-
-// upon date selection change, fetch game history for selected date range,
-// generate new leaderboard array,
-// re-render leaderboard and change to 1st page
-seasonDate.addEventListener("input", async (e) => {
-  const rawData = await fetchGameHistories(gameSelect.value);
-  if (rawData !== undefined) {
-    gameHistories = rawData;
-  }
-  leaderboardData = await generateLeaderboardData(gameHistories);
-  render();
-  changePage(1);
-  // check reset button status
-  checkResetEligibility();
-  // sync toggle status
-  syncToggleStatus(gameSelect.value);
-  // Display filter range in HTML
-  const displayRange = document.getElementById("filterRangeDisplay");
-  if (timeSelect.value === "allDates") {
-    displayRange.innerText = "Showing: All Time Records";
-  } else {
-    const sStr = new Date(startDate).toLocaleDateString();
-    const eStr = new Date(endDate).toLocaleDateString();
-    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
-  }
-});
-
-// upon time filter selection change, fetch game history for selected range,
-// generate new leaderboard array,
-// re-render leaderboard and change to 1st page
-timeSelect.addEventListener("change", async (e) => {
-  const rawData = await fetchGameHistories(gameSelect.value);
-  if (rawData !== undefined) {
-    gameHistories = rawData;
-  }
-  leaderboardData = await generateLeaderboardData(gameHistories);
-  render();
-  changePage(1);
-  // check reset button status
-  checkResetEligibility();
-  // sync toggle status
-  syncToggleStatus(gameSelect.value);
-  const displayRange = document.getElementById("filterRangeDisplay");
-  if (e.target.value === "allDates") {
-    displayRange.innerText = "Showing: All Time Records";
-  } else {
-    const sStr = new Date(startDate).toLocaleDateString();
-    const eStr = new Date(endDate).toLocaleDateString();
-    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
-  }
-});
-
-// upon scoring system change, generate new leaderboard data,
-// re-render leaderboard and change to 1st page
-document.getElementById("scoring").addEventListener("change", async (e) => {
-  leaderboardData = await generateLeaderboardData(gameHistories);
-  render();
-  changePage(1);
-  // check reset button status
-  checkResetEligibility();
-  // sync toggle status
-  syncToggleStatus(gameSelect.value);
-  const displayRange = document.getElementById("filterRangeDisplay");
-  if (e.target.value === "allDates") {
-    displayRange.innerText = "Showing: All Time Records";
-  } else {
-    const sStr = new Date(startDate).toLocaleDateString();
-    const eStr = new Date(endDate).toLocaleDateString();
-    displayRange.innerText = `Showing: ${sStr} — ${eStr}`;
-  }
-});
-
-let currentPage = 1;
-const perPage = 10;
-
-function render() {
-  const scoringSystem = getScoringSystem();
-
-  // Podium
-  for (let i = 0; i < 3; i++) {
-    const player = leaderboardData[i];
-
-    const username = document.getElementById("name-" + (i + 1));
-    const location = document.getElementById("location-" + (i + 1));
-    const score = document.getElementById("score-" + (i + 1));
-
-    if (username) {
-      username.textContent = player ? player.username : "---";
-    }
-    if (location) {
-      location.textContent = player ? `📍 ${player.location}` : "---";
-    }
-    if (score) {
-      score.textContent = player
-        ? player[scoringSystem].toLocaleString()
-        : "---";
-    }
+function getCurrentUserHistory(rawData) {
+  if (!state.currentUser) {
+    return [];
   }
 
-  // List
-  const listData = leaderboardData.slice(3);
-  const totalPages = Math.max(1, Math.ceil(listData.length / perPage));
+  const selectedGame = gameSelect.value;
+  const selectedLevel = levelSelect.value;
 
-  if (currentPage > totalPages) currentPage = totalPages;
-
-  const start = (currentPage - 1) * perPage;
-
-  document.getElementById("leaderboard").innerHTML = listData
-    .slice(start, start + perPage)
-    .map(
-      (p, i) => `
-                    <div class="row">
-                        <div class="rank">${start + i + 4}</div>
-                        <div class="name" style="display: flex; align-items: center; gap: 3em;">
-                            <span style="overflow: hidden; text-overflow: ellipsis; 
-                                        white-space: nowrap; width: 200px;">${p.username}</span>
-                            <span>📍 ${p.location}</span>
-                        </div>
-                        <div class="score">${p[scoringSystem].toLocaleString()}</div>
-                    </div>`,
-    )
-    .join("");
-
-  document.getElementById("pageNum").textContent = currentPage;
-  document.getElementById("totalPages").textContent = totalPages;
-
-  document.getElementById("prevBtn").disabled = currentPage === 1;
-  document.getElementById("nextBtn").disabled = currentPage === totalPages;
+  return filterRawDataByRange(rawData)
+    .filter((record) => record.uid === state.currentUser.uid)
+    .filter((record) => {
+      if (selectedGame === "all") return true;
+      return record.gameId === selectedGame;
+    })
+    .filter((record) => {
+      if (selectedGame === "all" || selectedLevel === "all") return true;
+      return getLevelKey(record) === selectedLevel;
+    })
+    .sort((a, b) => b.timestamp - a.timestamp);
 }
 
-// change page
-function changePage(page) {
-  const totalPages = Math.ceil(leaderboardData.length / perPage);
+function getRecentUserHistory() {
+  if (!state.currentUser) {
+    return [];
+  }
 
-  if (page < 1 || page > totalPages) return;
-  currentPage = page;
-  render();
+  return state.allTimeGlobalHistory
+    .filter((record) => record.uid === state.currentUser.uid)
+    .filter((record) => record.gameId && record.gameId !== "legacy")
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .slice(0, 6);
 }
 
-document
-  .getElementById("nextBtn")
-  .addEventListener("click", () => changePage(currentPage + 1));
-document
-  .getElementById("prevBtn")
-  .addEventListener("click", () => changePage(currentPage - 1));
+// =====================================================
+// VIEW + TABLE CONFIGURATION
+// =====================================================
 
-render();
-// check reset button status
-checkResetEligibility();
-// sync toggle status
-syncToggleStatus(gameSelect.value);
+function setTableHeader(view) {
+  leaderboardTableHeader.className = "leaderboard-table-header";
 
-// ============================================
-// ====== Reset and Competition Controls ======
-// ============================================
-
-// // For demo use, false for production
-// const mockIsAdmin = true;
-
-// Visibility logic for adminPanel
-onAuthStateChanged(auth, async (user) => {
-  const adminPanel = document.getElementById("adminPanel");
-  const analyticsBtn = document.getElementById("analyticsBtn");
-
-  if (!adminPanel) return;
-
-  let isAdmin = false;
-
-  if (user) {
-    //console.log("UID:", user.uid);
-    try {
-      const userDocRef = doc(db, "users", user.uid, "private", "account");
-      const userSnap = await getDoc(userDocRef);
-
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        isAdmin = userData.isAdmin === true;
-        //console.log("isAdmin:", isAdmin);
-      } else {
-        console.warn("User document not found in Firestore");
-      }
-    } catch (error) {
-      console.error("unable to get user role:", error);
-    }
-  }
-
-  // if (mockIsAdmin || isAdmin) {
-  if (isAdmin) {
-    adminPanel.style.display = "block";
-    if (analyticsBtn) analyticsBtn.style.display = "block";
-    checkResetEligibility();
-    //console.log("Admin Panel Shown");
-  } else {
-    adminPanel.style.display = "none";
-    if (analyticsBtn) analyticsBtn.style.display = "none";
-    //console.log("Admin Panel Hidden");
-  }
-});
-
-// Check Competition status
-const statusToggle = document.getElementById("statusToggle");
-async function syncToggleStatus(game) {
-  const statusToggle = document.getElementById("statusToggle");
-  if (!game || game === "Global") {
-    statusToggle.disabled = true;
-    statusToggle.checked = false;
+  if (view === "overall") {
+    leaderboardTableHeader.classList.add("leaderboard-table-header-overall");
+    leaderboardTableHeader.innerHTML = `
+      <div>Rank</div>
+      <div>Player</div>
+      <div>Overall Score</div>
+      <div>Ranked Games</div>
+      <div>Time</div>
+    `;
     return;
   }
-  statusToggle.disabled = false;
-  const gameSnap = await getDoc(doc(db, "leaderboards", game));
-  statusToggle.checked = gameSnap.exists()
-    ? gameSnap.data().competitionIsActive === true
-    : false;
+
+  if (view === "game") {
+    const isAllGames = gameSelect.value === "all";
+
+    leaderboardTableHeader.classList.add(
+      isAllGames
+        ? "leaderboard-table-header-game-all"
+        : "leaderboard-table-header-game",
+    );
+
+    leaderboardTableHeader.innerHTML = isAllGames
+      ? `
+          <div>Game Rank</div>
+          <div>Player</div>
+          <div>Best Score</div>
+          <div>Time</div>
+        `
+      : `
+          <div>Rank</div>
+          <div>Player</div>
+          <div>Game</div>
+          <div>Level</div>
+          <div>Best Score</div>
+          <div>Time</div>
+        `;
+    return;
+  }
+
+  leaderboardTableHeader.classList.add("leaderboard-table-header-history");
+  leaderboardTableHeader.innerHTML = `
+    <div>Date</div>
+    <div>Game</div>
+    <div>Level</div>
+    <div>Score</div>
+    <div>Time</div>
+    <div>Result</div>
+  `;
 }
 
-document
-  .getElementById("statusToggle")
-  .addEventListener("change", async (e) => {
-    const gameId = document.getElementById("gameSelect").value;
-    await setDoc(
-      doc(db, "leaderboards", gameId),
-      { competitionIsActive: e.target.checked },
-      { merge: true },
-    );
-    checkResetEligibility();
+function updateDatePickerState() {
+  const isAllTime = timeSelect.value === "allDates";
+
+  seasonDate.disabled = isAllTime;
+  seasonDate.setAttribute("aria-disabled", String(isAllTime));
+  seasonDate.title = isAllTime
+    ? "Choose Date is not used when Time Period is All Time."
+    : "";
+}
+
+function updateViewControls() {
+  updateDatePickerState();
+
+  document.querySelectorAll(".lb-view-tab").forEach((button) => {
+    const isActive = button.dataset.view === state.activeView;
+
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
   });
 
-// Check reset button eligibility
-async function checkResetEligibility() {
-  const game = document.getElementById("gameSelect").value;
-  const resetBtn = document.getElementById("resetBtn");
-  const resetHint = document.getElementById("resetHint");
+  const isOverall = state.activeView === "overall";
+  const isHistory = state.activeView === "history";
 
-  if (!game || game === "Global") {
-    resetBtn.disabled = false;
-    resetBtn.style.background = "";
+  gameSelect.disabled = isOverall;
+
+  if (isOverall) {
+    gameSelect.value = "all";
+    levelSelect.value = "all";
+    levelSelect.disabled = true;
+    filterTitle.textContent = "Overall Leaderboard";
+    rankingTitle.textContent = "Hall of Champions";
+  } else if (state.activeView === "game") {
+    filterTitle.textContent = "Game Leaderboard";
+  } else {
+    filterTitle.textContent = "My Game History";
+  }
+
+  scoringField.hidden = isHistory;
+  rankingSection.hidden = !isOverall;
+
+  setTableHeader(state.activeView);
+}
+
+function getPodiumRows() {
+  if (state.activeView !== "overall") {
+    return [];
+  }
+
+  return state.leaderboardData.slice(0, 3);
+}
+
+// =====================================================
+// RENDER PODIUM
+// =====================================================
+
+function renderPodium() {
+  rankingSection.hidden = state.activeView !== "overall";
+
+  if (rankingSection.hidden) {
+    return;
+  }
+
+  const podiumRows = getPodiumRows();
+  rankingTitle.textContent = "Hall of Champions";
+
+  for (let i = 0; i < 3; i++) {
+    const player = podiumRows[i];
+
+    const username = document.getElementById(`name-${i + 1}`);
+    const location = document.getElementById(`location-${i + 1}`);
+    const score = document.getElementById(`score-${i + 1}`);
+
+    username.textContent = player ? player.username : "---";
+    location.textContent = player ? `📍 ${player.location}` : "---";
+
+    if (!player) {
+      score.textContent = "---";
+      continue;
+    }
+
+    if (getScoringSystem() === "totalTimePlayed") {
+      score.textContent = formatSeconds(player.totalTimePlayed);
+    } else if (state.activeView === "overall") {
+      score.textContent = player.totalScore.toLocaleString();
+    } else {
+      score.textContent = player.bestScore.toLocaleString();
+    }
+  }
+}
+
+// =====================================================
+// RENDER MAIN TABLE
+// =====================================================
+
+function renderOverallRows(rows) {
+  return rows
+    .map(
+      (row) => `
+        <div class="row row-overall">
+          <div class="rank">${row.rank}</div>
+
+          <div class="player-cell">
+            <strong>${escapeHtml(row.username)}</strong>
+            <span>📍 ${escapeHtml(row.location)}</span>
+          </div>
+
+          <div class="score">${formatNumberOrDash(row.totalScore)}</div>
+
+          <div class="games-count">${row.gamesCount}</div>
+
+          <div class="time">${escapeHtml(
+            getScoringSystem() === "totalTimePlayed"
+              ? row.totalTimePlayedDisplay
+              : row.bestTimePlayedDisplay,
+          )}</div>
+        </div>
+      `,
+    )
+    .join("");
+}
+
+function getGameGroupHeading(row) {
+  const gameName = row.gameId.startsWith("bp26-")
+    ? `BP26 — ${row.gameName}`
+    : row.gameName;
+
+  const levelDisplay = getLevelDisplay(row);
+
+  return levelDisplay === "—"
+    ? gameName
+    : `${gameName} · ${levelDisplay}`;
+}
+
+function renderAllGamesRows(rows) {
+  let previousGroupKey = null;
+
+  return rows
+    .map((row) => {
+      const showGroupHeading = row.groupKey !== previousGroupKey;
+      previousGroupKey = row.groupKey;
+
+      return `
+        ${
+          showGroupHeading
+            ? `
+              <div class="lb-game-group-heading">
+                <span class="lb-game-group-icon" aria-hidden="true">🎮</span>
+                <strong>${escapeHtml(getGameGroupHeading(row))}</strong>
+              </div>
+            `
+            : ""
+        }
+
+        <div class="row row-game-all">
+          <div class="rank">${row.rank}</div>
+
+          <div class="player-cell">
+            <strong>${escapeHtml(row.username)}</strong>
+            <span>📍 ${escapeHtml(row.location)}</span>
+          </div>
+
+          <div class="score">${formatNumberOrDash(row.bestScore)}</div>
+
+          <div class="time">${escapeHtml(row.timeDisplay)}</div>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function renderGameRows(rows) {
+  if (gameSelect.value === "all") {
+    return renderAllGamesRows(rows);
+  }
+
+  return rows
+    .map(
+      (row) => `
+        <div class="row row-game">
+          <div class="rank">${row.rank}</div>
+
+          <div class="player-cell">
+            <strong>${escapeHtml(row.username)}</strong>
+            <span>📍 ${escapeHtml(row.location)}</span>
+          </div>
+
+          <div class="game-name">${escapeHtml(row.gameName)}</div>
+
+          <div class="level-name">${escapeHtml(getLevelDisplay(row))}</div>
+
+          <div class="score">${formatNumberOrDash(row.bestScore)}</div>
+
+          <div class="time">${escapeHtml(row.timeDisplay)}</div>
+        </div>
+      `,
+    )
+    .join("");
+}
+
+function renderHistoryRows(rows) {
+  return rows
+    .map(
+      (row) => `
+        <div class="row row-history">
+          <div class="history-date">${escapeHtml(formatDateTime(row.timestamp))}</div>
+
+          <div class="game-name">${escapeHtml(getGameName(row))}</div>
+
+          <div class="level-name">${escapeHtml(getLevelDisplay(row))}</div>
+
+          <div class="score">${formatNumberOrDash(row.score)}</div>
+
+          <div class="time">${escapeHtml(formatSeconds(row.timePlayed))}</div>
+
+          <div class="result">
+            <span class="lb-result-badge">${escapeHtml(
+              row.meta?.result || "completed",
+            )}</span>
+          </div>
+        </div>
+      `,
+    )
+    .join("");
+}
+
+function renderTable() {
+  const data = state.leaderboardData;
+  const total = data.length;
+  const totalPageCount = Math.max(1, Math.ceil(total / state.perPage));
+
+  if (state.currentPage > totalPageCount) {
+    state.currentPage = totalPageCount;
+  }
+
+  const start = (state.currentPage - 1) * state.perPage;
+  const pageRows = data.slice(start, start + state.perPage);
+
+  leaderboardEmpty.hidden = total > 0;
+
+  if (state.activeView === "overall") {
+    leaderboard.innerHTML = renderOverallRows(pageRows);
+  } else if (state.activeView === "game") {
+    leaderboard.innerHTML = renderGameRows(pageRows);
+  } else {
+    leaderboard.innerHTML = renderHistoryRows(pageRows);
+  }
+
+  pageNum.textContent = String(state.currentPage);
+  totalPages.textContent = String(totalPageCount);
+
+  prevBtn.disabled = state.currentPage <= 1;
+  nextBtn.disabled = state.currentPage >= totalPageCount;
+
+  pagination.hidden = total <= state.perPage;
+}
+
+// =====================================================
+// MY RANK
+// =====================================================
+
+function renderSignedOutRank() {
+  myRankSignedOut.hidden = false;
+  myRankContent.hidden = true;
+}
+
+async function renderMyRank() {
+  if (!state.currentUser) {
+    renderSignedOutRank();
+    return;
+  }
+
+  const profile = await getUserProfile(state.currentUser.uid);
+
+  myRankSignedOut.hidden = true;
+  myRankContent.hidden = false;
+
+  myRankAvatar.textContent = getInitials(profile.name);
+  myRankName.textContent = profile.name;
+  myRankEmail.textContent = maskEmail(state.currentUser.email);
+
+  let row = null;
+  let contextValue = "—";
+  let contextLabel = "Ranked Games";
+  let scoreLabel = "Overall Score";
+  let hint = "";
+  let usingOverallRank = false;
+
+  if (state.activeView === "overall" || gameSelect.value === "all") {
+    usingOverallRank = true;
+    const overallRows =
+      state.activeView === "overall"
+        ? state.leaderboardData
+        : await generateOverallLeaderboard(state.currentRawData);
+
+    row = overallRows.find((item) => item.uid === state.currentUser.uid) || null;
+
+    if (row) {
+      contextValue = row.gamesCount;
+    }
+
+    if (state.activeView !== "overall") {
+      hint = "Showing your Overall rank. Select one game and level for a game-specific rank.";
+    }
+  } else if (state.activeView === "game") {
+    const knownLevels = state.levelOptionsCache.get(gameSelect.value) || [];
+
+    if (knownLevels.length > 0 && levelSelect.value === "all") {
+      row = null;
+      contextValue = "—";
+      contextLabel = "Level";
+      scoreLabel = "Best Score";
+      hint = "Select a level to see your rank for that specific level.";
+    } else {
+      row =
+        state.leaderboardData.find(
+          (item) => item.uid === state.currentUser.uid,
+        ) || null;
+
+      contextValue =
+        levelSelect.value === "all"
+          ? "-"
+          : levelSelect.options[levelSelect.selectedIndex]?.text || "-";
+      contextLabel = "Level";
+      scoreLabel = "Best Score";
+    }
+  } else {
+    const overallRows = await generateOverallLeaderboard(
+      state.allTimeGlobalHistory,
+    );
+
+    row = overallRows.find((item) => item.uid === state.currentUser.uid) || null;
+
+    if (row) {
+      contextValue = row.gamesCount;
+    }
+
+    hint = "History shows every saved attempt, including repeat plays.";
+  }
+
+  if (!row) {
+    myRankPosition.textContent = "—";
+    myRankScore.textContent = "—";
+  } else {
+    myRankPosition.textContent = String(row.rank);
+
+    if (getScoringSystem() === "totalTimePlayed" && state.activeView !== "history") {
+      myRankScore.textContent = Number.isFinite(Number(row.totalTimePlayed))
+        ? formatSeconds(row.totalTimePlayed)
+        : "—";
+      scoreLabel = "Time Played";
+    } else {
+      const scoreValue = usingOverallRank ? row.totalScore : row.bestScore;
+      myRankScore.textContent = formatNumberOrDash(scoreValue);
+    }
+  }
+
+  myRankScoreLabel.textContent = scoreLabel;
+  myRankContext.textContent =
+    contextValue === null || contextValue === undefined || contextValue === ""
+      ? "—"
+      : String(contextValue);
+  myRankContextLabel.textContent = contextLabel;
+  myRankHint.textContent = hint;
+}
+
+// =====================================================
+// RECENT HISTORY SIDEBAR
+// =====================================================
+
+function renderRecentHistory() {
+  if (!state.currentUser) {
+    recentHistorySignedOut.hidden = false;
+    recentHistoryList.innerHTML = "";
+    return;
+  }
+
+  recentHistorySignedOut.hidden = true;
+
+  const attempts = getRecentUserHistory();
+
+  if (attempts.length === 0) {
+    recentHistoryList.innerHTML = `
+      <div class="lb-history-empty">
+        No saved game attempts yet.
+      </div>
+    `;
+    return;
+  }
+
+  recentHistoryList.innerHTML = attempts
+    .map(
+      (attempt) => `
+        <article class="lb-history-preview-item">
+          <div class="lb-history-preview-copy">
+            <strong>${escapeHtml(getGameName(attempt))}</strong>
+            ${
+              hasLevel(attempt)
+                ? `<span>${escapeHtml(getLevelDisplay(attempt))}</span>`
+                : ""
+            }
+            <small>${escapeHtml(formatDateTime(attempt.timestamp))}</small>
+          </div>
+
+          <div class="lb-history-preview-score">
+            ${formatNumberOrDash(attempt.score)}
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+// =====================================================
+// ADMIN CONTROLS
+// =====================================================
+
+function getSelectedAdminGame() {
+  if (state.activeView === "overall" || gameSelect.value === "all") {
+    return null;
+  }
+
+  return gameSelect.value;
+}
+
+async function syncAdminControls() {
+  const gameId = getSelectedAdminGame();
+
+  if (!gameId) {
+    statusToggle.disabled = true;
+    statusToggle.checked = false;
+    resetBtn.disabled = true;
+    adminContext.textContent =
+      "Select one game to manage its competition settings.";
     resetHint.textContent = "";
     return;
   }
 
-  const gameDoc = await getDoc(doc(db, "leaderboards", game));
-  if (gameDoc.exists() && gameDoc.data().competitionIsActive) {
+  statusToggle.disabled = false;
+  resetBtn.disabled = false;
+
+  const gameName = state.gameMap.get(gameId) || gameId;
+  adminContext.textContent = `Managing: ${gameName}`;
+
+  const gameSnap = await getDoc(doc(db, "leaderboards", gameId));
+
+  statusToggle.checked =
+    gameSnap.exists() && gameSnap.data().competitionIsActive === true;
+
+  await checkResetEligibility();
+}
+
+async function checkResetEligibility() {
+  const gameId = getSelectedAdminGame();
+
+  if (!gameId) {
     resetBtn.disabled = true;
-    resetBtn.style.background = "#ccc";
+    resetHint.textContent = "";
+    return;
+  }
+
+  const gameDoc = await getDoc(doc(db, "leaderboards", gameId));
+
+  if (gameDoc.exists() && gameDoc.data().competitionIsActive === true) {
+    resetBtn.disabled = true;
     resetHint.style.color = "#d30000";
     resetHint.textContent = "Competition active. Reset locked.";
   } else {
     resetBtn.disabled = false;
-    resetBtn.style.background = "";
     resetHint.textContent = "";
   }
 }
 
-statusToggle.addEventListener("change", async () => {
-  const gameId = document.getElementById("gameSelect").value;
-  if (gameId === "Global") return;
+async function performReset(gameId) {
+  const gameName = state.gameMap.get(gameId) || gameId;
 
-  const newState = statusToggle.checked;
-  try {
-    const gameDocRef = doc(db, "leaderboards", gameId);
-    await setDoc(
-      gameDocRef,
-      { competitionIsActive: newState },
-      { merge: true },
-    );
-    await checkResetEligibility();
-  } catch (error) {
-    console.error("Update failed:", error);
-    statusToggle.checked = !newState;
-    alert("Database update failed.");
-  }
-});
-
-// Logic for leaderboard reset
-async function performReset(game) {
   if (
     !confirm(
-      `Are you sure you want to clear all the score histories for ${game} ?`,
+      `Are you sure you want to clear all score histories for ${gameName}?`,
     )
-  )
+  ) {
     return;
+  }
 
-  const historyColRef = collection(db, "leaderboards", game, "gameHistory");
+  const historyColRef = collection(db, "leaderboards", gameId, "gameHistory");
   const historySnapshot = await getDocs(historyColRef);
 
   if (historySnapshot.empty) {
-    alert(`Score histories for ${game} are cleared.`);
+    alert(`Score histories for ${gameName} are already empty.`);
     return;
   }
 
@@ -759,55 +1422,267 @@ async function performReset(game) {
 
   try {
     await batch.commit();
-    alert(`Successfully reset ${game} histories.`);
-    gameHistories = [];
-    leaderboardData = await generateLeaderboardData(gameHistories);
-    render();
+
+    state.levelOptionsCache.delete(gameId);
+
+    alert(`Successfully reset ${gameName} histories.`);
+
+    await refreshLevelOptions();
+    await refreshData();
   } catch (error) {
-    console.error("Reset failed: ", error);
+    console.error("Reset failed:", error);
     alert("Error resetting leaderboard. Check console.");
   }
 }
 
-document.getElementById("resetBtn").addEventListener("click", () => {
-  const game = document.getElementById("gameSelect").value;
-  performReset(game);
+// =====================================================
+// MAIN REFRESH
+// =====================================================
+
+async function refreshData() {
+  updateViewControls();
+  updateRangeDisplay();
+
+  await fetchCurrentRawData();
+
+  if (state.activeView === "overall") {
+    state.leaderboardData = await generateOverallLeaderboard(
+      state.currentRawData,
+    );
+  } else if (state.activeView === "game") {
+    state.leaderboardData = await generateGameLeaderboard(
+      state.currentRawData,
+    );
+  } else {
+    state.leaderboardData = getCurrentUserHistory(state.currentRawData);
+  }
+
+  state.currentPage = 1;
+
+  renderPodium();
+  renderTable();
+  await renderMyRank();
+  renderRecentHistory();
+  await syncAdminControls();
+}
+
+// =====================================================
+// EVENTS
+// =====================================================
+
+document.querySelectorAll(".lb-view-tab").forEach((button) => {
+  button.addEventListener("click", async () => {
+    state.activeView = button.dataset.view || "overall";
+
+    if (state.activeView === "overall") {
+      gameSelect.value = "all";
+      levelSelect.value = "all";
+    } else {
+      gameSelect.disabled = false;
+      await refreshLevelOptions();
+    }
+
+    await refreshData();
+  });
 });
 
-// ============================================
-// ====== SPARKLE PARTICLE SYSTEM ======
-// ============================================
+gameSelect.addEventListener("change", async () => {
+  await refreshLevelOptions();
+  await refreshData();
+});
+
+levelSelect.addEventListener("change", async () => {
+  await refreshData();
+});
+
+seasonDate.addEventListener("input", async () => {
+  await refreshData();
+});
+
+timeSelect.addEventListener("change", async () => {
+  await refreshData();
+});
+
+document.getElementById("scoring").addEventListener("change", async () => {
+  if (state.activeView === "overall") {
+    state.leaderboardData = await generateOverallLeaderboard(
+      state.currentRawData,
+    );
+  } else if (state.activeView === "game") {
+    state.leaderboardData = await generateGameLeaderboard(
+      state.currentRawData,
+    );
+  }
+
+  state.currentPage = 1;
+
+  renderPodium();
+  renderTable();
+  await renderMyRank();
+});
+
+prevBtn.addEventListener("click", () => {
+  if (state.currentPage <= 1) return;
+
+  state.currentPage -= 1;
+  renderTable();
+});
+
+nextBtn.addEventListener("click", () => {
+  const totalPageCount = Math.max(
+    1,
+    Math.ceil(state.leaderboardData.length / state.perPage),
+  );
+
+  if (state.currentPage >= totalPageCount) return;
+
+  state.currentPage += 1;
+  renderTable();
+});
+
+viewAllHistoryBtn.addEventListener("click", async () => {
+  state.activeView = "history";
+
+  document.querySelectorAll(".lb-view-tab").forEach((button) => {
+    const isActive = button.dataset.view === "history";
+
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+
+  await refreshLevelOptions();
+  await refreshData();
+});
+
+statusToggle.addEventListener("change", async () => {
+  const gameId = getSelectedAdminGame();
+
+  if (!gameId) {
+    statusToggle.checked = false;
+    return;
+  }
+
+  const newState = statusToggle.checked;
+
+  try {
+    await setDoc(
+      doc(db, "leaderboards", gameId),
+      { competitionIsActive: newState },
+      { merge: true },
+    );
+
+    await checkResetEligibility();
+  } catch (error) {
+    console.error("Update failed:", error);
+    statusToggle.checked = !newState;
+    alert("Database update failed.");
+  }
+});
+
+resetBtn.addEventListener("click", async () => {
+  const gameId = getSelectedAdminGame();
+
+  if (!gameId) return;
+
+  await performReset(gameId);
+});
+
+// =====================================================
+// AUTH
+// =====================================================
+
+onAuthStateChanged(auth, async (user) => {
+  state.currentUser = user || null;
+
+  let isAdmin = false;
+
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid, "private", "account");
+      const userSnap = await getDoc(userDocRef);
+
+      isAdmin = userSnap.exists() && userSnap.data().isAdmin === true;
+    } catch (error) {
+      console.error("Unable to get user role:", error);
+    }
+  }
+
+  adminPanel.style.display = isAdmin ? "block" : "none";
+
+  if (isAdmin && !state.legacyBp26LabelsMigrated) {
+    try {
+      const updateCount = await migrateLegacyBp26Labels();
+      state.legacyBp26LabelsMigrated = true;
+
+      if (updateCount > 0) {
+        console.info(
+          `[Leaderboard] Updated ${updateCount} legacy BP26 game label(s).`,
+        );
+      }
+    } catch (error) {
+      console.warn(
+        "[Leaderboard] BP26 label migration could not be completed:",
+        error,
+      );
+    }
+  }
+
+  const analyticsBtn = document.getElementById("analyticsBtn");
+
+  if (analyticsBtn) {
+    analyticsBtn.style.display = isAdmin ? "inline-flex" : "none";
+  }
+
+  await renderMyRank();
+  renderRecentHistory();
+
+  if (state.activeView === "history") {
+    state.leaderboardData = getCurrentUserHistory(state.currentRawData);
+    state.currentPage = 1;
+    renderTable();
+  }
+});
+
+// =====================================================
+// SPARKLE PARTICLE SYSTEM
+// =====================================================
+
 const canvas = document.getElementById("sparkleCanvas");
 const ctx = canvas.getContext("2d");
+
 let particles = [];
 let hoveredCard = null;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-window.addEventListener("resize", () => {
+function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-});
+}
+
+resizeCanvas();
+
+window.addEventListener("resize", resizeCanvas);
 
 class Particle {
   constructor(x, y, color) {
     this.x = x;
     this.y = y;
     this.color = color;
-    this.size = Math.random() * 10 + 1; //You can make the particles smaller/bigger/same size here by getting rid of random, or changing the nums to be smaller/bigger
-    this.speedX = (Math.random() - 0.5) * 5;
-    this.speedY = (Math.random() - 0.5) * 5;
+    this.size = Math.random() * 6 + 1;
+    this.speedX = (Math.random() - 0.5) * 3;
+    this.speedY = (Math.random() - 0.5) * 3;
     this.alpha = 1;
     this.decay = Math.random() * 0.02 + 0.01;
     this.angle = Math.random() * Math.PI * 2;
     this.spin = (Math.random() - 0.5) * 0.2;
   }
+
   update() {
     this.x += this.speedX;
     this.y += this.speedY;
     this.alpha -= this.decay;
     this.angle += this.spin;
   }
+
   draw() {
     ctx.save();
     ctx.globalAlpha = this.alpha;
@@ -820,29 +1695,62 @@ class Particle {
 }
 
 [1, 2, 3].forEach((rank) => {
-  const el = document.getElementById(`card-${rank}`);
-  if (el) {
-    el.addEventListener("mouseenter", () => (hoveredCard = el));
-    el.addEventListener("mouseleave", () => (hoveredCard = null));
-  }
+  const element = document.getElementById(`card-${rank}`);
+
+  if (!element) return;
+
+  element.addEventListener("mouseenter", () => {
+    hoveredCard = element;
+  });
+
+  element.addEventListener("mouseleave", () => {
+    hoveredCard = null;
+  });
 });
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   if (hoveredCard) {
     const rect = hoveredCard.getBoundingClientRect();
     const color = hoveredCard.getAttribute("data-color");
+
     for (let i = 0; i < 2; i++) {
       const x = rect.left + Math.random() * rect.width;
       const y = rect.top + Math.random() * rect.height;
+
       particles.push(new Particle(x, y, color));
     }
   }
-  particles = particles.filter((p) => {
-    p.update();
-    p.draw();
-    return p.alpha > 0;
+
+  particles = particles.filter((particle) => {
+    particle.update();
+    particle.draw();
+
+    return particle.alpha > 0;
   });
+
   requestAnimationFrame(animate);
 }
-animate();
+
+// =====================================================
+// INITIALIZE
+// =====================================================
+
+async function initializeLeaderboard() {
+  try {
+    await loadGameOptions();
+    await loadAllTimeGlobalHistory();
+    updateViewControls();
+    await refreshData();
+    animate();
+  } catch (error) {
+    console.error("[Leaderboard] Failed to initialize:", error);
+
+    leaderboardEmpty.hidden = false;
+    leaderboardEmpty.textContent =
+      "The leaderboard could not be loaded. Please try again.";
+  }
+}
+
+await initializeLeaderboard();
