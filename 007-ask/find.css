@@ -1,9 +1,41 @@
+.ask-game .ask-stats { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 16px; }
+.ask-game #ask-time { font-variant-numeric: tabular-nums; }
+.ask-game .ask-help-actions a[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+.ask-game .ask-help-actions small { display: block; margin-top: 4px; }
+dialog.ask-result { box-sizing: border-box; width: min(440px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 24px; border: 1px solid var(--zatam-border); border-radius: 18px; color: var(--zatam-heading); background: #fff; overflow-y: auto; font-family: Arial, sans-serif; }
+dialog.ask-result::backdrop { background: rgb(15 23 42 / 65%); }
+.ask-result h2, .ask-result > p { text-align: center; }
+.ask-result dl { display: grid; gap: 12px; margin: 24px 0; }
+.ask-result dl > div { display: flex; justify-content: space-between; gap: 16px; }
+.ask-result dd { margin: 0; font-weight: 700; }
+.ask-result .ask-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.ask-result button { padding: 10px 14px; min-height: 44px; border: 1px solid var(--zatam-navy); border-radius: 9px; background: var(--zatam-navy); color: #fff; cursor: pointer; }
+.ask-result #ask-close { background: #fff; color: var(--zatam-navy); }
+.ask-result button:disabled { opacity: 0.55; cursor: wait; }
+.ask-result button:focus-visible { outline: 3px solid var(--zatam-gold); outline-offset: 3px; }
+
 body.ask-page {
   margin: 0;
   width: auto;
   min-width: 0;
   min-height: 100vh;
 }
+
+.ask-game #gridParent { visibility: visible; }
+.ask-game #gridParent[data-playing="true"] { visibility: visible; }
+.ask-game .ask-board-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 0 0 18px; }
+.ask-game .ask-board-actions button { min-height: 44px; padding: 10px 18px; border: 1px solid var(--zatam-navy); border-radius: 9px; background: var(--zatam-navy); color: white; font-weight: 700; cursor: pointer; }
+.ask-game .ask-board-actions #ask-replay { background: white; color: var(--zatam-navy); }
+.ask-game button:disabled { opacity: 0.5; cursor: default; }
+.ask-game .ask-name-switch .ask-name-toggle { display: inline-block; position: relative; width: 54px; height: 30px; margin: 0; flex-shrink: 0; }
+.ask-game .ask-name-toggle input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.ask-game .ask-toggle-track { display: block; width: 54px; height: 30px; border-radius: 20px; background: #68798b; pointer-events: none; }
+.ask-game .ask-toggle-track::before { content: ""; position: absolute; left: 4px; top: 4px; width: 22px; height: 22px; border-radius: 50%; background: white; }
+.ask-game .ask-name-toggle input:checked + .ask-toggle-track { background: var(--zatam-navy); }
+.ask-game .ask-name-toggle input:checked + .ask-toggle-track::before { transform: translateX(24px); }
+.ask-game .ask-name-toggle input:focus-visible + .ask-toggle-track { outline: 3px solid var(--zatam-gold); outline-offset: 3px; }
+.ask-game .ask-name-switch [data-active="false"] { opacity: 0.55; font-weight: 400; }
+.ask-game .ask-name-switch [data-active="true"] { opacity: 1; font-weight: 700; }
 
 .ask-game {
   max-width: 1320px;

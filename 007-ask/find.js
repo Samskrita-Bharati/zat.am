@@ -2,6 +2,7 @@ var N_ROWS = 10;
 var N_COLS = 10;
 var N_WORDS_TO_FIND = 5;
 var m=getQueryStringValue("m");
+if (m !== "a" && m !== "s") m = "s";
 if (m=="a")
 document.getElementById("customSwitch1").checked=false;
 if (!m)
@@ -26,6 +27,7 @@ var main = function () {
   hideHint();
   resizeGrid();
   registerEventListeners();
+  window.askScoring.begin({ total: nAnswersPresent, size: N_ROWS, names: m });
 };
 var registerEventListeners = function () {
   $("#grid").on("selectstart", function (e) {
@@ -66,7 +68,7 @@ var countAnswers = function () {
     }
   }
   $("#finishMessage").hide();
-  $("#nPresent").text(String.fromCharCode(0x0966 + nAnswersPresent));
+  $("#nPresent").text(Sanscript.t(String(nAnswersPresent), "iast", "devanagari"));
   $("#nFound").text(0);
   var answerIdx = 0;
   for (answerIdx = 0; answerIdx < answers.length; answerIdx++) {
@@ -74,13 +76,15 @@ var countAnswers = function () {
   }
 };
 var cellClick = function (e) {
+  if (!window.askScoring.canPlay()) return;
   var cell = $(e.target).closest("td").get(0);
-  nAnswersDiscovered += processCell(cell).length;
-  $("#nFound").text(String.fromCharCode(0x0966 + nAnswersDiscovered));
+  if (!cell) return;
+  var newlyFound = processCell(cell).length;
+  nAnswersDiscovered += newlyFound;
+  window.askScoring.found(newlyFound);
+  $("#nFound").text(Sanscript.t(String(nAnswersDiscovered), "iast", "devanagari"));
   if (nAnswersDiscovered == nAnswersPresent) {
-    $("#finishMessage").show();
-    $("#statusMessage").hide();
-    $("#lead").hide();
+    window.askScoring.complete();
   }
 };
 var processCell = function (cell, doNotMark) {
@@ -519,9 +523,9 @@ function getQueryStringValue(key) {
 
 let selectNames = () => {
 	if (document.getElementById("customSwitch1").checked)
-	window.location = window.location.origin + window.location.pathname + "?size=" + size + "&m=s" ;
+	window.location = window.location.origin + window.location.pathname + "?size=" + N_ROWS + "&m=s" ;
 	else
-		window.location = window.location.origin + window.location.pathname + "?size=" + size + "&m=a" ;
+		window.location = window.location.origin + window.location.pathname + "?size=" + N_ROWS + "&m=a" ;
 }
 function sV(obj) {
 obj.href+="&m="+getQueryStringValue("m");
@@ -534,6 +538,7 @@ var wordList = Sanscript.t(data[0][m],'iast', 'devanagari').split(" ");
 
 function showHint2()
 {
+  if (!window.askScoring.help("first")) return;
 	$("#lead2").html("");
 for (var i=0;i<wordList.length;i++)
 {
@@ -542,6 +547,7 @@ for (var i=0;i<wordList.length;i++)
 
 };
 function showHint3(){
+if (!window.askScoring.help("more")) return;
 $("#lead2").html("");
 for (var i=0;i<wordList.length;i++)
 {

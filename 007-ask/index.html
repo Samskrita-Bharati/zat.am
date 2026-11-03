@@ -34,6 +34,16 @@
         class="ask-board zatam-game-play-area"
         aria-label="Name search puzzle"
       >
+        <div class="ask-stats" lang="en">
+          <span>Time left: <strong id="ask-time">—</strong></span>
+          <span>Points: <strong id="ask-points">—</strong></span>
+          <span>Score: <strong id="ask-score">— / 100</strong></span>
+          <span>Help penalty: <strong id="ask-help-penalty">0</strong></span>
+        </div>
+        <div id="ask-board-actions" class="ask-board-actions" lang="en">
+          <button id="ask-start" type="button" disabled>Start</button>
+          <button id="ask-replay" type="button">Try again</button>
+        </div>
         <div id="statusMessage">
           <span id="nFound"></span> नामपदानि अन्वेषितानि
         </div>
@@ -51,16 +61,12 @@
             <h2>नामपदानि</h2>
 
             <div class="ask-name-switch">
-              <input
-                type="checkbox"
-                checked
-                id="customSwitch1"
-                onchange="selectNames()"
-              />
-
-              <label for="customSwitch1">
-                अर्जुनः / <span id="sk">श्रीकृष्णः</span>
+              <span id="arjuna-label">अर्जुनः</span>
+              <label class="ask-name-toggle">
+                <input type="checkbox" checked id="customSwitch1" role="switch" aria-label="Name set: Sri Krishna when on, Arjuna when off" onchange="selectNames()" />
+                <span class="ask-toggle-track" aria-hidden="true"></span>
               </label>
+              <span id="sk">श्रीकृष्णः</span>
             </div>
 
             <p class="ask-control-label">कठिनता</p>
@@ -89,14 +95,14 @@
           <h2 lang="en">Help</h2>
 
           <div class="ask-help-actions">
-            <a href="#" onclick="showHint2(); return false;">
+            <a id="first-help" href="#" onclick="showHint2(); return false;">
               <img src="hint.png" alt="" />
-              <span>नामपदानि कानि?</span>
+              <span>नामपदानि कानि? <small lang="en">−10 points</small></span>
             </a>
 
-            <a href="#" onclick="showHint3(); return false;">
+            <a id="more-help" href="#" onclick="showHint3(); return false;" aria-disabled="true" tabindex="-1" title="Use First Help to unlock">
               <img src="hint2.png" alt="" />
-              <span lang="en">More Help!!</span>
+              <span lang="en">More Help <small>−20 points</small></span>
             </a>
           </div>
         </section>
@@ -105,7 +111,7 @@
           <h2>How to play</h2>
 
           <p>
-            Find a name and click or tap its
+            Press <strong>Start</strong> to reveal the grid and begin the countdown. Find a name and click or tap its
             <strong>first अक्षर</strong>.
             The whole name will be highlighted.
           </p>
@@ -123,7 +129,7 @@
 
           <p>
             The first help option lists all names in the selected
-            set. More Help makes names present in this puzzle bold.
+            set and unlocks More Help. More Help makes names present in this puzzle bold. Each help option is charged once per puzzle, even if opened again.
           </p>
 
           <p>
@@ -137,14 +143,6 @@
         </section>
 
         <section id="refreshLink" class="ask-panel">
-          <a
-            class="ask-replay"
-            href="#"
-            onclick="window.location.reload(); return false;"
-          >
-            <img src="refresh.png" alt="" />
-            <span>पुनः</span>
-          </a>
 
           <p class="ask-source" lang="en">
             Names from —
@@ -167,6 +165,24 @@
     </div>
   </main>
 
+  <dialog id="ask-result" class="ask-result" aria-labelledby="ask-result-heading" lang="en">
+    <h2 id="ask-result-heading" lang="sa">उत्तमम्!</h2>
+    <p id="ask-result-message">You found all the names.</p>
+    <dl>
+      <div><dt>Difficulty</dt><dd id="result-difficulty">—</dd></div>
+      <div><dt>Time taken</dt><dd id="result-time">—</dd></div>
+      <div><dt>Names found</dt><dd id="result-found">—</dd></div>
+      <div><dt>Help penalty</dt><dd id="result-help">—</dd></div>
+      <div><dt>Final score</dt><dd id="result-score">—</dd></div>
+    </dl>
+    <p id="ask-save-status" role="status"></p>
+    <div id="ask-result-actions" class="ask-result-actions">
+      <button id="ask-retry-score" type="button" hidden>Retry saving score</button>
+      <button id="ask-next" type="button" hidden>Next difficulty</button>
+      <button id="ask-close" type="button">Close</button>
+    </div>
+  </dialog>
+
   <script
     src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -174,7 +190,8 @@
   ></script>
 
   <script src="./ask-data.js"></script>
-<script src="./find.js"></script>
+  <script src="./ask-scoring.js"></script>
+  <script src="./find.js"></script>
   <script type="module" src="../js/navbar-loader.js"></script>
 </body>
 </html>
