@@ -1,34 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="sa">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>१५ समस्या - 15 Puzzle</title>
-	<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-	<link rel="stylesheet" href="15-puzzle.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>१५ समस्या - 15 Puzzle</title>
+
+  <link rel="stylesheet" href="../shared/game-theme.css">
+  <link rel="stylesheet" href="puzzle.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 </head>
-<body data-page="games">
 
-    <!-- Shared Zat.am Navbar -->
-    <div id="navbar-mount"></div>
+<body data-page="games" class="zatam-themed-game">
+  <div id="navbar-mount"></div>
 
-	<div id="puzzle"></div>
-	<div id="controls">
-		<button id="solve">Solve</button>
-		<span id="moves"></span>
-		<button id="scramble">Scramble</button>
-	</div>
-	
-	<p>based on game Developed by Arnis Ritiņš</p>
-	<p></p>
+  <main class="sliding-game">
+    <header class="sliding-header">
+      <h1 id="puzzle-title">१५ समस्या</h1>
+      <p>Arrange the Sanskrit numbers in order.</p>
+    </header>
 
-	<script src="15-puzzle.js"></script>
+    <div class="sliding-layout">
+      <section class="board-panel" aria-label="Sliding puzzle">
+        <div class="moves-display" aria-live="polite">
+          Moves: <strong id="moves">०</strong>
+        </div>
 
+        <div class="timer-display">
+          Time: <strong id="puzzle-time">00:00</strong>
+        </div>
 
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
+        <div id="puzzle" aria-label="Number puzzle board"></div>
+
+        <div id="controls">
+          <button id="scramble" type="button">Scramble</button>
+          <button id="solve" type="button">Solve</button>
+        </div>
+      </section>
+
+      <div class="puzzle-sidebar">
+        <section class="personal-best" aria-labelledby="best-heading">
+          <h2 id="best-heading">Personal best</h2>
+          <dl>
+            <div><dt>Score:</dt><dd id="best-score">— / 100</dd></div>
+            <div><dt>Moves:</dt><dd id="best-moves">—</dd></div>
+            <div><dt>Time:</dt><dd id="best-time">—</dd></div>
+          </dl>
+          <p id="best-status" role="status"></p>
+        </section>
+
+      <aside class="instructions-panel">
+        <h2>How to play</h2>
+
+        <div class="instructions-content" tabindex="0">
+          <ol>
+            <li>Press <strong>Scramble</strong> to mix the tiles.</li>
+            <li>Click a numbered tile next to the empty space to slide it.</li>
+            <li>Arrange the numbers from left to right, starting at the top.</li>
+            <li>Leave the empty space in the bottom-right corner.</li>
+          </ol>
+
+          <p>Hover over a tile to see its number in English digits.</p>
+
+          <p>
+            The timer starts after scrambling. Time and valid moves both
+            affect your score. Your final score out of 100, moves, and
+            time appear when you complete the puzzle.
+          </p>
+
+          <p>
+            <strong>Solve</strong> displays the completed arrangement
+            and ends the attempt without awarding points.
+          </p>
+
+          <p>
+            Sign in to Zat.am to save a completed game’s score
+            to the leaderboard.
+          </p>
+        </div>
+
+        <nav class="puzzle-options" aria-label="Puzzle size">
+          <a id="option-3" href="index.html?size=3">8 Puzzle · 3 × 3</a>
+          <a id="option-4" href="index.html?size=4">15 Puzzle · 4 × 4</a>
+        </nav>
+      </aside>
+      </div>
+    </div>
+
+    <footer class="sliding-credit">
+      Based on the game developed by Arnis Ritiņš.
+    </footer>
+  </main>
+
+  <dialog class="puzzle-result" aria-labelledby="puzzle-result-title">
+    <div class="puzzle-result-content">
+      <h2 id="puzzle-result-title">उत्तमम्!</h2>
+      <p>You completed the puzzle.</p>
+
+      <dl class="puzzle-result-stats">
+        <div>
+          <dt>Time</dt>
+          <dd id="result-time"></dd>
+        </div>
+        <div>
+          <dt>Moves</dt>
+          <dd id="result-moves"></dd>
+        </div>
+        <div>
+          <dt>Final score</dt>
+          <dd id="result-score"></dd>
+        </div>
+      </dl>
+
+      <div class="puzzle-result-actions">
+        <button type="button" id="result-replay">Play again</button>
+        <button type="button" id="result-close">Close</button>
+      </div>
+
+      <p id="score-status" role="status"></p>
+
+      <button type="button" id="retry-score" hidden>
+        Retry score submission
+      </button>
+    </div>
+  </dialog>
+
+  <script src="puzzle.js"></script>
+  <script type="module" src="../js/navbar-loader.js"></script>
 </body>
 </html>
