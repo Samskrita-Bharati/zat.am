@@ -1,38 +1,98 @@
-<html>
-<head>
-<title>पाशः paashaH</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- https://www.the-art-of-web.com/javascript/maze-game/ -->
-<link rel="stylesheet" type="text/css" href="mazing.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-</body>
-<div id="maze_container"><div id="maze" data-steps="???"></div></div>
-<div id="buttons" style="float:right;left:60%">
-<button id="l" title="👈" onclick="myfn('l')">वामतः  vaamataH</button>
-<button id="u" title="👆" onclick="myfn('u')"> उपरि   upari</button>
-<button id="d" title="👇" onclick="myfn('d')"> अधः   adhaH</button>
-<button id="r" title="👉" onclick="myfn('r')">दक्षिणतः  dakShiNataH</button>
-<p>पाशः paashaH</p>
-<ul>
-<li>प्रथमं कुञ्चिकां स्वीकरोतु .. prathamaM ku~nchikaaM sviikarotu ..</li>
-<li>अनन्तरं द्वारं प्रति गच्छतु anantaraM dvaaraM prati gachChatu</li>
-</ul>
-</div>
-</body>
-    <!-- Auth Middleware-->
-    <script type="module" src="/auth/api/middleware.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-<script src="maze-builder.js"></script>
-<script src="mazing.js"></script>
-<script>
-  let Maze = new MazeBuilder(16, 12);
-  Maze.placeKey();
-  Maze.display("maze_container");
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>पाशः (PaashaH)</title>
+    <link rel="stylesheet" href="../shared/game-theme.css" />
+    <link rel="stylesheet" href="mazing.css" />
+  </head>
+  <body class="zatam-themed-game" data-page="games">
+    <div id="navbar-mount"></div>
 
-var maze;
-  window.addEventListener("DOMContentLoaded", function(e) {
-     maze = new Mazing("maze");
-  }, false);
-</script>
+    <main class="zatam-game-shell maze-shell">
+      <header class="zatam-game-header">
+        <span class="zatam-game-eyebrow">Sanskrit Maze</span>
+        <h1 class="zatam-game-title">पाशः <span>(PaashaH)</span></h1>
+        <p class="zatam-game-subtitle">Find the key, then make your way to the exit.</p>
+      </header>
+
+      <section class="zatam-game-instructions" aria-label="How to play">
+        <p>प्रथमं कुञ्चिकां स्वीकरोतु .. prathamaM ku~nchikaaM sviikarotu ..</p>
+        <p>अनन्तरं द्वारं प्रति गच्छतु anantaraM dvaaraM prati gachChatu</p>
+      </section>
+
+      <section class="zatam-game-play-area maze-play-area" aria-label="Maze game">
+        <div class="maze-board-column">
+          <div class="zatam-game-stats maze-stats" aria-label="Game status">
+            <div class="zatam-game-stat zatam-game-score" aria-live="polite">
+              <span class="zatam-game-stat-label">Score</span>
+              <span class="zatam-game-stat-value" id="game-score">0</span>
+            </div>
+            <div class="zatam-game-stat" aria-live="off">
+              <span class="zatam-game-stat-label">Time</span>
+              <span class="zatam-game-stat-value" id="game-time">00:00</span>
+            </div>
+          </div>
+          <div id="maze_container">
+            <div id="maze" data-steps="???"></div>
+          </div>
+        </div>
+        <div class="maze-controls">
+          <div class="zatam-game-actions maze-direction-pad" aria-label="Direction controls">
+            <button class="zatam-game-btn zatam-game-btn-secondary" type="button" title="Move left" aria-label="Move left" onclick="myfn('l')">← वामतः vaamataH</button>
+            <button class="zatam-game-btn zatam-game-btn-secondary" type="button" title="Move up" aria-label="Move up" onclick="myfn('u')">↑ उपरि upari</button>
+            <button class="zatam-game-btn zatam-game-btn-secondary" type="button" title="Move down" aria-label="Move down" onclick="myfn('d')">↓ अधः adhaH</button>
+            <button class="zatam-game-btn zatam-game-btn-secondary" type="button" title="Move right" aria-label="Move right" onclick="myfn('r')">→ दक्षिणतः dakShiNataH</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="maze-win-modal" class="zatam-game-modal-backdrop maze-win-modal" hidden>
+      <section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="maze-win-title">
+        <h2 id="maze-win-title" class="zatam-game-result-title">Congratulations!</h2>
+        <p class="zatam-game-result-message">समाप्तम् — samaaptam</p>
+        <div class="zatam-game-result-score-breakdown" aria-live="polite">
+          <p><span>Maze score</span><strong id="maze-base-score">0</strong></p>
+          <p><span>Time bonus</span><strong id="maze-time-bonus">+0</strong></p>
+          <p class="zatam-game-result-score-total"><span>Points earned</span><strong id="maze-final-score">0</strong></p>
+        </div>
+        <div id="score-save-status" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite" hidden></div>
+        <div class="zatam-game-actions">
+          <button id="maze-play-again" class="zatam-game-btn zatam-game-btn-primary" type="button">Play again</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="maze-failure-modal" class="zatam-game-modal-backdrop maze-failure-modal" hidden>
+      <section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="maze-failure-title">
+        <h2 id="maze-failure-title" class="zatam-game-result-title">Game over</h2>
+        <p class="zatam-game-result-message">sorry, you didn't make it</p>
+        <div class="zatam-game-actions">
+          <button id="maze-failure-play-again" class="zatam-game-btn zatam-game-btn-primary" type="button">Play again</button>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/auth/api/middleware.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+    <script src="score-config.js"></script>
+    <script src="maze-builder.js"></script>
+    <script src="mazing.js"></script>
+    <script>
+      const Maze = new MazeBuilder(16, 12);
+      Maze.placeKey();
+      Maze.display("maze_container");
+      new Mazing("maze");
+      document.getElementById("maze-play-again").addEventListener("click", () => window.location.reload());
+      document.getElementById("maze-failure-play-again").addEventListener("click", () => window.location.reload());
+    </script>
+    <script type="module" src="../js/navbar-loader.js"></script>
+    <script type="module">
+      import { initGameScore } from "../js/game-score.js";
+
+      initGameScore({ gameId: "022-p", gameName: "पाशः" });
+    </script>
+  </body>
 </html>

@@ -1,44 +1,146 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8" />
     <title>चित्र-समस्या</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:title" content="चित्र-समस्या">
     <meta property="og:image" content="../img/puzzle.jpg">
     <meta property="og:description" content="An online jigsaw puzzle by Marcelo Ricardo de Oliveira using the stunning features of the Paper JS framework">
+    <link href="../shared/game-theme.css" rel="stylesheet" type="text/css" />
     <link href="Puzzle.css" rel="stylesheet" type="text/css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
 <script src="js/paper.js" type="text/javascript"></script>
+<script src="js/score-config.js" type="text/javascript"></script>
 <script src="https://zat.am/cmpk-jul.json"></script>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-var set = urlParams.get('s');
-if (!set || set<0 || set>=ilist.length)
+var set = parseInt(urlParams.get('s'), 10);
+if (!Number.isInteger(set) || set < 0 || set > 16)
  set=0;
 var inum = urlParams.get('i');
 if (!inum || inum<0 || inum>=12)
  inum=parseInt(Math.random()*100)%12;
 var pic = urlParams.get('pic');
 </script>
-<style>
-#hintword:hover {background-color:blue}
-</style>
 </head>
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game zatam-game-page">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
 
-    <img width="920" height="120" src="../img/logo.png" class="logo"/>
-    <canvas id="canvas" class="canvas" resize></canvas>
-    <div class="charms"><p>🤔 <span id="hintword" style="color:#ccc"></span> 🤔</p>
-        <img width="50" height="50" src="../img/zoomIn.png" class="zoomIn"/>
-        <img width="50" height="50" src="../img/zoomOut.png" class="zoomOut"/>
-        <img width="50" height="50" src="../img/help.png" class="help"/>
-    </div>
-<img width="256" height="256" id="puzzle-image" class="puzzle-image" style="display: none;" src="../img/0/0.png" />
+    <main class="zatam-game-shell">
+      <div id="winScreen" class="winScreen zatam-game-modal-backdrop" role="presentation">
+        <section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="win-title">
+          <h2 id="win-title" class="zatam-game-result-title">Congratulations!</h2>
+          <p class="zatam-game-result-message">अभिनन्दनानि!!!</p>
+          <p class="zatam-game-result-score"><span id="win-score">100</span> points</p>
+          <div id="scoreSaveStatus" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite">Saving your score...</div>
+          <button id="play-again" type="button" class="zatam-game-btn zatam-game-btn-primary">Play again</button>
+        </section>
+      </div>
+      <section class="zatam-game-header">
+        <span class="zatam-game-eyebrow">Picture Puzzle</span>
+        <h1 class="zatam-game-title">चित्र-समस्या</h1>
+        <p class="zatam-game-subtitle">Arrange the pieces to complete the picture.</p>
+      </section>
+      <section class="zatam-game-instructions" aria-label="Instructions">
+        <p>Drag pieces to move them. Use the controls to zoom or preview the image.</p>
+      </section>
+      <div class="zatam-game-stats puzzle-stats" aria-label="Game status">
+        <div class="zatam-game-stat zatam-game-score" aria-live="polite">
+          <span class="zatam-game-stat-label">Score</span>
+          <span class="zatam-game-stat-value" id="score-value">0</span>
+        </div>
+        <div class="zatam-game-stat zatam-game-timer" aria-live="off">
+          <span class="zatam-game-stat-label">Time</span>
+          <span class="zatam-game-stat-value" id="time-value">00:00</span>
+        </div>
+        <div class="zatam-game-stat puzzle-set-stat">
+          <label class="zatam-game-stat-label" for="word-set-select">Word set</label>
+          <select class="zatam-game-stat-value" id="word-set-select" aria-label="Choose a word set"></select>
+        </div>
+      </div>
+      <section class="zatam-game-card puzzle-card" aria-label="Picture puzzle game">
+        <div class="play-area">
+          <img width="920" height="120" src="../img/logo.png" class="logo" alt="Puzzle complete" />
+          <canvas id="canvas" class="canvas"></canvas>
+          <p id="hintword" class="zatam-game-result-message puzzle-hint" aria-live="polite">
+            <span aria-hidden="true">🤔</span>
+            <span id="hintword-text"></span>
+            <span aria-hidden="true">🤔</span>
+          </p>
+          <div class="charms">
+            <img width="50" height="50" src="../img/zoomIn.png" class="zoomIn" alt="Zoom in" title="Zoom in" role="button" tabindex="0" />
+            <img width="50" height="50" src="../img/zoomOut.png" class="zoomOut" alt="Zoom out" title="Zoom out" role="button" tabindex="0" />
+            <img width="50" height="50" src="../img/help.png" class="help" alt="Show or hide the puzzle picture" title="Show or hide the puzzle picture" role="button" tabindex="0" />
+          </div>
+          <img width="256" height="256" id="puzzle-image" class="puzzle-image" style="display: none;" alt="Completed puzzle picture" />
+        </div>
+      </section>
+    </main>
     <img width="128" height="128" id="empty" style="display: none;" src="../img/empty.png" />
+<script>
+    const wordSetSelect = document.getElementById('word-set-select');
+    // The original local puzzle images are available for sets 0 through 16.
+    const wordSetCount = Math.min(wlist.length, 17);
+    for (let index = 0; index < wordSetCount; index++) {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = 'Set ' + (index + 1) + ' · ' + wlist[index][0];
+        wordSetSelect.appendChild(option);
+    }
+    wordSetSelect.value = String(set);
+    wordSetSelect.addEventListener('change', function() {
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('s', wordSetSelect.value);
+        window.location.href = nextUrl.toString();
+    });
+
+    window.submitPuzzleScore = async function(score, elapsedSeconds) {
+        const status = document.getElementById('scoreSaveStatus');
+        status.className = 'zatam-game-status zatam-game-status-info';
+        status.textContent = 'Saving your score...';
+        if (!window.zatamScore || typeof window.zatamScore.submit !== 'function') {
+            status.className = 'zatam-game-status zatam-game-status-error';
+            status.textContent = 'The leaderboard is not available right now.';
+            return;
+        }
+        try {
+            const result = await window.zatamScore.submit(score, {
+                metrics: {
+                    gameTimerSeconds: elapsedSeconds,
+                    pointsEarned: score,
+                    wordSet: set,
+                    imageIndex: inum
+                }
+            });
+            if (result && result.ok) {
+                status.className = 'zatam-game-status zatam-game-status-success';
+                status.textContent = 'Score saved to the leaderboard ✓';
+            } else if (result && result.reason === 'not-signed-in') {
+                status.className = 'zatam-game-status zatam-game-status-info';
+                status.textContent = 'Sign in to save your score to the leaderboard.';
+            } else if (result && result.reason === 'already-submitted') {
+                status.className = 'zatam-game-status zatam-game-status-success';
+                status.textContent = 'Score already saved ✓';
+            } else {
+                status.className = 'zatam-game-status zatam-game-status-error';
+                status.textContent = 'Your score could not be saved.';
+            }
+        } catch (error) {
+            console.error('[019-cs] Score submission failed:', error);
+            status.className = 'zatam-game-status zatam-game-status-error';
+            status.textContent = 'The leaderboard score could not be saved.';
+        }
+    };
+
+    const puzzleCanvas = document.getElementById('canvas');
+    puzzleCanvas.width = puzzleCanvas.clientWidth;
+    puzzleCanvas.height = puzzleCanvas.clientHeight;
+</script>
 <script type="text/paperscript" canvas="canvas">
         Array.prototype.remove = function(start, end) {
             this.splice(start, end);
@@ -46,14 +148,10 @@ var pic = urlParams.get('pic');
         }
 
         view.currentScroll = new Point(0, 0);
-        var scrollVector = new Point(0,0);
-        var scrollMargin = 32;
-$("#hintword").html(wlist[set][inum]);
-  if (pic)
-  $('#puzzle-image').attr('src',pic);
-  else
-  $('#puzzle-image').attr('src', '../img/'+set+'/'+inum+'.png');
-
+        window.addEventListener('resize', function() {
+            view.viewSize = new Size(puzzleCanvas.clientWidth, puzzleCanvas.clientHeight);
+        });
+$("#hintword-text").text(wlist[set][inum]);
         var imgWidth = $('.puzzle-image').css('width').replace('px', '');
         var imgHeight = $('.puzzle-image').css('height').replace('px', '');
 
@@ -61,8 +159,6 @@ $("#hintword").html(wlist[set][inum]);
             zoomScaleOnDrag: 1.125,
             imgName: 'puzzle-image',
             tileWidth: 64,
-            tilesPerRow: 10,
-            tilesPerColumn: 8,
             imgWidth: imgWidth,
             imgHeight: imgHeight,
             shadowWidth: 120
@@ -70,9 +166,26 @@ $("#hintword").html(wlist[set][inum]);
 
         var puzzle = new Html5Puzzle(config);
         puzzle.zoom(-.3);
-        var path;
-        var movePath = false;
-
+        var scoreConfig = window.PUZZLE_SCORE_CONFIG;
+        document.getElementById('win-score').textContent = scoreConfig.initialScore;
+        var startedAt = null;
+        var puzzleCompleted = false;
+        function startGameTimer() {
+            if (startedAt !== null) return;
+            startedAt = Date.now();
+            setInterval(function() {
+                var totalSeconds = Math.floor((Date.now() - startedAt) / 1000);
+                var minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+                var seconds = (totalSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('time-value').textContent = minutes + ':' + seconds;
+            }, 1000);
+        }
+        function calculateFinalScore(elapsedSeconds) {
+            var secondsAfterGracePeriod = Math.max(0, elapsedSeconds - scoreConfig.deductionStartsAfterSeconds);
+            var deductionCount = Math.floor(secondsAfterGracePeriod / scoreConfig.deductionIntervalSeconds);
+            var deductions = deductionCount * scoreConfig.deductionAmount;
+            return Math.max(0, scoreConfig.initialScore - deductions);
+        }
         $('.zoomIn').click(function() {
             puzzle.zoom(.1);
         });
@@ -81,23 +194,39 @@ $("#hintword").html(wlist[set][inum]);
             puzzle.zoom(-.1);
         });
 
-        $('.help').mousedown(function() {
+        $('.help').click(function() {
             if ($('.canvas').css('display') == 'none') {
                 $('.canvas').show();
                 $('.puzzle-image').hide();
                 $('.logo').hide();
+                $('.play-area').removeClass('preview-mode');
+                $('#hintword, .zoomIn, .zoomOut').show();
             }
             else {
                 $('.canvas').hide();
                 $('.puzzle-image').show();
-                $('.logo').show();
+                $('.logo').hide();
+                $('.play-area').addClass('preview-mode');
+                $('#hintword, .zoomIn, .zoomOut').hide();
             }
         });
 
-        var charmsWidth = $('.charms').css('width').replace('px', '');
-        $('.puzzle-image').css('margin', '-' + imgHeight/2 + 'px 0 0 -' + imgWidth/2 + 'px');
+        $('#play-again').click(function() {
+            window.location.reload();
+        });
+        $('#winScreen').click(function(event) {
+            if (event.target === this) window.location.reload();
+        });
+
+        $('.zoomIn, .zoomOut, .help').keydown(function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                $(this).trigger('click');
+            }
+        });
 
         function onMouseDown(event) {
+            startGameTimer();
             puzzle.pickTile();
         }
 
@@ -107,13 +236,6 @@ $("#hintword").html(wlist[set][inum]);
 
         function onMouseMove(event) {
             puzzle.mouseMove(event.point, event.delta);
-
-            if (event.point.x < scrollMargin) {
-                scrollVector = new Point(scrollMargin - event.point.x, 0);
-            }
-            else {
-                scrollVector = new Point(0, 0);
-            }
         }
 
         function onMouseDrag(event) {
@@ -133,7 +255,7 @@ $("#hintword").html(wlist[set][inum]);
 
         function Html5Puzzle(config) {
             instance = this;
-            this.currentZoom = 1.5;
+            this.currentZoom = 1;
             this.zoomScaleOnDrag = config.zoomScaleOnDrag;
             this.imgName = config.imgName;
             this.shadowWidth = config.shadowWidth;
@@ -143,14 +265,13 @@ $("#hintword").html(wlist[set][inum]);
             this.tileWidth = config.tileWidth;
             this.tilesPerRow = Math.ceil(config.imgWidth / config.tileWidth);
             this.tilesPerColumn = Math.ceil(config.imgHeight / config.tileWidth);
-//            this.tilesPerRow = 4;
-//            this.tilesPerColumn = 4;			
             this.tileMarginWidth = this.tileWidth * 0.203125;
             this.selectedTile = undefined;
             this.selectedTileIndex = undefined;
             this.selectionGroup = undefined;
             this.shadowScale = 1.5;
             this.tiles = createTiles(this.tilesPerRow, this.tilesPerColumn);
+            var scoreOrigin = null;
 
             function createTiles(xTileCount, yTileCount) {
                 var tiles = new Array();
@@ -296,8 +417,6 @@ $("#hintword").html(wlist[set][inum]);
                 ];
 
                 var mask = new Path();
-                var tileCenter = view.center;
-
                 var topLeftEdge = new Point(-4,4);
 
                 mask.moveTo(topLeftEdge);
@@ -341,17 +460,8 @@ $("#hintword").html(wlist[set][inum]);
                 return mask;
             }
 
-            var hitOptions = {
-                segments: true,
-                stroke: true,
-                fill: true,
-                tolerance: 5
-            };
-
             function getTileRaster(sourceRaster, size, offset) {
                 var targetRaster = new Raster('empty');
-				//hht
-				//var targetRaster = new Raster('puzzle-image');
                 var tileWithMarginWidth = size.width + instance.tileMarginWidth * 2;
                 var data = sourceRaster.getData(new Rectangle(
                     offset.x - instance.tileMarginWidth, 
@@ -434,23 +544,29 @@ $("#hintword").html(wlist[set][inum]);
                         var tile = instance.tiles[instance.selectedTileIndex];
                         tile.position = roundPosition;
                         tile.cellPosition = cellPosition;
-                        instance.selectionGroup.remove();
+                        if (!scoreOrigin) {
+                            scoreOrigin = cellPosition - tile.imagePosition;
+                        }
                         instance.selectedTile =
                         instance.selectionGroup = null;
                         project.activeLayer.addChild(tile);
 
                         var errors = checkTiles();
-                        if (errors == 0) {
-                            //alert('Congratulations!!!');
-							alert(wlist[set][inum]);
+                        updateScore();
+                        if (errors == 0 && !puzzleCompleted) {
+                            puzzleCompleted = true;
+                            var elapsedSeconds = startedAt === null ? 0 : Math.floor((Date.now() - startedAt) / 1000);
+                            var finalScore = calculateFinalScore(elapsedSeconds);
+                            document.getElementById('score-value').textContent = finalScore;
+                            document.getElementById('win-score').textContent = finalScore;
+                            window.submitPuzzleScore(finalScore, elapsedSeconds);
+                            document.getElementById('winScreen').classList.add('is-visible');
                         }
                     }
                 }
             }
 
             function getTileAtCellPosition(point) {
-                var width = instance.tilesPerRow;
-                var height = instance.tilesPerColumn;
                 var tile = undefined;
                 for (var i = 0; i < instance.tiles.length; i++) {
                     if (instance.tiles[i].cellPosition == point) {
@@ -481,8 +597,6 @@ $("#hintword").html(wlist[set][inum]);
                         var hit = false;
                         for (var index = 0; index < instance.tiles.length; index++) {
                             var tile = instance.tiles[index];
-                            var row = parseInt(index / config.tilesPerRow);
-                            var col = index % config.tilesPerRow;
 
                             var tileCenter = tile.position;
 
@@ -536,10 +650,24 @@ $("#hintword").html(wlist[set][inum]);
 
                 return errors;
             }
+
+            function updateScore() {
+                if (!scoreOrigin) return;
+                var correctlyPlaced = 0;
+                for (var i = 0; i < instance.tiles.length; i++) {
+                    var tile = instance.tiles[i];
+                    if (tile.cellPosition == tile.imagePosition + scoreOrigin) {
+                        correctlyPlaced++;
+                    }
+                }
+                document.getElementById('score-value').textContent = correctlyPlaced + ' / ' + instance.tiles.length;
+            }
         }
   </script>
 <script>
- $('#puzzle-image').attr('src', '../img/'+set+'/'+inum+'.png');
+    const puzzleImage = document.getElementById('puzzle-image');
+    // Load the original local image set; an explicit pic override remains supported.
+    puzzleImage.src = pic || '../img/' + set + '/' + inum + '.png';
 </script>
 
 
@@ -548,5 +676,10 @@ $("#hintword").html(wlist[set][inum]);
       type="module"
       src="../js/navbar-loader.js"
     ></script>
+    <script type="module">
+      import { initGameScore } from '../js/game-score.js';
+
+      initGameScore({ gameId: '019-cs', gameName: 'चित्र-समस्या' });
+    </script>
 </body>
 </html>

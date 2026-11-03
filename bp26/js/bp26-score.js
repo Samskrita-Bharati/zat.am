@@ -26,6 +26,22 @@ console.log("✅ Firebase connected to projectId:", db.app.options.projectId);
 let CURRENT_UID = ""; 
 let BP26_GAME = "bp26-Game1"; // default
 
+// TEMPORARY compatibility mapping.
+// Remove this file once all BP26 games use /js/game-score.js.
+const BP26_GAME_LABELS = Object.freeze({
+  "bp26-Game1": "Vocabulary (शब्दावली)",
+  "bp26-Game2": "Memory Game (क्रीडा)",
+  "bp26-Game3": "Find It (अन्वेषणम्)",
+  "bp26-Game4": "Word Search",
+  "bp26-Game5": "Audio Match",
+  "bp26-Game6": "Word Repeat (पुनरुक्ति)",
+  "bp26-Game7": "Picture Repeat (पुनरावर्तनम्)",
+});
+
+function getBp26GameLabel(gameId) {
+  return BP26_GAME_LABELS[gameId] || gameId;
+}
+
 function dayIdFromDate(d = new Date()) {
   return d.toISOString().split("T")[0]; // YYYY-MM-DD
 }
@@ -47,7 +63,11 @@ onAuthStateChanged(auth, async (user) => {
 async function ensureParentsUnderZatAm() {
   await Promise.all([
     setDoc(doc(db, "leaderboards", "Global"), { label: "Global" }, { merge: true }),
-    setDoc(doc(db, "leaderboards", BP26_GAME), { label: BP26_GAME }, { merge: true })
+    setDoc(
+      doc(db, "leaderboards", BP26_GAME),
+      { label: getBp26GameLabel(BP26_GAME) },
+      { merge: true },
+    )
   ]);
 }
 

@@ -1,0 +1,129 @@
+.clock-card {
+	width: min(100%, 560px);
+	margin: 0 auto;
+	text-align: center;
+}
+
+.clock-instructions {
+	width: min(100%, 560px);
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.clock-time-controls {
+	display: flex;
+	align-items: end;
+	justify-content: center;
+	gap: 10px;
+	margin: 0;
+}
+
+.clock-time-controls label {
+	display: grid;
+	gap: 5px;
+	color: var(--zatam-muted);
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	text-align: left;
+	text-transform: uppercase;
+}
+
+.clock-time-controls select {
+	min-width: 86px;
+	min-height: 44px;
+	padding: 8px 30px 8px 12px;
+	border: 1px solid var(--zatam-border);
+	border-radius: var(--zatam-radius-sm);
+	background: var(--zatam-white);
+	color: var(--zatam-heading);
+	font: 700 1rem/1.2 var(--zatam-font);
+}
+
+.clock-time-controls select:focus-visible {
+	outline: 3px solid rgba(47, 109, 255, 0.28);
+	outline-offset: 2px;
+}
+
+.clock-time-separator {
+	padding-bottom: 10px;
+	color: var(--zatam-heading);
+	font-size: 1.2rem;
+	font-weight: 800;
+}
+
+#canvas {
+	display: block;
+	width: min(100%, 400px);
+	height: auto;
+	margin: 0 auto;
+}
+
+.time-reading-label {
+	margin: 16px 0 6px;
+	color: var(--zatam-muted);
+	font-size: 0.8rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+#samayaH {
+	min-height: 1.6em;
+	margin: 0;
+	color: var(--zatam-heading);
+	font-size: clamp(1.35rem, 5vw, 2rem);
+	font-weight: 800;
+	line-height: 1.5;
+	word-break: keep-all;
+}
+
+.clock-card .zatam-game-actions {
+	margin-top: 18px;
+}
+
+.clock-control-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 18px;
+}
+
+.clock-card .clock-live-actions {
+	margin-top: 12px;
+}
+
+@media (max-width: 520px) {
+	.zatam-game-shell {
+		width: min(calc(100% - 20px), var(--zatam-content-width));
+		padding-top: 24px;
+	}
+
+	.clock-card {
+		padding: 14px;
+	}
+
+	.clock-card .zatam-game-actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.clock-control-row {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.clock-time-controls {
+		align-self: center;
+	}
+
+	.clock-control-row > .zatam-game-btn {
+		width: 100%;
+	}
+
+	.clock-card .zatam-game-btn {
+		width: 100%;
+	}
+}

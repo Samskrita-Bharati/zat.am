@@ -1,348 +1,470 @@
-<html>
+<!doctype html>
+<html lang="sa">
   <head>
-    <title>संस्कृतम् Minesweeper</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="A Sanskrit-number Minesweeper game from Zat.am."
+    />
+    <title>संस्कृतम् Minesweeper | Zat.am</title>
+    <link rel="stylesheet" href="../shared/game-theme.css" />
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-    <style>
-      BODY {
-        background: black;
-        color: #dddddd;
-        font-family: courier new;
-        text-align: center;
-      }
-
-      H1 {
-        text-align: center;
-        font-size: 14pt;
-        font-weight: normal;
-      }
-      #grid {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      #grid TR TD {
-        border: 1px solid white;
-        background: #999999;
-        width: 24px;
-        height: 24px;
-        text-align: center;
-      }
-
-      #grid TR TD.clicked {
-        background: #333333;
-      }
-
-      #grid TR TD.mine {
-        background: #ff0000;
-      }
-
-      BUTTON {
-        margin: 12px;
-      }
-      #gm {
-        background-color: red;
-      }
-
-      .checkbox label {
-        background-color: red;
-        border-radius: 50px;
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-        cursor: pointer;
-        display: block;
-        position: relative;
-        height: 30px;
-        width: 150px;
-        user-select: none;
-        transform: rotate(0deg);
-        transition: background-color 1s ease-in;
-      }
-
-      .checkbox label .ball {
-        background-color: #f1f1f1;
-        border-radius: 40%;
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.75);
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        width: 40px;
-        height: 20px;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        color: black;
-      }
-
-      .checkbox #ckb {
-        display: none;
-      }
-
-      .checkbox #ckb.active:not(:checked) + label {
-        background-color: red;
-        animation: uncheck 1.5s ease-in forwards;
-      }
-
-      @keyframes uncheck {
-        0% {
-          transform: rotate(0deg);
-        }
-
-        25%,
-        50% {
-          transform: rotate(-20deg);
-        }
-
-        100% {
-          transform: rotate(0deg);
-        }
-      }
-
-      .checkbox #ckb.active:not(:checked) + label .ball {
-        animation: moveBallLeft 1.5s ease-in forwards;
-      }
-
-      @keyframes moveBallLeft {
-        0%,
-        25% {
-          transform: translateX(100px);
-        }
-
-        50%,
-        100% {
-          transform: translateX(0px);
-        }
-      }
-
-      .checkbox #ckb.active:checked + label {
-        background-color: #4cd137;
-        animation: check 1.5s ease-in forwards;
-      }
-
-      @keyframes check {
-        0% {
-          transform: rotate(0deg);
-        }
-
-        25%,
-        50% {
-          transform: rotate(20deg);
-        }
-
-        100% {
-          transform: rotate(0deg);
-        }
-      }
-
-      .checkbox #ckb.active:checked + label .ball {
-        /* 	left: 105px; */
-        animation: moveBallRight 2s ease-in forwards;
-      }
-
-      @keyframes moveBallRight {
-        0%,
-        25% {
-          transform: translateX(0px);
-        }
-
-        50%,
-        100% {
-          transform: translateX(100px);
-        }
-      }
-    </style>
   </head>
-  <body data-page="games">
-    <!-- Shared Zat.am Navbar -->
+  <body data-page="games" class="zatam-themed-game zatam-minesweeper-game">
     <div id="navbar-mount"></div>
 
-    <h1>संस्कृतम् Minesweeper</h1>
-    <progress id="mss" value="0" max="80">0%</progress>
-    <table id="grid"></table>
-    <progress id="gm" value="0" max="20" style="display: none">0%</progress>
-    <br />
-    <center>
-      <div class="checkbox">
-        <input type="checkbox" id="ckb" />
-        <label for="ckb">
-          <div class="ball">१०</div>
-        </label>
-      </div>
-    </center>
-    <button onclick="generateGrid()">पुनः - Again</button>
-    <br />
-    <p>
-      Based on minesweeper game by 101computing.net
-      <script>
-        function chg() {
-          checkbox.classList.add("active");
-          if (document.getElementsByClassName("ball")[0].innerHTML == "७") {
-            document.getElementsByClassName("ball")[0].innerHTML = "१०";
-            siz = 10;
-          } else {
-            document.getElementsByClassName("ball")[0].innerHTML = "७";
-            siz = 7;
-          }
-          generateGrid();
-        }
-        const checkbox = document.getElementById("ckb");
+    <main class="zatam-game-shell minesweeper-page">
+      <header class="zatam-game-header minesweeper-header">
+        <p class="mangalam">॥ श्रीः ॥</p>
+        <span class="zatam-game-eyebrow">सङ्ख्याविमर्शः</span>
+        <h1 class="zatam-game-title">संस्कृतम् Minesweeper</h1>
+        <p class="zatam-game-subtitle">
+          Clear every safe square, mark suspected mines, and read the clues in Sanskrit numerals.
+        </p>
+      </header>
 
-        checkbox.addEventListener("change", chg);
-        const urlParams = new URLSearchParams(window.location.search);
-        var siz = urlParams.get("s");
-        //var d = parseInt(getQueryStringValue("d"));
-        if ((siz && siz == 10) || siz == 7) {
-        } else siz = 10;
+      <section class="zatam-game-instructions minesweeper-instructions" aria-label="How to play">
+        <details>
+          <summary>How to play</summary>
+          <p>
+            Select a square to reveal it. Right-click a square—or switch to Mark mode—to place a marker. The number in each revealed square shows how many mines touch it.
+          </p>
+        </details>
+      </section>
 
-        document.addEventListener("contextmenu", (event) =>
-          event.preventDefault(),
+      <section class="zatam-game-stats minesweeper-stats" aria-label="Game progress">
+        <div class="zatam-game-stat zatam-game-score">
+          <span class="zatam-game-stat-label">Score</span>
+          <span id="scoreValue" class="zatam-game-stat-value">100</span>
+          <span class="minesweeper-stat-note">final score on a win</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">Board</span>
+          <span id="boardSize" class="zatam-game-stat-value">१० × १०</span>
+          <span class="minesweeper-stat-note">choose a size below</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">Time</span>
+          <span id="timerValue" class="zatam-game-stat-value">०:००</span>
+          <span class="minesweeper-stat-note">starts on first reveal</span>
+        </div>
+      </section>
+
+      <section class="minesweeper-layout">
+        <aside class="zatam-game-card minesweeper-controls" aria-label="Board settings">
+          <h2 class="zatam-game-section-title">कठिनता</h2>
+          <p class="control-copy">Choose the size of the field.</p>
+          <div class="size-options" role="group" aria-label="Choose board size">
+            <button class="zatam-game-btn zatam-game-btn-secondary size-button" type="button" data-size="5" aria-pressed="false">
+              लघु <span>५ × ५</span>
+            </button>
+            <button class="zatam-game-btn zatam-game-btn-secondary size-button" type="button" data-size="7" aria-pressed="false">
+              सरलम् <span>७ × ७</span>
+            </button>
+            <button class="zatam-game-btn zatam-game-btn-secondary size-button" type="button" data-size="10" aria-pressed="true">
+              कठिनम् <span>१० × १०</span>
+            </button>
+          </div>
+          <p class="control-copy control-copy--small">About one square in five contains a mine.</p>
+        </aside>
+
+        <section class="zatam-game-play-area minesweeper-play-area" aria-label="Minesweeper board">
+          <div class="board-heading">
+            <div>
+              <span class="board-kicker">क्रीडाक्षेत्रम्</span>
+              <h2>Find the safe path</h2>
+            </div>
+            <button id="markModeButton" class="mine-key mark-mode-button" type="button" aria-pressed="false">
+              <span class="mine-key-icon" aria-hidden="true">⚑</span>
+              <span>Mark mode</span>
+            </button>
+          </div>
+          <div class="board-wrap">
+            <div id="grid" role="group" aria-label="Minesweeper board"></div>
+          </div>
+          <p id="gameStatus" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite">
+            Choose a square to begin.
+          </p>
+        </section>
+      </section>
+
+      <nav class="zatam-game-actions minesweeper-actions" aria-label="Game actions">
+        <button id="resetButton" class="zatam-game-btn zatam-game-btn-primary" type="button">
+          <span aria-hidden="true">↻</span>
+          <span>पुनः / New board</span>
+        </button>
+      </nav>
+
+      <section id="resultPanel" class="zatam-game-result zatam-hidden" aria-live="polite">
+        <h2 class="zatam-game-result-title">जयः 🎉</h2>
+        <div id="resultScore" class="zatam-game-result-score">100 / 100</div>
+        <p id="resultDetails" class="zatam-game-result-message"></p>
+        <p id="scoreSaveStatus" class="zatam-game-status zatam-game-status-info">
+          Checking leaderboard...
+        </p>
+      </section>
+
+      <footer class="game-footer">
+        Based on the Minesweeper game by <a href="https://www.101computing.net/minesweeper-in-javascript/" rel="noreferrer">101 Computing</a>.
+      </footer>
+    </main>
+
+    <script type="module">
+      import {
+        clampScore,
+        initGameScore,
+        resetGameScore,
+        submitGameScore,
+      } from "../js/game-score.js";
+
+      const grid = document.getElementById("grid");
+      const scoreValue = document.getElementById("scoreValue");
+      const boardSize = document.getElementById("boardSize");
+      const gameStatus = document.getElementById("gameStatus");
+      const markModeButton = document.getElementById("markModeButton");
+      const sizeButtons = [...document.querySelectorAll(".size-button")];
+      const timerValue = document.getElementById("timerValue");
+      const resultPanel = document.getElementById("resultPanel");
+      const resultScore = document.getElementById("resultScore");
+      const resultDetails = document.getElementById("resultDetails");
+      const scoreSaveStatus = document.getElementById("scoreSaveStatus");
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const requestedSize = Number(urlParams.get("s"));
+      let siz = [5, 7, 10].includes(requestedSize) ? requestedSize : 10;
+      let mineTotal = 0;
+      let safeTotalCount = 0;
+      let safeCleared = 0;
+      let markers = 0;
+      let gameActive = true;
+      let hasStarted = false;
+      let markMode = false;
+      let elapsedSeconds = 0;
+      let timerId = null;
+      let cells = [];
+
+      initGameScore({
+        gameId: "008-mss",
+        gameName: "संस्कृतम् Minesweeper",
+      });
+
+      function devanagari(value) {
+        return Sanscript.t(String(value), "iast", "devanagari");
+      }
+
+      function setStatus(message, kind = "info") {
+        gameStatus.textContent = message;
+        gameStatus.className = `zatam-game-status zatam-game-status-${kind}`;
+      }
+
+      function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        return `${devanagari(minutes)}:${devanagari(seconds)}`;
+      }
+
+      function calculateScore() {
+        const paceBySize = {
+          5: { parSeconds: 30, secondsPerPoint: 2 },
+          7: { parSeconds: 60, secondsPerPoint: 3 },
+          10: { parSeconds: 150, secondsPerPoint: 6 },
+        };
+        const pace = paceBySize[siz];
+        const overtime = Math.max(0, elapsedSeconds - pace.parSeconds);
+        return clampScore(100 - Math.floor(overtime / pace.secondsPerPoint));
+      }
+
+      function updateTimer() {
+        timerValue.textContent = formatTime(elapsedSeconds);
+      }
+
+      function startTimer() {
+        if (timerId || !gameActive) return;
+        // Keep the shared leaderboard timer aligned with the visible game timer:
+        // both begin only once a player reveals their first square.
+        resetGameScore();
+        timerId = window.setInterval(() => {
+          elapsedSeconds += 1;
+          updateStats();
+        }, 1000);
+      }
+
+      function stopTimer() {
+        if (!timerId) return;
+        window.clearInterval(timerId);
+        timerId = null;
+      }
+
+      function updateStats() {
+        boardSize.textContent = `${devanagari(siz)} × ${devanagari(siz)}`;
+        scoreValue.textContent = String(calculateScore());
+        updateTimer();
+      }
+
+      function setCellLabel(cell, description) {
+        cell.setAttribute(
+          "aria-label",
+          `${description}, row ${cell.dataset.row}, column ${cell.dataset.column}`
         );
-        //minesweeper game by 101computing.net - www.101computing.et/minesweeper-in-javascript/
-        var grid = document.getElementById("grid");
-        var testMode = false; //Turn this variable to true to see where the mines are
+      }
+
+      function updateMarkModeButton() {
+        markModeButton.setAttribute("aria-pressed", String(markMode));
+        markModeButton.querySelector("span:last-child").textContent = markMode ? "Mark mode on" : "Mark mode";
+      }
+
+      function setMarkMode(nextMode) {
+        if (!gameActive) return;
+        markMode = nextMode;
+        updateMarkModeButton();
+        setStatus(
+          markMode
+            ? "Mark mode is on. Select a square to place or remove a marker."
+            : "Reveal mode is on. Select a square to reveal it."
+        );
+      }
+
+      function setBoardSize(nextSize, shouldUpdateUrl) {
+        siz = nextSize;
+        if (shouldUpdateUrl) {
+          const nextUrl = new URL(window.location.href);
+          nextUrl.searchParams.set("s", String(siz));
+          window.history.replaceState({}, "", nextUrl);
+        }
+        sizeButtons.forEach((button) => {
+          button.setAttribute("aria-pressed", String(Number(button.dataset.size) === siz));
+        });
         generateGrid();
-        if (siz == 7) chg();
-        function generateGrid() {
-          document.getElementById("mss").value = 0;
-          document.getElementById("mss").max = parseInt(
-            siz * siz - (siz * siz) / 5,
-          );
-          document.getElementById("gm").value = 0;
-          grid.innerHTML = "";
-          for (var i = 0; i < siz; i++) {
-            row = grid.insertRow(i);
-            for (var j = 0; j < siz; j++) {
-              cell = row.insertCell(j);
-              cell.onmousedown = function (ev) {
-                if (ev.button == 2) {
-                  markCell(this);
-                  //ev.returnValue = false;ev.preventDefault();return false;
-                } else clickCell(this);
-              };
-              var mine = document.createAttribute("data-mine");
-              mine.value = "false";
-              cell.setAttributeNode(mine);
-            }
-          }
-          addMines();
-        }
+      }
 
-        function addMines() {
-          //Add mines randomly
-          for (var i = 0; i < parseInt((siz * siz) / 5); i++) {
-            var row = Math.floor((Math.random() * 10) % siz);
-            var col = Math.floor((Math.random() * 10) % siz);
-            var cell = grid.rows[row].cells[col];
-            //	if (cell.innerHTML=="X") cell.innerHTML="y" ;else cell.innerHTML="X";
-            //if (cell.getAttribute("data-mine")) console.log("repeat");
-            cell.setAttribute("data-mine", "true");
-            if (testMode) cell.innerHTML = "X";
-          }
-        }
+      function generateGrid() {
+        stopTimer();
+        mineTotal = Math.floor((siz * siz) / 5);
+        safeTotalCount = siz * siz - mineTotal;
+        safeCleared = 0;
+        markers = 0;
+        gameActive = true;
+        hasStarted = false;
+        markMode = false;
+        elapsedSeconds = 0;
+        grid.innerHTML = "";
+        grid.classList.remove("is-finished");
+        grid.setAttribute("aria-disabled", "false");
+        grid.style.setProperty("--board-size", String(siz));
+        markModeButton.disabled = false;
+        resultPanel.classList.add("zatam-hidden");
+        grid.setAttribute("aria-label", `${siz} by ${siz} Minesweeper board`);
+        updateMarkModeButton();
 
-        function revealMines() {
-          //Highlight all mines in red
-          for (var i = 0; i < siz; i++) {
-            for (var j = 0; j < siz; j++) {
-              var cell = grid.rows[i].cells[j];
-              if (cell.getAttribute("data-mine") == "true")
-                cell.style.backgroundColor = "#FF0000";
-            }
-          }
-        }
-
-        function checkLevelCompletion() {
-          var levelComplete = true;
-          for (var i = 0; i < siz; i++) {
-            for (var j = 0; j < siz; j++) {
-              if (
-                grid.rows[i].cells[j].getAttribute("data-mine") == "false" &&
-                grid.rows[i].cells[j].innerHTML == ""
-              )
-                levelComplete = false;
-            }
-          }
-          if (levelComplete) {
-            alert("जयः 🙂");
-            revealMines();
-          }
-        }
-        function markCell(cell) {
-          if (cell.style.backgroundColor == "tomato") {
-            cell.style.backgroundColor = "";
-            document.getElementById("gm").value -= 1;
-          } else {
-            document.getElementById("gm").value += 1;
-            cell.style.backgroundColor = "tomato";
-          }
-        }
-        function clickCell(cell) {
-          cell.style.backgroundColor = "";
-          //Check if the end-user clicked on a mine
-          if (cell.getAttribute("data-mine") == "true") {
-            revealMines();
-            alert("पराजयः 🙁");
-            for (var i = 0; i < siz; i++) {
-              for (var j = 0; j < siz; j++) {
-                var cell = grid.rows[i].cells[j];
-                cell.onclick = "";
-              }
-            }
-          } else {
-            if (cell.className != "clicked")
-              document.getElementById("mss").value += 1;
-            cell.className = "clicked";
-
-            //Count and display the number of adjacent mines
-            var mineCount = 0;
-            var cellRow = cell.parentNode.rowIndex;
-            var cellCol = cell.cellIndex;
-            //alert(cellRow + " " + cellCol);
-            for (
-              var i = Math.max(cellRow - 1, 0);
-              i <= Math.min(cellRow + 1, siz - 1);
-              i++
-            ) {
-              for (
-                var j = Math.max(cellCol - 1, 0);
-                j <= Math.min(cellCol + 1, siz - 1);
-                j++
-              ) {
-                if (grid.rows[i].cells[j].getAttribute("data-mine") == "true")
-                  mineCount++;
-              }
-            }
-            if (mineCount == 0) cell.innerHTML = " ";
-            else
-              cell.innerHTML = Sanscript.t(
-                String(mineCount),
-                "iast",
-                "devanagari",
-              );
-            if (mineCount == 0) {
-              //Reveal all adjacent cells as they do not have a mine
-              for (
-                var i = Math.max(cellRow - 1, 0);
-                i <= Math.min(cellRow + 1, siz - 1);
-                i++
-              ) {
-                for (
-                  var j = Math.max(cellCol - 1, 0);
-                  j <= Math.min(cellCol + 1, siz - 1);
-                  j++
-                ) {
-                  //Recursive Call
-                  if (grid.rows[i].cells[j].innerHTML == "")
-                    clickCell(grid.rows[i].cells[j]);
+        cells = Array.from({ length: siz }, () => []);
+        for (let rowIndex = 0; rowIndex < siz; rowIndex += 1) {
+          for (let columnIndex = 0; columnIndex < siz; columnIndex += 1) {
+            const cell = document.createElement("button");
+            cell.type = "button";
+            cell.className = "mine-cell";
+            cell.dataset.mine = "false";
+            cell.dataset.marked = "false";
+            cell.dataset.row = String(rowIndex + 1);
+            cell.dataset.column = String(columnIndex + 1);
+            cell.setAttribute("aria-disabled", "false");
+            setCellLabel(cell, "Hidden square");
+            cell.addEventListener("pointerdown", (event) => {
+              event.preventDefault();
+              if (event.button === 2) markCell(cell);
+              if (event.button === 0) {
+                if (markMode) {
+                  markCell(cell);
+                } else {
+                  clickCell(cell);
                 }
               }
-            }
-            checkLevelCompletion();
+            });
+            cell.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                if (markMode) {
+                  markCell(cell);
+                } else {
+                  clickCell(cell);
+                }
+              }
+              if (event.key.toLowerCase() === "m") {
+                event.preventDefault();
+                markCell(cell);
+              }
+            });
+            cells[rowIndex][columnIndex] = cell;
+            grid.append(cell);
           }
         }
-      </script>
 
-      <!-- Shared Zat.am Navbar -->
-      <script type="module" src="../js/navbar-loader.js"></script>
-    </p>
+        updateStats();
+        setStatus("Choose a square to begin.");
+      }
+
+      function addMines(firstCell) {
+        let addedMines = 0;
+        while (addedMines < mineTotal) {
+          const row = Math.floor(Math.random() * siz);
+          const column = Math.floor(Math.random() * siz);
+          const cell = cells[row][column];
+          if (cell === firstCell || cell.dataset.mine === "true") continue;
+          cell.dataset.mine = "true";
+          addedMines += 1;
+        }
+      }
+
+      function revealMines() {
+        for (let row = 0; row < siz; row += 1) {
+          for (let column = 0; column < siz; column += 1) {
+            const cell = cells[row][column];
+            if (cell.dataset.mine === "true") {
+              cell.classList.add("mine");
+              cell.textContent = "✹";
+              setCellLabel(cell, "Mine");
+            }
+          }
+        }
+      }
+
+      function finishGame(message, kind) {
+        gameActive = false;
+        stopTimer();
+        grid.classList.add("is-finished");
+        grid.setAttribute("aria-disabled", "true");
+        grid.querySelectorAll(".mine-cell").forEach((cell) => {
+          cell.disabled = true;
+          cell.setAttribute("aria-disabled", "true");
+        });
+        markModeButton.disabled = true;
+        setStatus(message, kind);
+      }
+
+      function showResult(finalScore) {
+        resultScore.textContent = `${finalScore} / 100`;
+        resultDetails.textContent = `You cleared all ${safeTotalCount} safe squares on the ${siz} × ${siz} board in ${formatTime(elapsedSeconds)}.`;
+        scoreSaveStatus.className = "zatam-game-status zatam-game-status-info";
+        scoreSaveStatus.textContent = "Saving your score...";
+        resultPanel.classList.remove("zatam-hidden");
+        resultPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      async function saveCompletedScore(finalScore) {
+        try {
+          const result = await submitGameScore(finalScore, {
+            metrics: {
+              boardSize: siz,
+              mines: mineTotal,
+              safeSquares: safeTotalCount,
+              gameTimerSeconds: elapsedSeconds,
+            },
+          });
+
+          if (result.ok) {
+            scoreSaveStatus.className = "zatam-game-status zatam-game-status-success";
+            scoreSaveStatus.textContent = "Score saved to the leaderboard ✓";
+          } else if (result.reason === "not-signed-in") {
+            scoreSaveStatus.className = "zatam-game-status zatam-game-status-info";
+            scoreSaveStatus.textContent = "Game complete! Sign in to save future scores to the leaderboard.";
+          } else if (result.reason === "already-submitted") {
+            scoreSaveStatus.className = "zatam-game-status zatam-game-status-success";
+            scoreSaveStatus.textContent = "Score already saved ✓";
+          } else {
+            scoreSaveStatus.className = "zatam-game-status zatam-game-status-error";
+            scoreSaveStatus.textContent = "Game complete, but the score could not be saved.";
+          }
+        } catch (error) {
+          console.error("[008-mss] Score submission failed:", error);
+          scoreSaveStatus.className = "zatam-game-status zatam-game-status-error";
+          scoreSaveStatus.textContent = "Game complete, but the leaderboard score could not be saved.";
+        }
+      }
+
+      function checkLevelCompletion() {
+        if (safeCleared === safeTotalCount) {
+          revealMines();
+          finishGame("जयः 🙂 All safe squares are clear. Start a new board when you are ready.", "success");
+          const finalScore = calculateScore();
+          scoreValue.textContent = String(finalScore);
+          showResult(finalScore);
+          void saveCompletedScore(finalScore);
+        }
+      }
+
+      function markCell(cell) {
+        if (!gameActive || cell.classList.contains("clicked")) return;
+        const isMarked = cell.dataset.marked === "true";
+        if (!isMarked && markers >= mineTotal) {
+          setStatus("All available markers are already in use.");
+          return;
+        }
+        cell.dataset.marked = String(!isMarked);
+        cell.classList.toggle("marked", !isMarked);
+        cell.textContent = isMarked ? "" : "⚑";
+        setCellLabel(cell, isMarked ? "Hidden square" : "Marked square");
+        markers += isMarked ? -1 : 1;
+        updateStats();
+      }
+
+      function clickCell(cell) {
+        if (!gameActive || cell.classList.contains("clicked") || cell.dataset.marked === "true") return;
+
+        if (!hasStarted) {
+          addMines(cell);
+          hasStarted = true;
+          startTimer();
+        }
+
+        if (cell.dataset.mine === "true") {
+          revealMines();
+          finishGame("पराजयः 🙁 A mine was uncovered. Try a fresh board.", "error");
+          return;
+        }
+
+        cell.classList.add("clicked");
+        safeCleared += 1;
+
+        let nearbyMines = 0;
+        const cellRow = Number(cell.dataset.row) - 1;
+        const cellColumn = Number(cell.dataset.column) - 1;
+
+        for (let row = Math.max(cellRow - 1, 0); row <= Math.min(cellRow + 1, siz - 1); row += 1) {
+          for (let column = Math.max(cellColumn - 1, 0); column <= Math.min(cellColumn + 1, siz - 1); column += 1) {
+            if (cells[row][column].dataset.mine === "true") nearbyMines += 1;
+          }
+        }
+
+        if (nearbyMines === 0) {
+          cell.textContent = "";
+          setCellLabel(cell, "Revealed safe square, no adjacent mines");
+          for (let row = Math.max(cellRow - 1, 0); row <= Math.min(cellRow + 1, siz - 1); row += 1) {
+            for (let column = Math.max(cellColumn - 1, 0); column <= Math.min(cellColumn + 1, siz - 1); column += 1) {
+              const neighbor = cells[row][column];
+              if (!neighbor.classList.contains("clicked") && neighbor.dataset.marked !== "true") clickCell(neighbor);
+            }
+          }
+        } else {
+          cell.textContent = devanagari(nearbyMines);
+          cell.dataset.nearby = nearbyMines;
+          setCellLabel(cell, `Revealed safe square, ${nearbyMines} adjacent mine${nearbyMines === 1 ? "" : "s"}`);
+        }
+
+        updateStats();
+        checkLevelCompletion();
+      }
+
+      grid.addEventListener("contextmenu", (event) => event.preventDefault());
+      document.getElementById("resetButton").addEventListener("click", generateGrid);
+      sizeButtons.forEach((button) => {
+        button.addEventListener("click", () => setBoardSize(Number(button.dataset.size), true));
+      });
+
+      markModeButton.addEventListener("click", () => setMarkMode(!markMode));
+
+      setBoardSize(siz, false);
+    </script>
+    <script type="module" src="../js/navbar-loader.js"></script>
   </body>
 </html>

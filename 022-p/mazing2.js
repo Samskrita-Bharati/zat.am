@@ -1,6 +1,9 @@
 // Original JavaScript code by Chirp Internet: chirpinternet.eu
 // Please acknowledge use of this code by including this header.
 const urlParams = new URLSearchParams(window.location.search);
+const scoreConfig = window.PAASHA_SCORE_CONFIG;
+const treasureBonus = 10;
+const sentinelPenalty = 5;
 var sa = urlParams.get('a');
 if (!sa || isNaN(sa))
 	sa=1;
@@ -24,14 +27,11 @@ function Mazing(id) {
   this.mazeMessage = document.createElement("div");
   this.mazeMessage.id = "maze_message";
 
-  this.heroScore = this.mazeContainer.getAttribute("data-steps") - 2;
+  this.heroScore = Number(this.mazeContainer.getAttribute("data-steps")) - scoreConfig.initialScoreDeduction;
 
   this.maze = [];
   this.heroPos = {};
   this.heroHasKey = false;
-  this.childMode = false;
-
-  this.utter = null;
 
   for(i=0; i < this.mazeContainer.children.length; i++) {
     for(j=0; j < this.mazeContainer.children[i].children.length; j++) {
@@ -51,7 +51,6 @@ function Mazing(id) {
   mazeOutputDiv.appendChild(this.mazeScore);
   mazeOutputDiv.appendChild(this.mazeMessage);
 
-  mazeOutputDiv.style.width = this.mazeContainer.scrollWidth + "px";
   this.setMessage("first find the key");
 
   this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
@@ -70,14 +69,14 @@ Mazing.prototype.setMessage = function(text) {
 
 Mazing.prototype.heroTakeTreasure = function() {
   this.maze[this.heroPos].classList.remove("nubbin");
-  this.heroScore += 10;
+  this.heroScore += treasureBonus;
   this.setMessage("yay, treasure!");
 };
 
 Mazing.prototype.heroTakeKey = function() {
   this.maze[this.heroPos].classList.remove("key");
   this.heroHasKey = true;
-  this.heroScore += 20;
+  this.heroScore += scoreConfig.keyBonus;
   this.mazeScore.classList.add("has-key");
   this.setMessage("you now have the key!");
 };
@@ -92,7 +91,7 @@ Mazing.prototype.gameOver = function(text) {
 Mazing.prototype.heroWins = function() {
   this.mazeScore.classList.remove("has-key");
   this.maze[this.heroPos].classList.remove("door");
-  this.heroScore += 50;
+  this.heroScore += scoreConfig.exitBonus;
   this.gameOver("you finished !!!");
 };
 
@@ -106,8 +105,8 @@ Mazing.prototype.tryMoveHero = function(pos) {
 
   // before moving
   if(nextStep.match(/sentinel/)) {
-    this.heroScore = Math.max(this.heroScore - 5, 0);
-    if(!this.childMode && this.heroScore <= 0) {
+    this.heroScore = Math.max(this.heroScore - sentinelPenalty, scoreConfig.minimumScore);
+    if(this.heroScore <= scoreConfig.minimumScore) {
       this.gameOver("sorry, you didn't make it");
     } else {
       this.setMessage("ow, that hurt!");
@@ -144,10 +143,8 @@ Mazing.prototype.tryMoveHero = function(pos) {
     return;
   }
   if(this.heroScore >= 1) {
-    if(!this.childMode) {
-      this.heroScore--;
-    }
-    if(!this.childMode && (this.heroScore <= 0)) {
+    this.heroScore = Math.max(this.heroScore - scoreConfig.pointsLostPerMove, scoreConfig.minimumScore);
+    if(this.heroScore <= scoreConfig.minimumScore) {
       this.gameOver("sorry, you didn't make it");
     } else {
       this.setMessage("...");
@@ -183,12 +180,6 @@ Mazing.prototype.mazeKeyPressHandler = function(e) {
   }
   this.tryMoveHero(tryPos);
   e.preventDefault();
-};
-
-Mazing.prototype.setChildMode = function() {
-  this.childMode = true;
-  this.heroScore = 0;
-  this.setMessage("collect all the treasure");
 };
 
 var myfn = function(e) {

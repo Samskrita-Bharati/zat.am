@@ -1,6 +1,7 @@
 // Original JavaScript code by Chirp Internet: chirpinternet.eu
 // Please acknowledge use of this code by including this header.
 const urlParams = new URLSearchParams(window.location.search);
+const scoreConfig = window.PAASHA_SCORE_CONFIG;
 var sa = urlParams.get('a');
 if (!sa || isNaN(sa))
 	sa=1;
@@ -18,20 +19,20 @@ function Mazing(id) {
   // bind to HTML element
   this.mazeContainer = document.getElementById(id);
 
-  this.mazeScore = document.createElement("div");
-  this.mazeScore.id = "maze_score";
+  this.mazeScore = document.getElementById("game-score");
+  this.gameTimer = document.getElementById("game-time");
+  this.timerStartedAt = null;
+  this.timerInterval = null;
 
   this.mazeMessage = document.createElement("div");
   this.mazeMessage.id = "maze_message";
+  this.mazeMessage.className = "zatam-game-status zatam-game-status-info";
 
-  this.heroScore = this.mazeContainer.getAttribute("data-steps") - 2;
+  this.heroScore = Number(this.mazeContainer.getAttribute("data-steps")) - scoreConfig.initialScoreDeduction;
 
   this.maze = [];
   this.heroPos = {};
   this.heroHasKey = false;
-  this.childMode = false;
-
-  this.utter = null;
 
   for(i=0; i < this.mazeContainer.children.length; i++) {
     for(j=0; j < this.mazeContainer.children[i].children.length; j++) {
@@ -48,11 +49,9 @@ function Mazing(id) {
   var mazeOutputDiv = document.createElement("div");
   mazeOutputDiv.id = "maze_output";
 
-  mazeOutputDiv.appendChild(this.mazeScore);
   mazeOutputDiv.appendChild(this.mazeMessage);
 
-  mazeOutputDiv.style.width = this.mazeContainer.scrollWidth + "px";
-  this.setMessage("first find the key");
+  this.setMessage("First, find the key.");
 
   this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
@@ -65,35 +64,119 @@ function Mazing(id) {
 
 Mazing.prototype.setMessage = function(text) {
   this.mazeMessage.innerHTML = text;
-  this.mazeScore.innerHTML = this.heroScore + " - " + Sanscript.t(String(this.heroScore),'itrans', 'devanagari');
+  this.mazeScore.textContent = this.heroScore + " - " + Sanscript.t(String(this.heroScore), "itrans", "devanagari");
 };
 
-Mazing.prototype.heroTakeTreasure = function() {
-  this.maze[this.heroPos].classList.remove("nubbin");
-  this.heroScore += 10;
-  this.setMessage("yay, treasure!");
+Mazing.prototype.startTimer = function() {
+  if(this.timerStartedAt !== null) return;
+  this.timerStartedAt = Date.now();
+  this.timerInterval = window.setInterval(this.updateTimerDisplay.bind(this), 1000);
+  this.updateTimerDisplay();
+};
+
+Mazing.prototype.stopTimer = function() {
+  if(this.timerInterval !== null) window.clearInterval(this.timerInterval);
+  this.timerInterval = null;
+  if(this.timerStartedAt !== null) this.updateTimerDisplay();
+};
+
+Mazing.prototype.updateTimerDisplay = function() {
+  if(this.timerStartedAt === null) return;
+  var elapsedSeconds = this.getElapsedSeconds();
+  var minutes = Math.floor(elapsedSeconds / 60);
+  var seconds = elapsedSeconds % 60;
+  this.gameTimer.textContent = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+};
+
+Mazing.prototype.getElapsedSeconds = function() {
+  return this.timerStartedAt === null
+    ? 0
+    : Math.floor((Date.now() - this.timerStartedAt) / 1000);
+};
+
+Mazing.prototype.submitLeaderboardScore = async function(score, resultType, metrics) {
+  var status = document.getElementById("score-save-status");
+  status.hidden = false;
+  status.className = "zatam-game-status zatam-game-status-info";
+  status.textContent = "Saving your score...";
+
+  if(!window.zatamScore || typeof window.zatamScore.submit !== "function") {
+    status.className = "zatam-game-status zatam-game-status-error";
+    status.textContent = "The leaderboard is not available right now.";
+    return;
+  }
+
+  try {
+    var leaderboardScore = window.zatamScore.clampScore
+      ? window.zatamScore.clampScore(score)
+      : Math.max(0, Math.min(100, Math.round(score)));
+    var submission = await window.zatamScore.submit(leaderboardScore, {
+      result: resultType,
+      metrics: Object.assign({}, metrics, { pointsEarned: leaderboardScore }),
+    });
+
+    if(submission && submission.ok) {
+      status.className = "zatam-game-status zatam-game-status-success";
+      status.textContent = "Score saved to the leaderboard ✓";
+    } else if(submission && submission.reason === "not-signed-in") {
+      status.className = "zatam-game-status zatam-game-status-info";
+      status.textContent = "Sign in to save your score to the leaderboard.";
+    } else if(submission && submission.reason === "already-submitted") {
+      status.className = "zatam-game-status zatam-game-status-success";
+      status.textContent = "Score already saved ✓";
+    } else {
+      status.className = "zatam-game-status zatam-game-status-error";
+      status.textContent = "Your score could not be saved.";
+    }
+  } catch(error) {
+    console.error("[022-p] Score submission failed:", error);
+    status.className = "zatam-game-status zatam-game-status-error";
+    status.textContent = "The leaderboard score could not be saved.";
+  }
 };
 
 Mazing.prototype.heroTakeKey = function() {
   this.maze[this.heroPos].classList.remove("key");
   this.heroHasKey = true;
-  this.heroScore += 20;
+  this.heroScore += scoreConfig.keyBonus;
   this.mazeScore.classList.add("has-key");
   this.setMessage("you now have the key!");
 };
 
-Mazing.prototype.gameOver = function(text) {
+Mazing.prototype.gameOver = function(text, completed = false) {
   // de-activate control keys
   document.removeEventListener("keydown", this.keyPressHandler, false);
+  this.stopTimer();
   this.setMessage(text);
   this.mazeContainer.classList.add("finished");
+  if(!completed) {
+    this.mazeContainer.classList.add("maze-failed");
+    document.getElementById("maze-failure-modal").hidden = false;
+  }
 };
 
 Mazing.prototype.heroWins = function() {
   this.mazeScore.classList.remove("has-key");
   this.maze[this.heroPos].classList.remove("door");
-  this.heroScore += 50;
-  this.gameOver("you finished !!!");
+  this.heroScore += scoreConfig.exitBonus;
+  var baseScore = this.heroScore;
+  var elapsedSeconds = this.getElapsedSeconds();
+  var tierIndex = scoreConfig.timeBonusThresholdsSeconds.findIndex(
+    (threshold) => elapsedSeconds < threshold,
+  );
+  var timeBonus = tierIndex === -1 ? 0 : scoreConfig.timeBonusPoints[tierIndex] ?? 0;
+  this.heroScore = Math.max(scoreConfig.minimumScore, baseScore + timeBonus);
+  this.gameOver("you finished !!!", true);
+  this.mazeContainer.classList.add("maze-won");
+  document.getElementById("maze-base-score").textContent = baseScore;
+  document.getElementById("maze-time-bonus").textContent = `+${timeBonus}`;
+  document.getElementById("maze-final-score").textContent = this.heroScore;
+  document.getElementById("maze-win-modal").hidden = false;
+  this.submitLeaderboardScore(this.heroScore, "completed", {
+    mazeScore: baseScore,
+    timeBonus,
+    gameTimerSeconds: elapsedSeconds,
+  });
 };
 
 Mazing.prototype.tryMoveHero = function(pos) {
@@ -104,26 +187,18 @@ Mazing.prototype.tryMoveHero = function(pos) {
 
   var nextStep = this.maze[pos].className;
 
-  // before moving
-  if(nextStep.match(/sentinel/)) {
-    this.heroScore = Math.max(this.heroScore - 5, 0);
-    if(!this.childMode && this.heroScore <= 0) {
-      this.gameOver("sorry, you didn't make it");
-    } else {
-      this.setMessage("ow, that hurt!");
-    }
-    return;
-  }
   if(nextStep.match(/wall/)) {
     return;
   }
+  if(nextStep.match(/exit/) && !this.heroHasKey) {
+    this.setMessage("you need a key to unlock the door");
+    return;
+  }
+
+  this.startTimer();
+
   if(nextStep.match(/exit/)) {
-    if(this.heroHasKey) {
-      this.heroWins();
-    } else {
-      this.setMessage("you need a key to unlock the door");
-      return;
-    }
+    this.heroWins();
   }
 
   // move hero one step
@@ -132,10 +207,6 @@ Mazing.prototype.tryMoveHero = function(pos) {
   this.heroPos = pos;
 
   // after moving
-  if(nextStep.match(/nubbin/)) {
-    this.heroTakeTreasure();
-    return;
-  }
   if(nextStep.match(/key/)) {
     this.heroTakeKey();
     return;
@@ -144,10 +215,8 @@ Mazing.prototype.tryMoveHero = function(pos) {
     return;
   }
   if(this.heroScore >= 1) {
-    if(!this.childMode) {
-      this.heroScore--;
-    }
-    if(!this.childMode && (this.heroScore <= 0)) {
+    this.heroScore = Math.max(this.heroScore - scoreConfig.pointsLostPerMove, scoreConfig.minimumScore);
+    if(this.heroScore <= scoreConfig.minimumScore) {
       this.gameOver("sorry, you didn't make it");
     } else {
       this.setMessage("...");
@@ -183,12 +252,6 @@ Mazing.prototype.mazeKeyPressHandler = function(e) {
   }
   this.tryMoveHero(tryPos);
   e.preventDefault();
-};
-
-Mazing.prototype.setChildMode = function() {
-  this.childMode = true;
-  this.heroScore = 0;
-  this.setMessage("collect all the treasure");
 };
 
 var myfn = function(e) {

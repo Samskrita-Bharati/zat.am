@@ -3,15 +3,102 @@ import {
   getDocs,
   doc,
   getDoc,
+  writeBatch,
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 import { db } from "./auth/api/firebase-config.js";
 
+const LEGACY_BP26_GAME_LABELS = Object.freeze({
+  "bp26-Game1": "Vocabulary (शब्दावली)",
+  "bp26-Game2": "Memory Game (क्रीडा)",
+  "bp26-Game3": "Find It (अन्वेषणम्)",
+  "bp26-Game4": "Word Search",
+  "bp26-Game5": "Audio Match",
+  "bp26-Game6": "Word Repeat (पुनरुक्ति)",
+  "bp26-Game7": "Picture Repeat (पुनरावर्तनम्)",
+});
+
+function getFriendlyGameLabel(gameId, storedLabel) {
+  const fallback = LEGACY_BP26_GAME_LABELS[gameId] || gameId;
+  const label = String(storedLabel || "").trim();
+
+  if (!label || label === gameId) {
+    return fallback;
+  }
+
+  return label;
+}
+
 /*
 =====================================================
-CHECK WHETHER FIRESTORE NEEDS TO BE FETCHED AGAIN
+ONE-TIME LEGACY BP26 LABEL MIGRATION
 =====================================================
+
+Only parent-document labels are changed. Score/history data is untouched.
+The operation is idempotent: once labels match, no writes are made.
 */
+
+export async function migrateLegacyBp26Labels() {
+  const snapshot = await getDocs(collection(db, "leaderboards"));
+  const docsById = new Map(
+    snapshot.docs.map((docSnap) => [docSnap.id, docSnap]),
+  );
+  const batch = writeBatch(db);
+  let updateCount = 0;
+
+  Object.entries(LEGACY_BP26_GAME_LABELS).forEach(([gameId, label]) => {
+    const docSnap = docsById.get(gameId);
+
+    if (!docSnap) {
+      return;
+    }
+
+    const currentLabel = String(docSnap.data()?.label || "").trim();
+
+    if (currentLabel === label) {
+      return;
+    }
+
+    batch.set(docSnap.ref, { label }, { merge: true });
+    updateCount += 1;
+  });
+
+  if (updateCount > 0) {
+    await batch.commit();
+  }
+
+  return updateCount;
+}
+
+/*
+=====================================================
+GET LEADERBOARD-ENABLED GAMES
+=====================================================
+
+Every scored game creates/updates a parent document under:
+leaderboards/{gameId}
+
+The shared scorer stores the human-readable game name in `label`.
+Global is excluded because it is an aggregate leaderboard, not a game.
+*/
+
+export async function getLeaderboardGames() {
+  const snapshot = await getDocs(collection(db, "leaderboards"));
+
+  return snapshot.docs
+    .filter((docSnap) => docSnap.id !== "Global")
+    .map((docSnap) => {
+      const data = docSnap.data() || {};
+
+      return {
+        id: docSnap.id,
+        name: getFriendlyGameLabel(docSnap.id, data.label),
+      };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/* CHECK WHETHER FIRESTORE NEEDS TO BE FETCHED AGAIN */
 
 export function checkFetchRequirements(
   startDate,
@@ -53,11 +140,7 @@ GET RAW LEADERBOARD HISTORY
 export async function getRawData(start, end, selectedGame) {
   const historyDocuments = [];
 
-  /*
-  -----------------------------------------------------
-  ALL DATES
-  -----------------------------------------------------
-  */
+  /* ALL DATES */
 
   if (start === 0) {
     const gameHistoryRef = collection(
@@ -228,9 +311,49 @@ function formatRawData(entries, attemptMeta, selectedGame) {
       const score = Number(rawScore);
 
       /*
-      Ignore malformed records instead of letting NaN
-      break leaderboard sorting.
+      LEVEL COMPATIBILITY
+
+      New attempts:
+      - meta.levelId
+      - meta.levelName
+
+      Existing integrations may already have stored level information
+      through custom metrics. Because the current shared scorer flattens
+      metrics into attemptMeta, meta.levelId already covers that format.
+
+      A small number of older puzzle results may only have puzzleSize.
+      We preserve that value as a fallback level identifier instead of
+      guessing a game-specific Level 1 / Level 2 mapping.
       */
+
+      const nestedMetrics =
+        meta.metrics && typeof meta.metrics === "object" ? meta.metrics : {};
+
+      const rawLevelId =
+        meta.levelId ??
+        nestedMetrics.levelId ??
+        meta.puzzleSize ??
+        nestedMetrics.puzzleSize ??
+        null;
+
+      const rawLevelName = meta.levelName ?? nestedMetrics.levelName ?? null;
+
+      const levelId =
+        rawLevelId === undefined || rawLevelId === null || rawLevelId === ""
+          ? null
+          : String(rawLevelId).trim();
+
+      const levelName =
+        rawLevelName === undefined ||
+        rawLevelName === null ||
+        rawLevelName === ""
+          ? null
+          : String(rawLevelName).trim();
+
+      const gameName =
+        typeof meta.gameName === "string" && meta.gameName.trim()
+          ? meta.gameName.trim()
+          : null;
 
       if (!uid || !Number.isFinite(timestamp) || !Number.isFinite(score)) {
         console.warn("[Leaderboard] Ignoring invalid history entry:", key);
@@ -250,6 +373,9 @@ function formatRawData(entries, attemptMeta, selectedGame) {
         timePlayed,
 
         gameId,
+        gameName,
+        levelId,
+        levelName,
 
         /*
         Keep metadata available for future use.
