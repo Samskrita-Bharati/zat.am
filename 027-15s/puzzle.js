@@ -8,7 +8,8 @@
 
   var params = new URLSearchParams(window.location.search);
   var size = params.get("size") === "3" ? 3 : 4;
-  var levelId = size === 3 ? 1 : 2;
+  var levelId = size === 3 ? "1" : "2";
+  var levelName = size === 3 ? "8 Puzzle" : "15 Puzzle";
   var total = size * size;
   var startingScore = size === 3 ? 1000 : 2000;
 
@@ -128,13 +129,17 @@
         var attempt = metadata[key];
 
         if (!attempt || attempt.result !== "completed") return;
-        if (Number(attempt.puzzleSize) !== size) return;
+        // Prefer the shared level ID; retain older puzzle-size-only history.
+        var savedLevelId = attempt.levelId ?? attempt.metrics?.levelId;
+        if (savedLevelId !== undefined && savedLevelId !== null && savedLevelId !== "") {
+          if (String(savedLevelId) !== levelId) return;
+        } else if (Number(attempt.puzzleSize) !== size) return;
 
         // Read the exact 0–100 score stored by shared scoring.
         var candidate = {
           score: entries[key],
           moves: attempt.moves,
-          seconds: attempt.elapsedSeconds
+          seconds: attempt.puzzleSeconds ?? attempt.elapsedSeconds
         };
 
         if (
@@ -302,7 +307,9 @@
 
       shared.initGameScore({
         gameId: "027-15s",
-        gameName: "Sliding Number Puzzle"
+        gameName: "Sliding Number Puzzle",
+        levelId: levelId,
+        levelName: levelName
       });
 
       sharedRunInitialized = true;
@@ -461,6 +468,7 @@
     solveButton.disabled = true;
     scrambleButton.disabled = true;
     replayButton.disabled = true;
+    closeButton.disabled = true;
 
     try {
       var shared = await loadScoring();
@@ -469,7 +477,9 @@
       if (!attempt.initialized) {
         shared.initGameScore({
           gameId: "027-15s",
-          gameName: "Sliding Number Puzzle"
+          gameName: "Sliding Number Puzzle",
+          levelId: levelId,
+          levelName: levelName
         });
 
         attempt.initialized = true;
@@ -480,12 +490,15 @@
         {
           result: "completed",
           levelId: levelId,
+          levelName: levelName,
           metrics: {
             levelId: levelId,
+            levelName: levelName,
             puzzleSize: size,
             puzzleType: size === 3 ? "8-puzzle" : "15-puzzle",
             moves: attempt.moves,
             elapsedSeconds: attempt.seconds,
+            puzzleSeconds: attempt.seconds,
             rawScore: attempt.rawScore,
             maximumScore: startingScore
           }
@@ -520,6 +533,7 @@
       solveButton.disabled = false;
       scrambleButton.disabled = false;
       replayButton.disabled = false;
+      closeButton.disabled = false;
     }
   }
 
@@ -660,7 +674,11 @@
   );
 
   closeButton.addEventListener("click", function () {
+    if (savingScore) return;
     dialog.close();
+  });
+  dialog.addEventListener("cancel", function (event) {
+    if (savingScore) event.preventDefault();
   });
 
   replayButton.addEventListener("click", function () {
