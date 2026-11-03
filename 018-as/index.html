@@ -295,7 +295,7 @@ async function saveCompletedScore(finalScore) {
 function updateVerseProgress() {
   if (!verseProgressElement) return;
 
-  verseProgressElement.textContent = 'Shloka ' +
+  verseProgressElement.textContent =
     (playableVerseIndexes.indexOf(snum) + 1) +
     ' of ' + playableVerseIndexes.length;
 }
@@ -535,7 +535,7 @@ function matchCardToSlot(slot, card) {
     </div>
     <div class="zatam-game-stat">
       <span class="zatam-game-stat-label">Current shloka</span>
-      <span id="verseProgress" class="zatam-game-stat-value">Shloka 1 of 16</span>
+      <span id="verseProgress" class="zatam-game-stat-value">1 of 16</span>
     </div>
     <div class="zatam-game-stat">
       <span class="zatam-game-stat-label">Time</span>
