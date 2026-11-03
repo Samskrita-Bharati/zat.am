@@ -9,6 +9,11 @@ body.zatam-themed-game.zatam-ordering-game {
 
 .ordering-game-shell {
   width: min(calc(100% - 1.5rem), 1100px);
+  padding-top: 1.5rem;
+}
+
+.ordering-game-header {
+  margin-bottom: 1.25rem;
 }
 
 .ordering-game-header .mangalam {
@@ -19,20 +24,47 @@ body.zatam-themed-game.zatam-ordering-game {
 }
 
 .ordering-game-instructions {
+  max-width: 860px;
+  margin-inline: auto;
   text-align: center;
 }
 
 .ordering-game-stats {
-  width: min(100%, 15rem);
+  width: min(100%, 58rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1.1rem;
+  margin-bottom: 0.85rem;
   margin-inline: auto;
 }
 
-.ordering-game-board {
+.ordering-game-stats .zatam-game-stat {
+  padding: 0.85rem 0.75rem;
+}
+
+.ordering-game-stats .zatam-game-stat-value {
+  font-size: 1.2rem;
+}
+
+#verseProgress {
+  white-space: nowrap;
+}
+
+.zatam-ordering-game .ordering-game-shell > .zatam-game-actions {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.zatam-ordering-game .ordering-game-shell > .zatam-game-actions .zatam-game-btn {
+  min-height: 40px;
+}
+
+.zatam-ordering-game #content.ordering-game-board {
   display: grid;
   grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
-  gap: clamp(1rem, 3vw, 1.5rem);
+  gap: clamp(0.85rem, 2.5vw, 1.35rem);
   align-items: start;
-  margin: 0;
+  width: 100%;
+  margin: 1.25rem 0 0;
   padding: clamp(0.8rem, 2vw, 1.25rem);
   text-align: left;
   user-select: none;
@@ -41,13 +73,13 @@ body.zatam-themed-game.zatam-ordering-game {
 .zatam-ordering-game #cardPile,
 .zatam-ordering-game #cardSlots {
   display: grid;
-  gap: 0.65rem;
+  gap: 0.55rem;
   align-content: start;
   width: auto;
-  min-height: 20rem;
+  min-height: 0;
   height: auto;
   margin: 0;
-  padding: 0.85rem;
+  padding: 0.8rem;
   float: none;
   background: var(--zatam-soft);
   border: 1px solid var(--zatam-border);
@@ -86,7 +118,7 @@ body.zatam-themed-game.zatam-ordering-game {
 .zatam-ordering-game #cardSlots > div {
   display: grid;
   place-items: center;
-  min-height: 4.75rem;
+  min-height: 4.25rem;
   width: auto;
   height: auto;
   margin: 0;
@@ -102,6 +134,7 @@ body.zatam-themed-game.zatam-ordering-game {
   line-height: 1.45;
   text-align: center;
   text-shadow: none;
+  touch-action: manipulation;
   overflow-wrap: anywhere;
 }
 
@@ -227,8 +260,26 @@ body.zatam-themed-game.zatam-ordering-game {
 }
 
 @media (max-width: 760px) {
-  .ordering-game-board {
+  .ordering-game-shell {
+    padding-top: 1rem;
+  }
+
+  .ordering-game-header {
+    margin-bottom: 0.9rem;
+  }
+
+  .ordering-game-instructions {
+    padding: 0.8rem 0.9rem;
+  }
+
+  .ordering-game-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .zatam-ordering-game #content.ordering-game-board {
     grid-template-columns: minmax(0, 1fr);
+    padding: 0.7rem;
   }
 
   .zatam-ordering-game #cardPile,
@@ -237,12 +288,33 @@ body.zatam-themed-game.zatam-ordering-game {
   }
 }
 
+@media (max-width: 600px) {
+  .zatam-ordering-game #cardPile {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .zatam-ordering-game #cardPile > div {
+    min-height: 3.35rem;
+    padding: 0.55rem 0.25rem;
+    font-size: 0.84rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 760px) and (min-height: 600px) and (pointer: coarse) {
+  .zatam-ordering-game #cardPile {
+    position: sticky;
+    top: 0.65rem;
+    z-index: 1;
+    box-shadow: var(--zatam-shadow);
+  }
+}
+
 @media (max-width: 430px) {
   .ordering-game-shell {
     width: min(calc(100% - 1rem), 1100px);
   }
 
-  .zatam-ordering-game #cardPile,
   .zatam-ordering-game #cardSlots {
     grid-template-columns: minmax(0, 1fr);
     padding: 0.65rem;
@@ -250,8 +322,17 @@ body.zatam-themed-game.zatam-ordering-game {
 
   .zatam-ordering-game #cardPile > div,
   .zatam-ordering-game #cardSlots > div {
-    min-height: 4rem;
+    min-height: 3.75rem;
+    padding: 0.65rem;
     font-size: 0.9rem;
+  }
+
+  .ordering-game-stats .zatam-game-stat {
+    padding: 0.7rem 0.45rem;
+  }
+
+  .ordering-game-stats .zatam-game-stat-value {
+    font-size: 1.1rem;
   }
 }
 
