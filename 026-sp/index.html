@@ -1,57 +1,113 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width">
-  <meta charset="UTF-8">
-  <title>स्वराः-paint</title>
-  <link rel="stylesheet" type="text/css" href="letterpaint.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>स्वराः — Paint the vowel</title>
+  <link rel="stylesheet" href="../shared/game-theme.css">
+  <link rel="stylesheet" href="letterpaint.css">
 </head>
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game">
+  <div id="navbar-mount"></div>
 
-    <!-- Shared Zat.am Navbar -->
-    <div id="navbar-mount"></div>
+  <main class="zatam-game-shell vowel-paint">
+    <header class="zatam-game-header">
+      <h1 class="zatam-game-title" lang="sa">स्वराः</h1>
+      <p class="zatam-game-subtitle">Paint the vowel without going outside its shape.</p>
+    </header>
 
-  <div id="container" class="container">
+    <div class="paint-layout">
+      <section class="zatam-game-card paint-card" aria-label="Vowel tracing game">
+        <div class="paint-toolbar">
+          <button id="reload" type="button" class="zatam-game-btn zatam-game-btn-secondary" disabled>New letter</button>
+          <button id="sound" type="button" class="zatam-game-btn zatam-game-btn-secondary" aria-pressed="true">Sound on</button>
+        </div>
 
-    <div id="chars" class="gamedata">अआइईउऊऋॠएऐओऔ</div>
+        <div class="paint-stats" aria-label="Current attempt">
+          <span>Time: <strong id="paint-time">00:00</strong></span>
+          <span>Painted: <strong id="paint-coverage">0%</strong></span>
+        </div>
 
-    <canvas></canvas>
+        <div id="container" class="paint-board" data-state="intro">
+          <canvas id="paint-canvas" width="800" height="800" aria-label="Trace the Sanskrit vowel shown on the board"></canvas>
 
-    <h1 class="toppanel">स्वराः-paint</h1>
+          <div id="intro" class="paint-cover">
+            <div class="paint-cover-content">
+              <h2>Ready to paint?</h2>
+              <p>Press and drag with your mouse, finger, or pen. Keep the centre of your brush inside the red letter.</p>
+              <button type="button" class="zatam-game-btn zatam-game-btn-primary" disabled>Start</button>
+            </div>
+          </div>
 
-    <div id="intro" class="cover">
-      <p>Paint over the letter you see on the screen. Can you write it without going outside of it?</p>
-      <button class="actionbutton">➜</button>
+          <div id="win" class="paint-cover" hidden>
+            <div class="paint-cover-content" role="status">
+              <h2 lang="sa">उत्तमम्!</h2>
+              <p>Good job! Try another vowel.</p>
+              <dl class="paint-result-stats">
+                <div><dt>Painted</dt><dd id="result-coverage">—</dd></div>
+                <div><dt>Time</dt><dd id="result-time">—</dd></div>
+                <div><dt>Score</dt><dd id="result-score">—</dd></div>
+              </dl>
+              <button type="button" class="zatam-game-btn zatam-game-btn-primary">Next letter</button>
+              <p id="leaderboard-status" role="status"></p>
+              <button id="retry-score" type="button" class="zatam-game-btn zatam-game-btn-secondary" hidden>Retry score submission</button>
+            </div>
+          </div>
+
+          <div id="error" class="paint-cover" hidden>
+            <div class="paint-cover-content" role="status">
+              <h2>Try पुनः</h2>
+              <p>You painted outside the letter. Try the same vowel again.</p>
+              <button type="button" class="zatam-game-btn zatam-game-btn-primary">Try again</button>
+            </div>
+          </div>
+        </div>
+        <nav id="vowel-options" class="vowel-options" aria-label="Choose a vowel"></nav>
+        <p id="game-load-status" role="status"></p>
+        <button id="retry-load" type="button" class="zatam-game-btn zatam-game-btn-secondary" hidden>Retry loading letters</button>
+      </section>
+
+      <div class="paint-sidebar">
+      <section class="zatam-game-card paint-personal-score" aria-labelledby="personal-score-heading">
+        <h2 id="personal-score-heading" class="zatam-game-section-title">Personal score</h2>
+        <p id="personal-score" class="paint-score-value" aria-live="polite">— / 100</p>
+        <p id="letters-completed">0 letters completed</p>
+        <h3>Personal best · <span id="best-letter" lang="sa">—</span></h3>
+        <dl class="paint-best-stats">
+          <div><dt>Score:</dt><dd id="best-score">—</dd></div>
+          <div><dt>Time:</dt><dd id="best-time">—</dd></div>
+          <div><dt>Painted:</dt><dd id="best-coverage">—</dd></div>
+        </dl>
+        <p id="best-status" role="status"></p>
+        <p id="save-status" role="status"></p>
+      </section>
+      <aside class="zatam-game-card paint-instructions">
+        <h2 class="zatam-game-section-title">How to play</h2>
+        <div class="paint-instructions-scroll" tabindex="0">
+          <ol>
+            <li>Select <strong>Start</strong>.</li>
+            <li>Press on the red vowel and drag to paint it.</li>
+            <li>Lift your finger or release the mouse between separate strokes.</li>
+            <li>Keep the centre of the brush inside the letter. Going outside gives you another try.</li>
+            <li>After painting enough of the vowel, release to complete it.</li>
+          </ol>
+          <p><strong>Try again</strong> repeats the same vowel. <strong>Next letter</strong> and <strong>New letter</strong> choose a random vowel.</p>
+          <p>Use <strong>Sound on/off</strong> to control feedback sounds.</p>
+          <p>The timer starts with your first stroke and continues through retries. Selecting a vowel or New letter starts a fresh attempt.</p>
+          <p>Painted percentage updates when you release a stroke. Thin unpainted edges may still be accepted for completion.</p>
+          <p>Select a vowel to see its saved personal best. Green checks and best scores remain after reloading this browser. An unfinished drawing starts fresh after reload.</p>
+        </div>
+      </aside>
+      </div>
     </div>
 
-    <button id="sound" class="navbutton">♬</button>
+    <p class="paint-credit">Based on <a href="https://github.com/codepo8/letterpaint" target="_blank" rel="noopener">Letterpaint by Christian Heilmann</a>.</p>
+  </main>
 
-    <div id="win" class="cover check">
-      <p>उत्तमम् !  (uttamam) Good job!</p> 
-      <button class="actionbutton">➜</button>
-    </div>
-
-    <div id="error" class="cover">
-      <p>Try पुनः (punaH = again) .. You painted outside the letter!</p> 
-      <button class="actionbutton">➜</button>
-    </div>
-
-
-    <button class="actionbutton undo" id="reload">X</button>
-  </div>
-
-  <!-- http://freesound.org/people/NenadSimic/sounds/150879/ -->
-  <audio src="win.ogg" id="winsound"></audio>
-  <!-- http://freesound.org/people/Autistic%20Lucario/sounds/142608/ -->
-  <audio src="error.ogg" id="errorsound"></audio>
-
+  <audio id="winsound" src="win.ogg" preload="none"></audio>
+  <!-- error.ogg is absent from the original repository. The script
+       uses a short synthesized error tone without requesting a missing file. -->
   <script src="letterpaint.js"></script>
-
-
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
+  <script type="module" src="../js/navbar-loader.js"></script>
 </body>
 </html>
