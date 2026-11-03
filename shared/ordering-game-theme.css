@@ -1,0 +1,351 @@
+/* Shared presentation for Zat.am's verse-ordering games. */
+
+body.zatam-themed-game.zatam-ordering-game {
+  margin: 0;
+  color: var(--zatam-text);
+  font-family: var(--zatam-font);
+  line-height: 1.5;
+}
+
+.ordering-game-shell {
+  width: min(calc(100% - 1.5rem), 1100px);
+  padding-top: 1.5rem;
+}
+
+.ordering-game-header {
+  margin-bottom: 1.25rem;
+}
+
+.ordering-game-header .mangalam {
+  margin: 0 0 0.35rem;
+  color: var(--zatam-coral);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.ordering-game-instructions {
+  max-width: 860px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ordering-game-stats {
+  width: min(100%, 58rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1.1rem;
+  margin-bottom: 0.85rem;
+  margin-inline: auto;
+}
+
+.ordering-game-stat-note {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--zatam-muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.ordering-game-stats .zatam-game-stat {
+  padding: 0.85rem 0.75rem;
+}
+
+.ordering-game-stats .zatam-game-stat-value {
+  font-size: 1.2rem;
+}
+
+#verseProgress {
+  white-space: nowrap;
+}
+
+.zatam-ordering-game .ordering-game-shell > .zatam-game-actions {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.zatam-ordering-game .ordering-game-shell > .zatam-game-actions .zatam-game-btn {
+  min-height: 40px;
+}
+
+.zatam-ordering-game #content.ordering-game-board {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(0.85rem, 2.5vw, 1.35rem);
+  align-items: start;
+  width: 100%;
+  margin: 1.25rem 0 0;
+  padding: clamp(0.8rem, 2vw, 1.25rem);
+  text-align: left;
+  user-select: none;
+}
+
+.zatam-ordering-game #cardPile,
+.zatam-ordering-game #cardSlots {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+  width: auto;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  padding: 0.8rem;
+  float: none;
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+  box-shadow: none;
+}
+
+.zatam-ordering-game #cardPile {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.zatam-ordering-game #cardSlots {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+}
+
+.zatam-ordering-game #cardPile::before,
+.zatam-ordering-game #cardSlots::before {
+  grid-column: 1 / -1;
+  padding-bottom: 0.25rem;
+  color: var(--zatam-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.zatam-ordering-game #cardPile::before {
+  content: "Number cards";
+}
+
+.zatam-ordering-game #cardSlots::before {
+  content: "Verse in order";
+}
+
+.zatam-ordering-game #cardPile > div,
+.zatam-ordering-game #cardSlots > div {
+  display: grid;
+  place-items: center;
+  min-height: 4.25rem;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.75rem;
+  float: none;
+  color: var(--zatam-heading);
+  background: var(--zatam-white);
+  border: 1.5px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-sm);
+  box-shadow: var(--zatam-shadow-sm);
+  font-family: var(--zatam-font);
+  font-size: 0.96rem;
+  line-height: 1.45;
+  text-align: center;
+  text-shadow: none;
+  touch-action: manipulation;
+  overflow-wrap: anywhere;
+}
+
+.zatam-ordering-game #cardPile > div {
+  color: var(--zatam-white);
+  background: var(--zatam-navy);
+  border-color: var(--zatam-navy);
+  cursor: grab;
+}
+
+.zatam-ordering-game #cardPile > div:active {
+  cursor: grabbing;
+}
+
+.zatam-ordering-game #cardPile > div.selected {
+  background: var(--zatam-blue);
+  border-color: var(--zatam-gold);
+  box-shadow: 0 0 0 3px rgb(246 178 59 / 30%);
+}
+
+.zatam-ordering-game #cardSlots > div {
+  border-style: dashed;
+  border-color: #b8c8da;
+}
+
+.zatam-ordering-game #cardSlots > div.hovered {
+  background: #fff0cf;
+  border-color: var(--zatam-gold);
+}
+
+.zatam-ordering-game #cardSlots > div[aria-disabled="true"] {
+  border-style: solid;
+  opacity: 0.7;
+}
+
+.zatam-ordering-game #cardPile > div.correct {
+  color: var(--zatam-heading);
+  background: var(--zatam-gold);
+  border-color: var(--zatam-gold);
+  text-shadow: none;
+}
+
+.zatam-ordering-game #cardSlots > div.matched {
+  padding: 0.35rem;
+  border-style: solid;
+  border-color: var(--zatam-gold);
+  background: #fff8e9;
+}
+
+.zatam-ordering-game #cardSlots > div.matched > .ordering-number-card {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 4rem;
+  margin: 0;
+  padding: 0.75rem;
+  color: var(--zatam-heading);
+  background: var(--zatam-gold);
+  border: 1.5px solid var(--zatam-gold);
+  border-radius: calc(var(--zatam-radius-sm) - 0.15rem);
+  box-shadow: none;
+  font-family: var(--zatam-font);
+  font-size: 0.96rem;
+  line-height: 1.45;
+  text-align: center;
+  text-shadow: none;
+}
+
+.zatam-ordering-game #cardPile > div.ui-draggable-dragging {
+  z-index: 2;
+  box-shadow: var(--zatam-shadow-lg);
+}
+
+.zatam-ordering-game #successMessage.ordering-result {
+  position: static;
+  width: min(100%, 700px);
+  height: auto;
+  margin: 1.5rem auto 0;
+  padding: 1.25rem;
+  background: var(--zatam-success-soft);
+  border: 1px solid #c9ead5;
+  border-top: 5px solid var(--zatam-gold);
+  border-radius: var(--zatam-radius-lg);
+  box-shadow: var(--zatam-shadow);
+  color: var(--zatam-success);
+  text-align: center;
+}
+
+.zatam-ordering-game #successMessage.ordering-result h2 {
+  margin: 0;
+  color: var(--zatam-heading);
+  font-size: 1.35rem;
+}
+
+.zatam-ordering-game #successMessage.ordering-result .completion-reference {
+  margin: 0.85rem 0 0;
+  color: var(--zatam-text);
+  line-height: 1.65;
+}
+
+.zatam-ordering-game #successMessage.ordering-result .zatam-game-btn {
+  margin-top: 1rem;
+}
+
+.ordering-selection-status {
+  margin: 0 auto 1rem;
+  color: var(--zatam-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.ordering-footer {
+  margin: 1.5rem 0 0;
+  color: var(--zatam-muted);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.ordering-footer a {
+  color: var(--zatam-navy);
+}
+
+@media (max-width: 760px) {
+  .ordering-game-shell {
+    padding-top: 1rem;
+  }
+
+  .ordering-game-header {
+    margin-bottom: 0.9rem;
+  }
+
+  .ordering-game-instructions {
+    padding: 0.8rem 0.9rem;
+  }
+
+  .ordering-game-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .zatam-ordering-game #content.ordering-game-board {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0.7rem;
+  }
+
+  .zatam-ordering-game #cardPile,
+  .zatam-ordering-game #cardSlots {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .zatam-ordering-game #cardPile {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .zatam-ordering-game #cardPile > div {
+    min-height: 3.35rem;
+    padding: 0.55rem 0.25rem;
+    font-size: 0.84rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 760px) and (min-height: 600px) and (pointer: coarse) {
+  .zatam-ordering-game #cardPile {
+    position: sticky;
+    top: 0.65rem;
+    z-index: 1;
+    box-shadow: var(--zatam-shadow);
+  }
+}
+
+@media (max-width: 430px) {
+  .ordering-game-shell {
+    width: min(calc(100% - 1rem), 1100px);
+  }
+
+  .zatam-ordering-game #cardSlots {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0.65rem;
+  }
+
+  .zatam-ordering-game #cardPile > div,
+  .zatam-ordering-game #cardSlots > div {
+    min-height: 3.75rem;
+    padding: 0.65rem;
+    font-size: 0.9rem;
+  }
+
+  .ordering-game-stats .zatam-game-stat {
+    padding: 0.7rem 0.45rem;
+  }
+
+  .ordering-game-stats .zatam-game-stat-value {
+    font-size: 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zatam-ordering-game * {
+    scroll-behavior: auto !important;
+  }
+}
