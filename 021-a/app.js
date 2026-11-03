@@ -1,9 +1,41 @@
 const modeButtons = document.querySelectorAll(".mode-button");
 const gameFrame = document.getElementById("game-frame");
+const characterSetSelect = document.getElementById("character-set-select");
 const scoreDisplay = document.getElementById("game-score");
 const timeDisplay = document.getElementById("game-time");
 const errorsDisplay = document.getElementById("game-errors");
 const scoreConfig = window.ANVESHAN_SCORE_CONFIG;
+const requestedSet = Number.parseInt(new URLSearchParams(window.location.search).get("s"), 10);
+let gameSet = Number.isInteger(requestedSet) && requestedSet >= 0 && requestedSet < nums.length
+  ? requestedSet
+  : 0;
+
+nums.forEach((characters, index) => {
+  const option = document.createElement("option");
+  option.value = String(index);
+  option.textContent = characters.join(" ");
+  characterSetSelect.appendChild(option);
+});
+characterSetSelect.value = String(gameSet);
+
+function gameUrl(src, set = gameSet) {
+  const url = new URL(src, window.location.href);
+  url.searchParams.set("s", String(set));
+  return url.href;
+}
+
+// Pass the selected character set from the menu page into the embedded game.
+gameFrame.src = gameUrl(gameFrame.getAttribute("src"));
+
+characterSetSelect.addEventListener("change", () => {
+  gameSet = Number.parseInt(characterSetSelect.value, 10);
+  const nextPageUrl = new URL(window.location.href);
+  nextPageUrl.searchParams.set("s", String(gameSet));
+  window.history.replaceState(null, "", nextPageUrl);
+  resetStats();
+  window.zatamScore?.reset?.();
+  gameFrame.src = gameUrl(gameFrame.src);
+});
 
 function calculateScore(found, errors) {
   const liveScore = found * scoreConfig.pointsPerFind - errors * scoreConfig.penaltyPerError;
@@ -142,7 +174,7 @@ modeButtons.forEach((button) => {
 
     resetStats();
     window.zatamScore?.reset?.();
-    gameFrame.src = button.dataset.src;
+    gameFrame.src = gameUrl(button.dataset.src);
     gameFrame.title = `${button.dataset.name} mode`;
   });
 });
