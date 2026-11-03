@@ -365,7 +365,6 @@ function selectCard(card) {
 }
 
 function selectSlot(slot) {
-  startTimer();
   if (slot.data('matched')) return;
 
   if (!selectedCard) {
@@ -373,6 +372,7 @@ function selectSlot(slot) {
     return;
   }
 
+  startTimer();
   matchCardToSlot(slot, selectedCard);
 }
 
@@ -477,6 +477,7 @@ selectedCard=null;
 
 function matchCardToSlot(slot, card) {
   if (!gameActive) return;
+  startTimer();
   var slotNumber = slot.data('number');
   var cardNumber = card.data('number');
   $('#cardPile > div').removeClass('selected');

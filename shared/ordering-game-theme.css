@@ -142,6 +142,7 @@ body.zatam-themed-game.zatam-ordering-game {
   line-height: 1.45;
   text-align: center;
   text-shadow: none;
+  touch-action: manipulation;
   overflow-wrap: anywhere;
 }
 
@@ -267,12 +268,26 @@ body.zatam-themed-game.zatam-ordering-game {
 }
 
 @media (max-width: 760px) {
+  .ordering-game-shell {
+    padding-top: 1rem;
+  }
+
+  .ordering-game-header {
+    margin-bottom: 0.9rem;
+  }
+
+  .ordering-game-instructions {
+    padding: 0.8rem 0.9rem;
+  }
+
   .ordering-game-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
   }
 
   .zatam-ordering-game #content.ordering-game-board {
     grid-template-columns: minmax(0, 1fr);
+    padding: 0.7rem;
   }
 
   .zatam-ordering-game #cardPile,
@@ -294,8 +309,17 @@ body.zatam-themed-game.zatam-ordering-game {
 
   .zatam-ordering-game #cardPile > div,
   .zatam-ordering-game #cardSlots > div {
-    min-height: 4rem;
+    min-height: 3.75rem;
+    padding: 0.65rem;
     font-size: 0.9rem;
+  }
+
+  .ordering-game-stats .zatam-game-stat {
+    padding: 0.7rem 0.45rem;
+  }
+
+  .ordering-game-stats .zatam-game-stat-value {
+    font-size: 1.1rem;
   }
 }
 
