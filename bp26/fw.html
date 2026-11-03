@@ -1,8 +1,9 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <title>अन्वेषणम्</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link
       rel="stylesheet"
@@ -16,6 +17,9 @@
     <!-- Header CSS -->
     <link rel="stylesheet" href="css/header.css" />
 
+    <link rel="stylesheet" href="../shared/game-theme.css" />
+    <link rel="stylesheet" href="css/fw-ui.css" />
+
     <script
       type="text/javascript"
       src="https://unpkg.com/papaparse@latest/papaparse.min.js"
@@ -26,7 +30,7 @@
     <script src="./js/transliteration.js"></script>
   </head>
 
-  <body>
+  <body class="fw-page">
     <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
 
@@ -40,10 +44,10 @@
          Navbar stays OUTSIDE this wrapper.
     ================================================== -->
 
-    <main id="fwGameShell">
-      <h1 class="gameTitle">Word Search</h1>
-
-      <div class="header-divider"></div>
+    <main id="fwGameShell" class="zatam-game-shell">
+      <header class="zatam-game-header">
+        <h1 class="zatam-game-title">Word Search</h1>
+      </header>
 
       <div id="lead">
         अस्मिन् अक्षरसमूहे अद्यतन-कथा-तः पदानि सन्ति । कति ?
@@ -53,76 +57,97 @@
         <span id="lead2"></span>
       </div>
 
-      <div id="statusMessage">पदानि अन्वेषितानि</div>
+      <div class="fw-layout">
+        <section class="fw-panel fw-board" aria-label="Word search board">
+          <div id="statusMessage">पदानि अन्वेषितानि</div>
 
-      <div id="liveScore">Score: 100</div>
-
-      <div id="finishMessage">।। शुभमस्तु ।।</div>
-
-      <div id="gridParent">
-        <div id="grid"></div>
-      </div>
-
-      <div id="footer">
-        <div id="level">
-          <div class="leveltext">
-            ✔️ = <span id="nFound"></span>
-
-            <br />
-
-            <strong>कठिनता</strong>
-
-            <ul>
-              <li>
-                <a href="fw.html?size=5" onclick="sV(this)"> सरलम् </a>
-              </li>
-
-              <li>
-                <a href="fw.html?size=7" onclick="sV(this)"> मध्यमम् </a>
-              </li>
-
-              <li>
-                <a href="fw.html?size=10" onclick="sV(this)"> कठिनम् </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div id="hintLink">
-          <div>
-            <a onclick="showHint1()" href="#">
-              <img src="imgs/hint.png" alt="help" />
-              नामपदानि ..
-            </a>
-
-            <a onclick="showHint2()" href="#">
-              <img src="imgs/hint2.png" alt="help" />
-              .. कानि ???
-            </a>
+          <div class="fw-actions">
+            <button id="fwStart" type="button" disabled>Start</button>
+            <button id="fwRetry" type="button" onclick="window.location.reload()">Try again</button>
           </div>
 
-          <div id="hintPopup" onclick="hideHint()">
-            <div class="content" onclick="hideHint()">
-              <ul id="answers"></ul>
+          <div id="liveScore">Score: —</div>
+
+          <div id="finishMessage">।। शुभमस्तु ।।</div>
+
+          <div id="gridParent">
+            <div id="grid"></div>
+          </div>
+
+        </section>
+
+        <aside id="footer" aria-label="Word search controls">
+          <div id="level" class="fw-panel">
+            <div class="leveltext">
+              ✔️ = <span id="nFound"></span>
+
+              <br />
+
+              <strong>कठिनता</strong>
+
+              <ul>
+                <li>
+                  <a href="fw.html?size=5" onclick="sV(this)"> सरलम् </a>
+                </li>
+
+                <li>
+                  <a href="fw.html?size=7" onclick="sV(this)"> मध्यमम् </a>
+                </li>
+
+                <li>
+                  <a href="fw.html?size=10" onclick="sV(this)"> कठिनम् </a>
+                </li>
+              </ul>
             </div>
           </div>
-        </div>
 
-        <div id="refreshLink">
-          <div>
-            <a
-              href="#"
-              onclick="
+          <div id="hintLink" class="fw-panel">
+            <h2>Help</h2>
+            <div>
+              <a onclick="showHint1()" href="#">
+                <img src="imgs/hint.png" alt="help" />
+                नामपदानि ..
+              </a>
+
+              <a onclick="showHint2()" href="#">
+                <img src="imgs/hint2.png" alt="help" />
+                .. कानि ???
+              </a>
+            </div>
+
+            <div id="hintPopup" onclick="hideHint()">
+              <div class="content" onclick="hideHint()">
+                <ul id="answers"></ul>
+              </div>
+            </div>
+          </div>
+
+          <section class="fw-panel fw-instructions" tabindex="0" aria-label="How to play">
+            <h2>How to play</h2>
+            <ol>
+              <li>Select Start, then find a word and select its first अक्षर.</li>
+              <li>Look right, down, or diagonally down and right. Found words are highlighted.</li>
+              <li>Use the first hint to list the words. The second hint shows the words hidden in this board in bold.</li>
+              <li>Choose a difficulty to play a new board, or select पुनः to replay.</li>
+            </ol>
+          </section>
+
+          <div id="refreshLink" class="fw-panel">
+            <div>
+              <a
+                href="#"
+                onclick="
                 window.location.reload();
                 return false;
               "
-            >
-              <img src="imgs/refresh.png" alt="re-do" />
+              >
+                <img src="imgs/refresh.png" alt="re-do" />
 
-              <div>पुनः</div>
-            </a>
+                <div>पुनः</div>
+              </a>
+            </div>
           </div>
-        </div>
+        </aside>
       </div>
     </main>
 
@@ -260,6 +285,7 @@
       var isGameFinished = false;
       let score = 0;
       let scoreInterval = null;
+      let hasStarted = false;
       const liveScoreEl = document.getElementById("liveScore");
       const translit = window.bp26Translit;
       const tScript = translit.getTargetScript();
@@ -424,13 +450,9 @@
         };
 
         var cellClick = async function (e) {
-          if (isGameFinished) return;
+          if (!hasStarted || isGameFinished) return;
 
           nc++;
-
-          score -= 1;
-
-          if (score < 0) score = 0;
 
           var cell = $(e.target).closest("td").get(0);
 
@@ -440,6 +462,8 @@
 
           if (foundNow > 0) {
             score += foundNow * 10;
+          } else {
+            score = Math.max(0, score - 1);
           }
 
           liveScoreEl.textContent = "Score: " + Math.round(score);
@@ -606,7 +630,7 @@
 
             if (nCssUsed > MAX_MARKER_IDX) {
               stringToCss[word] = "markerX";
-            } else {
+           } else {
               stringToCss[word] = "marker" + Object.keys(stringToCss).length;
             }
           }
@@ -1097,9 +1121,15 @@
 
         $(window).resize(resizeGrid);
 
-        initScoreByDifficulty();
-
         main();
+
+        const startButton = document.getElementById("fwStart");
+        startButton.disabled = false;
+        startButton.addEventListener("click", () => {
+          hasStarted = true;
+          startButton.disabled = true;
+          initScoreByDifficulty();
+        }, { once: true });
       }
 
       function sV(obj) {
