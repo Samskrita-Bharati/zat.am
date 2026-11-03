@@ -309,3 +309,133 @@ div.score {
     font-size: 13px;
   }
 }
+
+/* The deck chooser is the only page using the shared Zat.am game shell.
+   Individual decks deliberately retain the original blue flash-card theme. */
+body.zatam-flash-landing {
+  min-width: 0;
+  background: var(--zatam-page);
+  color: var(--zatam-text);
+  font-family: var(--zatam-font);
+}
+
+.flash-landing-shell {
+  width: min(calc(100% - 2rem), 960px);
+}
+
+.flash-landing-shell *,
+.flash-landing-shell *::before,
+.flash-landing-shell *::after {
+  box-sizing: border-box;
+}
+
+.flash-landing-header .mangalam {
+  margin: 0 0 0.35rem;
+  color: var(--zatam-coral);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.flash-landing-intro {
+  max-width: 760px;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+
+.flash-deck-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 760px;
+  margin: 1.5rem auto 0;
+}
+
+.flash-deck-card {
+  display: flex;
+  align-items: center;
+  min-height: 104px;
+  gap: 0.9rem;
+  padding: 1rem;
+  color: var(--zatam-text);
+  background: var(--zatam-white);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+  box-shadow: var(--zatam-shadow-sm);
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.flash-deck-card:hover {
+  border-color: var(--zatam-gold);
+  box-shadow: var(--zatam-shadow);
+  transform: translateY(-3px);
+}
+
+.flash-deck-card:focus-visible {
+  outline: 3px solid rgb(47 109 255 / 30%);
+  outline-offset: 3px;
+}
+
+.flash-deck-mark {
+  display: grid;
+  width: 3.3rem;
+  height: 3.3rem;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--zatam-heading);
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-radius: 50%;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.flash-deck-content {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.flash-deck-content strong {
+  color: var(--zatam-heading);
+  font-size: 1rem;
+}
+
+.flash-deck-content small {
+  color: var(--zatam-muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.flash-deck-arrow {
+  margin-left: auto;
+  color: var(--zatam-coral);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  .flash-landing-shell {
+    width: min(calc(100% - 1rem), 960px);
+  }
+
+  .flash-deck-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .flash-deck-card {
+    min-height: 84px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash-deck-card {
+    transition: none;
+  }
+
+  .flash-deck-card:hover {
+    transform: none;
+  }
+}
