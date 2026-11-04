@@ -1,89 +1,146 @@
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #252525;
-    color: #fff;
+/* Visual language adapted from 018-as. */
+:root {
+    color-scheme: light;
 }
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 5px;
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: #fff;
+    color: #333;
+    font-family: Georgia, serif;
+    line-height: 1.8;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+header,
+footer,
+main {
+    box-sizing: border-box;
+}
+
+.wide-box {
+    clear: both;
+    margin: 30px 70px;
+    padding: 10px;
+    background: #ebedf2;
+    border: 1px solid #333;
     text-align: center;
 }
 
-h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
+header h2 {
+    margin: 20px 0 8px;
+    color: #666;
+    font-size: 1.5em;
 }
 
-p {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+header p {
+    margin: 0 0 12px;
 }
 
 main {
-    max-width: 800px;
-    margin: 10px auto;
-    padding: 10px;
-    background-color: #444;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    position: relative; 
+    max-width: 900px;
+    margin: 80px auto 150px;
+    padding: 0 24px;
+    text-align: center;
+    user-select: none;
 }
 
 .game-preview {
-    text-align: center;
-    margin-bottom: 10px;
+    margin: 0 auto 32px;
+}
+
+.game-preview h3,
+#instructions h3 {
+    margin: 0 0 16px;
+    color: #666;
 }
 
 .game-preview img {
-    max-width: 40%;
+    display: block;
+    width: min(100%, 420px);
+    margin: 0 auto;
+    border: 2px solid #333;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
 }
 
-h2 {
-    font-size: 2rem;
-    margin-bottom: 10px;
+#instructions {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
+    text-align: left;
 }
 
-ul, ol {
-    list-style: none;
-    padding: 0;
+#instructions ol {
+    margin: 0;
+    padding-left: 1.5em;
 }
 
-li {
-    margin-bottom: 10px;
-}
-
-button {
-    padding: 5px 10px;
-    font-size: 1.2rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-button:focus {
-    outline: none;
+#instructions li + li {
+    margin-top: 10px;
 }
 
 footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
     position: fixed;
+    right: 0;
     bottom: 0;
     left: 0;
-    width: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+}
+
+button {
+    padding: 9px 16px;
+    background: #666;
+    color: #fff;
+    border: 2px solid #333;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    cursor: pointer;
+    font: inherit;
+}
+
+button:hover,
+button:focus-visible {
+    background: #333;
+}
+
+button:focus-visible,
+.back-link:focus-visible {
+    outline: 3px solid #f0bb54;
+    outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+    .wide-box {
+        margin: 18px 16px;
+    }
+
+    main {
+        margin-top: 48px;
+        padding: 0 16px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 16px;
+    }
 }

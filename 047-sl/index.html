@@ -14,7 +14,7 @@
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-    <header>
+    <header class="wide-box">
         <h2>सर्पक्रीडायां स्वागतम् 🐍</h2>
         <p>किं त्वं सज्जः असि?</p>
     </header>
@@ -23,7 +23,7 @@
             <h3>पूर्वावलोकनम्</h3>
             <img src="images/preview.png" alt="Game Preview">
         </section>
-        <section id="instructions" style="visibility: hidden;">
+        <section id="instructions" hidden>
             <h3>How to Play</h3>
             <ol>
                 <li>Use arrow keys to control the snake</li>
@@ -32,9 +32,9 @@
             </ol>
         </section>
     </main>
-    <footer>
+    <footer class="wide-box">
         <button onclick="window.location.href='content/game.html'">अधुना क्रीडतु! Play Now</button>
-        <button onclick="document.getElementById('instructions').style.visibility='visible'">HOWTO</button>
+        <button type="button" onclick="document.getElementById('instructions').hidden = false; this.hidden = true;">HOWTO</button>
     </footer>
 
 
