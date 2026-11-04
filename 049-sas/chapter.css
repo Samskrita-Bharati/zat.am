@@ -1,0 +1,62 @@
+/* Shared appearance for the 18 Bhagavad Gita chapter presentations. */
+body {
+    background: #fbf7ef;
+    color: #18284a;
+}
+
+#impress .slide {
+    background: #fff;
+    border-color: #eadfce;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(13, 42, 77, 0.1);
+    color: #18284a;
+    font-size: 48px;
+    line-height: 1.45;
+    text-shadow: none;
+    overflow-wrap: anywhere;
+}
+
+#impress .slide center span {
+    color: #0d2a4d !important; /* Replace the original inline tomato color. */
+}
+
+#impress .slide a {
+    color: #1b5ea6;
+    text-underline-offset: 0.15em;
+}
+
+.go-back,
+.arrow {
+    background: #0d2a4d;
+    color: #fff;
+    border-radius: 12px;
+}
+
+.go-back {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+}
+
+.arrow {
+    box-sizing: border-box;
+    width: 48px;
+    height: 48px;
+    right: 16px;
+}
+
+.arrow-up { bottom: 76px; }
+.arrow-down { bottom: 16px; }
+
+.go-back:hover,
+.arrow:hover {
+    background: #fff5e4;
+    color: #0d2a4d;
+}
+
+.go-back:focus-visible,
+.arrow:focus-visible,
+#impress .slide a:focus-visible {
+    outline: 3px solid #1b5ea6;
+    outline-offset: 3px;
+}
