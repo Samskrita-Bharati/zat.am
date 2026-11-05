@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="sa">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>श्रीमद्-भगवद्गीता-श्लोकसंग्रह</title>
     <link rel="stylesheet" href="../shared/game-theme.css">
@@ -9,40 +9,32 @@
 </head>
 <body data-page="games" class="shloka-page">
     <div id="navbar-mount"></div>
-
     <main class="shloka-collection zatam-game-shell">
         <header class="zatam-game-header">
             <h1 id="title" class="zatam-game-title">श्रीमद्-भगवद्गीता-श्लोकसंग्रह</h1>
             <p id="intro">श्लोकान् पठितुम् अध्यायं चिनोतु।</p>
-            <button id="collection-language" type="button" lang="en">English?</button>
+            <button id="collection-language" type="button" lang="en">Switch to English</button>
         </header>
         <nav id="grid-container" class="chapter-grid" aria-label="अध्यायाः"></nav>
     </main>
-
     <footer class="shloka-footer">
-        <p id="collection-credit">© 2024 Samskrita Bharati. All rights reserved. Crafted with ♥ by Karanveer Masoun.</p>
+        <p id="collection-credit">© 2024 Samskrita Bharati. Crafted with ♥ by Karanveer Masoun.</p>
     </footer>
-
     <script>
         const copy = {
             sa: {
                 title: "श्रीमद्-भगवद्गीता-श्लोकसंग्रह",
                 intro: "श्लोकान् पठितुम् अध्यायं चिनोतु।",
-                chapters: "अध्यायाः",
-                chapter: "अध्यायः",
-                switchTo: "English",
+                chapters: "अध्यायाः", chapter: "अध्यायः", switchTo: "Switch to English",
                 credit: "© २०२४ संस्कृतभारती । करणवीर मासौण द्वारा",
             },
             en: {
                 title: "Bhagavad Gita Shloka Collection",
                 intro: "Choose a chapter to read its verses.",
-                chapters: "Chapters",
-                chapter: "Chapter",
-                switchTo: "Sanskrit",
+                chapters: "Chapters", chapter: "Chapter", switchTo: "Switch to Sanskrit",
                 credit: "© 2024 Samskrita Bharati. All rights reserved. Crafted with ♥ by Karanveer Masoun.",
             },
         };
-        const digits = "०१२३४५६७८९";
         const grid = document.getElementById("grid-container");
         const toggle = document.getElementById("collection-language");
         let language = "sa";
@@ -56,12 +48,11 @@
             document.getElementById("collection-credit").textContent = labels.credit;
             toggle.textContent = labels.switchTo;
             grid.setAttribute("aria-label", labels.chapters);
-
             const links = document.createDocumentFragment();
             for (let i = 1; i <= 18; i++) {
                 const link = document.createElement("a");
-                const number = language === "sa" ? String(i).replace(/\d/g, digit => digits[digit]) : i;
-                link.href = `bg${i}.html`;
+                const number = language === "sa" ? String(i).replace(/\d/g, digit => "०१२३४५६७८९"[digit]) : i;
+                link.href = `chapter.html?chapter=${i}`;
                 link.textContent = `${labels.chapter} ${number}`;
                 links.append(link);
             }

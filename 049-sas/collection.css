@@ -15,14 +15,8 @@ body.shloka-page {
     text-align: center;
 }
 
-.shloka-collection h1 {
-    margin: 0;
-    overflow-wrap: anywhere;
-}
-
-.shloka-collection #intro {
-    margin: 12px 0;
-}
+.shloka-collection h1 { margin: 0; overflow-wrap: anywhere; }
+.shloka-collection #intro { margin: 12px 0; }
 
 .shloka-collection #collection-language,
 .shloka-collection .chapter-grid a {
@@ -54,12 +48,20 @@ body.shloka-page {
 
 .shloka-collection .chapter-grid a {
     min-height: 58px;
+    transition: transform .2s, box-shadow .2s;
 }
 
 .shloka-collection .chapter-grid a:hover,
 .shloka-collection #collection-language:hover {
     border-color: #e8aa38;
     background: #fff5e4;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .shloka-collection .chapter-grid a:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+    }
 }
 
 .shloka-collection a:focus-visible,
@@ -74,16 +76,4 @@ body.shloka-page {
     text-align: center;
 }
 
-.shloka-footer p {
-    margin: 0;
-}
-.shloka-collection .chapter-grid a {
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .shloka-collection .chapter-grid a:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-}
+.shloka-footer p { margin: 0; }
