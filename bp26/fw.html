@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <title>अन्वेषणम्</title>
+    <link rel="icon" type="image/png" href="bp26c.png" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -37,7 +38,7 @@
     <script type="module" src="../js/bilingual-toggle.js"></script>
 
     <!-- Load Header -->
-    <script src="js/load-header.js"></script>
+    <script type="module" src="js/load-header.js"></script>
 
     <!-- =================================================
          GAME CONTENT
@@ -63,7 +64,7 @@
 
           <div class="fw-actions">
             <button id="fwStart" type="button" disabled>Start</button>
-            <button id="fwRetry" type="button" onclick="window.location.reload()">Try again</button>
+            <button id="fwRetry" type="button" lang="sa" aria-label="पुनः — Try again" onclick="window.location.reload()">पुनः</button>
           </div>
 
           <div id="liveScore">Time: — · Score: —</div>
@@ -106,15 +107,15 @@
           <div id="hintLink" class="fw-panel">
             <h2>Help</h2>
             <div>
-              <a onclick="showHint1(); return false;" href="#">
+              <button id="fwHint1" type="button" onclick="showHint1()" disabled>
                 <img src="imgs/hint.png" alt="help" />
                 नामपदानि .. <span>(−10 points)</span>
-              </a>
+              </button>
 
-              <a onclick="showHint2(); return false;" href="#">
+              <button id="fwHint2" type="button" onclick="showHint2()" disabled>
                 <img src="imgs/hint2.png" alt="help" />
                 .. कानि ??? <span>(−20 points)</span>
-              </a>
+              </button>
             </div>
 
             <div id="hintPopup" onclick="hideHint()">
@@ -135,21 +136,6 @@
             </ol>
           </section>
 
-          <div id="refreshLink" class="fw-panel">
-            <div>
-              <a
-                href="#"
-                onclick="
-                window.location.reload();
-                return false;
-              "
-              >
-                <img src="imgs/refresh.png" alt="re-do" />
-
-                <div>पुनः</div>
-              </a>
-            </div>
-          </div>
         </aside>
       </div>
     </main>
@@ -284,9 +270,8 @@
       var nc = 0;
       var N_WORDS_TO_FIND = 5;
       var isGameFinished = false;
-      const BP26_GAME = "bp26-Game4";
-      const BP26_DAY = 4;
       let penalties = 0;
+      let scoringSession;
       let startedAt = 0;
       const usedHints = new Set();
       let scoreInterval = null;
@@ -307,19 +292,27 @@
       }
 
       function currentScore(seconds = elapsedSeconds()) {
-        return Math.round(100 * Math.max(0, level.seconds - seconds - penalties) / level.seconds);
+        return Math.round(Math.max(0, 100 * (level.seconds - seconds) / level.seconds - penalties));
       }
 
       function renderScore() {
-        const remaining = Math.max(0, level.seconds - elapsedSeconds());
+        const seconds = hasStarted ? elapsedSeconds() : 0;
+        const remaining = Math.max(0, level.seconds - seconds);
         const clock = Math.floor(remaining / 60) + ":" + String(remaining % 60).padStart(2, "0");
-        liveScoreEl.textContent = "Time: " + clock + " · Score: " + currentScore() + " / 100";
+        liveScoreEl.textContent = "Time: " + clock + " · Score: " + currentScore(seconds) + " / 100";
+      }
+
+      function updateHints() {
+        document.getElementById("fwHint1").disabled = !hasStarted || isGameFinished;
+        document.getElementById("fwHint2").disabled =
+          !hasStarted || isGameFinished || !usedHints.has(1);
       }
 
       function useHint(id, cost) {
         if (!hasStarted || isGameFinished || (id === 2 && !usedHints.has(1))) return false;
         if (!usedHints.has(id)) {
           usedHints.add(id);
+          updateHints();
           penalties += cost;
           renderScore();
         }
@@ -340,24 +333,33 @@
         var lnk =
           "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6CFR_0gDsZl-lmwLFWmtdXMXYGVEHGJ8fvBu2_5wvbEl9L-4Yr0ugI0TFTTdvtLlMTRmLnCIJ5FBF/pub?gid=0&single=true&output=csv";
 
+        renderScore();
+        document.querySelectorAll("#level a").forEach((link) => {
+          const size = new URL(link.href).searchParams.get("size");
+          if (size === ["5", "7", "10"][Number(level.id) - 1]) {
+            link.setAttribute("aria-current", "true");
+          }
+        });
+
         Papa.parse(lnk, {
           download: true,
-          header: true,
+          header: false,
           complete: populateWlist,
+          error: () => populateWlist({ data: [] }),
         });
       });
 
       function populateWlist(fildat) {
-        var set = urlParams.get("set");
+        const [headers = [], ...rows] = fildat.data;
+        const column = headers.findIndex((name) => name.trim() === "padam");
+        const requestedSet = Number(urlParams.get("set"));
+        const set = Number.isInteger(requestedSet) && requestedSet >= 0 &&
+          requestedSet * wpp + wpp <= rows.length ? requestedSet : 0;
 
-        if (!set || isNaN(set)) set = 0;
-
-        fullist = fildat.data;
-
-        if (set > fildat.data.length / wpp) set = 0;
-
-        for (i = 0; i < wpp; i++) {
-          wlist.push(fullist[set * wpp + i].padam);
+        if (column >= 0) {
+          wlist = rows.slice(set * wpp, (set + 1) * wpp)
+            .map((row) => row[column]?.trim())
+            .filter(Boolean);
         }
 
         if (wlist.length > 0) wordList = wlist;
@@ -483,6 +485,7 @@
 
           if (nAnswersDiscovered == nAnswersPresent) {
             isGameFinished = true;
+            updateHints();
 
             clearInterval(scoreInterval);
 
@@ -500,27 +503,11 @@
             bp26Celebrate({ title: "Finished ✅", score: finalScore });
             const status = document.getElementById("fwSaveStatus");
             try {
-              const { initGameScore, submitGameScore } =
-                await import("../js/game-score.js");
-
-              const config = initGameScore({
-                gameId: "bp26-fw",
-                gameName: "Word Search",
-                levelId: level.id,
-                levelName: level.name,
-              });
-
-              if (String(config?.levelId) !== level.id) {
-                throw new Error("The shared scorer did not confirm the difficulty.");
-              }
-
-              const saved = await submitGameScore(finalScore, {
+              const scorer = await scoringSession;
+              if (!scorer) throw new Error("Word Search requires a level-aware shared scorer.");
+              const saved = await scorer.submitGameScore(finalScore, {
                 result: "completed",
-                metrics: {
-                  elapsedSeconds: completedIn,
-                  clicks: nc,
-                  hints: usedHints.size,
-                },
+                metrics: { elapsedSeconds: completedIn, clicks: nc, hints: usedHints.size },
               });
               status.textContent = saved?.ok ? "Score saved." : "Score could not be saved.";
             } catch (error) {
@@ -1156,6 +1143,19 @@
           hasStarted = true;
           startButton.disabled = true;
           initScoreByDifficulty();
+          updateHints();
+          scoringSession = import("../js/game-score.js").then((scorer) => {
+            const config = scorer.initGameScore({
+              gameId: "bp26-fw",
+              gameName: "Word Search",
+              levelId: level.id,
+              levelName: level.name,
+            });
+            return String(config?.levelId) === level.id ? scorer : null;
+          }).catch((error) => {
+            console.error("Could not initialize Word Search scoring:", error);
+            return null;
+          });
         }, { once: true });
       }
 
@@ -1204,18 +1204,5 @@
       }
     </script>
 
-    <!-- IMPORTANT: This is your Firestore score file -->
-    <script type="module" src="./js/bp26-score.js"></script>
-
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        if (window.bp26Init) {
-          window.bp26Init({
-            game: BP26_GAME,
-            day: BP26_DAY,
-          });
-        }
-      });
-    </script>
   </body>
 </html>

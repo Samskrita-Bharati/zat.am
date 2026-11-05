@@ -241,3 +241,49 @@ body.fw-page {
   outline: 2px solid var(--zatam-blue);
   outline-offset: 3px;
 }
+
+#fwGameShell #hintLink button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 5px 8px;
+  border: 1px solid var(--zatam-border);
+  border-radius: 8px;
+  color: var(--zatam-navy);
+  background: var(--zatam-soft);
+  font-weight: 700;
+}
+
+#fwGameShell #hintLink button img {
+  width: 22px;
+  height: 26px;
+  object-fit: contain;
+}
+
+#fwGameShell #hintLink button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+#fwGameShell #level a[aria-current="true"] {
+  background: var(--zatam-navy);
+  color: var(--zatam-white);
+}
+
+@media (min-width: 951px) {
+  body.fw-page #header-placeholder .zatam-header {
+    min-height: 96px;
+  }
+
+  body.fw-page #header-placeholder .zatam-nav {
+    align-self: stretch;
+    height: auto;
+    font-size: 20px;
+  }
+
+  body.fw-page #header-placeholder .bp26-navbar-logo {
+    height: 68px !important;
+    max-height: 68px !important;
+  }
+}
