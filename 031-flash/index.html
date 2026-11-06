@@ -1,32 +1,42 @@
-<!DOCTYPE HTML>
-<html>
+<!doctype html>
+<html lang="sa">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sanskrit Flash Cards</title>
+  <meta name="description" content="Sanskrit flash cards and pronunciation practice from Zat.am." />
+  <title>Sanskrit Flash Cards | Zat.am</title>
+  <link rel="stylesheet" href="../shared/game-theme.css">
   <link rel="stylesheet" href="w3.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game zatam-flash-landing">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-  <div id="container" class="w3-container">
-    <div class="quiz landing">
-      <h1>Choose a deck:</h1>
-      <ul class="landing">
-        <li><a href="index-alphabet.html">Alphabet - वर्णमाला (प्रवेशः १)</a></li>
-        <li><a href="index-conjunct.html">Conjunct Consonants - संयोग (प्रवेशः १)</a></li>
-        <li><a href="index-phrases.html">Common Phrases - संस्कृतठ्यवहारः (प्रवेशः १)</a></li>
-        <li><a href="index-digits.html">Digits (1-9) (प्रवेशः २)</a></li>
-        <li><a href="index-numbers.html">Numbers - सङ्ख्याः (प्रवेशः २-४)</a></li>
-        <li><a href="index-pres-3-sing.html">Present 3rd Person Singular (प्रवेशः १)</a></li>
-      </ul>
-    </div>
-  </div>
+  <main class="zatam-game-shell flash-landing-shell">
+    <header class="zatam-game-header flash-landing-header">
+      <p class="mangalam">॥ श्रीः ॥</p>
+      <span class="zatam-game-eyebrow">संस्कृत-अभ्यासः</span>
+      <h1 class="zatam-game-title">Flash Cards</h1>
+      <p class="zatam-game-subtitle">Choose a deck, listen closely, and build confidence in Sanskrit one card at a time.</p>
+    </header>
+
+    <section class="zatam-game-instructions flash-landing-intro" aria-label="About Flash Cards">
+      <p>Each deck offers a gentle review mode and a quiz mode with randomized cards.</p>
+    </section>
+
+    <nav class="flash-deck-grid" aria-label="Choose a flash-card deck">
+      <a class="flash-deck-card" href="index-alphabet.html"><span class="flash-deck-mark">अ</span><span class="flash-deck-content"><strong>Alphabet</strong><small>वर्णमाला · प्रवेशः १</small></span><span class="flash-deck-arrow" aria-hidden="true">→</span></a>
+      <a class="flash-deck-card" href="index-conjunct.html"><span class="flash-deck-mark">क्ष</span><span class="flash-deck-content"><strong>Conjunct consonants</strong><small>संयोग · प्रवेशः १</small></span><span class="flash-deck-arrow" aria-hidden="true">→</span></a>
+      <a class="flash-deck-card" href="index-phrases.html"><span class="flash-deck-mark">नमः</span><span class="flash-deck-content"><strong>Common phrases</strong><small>संस्कृत-व्यवहारः · प्रवेशः १</small></span><span class="flash-deck-arrow" aria-hidden="true">→</span></a>
+      <a class="flash-deck-card" href="index-digits.html"><span class="flash-deck-mark">१</span><span class="flash-deck-content"><strong>Digits</strong><small>१–९ · प्रवेशः २</small></span><span class="flash-deck-arrow" aria-hidden="true">→</span></a>
+      <a class="flash-deck-card" href="index-numbers.html"><span class="flash-deck-mark">१०</span><span class="flash-deck-content"><strong>Numbers</strong><small>सङ्ख्याः · प्रवेशः २–४</small></span><span class="flash-deck-arrow" aria-hidden="true">→</span></a>
+      <a class="flash-deck-card" href="index-pres-3-sing.html"><span class="flash-deck-mark">पठति</span><span class="flash-deck-content"><strong>Present tense</strong><small>Third-person singular · प्रवेशः १</small></span><span class="flash-deck-arrow" aria-hidden="true">→</span></a>
+    </nav>
+  </main>
 
 
     <!-- Shared Zat.am Navbar -->

@@ -1,72 +1,66 @@
-# flash
-Flash card web app supporting multiple choice quizzes, with text, images, and audio. Written in Elm and compiled to javascript.
+# Sanskrit Flash Cards
 
-The cards in a deck are displayed in random order.
-
-Each deck of flash cards contains its own Settings page which can be configured
-for each deck.
-
-## Training Mode
-The training mode can be set to Review or a variation of a multiple choice quiz.
-
-## Review
-In review mode, the cards are displayed with all content and no quiz.
-The user can navigate through the cards with Next or Previous buttons.
-
-## Multiple Choice Quiz
-For multiple choice quizzes, the correct answer is given in a random position
-among a number of wrong answer choices that are randomly selected from other
-cards in the deck. The user must select an answer, and a running score
-is displayed showing the number correct out of the total number of cards,
-and the number of cards remaining. The user can only navigate forwards through
-the deck.
-
-## File Structure
-An entry page should provide links to decks to choose from. Currently
-there is one entry page `index.html` which has links to the
-three available sanskrit learning decks,
-each of which has its own entry page in the root directory.
-
-The content of a deck is located in `decks` and contains the following
-structure:
-
-`<deck name>/`: A directory for the content of a deck
-- `config.js`: A javascript file containing the JSON configuration for the deck
-- `assets/`
-  - `images/`
-  - `audio/`
+A Sanskrit learning game with six focused flash-card decks. Each deck supports
+calm review and randomized quiz practice, with text, images, and audio where
+the deck provides them.
 
 ## Decks
-The currently available decks include the following:
 
-### **alphabet**
-The vowels and consonants in the Devanagari alphabet as it applies to Sanskrit.
-Training Modes include:
+- **Alphabet** — Sanskrit vowels and consonants.
+- **Conjunct consonants** — common consonant combinations.
+- **Common phrases** — everyday Sanskrit expressions.
+- **Digits** — Sanskrit numbers and place values.
+- **Numbers** — expanded number practice.
+- **Present tense** — third-person singular Sanskrit sentences.
 
-#### Review
-Review the content without a quiz
+## How to use a deck
 
-#### Devanagari
-Provide the Devanagari letter given the ISO 15919 representation
+1. Open a deck from the landing page.
+2. Choose **Review** to browse every card, or choose a quiz mode to practice.
+3. Select the script, group, and question type where the deck offers those
+   options.
+4. Use **Next** and **Previous** in review mode. Quiz decks randomize the cards
+   and show your score and progress.
+5. Use **Change Deck** to return to the deck chooser.
 
-#### ISO 15919 (Latin)
-Provide the ISO 15919 letter given the Devanagari representation
+On phones, tap the answer options and controls. Audio controls, images, text
+answers, and navigation buttons resize to fit the screen.
 
-### **Conjunct Consonants**
-Similar to the alphabet deck but for learning conjunct consonants in Devanagari.
+## Run locally
 
-### **Present 3rd Person Singular**
-Sentences in Sanskrit in the present thrid person singular with training modes for `Review`, `Sanskrit`, and `English`.
-Also provides a setting for which script to show Sanskrit in, Devanagari or ISO 15919.
+From the repository root:
 
-## Run
+```powershell
+cd C:\Zatam\zat.am-031-flash
+npm install
+npm run dev
+```
 
-To try out the app locally, clone the repository then open one of the
-index files in a browser. `index.html` is a landing page that
-has links to all the Sanskrit decks.
+Open the URL printed by Vite, then visit:
 
-## Build
+`http://localhost:5173/031-flash/`
 
-To build the app, install [elm](https://guide.elm-lang.org/install.html) and then:
+## Project structure
 
-    elm make src/Main.elm --optimize --output=elm.js
+- `index.html` is the deck chooser.
+- `index-*.html` starts each individual deck.
+- `decks/<deck>/config.js` supplies a deck's card data and settings.
+- `decks/<deck>/assets/` contains its audio and image material.
+- `src/` contains the Elm source for the shared flash-card experience.
+- `elm.js` is the compiled Elm application used by the deck pages.
+- `styles.css` provides the flash-card and phone-responsive styles.
+- `../shared/game-theme.css` and `../js/navbar-loader.js` provide the Zat.am
+  landing-page theme and navigation.
+
+## Rebuilding the Elm application
+
+The repository includes the compiled `elm.js`, so normal local play does not
+require Elm. If you change files under `src/`, install Elm and rebuild it:
+
+```powershell
+elm make src/Main.elm --optimize --output=elm.js
+```
+
+## License
+
+See [LICENSE](LICENSE).
