@@ -1,146 +1,51 @@
-/* Visual language adapted from 018-as. */
-:root {
-    color-scheme: light;
+/* Snake-specific additions to the shared Zat.am game theme. */
+
+.snake-intro-shell {
+  max-width: 900px;
 }
 
-body {
-    min-height: 100vh;
-    margin: 0;
-    background: #fff;
-    color: #333;
-    font-family: Georgia, serif;
-    line-height: 1.8;
+.snake-intro-layout {
+  display: grid;
+  gap: 20px;
 }
 
-h1,
-h2,
-h3,
-h4 {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+.snake-preview-card {
+  text-align: center;
 }
 
-header,
-footer,
-main {
-    box-sizing: border-box;
+.snake-preview-image {
+  display: block;
+  width: min(100%, 420px);
+  margin: 0 auto;
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+  box-shadow: var(--zatam-shadow-sm);
 }
 
-.wide-box {
-    clear: both;
-    margin: 30px 70px;
-    padding: 10px;
-    background: #ebedf2;
-    border: 1px solid #333;
-    text-align: center;
+.snake-instructions {
+  text-align: left;
 }
 
-header h2 {
-    margin: 20px 0 8px;
-    color: #666;
-    font-size: 1.5em;
+.snake-instructions-list {
+  margin: 0;
+  padding-left: 1.4rem;
+
+  color: var(--zatam-text);
+  line-height: 1.65;
 }
 
-header p {
-    margin: 0 0 12px;
+.snake-instructions-list li + li {
+  margin-top: 8px;
 }
 
-main {
-    max-width: 900px;
-    margin: 80px auto 150px;
-    padding: 0 24px;
-    text-align: center;
-    user-select: none;
+.snake-instructions-list ::marker {
+  color: var(--zatam-coral);
+  font-weight: 800;
 }
 
-.game-preview {
-    margin: 0 auto 32px;
-}
-
-.game-preview h3,
-#instructions h3 {
-    margin: 0 0 16px;
-    color: #666;
-}
-
-.game-preview img {
-    display: block;
-    width: min(100%, 420px);
-    margin: 0 auto;
-    border: 2px solid #333;
-    border-radius: 10px;
-    box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
-}
-
-#instructions {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #fff;
-    border: 2px solid #333;
-    border-radius: 10px;
-    box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
-    text-align: left;
-}
-
-#instructions ol {
-    margin: 0;
-    padding-left: 1.5em;
-}
-
-#instructions li + li {
-    margin-top: 10px;
-}
-
-footer {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin: 0;
-    border-right: 0;
-    border-bottom: 0;
-    border-left: 0;
-}
-
-button {
-    padding: 9px 16px;
-    background: #666;
-    color: #fff;
-    border: 2px solid #333;
-    border-radius: 6px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
-    cursor: pointer;
-    font: inherit;
-}
-
-button:hover,
-button:focus-visible {
-    background: #333;
-}
-
-button:focus-visible,
-.back-link:focus-visible {
-    outline: 3px solid #f0bb54;
-    outline-offset: 3px;
-}
-
-@media (max-width: 640px) {
-    .wide-box {
-        margin: 18px 16px;
-    }
-
-    main {
-        margin-top: 48px;
-        padding: 0 16px;
-    }
-
-    footer {
-        flex-direction: column;
-        gap: 8px;
-        padding: 8px 16px;
-    }
+@media (max-width: 560px) {
+  .snake-preview-card,
+  .snake-instructions {
+    padding: 16px;
+  }
 }
