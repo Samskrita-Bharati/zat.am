@@ -1,0 +1,79 @@
+body.shloka-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    color: #18284a;
+    background: #fbf7ef;
+}
+
+.shloka-collection {
+    flex: 1;
+    width: min(1000px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 52px) 0;
+    text-align: center;
+}
+
+.shloka-collection h1 { margin: 0; overflow-wrap: anywhere; }
+.shloka-collection #intro { margin: 12px 0; }
+
+.shloka-collection #collection-language,
+.shloka-collection .chapter-grid a {
+    display: grid;
+    place-items: center;
+    min-height: 48px;
+    padding: 10px;
+    border: 1px solid #eadfce;
+    border-radius: 12px;
+    background: #fff;
+    color: #0d2a4d;
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.shloka-collection #collection-language {
+    margin: 16px auto 0;
+    padding-inline: 16px;
+    cursor: pointer;
+}
+
+.shloka-collection .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 135px), 1fr));
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.shloka-collection .chapter-grid a {
+    min-height: 58px;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.shloka-collection .chapter-grid a:hover,
+.shloka-collection #collection-language:hover {
+    border-color: #e8aa38;
+    background: #fff5e4;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .shloka-collection .chapter-grid a:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, .2);
+    }
+}
+
+.shloka-collection a:focus-visible,
+.shloka-collection button:focus-visible {
+    outline: 2px solid #1b5ea6;
+    outline-offset: 3px;
+}
+
+.shloka-footer {
+    padding: 16px;
+    border-top: 1px solid #eadfce;
+    text-align: center;
+}
+
+.shloka-footer p { margin: 0; }
