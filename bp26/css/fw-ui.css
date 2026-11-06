@@ -1,0 +1,289 @@
+/* Only loaded by the BP26 Word Search page. */
+body.fw-page {
+  background: var(--zatam-page);
+}
+
+#fwGameShell.zatam-game-shell {
+  width: min(1120px, calc(100% - 24px));
+  max-width: none;
+  height: auto;
+  margin: 24px auto;
+  padding: 0;
+  overflow: visible;
+  color: var(--zatam-text);
+}
+
+#fwGameShell .fw-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 290px);
+  align-items: start;
+  gap: 20px;
+}
+
+#fwGameShell #footer {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+#fwGameShell .fw-panel {
+  min-width: 0;
+  padding: clamp(10px, 2vw, 18px);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+  background: var(--zatam-white);
+  box-shadow: var(--zatam-shadow-sm);
+}
+
+#fwGameShell #lead {
+  margin-bottom: 12px;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+#fwGameShell #liveScore {
+  margin-bottom: 12px;
+  text-align: center;
+  color: var(--zatam-navy);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+#fwGameShell #finishMessage {
+  color: var(--zatam-success);
+  font-size: 1.125rem;
+}
+
+#fwGameShell #gridParent { padding: 0; }
+
+#fwGameShell #grid {
+  /* Existing script still sets inline dimensions; let the card size the board. */
+  width: min(100%, 580px) !important;
+  height: auto !important;
+  aspect-ratio: 1;
+  container-type: inline-size;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+#fwGameShell #grid table {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+#fwGameShell #grid td {
+  padding: 0;
+  border: 1px solid #c2d5e9;
+  background: #eaf3fc;
+  color: var(--zatam-navy);
+  cursor: pointer;
+  font-size: clamp(12px, 4cqi, 30px);
+}
+
+#fwGameShell #grid td:hover { background: #fff0cf; }
+
+#fwGameShell #grid td > span {
+  display: grid;
+  place-items: center;
+  white-space: nowrap;
+  line-height: 1.15;
+}
+
+#fwGameShell #grid td .markers { pointer-events: none; }
+
+#fwGameShell #level,
+#fwGameShell #hintLink,
+#fwGameShell #refreshLink {
+  position: static;
+  display: block;
+  width: auto;
+  margin: 0;
+  font-size: 1rem;
+}
+
+#fwGameShell .leveltext {
+  display: block;
+  font-size: 1rem;
+}
+
+#fwGameShell #level ul,
+#fwGameShell #hintLink > div:first-of-type {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+#fwGameShell .fw-panel h2 {
+  margin: 0 0 8px;
+  color: var(--zatam-heading);
+  font-size: 1.05rem;
+}
+
+#fwGameShell #footer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  margin: 0;
+  padding: 5px 8px;
+  border: 1px solid var(--zatam-border);
+  border-radius: 8px;
+  color: var(--zatam-navy);
+  background: var(--zatam-soft);
+}
+
+#fwGameShell #footer a img {
+  width: 22px;
+  height: 26px;
+  object-fit: contain;
+}
+
+#fwGameShell .fw-instructions {
+  max-height: 320px;
+  overflow-y: auto;
+  line-height: 1.55;
+}
+
+#fwGameShell .fw-instructions ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+#fwGameShell .fw-instructions li + li { margin-top: 6px; }
+
+#fwGameShell #hintPopup {
+  inset: 0;
+  z-index: 6000;
+  width: auto;
+  height: auto;
+  overflow: auto;
+}
+
+#fwGameShell #hintPopup .content {
+  width: min(540px, calc(100% - 24px));
+  margin: 8vh auto;
+  transform: none;
+  border-radius: 14px;
+  background: var(--zatam-white);
+}
+
+@media (max-width: 740px) {
+  #fwGameShell .fw-layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Sizes above 10 are also supported by the existing URL parameter. */
+#fwGameShell #grid tr:has(> td:nth-child(11)) td {
+  font-size: clamp(9px, 3.2cqi, 22px);
+}
+
+#fwGameShell .fw-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+#fwGameShell .fw-actions button {
+  min-height: 44px;
+  padding: 6px 16px;
+  border: 1px solid var(--zatam-navy);
+  border-radius: 10px;
+  background: var(--zatam-white);
+  color: var(--zatam-navy);
+  font-weight: 700;
+}
+
+#fwGameShell #fwStart {
+  background: var(--zatam-navy);
+  color: white;
+}
+
+#fwGameShell #fwStart:disabled { opacity: .55; }
+
+/* Keep the completion status and action aligned with the final score. */
+#fwGameShell #fwSaveStatus {
+  margin: 0 0 8px;
+  color: var(--zatam-muted);
+  text-align: center;
+  font-size: .875rem;
+}
+
+#fwGameShell #fwSaveStatus:empty,
+#fwGameShell #fwNext[hidden] {
+  display: none;
+}
+
+#fwGameShell #fwNext:not([hidden]) {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 0 auto 12px;
+  padding: 8px 16px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--zatam-navy);
+  color: var(--zatam-white);
+  text-decoration: none;
+}
+
+#fwGameShell #fwNext:hover { background: var(--zatam-heading); }
+
+#fwGameShell #fwNext:focus-visible {
+  outline: 2px solid var(--zatam-blue);
+  outline-offset: 3px;
+}
+
+#fwGameShell #hintLink button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 5px 8px;
+  border: 1px solid var(--zatam-border);
+  border-radius: 8px;
+  color: var(--zatam-navy);
+  background: var(--zatam-soft);
+  font-weight: 700;
+}
+
+#fwGameShell #hintLink button img {
+  width: 22px;
+  height: 26px;
+  object-fit: contain;
+}
+
+#fwGameShell #hintLink button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+#fwGameShell #level a[aria-current="true"] {
+  background: var(--zatam-navy);
+  color: var(--zatam-white);
+}
+
+@media (min-width: 951px) {
+  body.fw-page #header-placeholder .zatam-header {
+    min-height: 96px;
+  }
+
+  body.fw-page #header-placeholder .zatam-nav {
+    align-self: stretch;
+    height: auto;
+    font-size: 20px;
+  }
+
+  body.fw-page #header-placeholder .bp26-navbar-logo {
+    height: 68px !important;
+    max-height: 68px !important;
+  }
+}
