@@ -2,6 +2,7 @@ var N_ROWS = 10;
 var N_COLS = 10;
 var N_WORDS_TO_FIND = 5;
 var m=getQueryStringValue("m");
+if (m !== "a" && m !== "s") m = "s";
 if (m=="a")
 document.getElementById("customSwitch1").checked=false;
 if (!m)
@@ -26,6 +27,7 @@ var main = function () {
   hideHint();
   resizeGrid();
   registerEventListeners();
+  window.askScoring.begin({ total: nAnswersPresent, size: N_ROWS, names: m });
 };
 var registerEventListeners = function () {
   $("#grid").on("selectstart", function (e) {
@@ -38,7 +40,7 @@ var drawGrid = function () {
   var rowIdx = 0;
   var colIdx = 0;
   for (rowIdx = 0; rowIdx < N_ROWS; rowIdx++) {
-    var row = $('<tr id="tblRow_"' + rowIdx + '"></tr>');
+var row = $('<tr id="tblRow_' + rowIdx + '"></tr>');
     for (colIdx = 0; colIdx < N_COLS; colIdx++) {
       var cell = $('<td id="tblCell_' + rowIdx + "_" + colIdx + '"></td>');
       row.append(cell);
@@ -66,7 +68,7 @@ var countAnswers = function () {
     }
   }
   $("#finishMessage").hide();
-  $("#nPresent").text(String.fromCharCode(0x0966 + nAnswersPresent));
+  $("#nPresent").text(Sanscript.t(String(nAnswersPresent), "iast", "devanagari"));
   $("#nFound").text(0);
   var answerIdx = 0;
   for (answerIdx = 0; answerIdx < answers.length; answerIdx++) {
@@ -74,13 +76,15 @@ var countAnswers = function () {
   }
 };
 var cellClick = function (e) {
+  if (!window.askScoring.canPlay()) return;
   var cell = $(e.target).closest("td").get(0);
-  nAnswersDiscovered += processCell(cell).length;
-  $("#nFound").text(String.fromCharCode(0x0966 + nAnswersDiscovered));
+  if (!cell) return;
+  var newlyFound = processCell(cell).length;
+  nAnswersDiscovered += newlyFound;
+  window.askScoring.found(newlyFound);
+  $("#nFound").text(Sanscript.t(String(nAnswersDiscovered), "iast", "devanagari"));
   if (nAnswersDiscovered == nAnswersPresent) {
-    $("#finishMessage").show();
-    $("#statusMessage").hide();
-    $("#lead").hide();
+    window.askScoring.complete();
   }
 };
 var processCell = function (cell, doNotMark) {
@@ -479,14 +483,20 @@ var getRandomAkshara = function () {
   return akshara;
 };
 var resizeGrid = function () {
-  var width = $(window).width();
-  var height = $(window).height();
-  var minDim = width;
-  if (minDim > height) {
-    minDim = height;
-  }
-  $("#grid").width(minDim * 0.85);
-  $("#grid").height(minDim * 0.85);
+  var parent = document.getElementById("gridParent");
+  var grid = document.getElementById("grid");
+
+  if (!parent || !grid) return;
+
+  var width = Math.min(parent.clientWidth, 720);
+
+  $("#grid").width(width);
+  $("#grid").height(width);
+
+  var cellWidth = width / N_COLS;
+  var fontSize = Math.max(10, Math.min(38, cellWidth * 0.55));
+
+  grid.style.setProperty("--ask-cell-font", fontSize + "px");
 };
 $(window).resize(resizeGrid);
 $(document).ready(main);
@@ -513,9 +523,9 @@ function getQueryStringValue(key) {
 
 let selectNames = () => {
 	if (document.getElementById("customSwitch1").checked)
-	window.location = window.location.origin + window.location.pathname + "?size=" + size + "&m=s" ;
+	window.location = window.location.origin + window.location.pathname + "?size=" + N_ROWS + "&m=s" ;
 	else
-		window.location = window.location.origin + window.location.pathname + "?size=" + size + "&m=a" ;
+		window.location = window.location.origin + window.location.pathname + "?size=" + N_ROWS + "&m=a" ;
 }
 function sV(obj) {
 obj.href+="&m="+getQueryStringValue("m");
@@ -528,6 +538,7 @@ var wordList = Sanscript.t(data[0][m],'iast', 'devanagari').split(" ");
 
 function showHint2()
 {
+  if (!window.askScoring.help("first")) return;
 	$("#lead2").html("");
 for (var i=0;i<wordList.length;i++)
 {
@@ -536,6 +547,7 @@ for (var i=0;i<wordList.length;i++)
 
 };
 function showHint3(){
+if (!window.askScoring.help("more")) return;
 $("#lead2").html("");
 for (var i=0;i<wordList.length;i++)
 {

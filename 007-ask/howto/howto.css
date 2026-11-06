@@ -1,0 +1,116 @@
+html {
+  box-sizing: border-box;
+  background: #fffaf3;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body.c15.doc-content {
+  width: min(100% - 32px, 960px);
+  max-width: 960px;
+  margin: 24px auto;
+  padding: clamp(20px, 4vw, 48px);
+  border: 1px solid #eadfce;
+  border-radius: 18px;
+  background: #fff;
+  color: #163453;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.75;
+}
+
+.doc-content p,
+.doc-content li {
+  max-width: 100%;
+  color: #334e68;
+  font-size: 1rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.doc-content p {
+  margin-bottom: 12px;
+}
+
+.doc-content h1,
+.doc-content h2,
+.doc-content h3 {
+  color: #0b2b4f;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 24px;
+}
+
+.doc-content h1 {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid #eadfce;
+  font-size: 1.65rem;
+}
+
+.doc-content h2 {
+  margin-top: 24px;
+  font-size: 1.25rem;
+}
+
+.doc-content a {
+  color: #175c9b;
+  overflow-wrap: anywhere;
+  text-underline-offset: 3px;
+}
+
+/* Override fixed Google Docs image wrapper dimensions. */
+.doc-content span[style*="overflow: hidden"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100%;
+  height: auto !important;
+  margin: 16px 0 !important;
+}
+
+.doc-content img {
+  display: block;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  object-fit: contain;
+}
+
+.doc-content table {
+  max-width: 100%;
+}
+
+@media (max-width: 550px) {
+  body.c15.doc-content {
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .doc-content h1 {
+    font-size: 1.4rem;
+  }
+
+  .doc-content h2 {
+    font-size: 1.15rem;
+  }
+
+  .doc-content .c1 {
+    margin-left: 12px;
+  }
+}
+
+@media print {
+  body.c15.doc-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+}
