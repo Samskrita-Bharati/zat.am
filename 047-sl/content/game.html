@@ -6,13 +6,66 @@
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
     <meta name="author" content="Karanveer">
 
-    <title>सर्पलीला</title>
+    <title>सर्पलीला — Snake Game | Zat.am</title>
 
     <link rel="icon" type="image/x-icon" href="../images/icon.png">
+    <link rel="stylesheet" href="../../shared/game-theme.css">
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
-    <div id="game-board"></div>
+<body data-page="games" class="zatam-themed-game snake-game-page">
+    <div id="navbar-mount"></div>
+
+    <main class="zatam-game-shell snake-game-shell">
+        <header class="zatam-game-header">
+            <span class="zatam-game-eyebrow">Zat.am game</span>
+            <h1 class="zatam-game-title">सर्पलीला</h1>
+            <p class="zatam-game-subtitle">सर्पं मार्गे चालयतु</p>
+        </header>
+
+        <section class="zatam-game-play-area snake-game-board-card" aria-label="Snake game board">
+            <div class="snake-game-hud" aria-label="Game score">
+                <div class="snake-game-stat snake-game-stat--current">
+                    <span class="snake-game-stat-label">This round</span>
+                    <strong id="snake-current-score" class="snake-game-stat-value" aria-live="polite">०</strong>
+                </div>
+                <div class="snake-game-stat">
+                    <span class="snake-game-stat-label">Best score</span>
+                    <strong id="snake-best-score" class="snake-game-stat-value">०</strong>
+                </div>
+            </div>
+
+            <div class="snake-board-stage">
+                <div id="game-board" aria-label="Snake game board"></div>
+            </div>
+        </section>
+
+        <div class="zatam-game-actions snake-game-actions">
+            <a class="zatam-game-btn zatam-game-btn-secondary" href="../index.html">← पुनः मुखपृष्ठम्</a>
+        </div>
+    </main>
+
+    <section id="game-over-dialog" class="zatam-game-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="game-over-title" hidden>
+        <div class="zatam-game-modal snake-game-over">
+            <h2 id="game-over-title" class="zatam-game-modal-title">पराजयः 🙁</h2>
+            <p class="snake-game-over-message">पुनः प्रयत्नार्थं क्रीडां पुनः आरभत।</p>
+            <div class="snake-game-over-scores">
+                <div>
+                    <span>This round</span>
+                    <strong id="game-over-round-score">०</strong>
+                </div>
+                <div>
+                    <span>Best score</span>
+                    <strong id="game-over-highscore">०</strong>
+                </div>
+            </div>
+            <div class="zatam-game-actions">
+                <button id="restart-button" class="zatam-game-btn zatam-game-btn-primary" type="button">पुनः क्रीडतु · Play Again</button>
+                <a class="zatam-game-btn zatam-game-btn-secondary" href="../index.html">मुखपृष्ठम् · Home</a>
+            </div>
+        </div>
+    </section>
+
     <script src="../scripts/game.js" defer type="module"></script>
+    <script type="module" src="../../js/navbar-loader.js"></script>
 </body>
 </html>

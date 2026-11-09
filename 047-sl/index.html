@@ -4,38 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
-    <title>सर्पलीला</title>
+    <title>सर्पलीला — Snake Game | Zat.am</title>
     <link rel="icon" type="image/x-icon" href="../images/icon.png">
+    <link rel="stylesheet" href="../shared/game-theme.css">
     <link rel="stylesheet" href="css/index.css">
     <meta name="author" content="Karanveer">
 </head>
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-    <header>
-        <h2>सर्पक्रीडायां स्वागतम् 🐍</h2>
-        <p>किं त्वं सज्जः असि?</p>
-    </header>
-    <main>
-        <section class="game-preview">
-            <h3>पूर्वावलोकनम्</h3>
-            <img src="images/preview.png" alt="Game Preview">
-        </section>
-        <section id="instructions" style="visibility: hidden;">
-            <h3>How to Play</h3>
-            <ol>
-                <li>Use arrow keys to control the snake</li>
-                <li>Eat the food to grow longer and Avoid hitting the walls or yourself</li>
-                <li>Survive as long as possible and beat your high score</li>
-            </ol>
-        </section>
+    <main class="zatam-game-shell snake-intro-shell">
+        <header class="zatam-game-header">
+            <span class="zatam-game-eyebrow">Zat.am game</span>
+            <h1 class="zatam-game-title">सर्पलीला</h1>
+            <p class="zatam-game-subtitle">सर्पक्रीडायां स्वागतम् 🐍 किं त्वं सज्जः असि?</p>
+        </header>
+
+        <div class="snake-intro-layout">
+            <section class="zatam-game-card snake-preview-card" aria-labelledby="preview-title">
+                <h2 id="preview-title" class="zatam-game-section-title">पूर्वावलोकनम्</h2>
+                <img class="snake-preview-image" src="images/preview.png" alt="Preview of the Sanskrit snake game">
+            </section>
+
+            <section id="instructions" class="zatam-game-instructions snake-instructions" aria-labelledby="instructions-title" hidden>
+                <h2 id="instructions-title" class="zatam-game-section-title">How to Play</h2>
+                <ol class="snake-instructions-list">
+                    <li>Use the arrow keys to control the snake.</li>
+                    <li>Eat the numbered food to grow, while avoiding the walls and your own tail.</li>
+                    <li>Survive as long as possible and beat your high score.</li>
+                </ol>
+            </section>
+        </div>
+
+        <div class="zatam-game-actions">
+            <button class="zatam-game-btn zatam-game-btn-primary" type="button" onclick="window.location.href='content/game.html'">अधुना क्रीडतु! Play Now</button>
+            <button id="howto-button" class="zatam-game-btn zatam-game-btn-secondary" type="button" aria-controls="instructions" aria-expanded="false" onclick="document.getElementById('instructions').hidden = false; this.hidden = true;">HOWTO</button>
+        </div>
     </main>
-    <footer>
-        <button onclick="window.location.href='content/game.html'">अधुना क्रीडतु! Play Now</button>
-        <button onclick="document.getElementById('instructions').style.visibility='visible'">HOWTO</button>
-    </footer>
 
 
     <!-- Shared Zat.am Navbar -->
