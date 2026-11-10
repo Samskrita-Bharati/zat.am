@@ -175,6 +175,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   updateSpeedDisplay();
 
+  setupHoldSpeedButton(document.querySelector(".buttons .increase"), 1);
+  setupHoldSpeedButton(document.querySelector(".buttons .decrease"), -1);
+
   // These events do not fire when moving between child elements.
   reader.addEventListener("mouseenter", () => {
     isHovered = true;
@@ -280,9 +283,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       event.preventDefault();
     });
   }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    setupHoldSpeedButton(document.querySelector(".buttons .increase"), 1);
-    setupHoldSpeedButton(document.querySelector(".buttons .decrease"), -1);
-  });
 });
