@@ -88,3 +88,35 @@ footer {
   font-size: 0.9rem;
   color: #777;
 }
+
+.reader-info {
+  margin-top: 15px;
+}
+
+.reader-info p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+#speed-display {
+  font-weight: bold;
+}
+
+#speed-change {
+  min-height: 1.5em;
+  color: #555;
+}
+
+#reader-status {
+  color: #444;
+}
+
+.buttons {
+  flex-wrap: wrap;
+}
+
+.buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

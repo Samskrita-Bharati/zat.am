@@ -1,68 +1,217 @@
-//Vertical Scrolling ONLY  ✅
-//Three buttons  + or - (to increase/decrease the speed) & then restart  ✅
-//Funcionality to pause when hovered over the div and resumes when taken out. ✅
-// Decreased the scrolling speed by adjusting frames i setTimeout [1200 => 2400] and scrollInterval[16=>32] and intial scrollSpeed[1=>0.5]
+const SCROLL_INTERVAL_MS = 64;
+const INITIAL_SPEED = 1;
+const SPEED_STEP = 0.1;
+const MIN_SPEED = 0.1;
+const START_DELAY_MS = 2400;
 
-let scrollSpeed = 1;
-let scrollInterval;
+let scrollSpeed = INITIAL_SPEED;
+let scrollInterval = null;
+let startTimeout = null;
+let verseData = [];
+let isHovered = false;
+let isCompleted = false;
+let isLoaded = false;
+let scrollPosition = 0;
 
-function startScrolling() {
-  try {
-    scrollInterval = setInterval(() => {
-      document.getElementById("vScroll").scrollTop += scrollSpeed;
-    }, 64);
-  }catch (error) {
-    console.error("Error Scrolling");
-  }
+let reader;
+let speedDisplay;
+let statusDisplay;
+let decreaseButton;
+
+function updateSpeedDisplay() {
+  const pixelsPerSecond = scrollSpeed * (1000 / SCROLL_INTERVAL_MS);
+  const stepPerSecond = SPEED_STEP * (1000 / SCROLL_INTERVAL_MS);
+
+  speedDisplay.textContent =
+    `Current speed: ${pixelsPerSecond.toFixed(2)} px/s · ` +
+    `Each click changes speed by ${stepPerSecond.toFixed(2)} px/s`;
+
+  decreaseButton.disabled = scrollSpeed <= MIN_SPEED;
 }
 
 function pauseScrolling() {
   clearInterval(scrollInterval);
+  scrollInterval = null;
+}
+
+function cancelDelayedStart() {
+  clearTimeout(startTimeout);
+  startTimeout = null;
+}
+
+function completeReading() {
+  pauseScrolling();
+  isCompleted = true;
+  statusDisplay.textContent =
+    "You have reached the end of the Bhagavad Gita. Press Restart to read again.";
+}
+
+function startScrolling() {
+  // Always clear the previous timer before creating another.
+  pauseScrolling();
+
+  if (!isLoaded || isHovered || isCompleted) return;
+
+  scrollPosition = reader.scrollTop;
+
+  scrollInterval = setInterval(() => {
+    const maxScroll = Math.max(
+      0,
+      reader.scrollHeight - reader.clientHeight
+    );
+
+    if (reader.scrollTop >= maxScroll - 1) {
+      completeReading();
+      return;
+    }
+
+    // Preserve fractional movement for slow speeds.
+    scrollPosition = Math.min(scrollPosition + scrollSpeed, maxScroll);
+    reader.scrollTop = scrollPosition;
+
+    if (scrollPosition >= maxScroll) {
+      completeReading();
+    }
+  }, SCROLL_INTERVAL_MS);
+}
+
+function scheduleScrolling() {
+  cancelDelayedStart();
+
+  startTimeout = setTimeout(() => {
+    startTimeout = null;
+    startScrolling();
+  }, START_DELAY_MS);
 }
 
 function resumeScrolling() {
+  if (!isLoaded || isCompleted) return;
+
+  // Preserve the initial delay if it is still pending.
+  if (startTimeout !== null) {
+    statusDisplay.textContent = "Scrolling will start shortly.";
+    return;
+  }
+
+  statusDisplay.textContent = "Reading… Hover over the verses to pause.";
   startScrolling();
 }
 
-
-setTimeout(startScrolling, 2400);
-// setTimeout(scrollVertically, 1200);
-
-let verseData = [];
-
 async function fetchVerse() {
-  try {
-    const response = await fetch(
-      "https://raw.githubusercontent.com/gita/gita/refs/heads/main/data/verse.json"
-    );
-    verseData = await response.json();
-    // console.log(verseData);
-    showVerse();
-  } catch (error) {
-    console.error("Error Fetching the data");
+  const response = await fetch(
+    "https://raw.githubusercontent.com/gita/gita/refs/heads/main/data/verse.json"
+  );
+
+  if (!response.ok) {
+    throw new Error(`Could not load verses: HTTP ${response.status}`);
   }
+
+  verseData = await response.json();
 }
 
 function showVerse() {
-  let content = "";
-  verseData.forEach(verse => {
-    content += verse.text + "<br>";
+  const fragment = document.createDocumentFragment();
+
+  verseData.forEach((verse) => {
+    fragment.appendChild(document.createTextNode(verse.text));
+    fragment.appendChild(document.createElement("br"));
   });
-  document.querySelector(".container .scroll-section #verse").innerHTML = content;
+
+  document.getElementById("verse").replaceChildren(fragment);
 }
 
-fetchVerse();
+function changeSpeed(direction) {
+  const previousSpeed = scrollSpeed;
 
-//FIX : when negative, the auto-scroll get reversed
-function changeSpeed(n) {
-  scrollSpeed += n;
-  // console.log(scrollSpeed) development pursope
+  scrollSpeed = Math.max(
+    MIN_SPEED,
+    Math.round((scrollSpeed + direction * SPEED_STEP) * 10) / 10
+  );
+
+  updateSpeedDisplay();
+
+  const actualChange =
+    Math.abs(scrollSpeed - previousSpeed) *
+    (1000 / SCROLL_INTERVAL_MS);
+
+  if (actualChange === 0) {
+    document.getElementById("speed-change").textContent =
+      "Minimum speed reached.";
+    return;
+  }
+
+  document.getElementById("speed-change").textContent =
+    `${direction > 0 ? "Increased" : "Decreased"} speed by ` +
+    `${actualChange.toFixed(2)} px/s.`;
 }
 
 function verseRestart() {
-  document.querySelector(".container .scroll-section #verse").innerHTML = ""
-  fetchVerse().then(() => {
-    showVerse();
-    // console.log("Restarted");
-  });
+  pauseScrolling();
+  cancelDelayedStart();
+
+  isCompleted = false;
+  scrollPosition = 0;
+  reader.scrollTop = 0;
+
+  // Reuse the loaded verses; no extra fetch or rendering is needed.
+  if (!isLoaded) {
+    statusDisplay.textContent =
+      "Verses are not loaded. Refresh the page to try again.";
+    return;
+  }
+
+  statusDisplay.textContent = isHovered
+    ? "Restarted. Move your pointer outside the reader to resume."
+    : "Restarted. Scrolling will start in 2.4 seconds.";
+
+  scheduleScrolling();
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  reader = document.getElementById("vScroll");
+  speedDisplay = document.getElementById("speed-display");
+  statusDisplay = document.getElementById("reader-status");
+  decreaseButton = document.querySelector(".buttons .decrease");
+
+  updateSpeedDisplay();
+
+  // These events do not fire when moving between child elements.
+  reader.addEventListener("mouseenter", () => {
+    isHovered = true;
+    pauseScrolling();
+
+    if (isLoaded && !isCompleted) {
+      statusDisplay.textContent =
+        "Paused. Move your pointer outside the reader to resume.";
+    }
+  });
+
+  reader.addEventListener("mouseleave", () => {
+    isHovered = false;
+    resumeScrolling();
+  });
+
+  // Keep automatic scrolling aligned after manual scrolling.
+  reader.addEventListener("scroll", () => {
+    scrollPosition = reader.scrollTop;
+  });
+
+  statusDisplay.textContent = "Loading verses…";
+
+  try {
+    await fetchVerse();
+    showVerse();
+    isLoaded = true;
+    reader.scrollTop = 0;
+
+    statusDisplay.textContent = isHovered
+      ? "Paused. Move your pointer outside the reader to resume."
+      : "Verses loaded. Scrolling will start in 2.4 seconds.";
+
+    scheduleScrolling();
+  } catch (error) {
+    console.error("Error fetching verses:", error);
+    statusDisplay.textContent =
+      "Unable to load verses. Please refresh the page to try again.";
+  }
+});
