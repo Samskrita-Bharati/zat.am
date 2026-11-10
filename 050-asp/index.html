@@ -3,74 +3,121 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GeetaShlokUseCase</title>
-    <link rel="stylesheet" href="style/styles.css" />
-    <script src="script/logic.js"></script>
-  </head>
-  <body data-page="games">
 
-    <!-- Shared Zat.am Navbar -->
+    <title>Auto श्लोकपाठक | Zat.am</title>
+    <meta
+      name="description"
+      content="Read Bhagavad Gita shlokas with automatic scrolling and adjustable reading speed."
+    />
+
+    <!-- Shared theme first, reader-specific styles second -->
+    <link rel="stylesheet" href="../shared/game-theme.css" />
+    <link rel="stylesheet" href="style/styles.css" />
+
+    <script defer src="script/logic.js"></script>
+  </head>
+
+  <body data-page="games" class="zatam-themed-game">
     <div id="navbar-mount"></div>
 
-    <h1>Auto श्लोकपाठक: Auto Reader for Shloka from श्रीमद् भगवद्गीता</h1>
-    <div class="container">
-      <div id="vScroll" class="scroll-section">
-        <h1>श्रीमद् भगवद्गीता</h1>
-        <p id="verse"></p>
-      </div>
+    <main class="zatam-game-shell shloka-reader">
+      <header class="zatam-game-header">
+        <span class="zatam-game-eyebrow">Bhagavad Gita Reader</span>
 
-      <div class="reader-info">
-        <p id="speed-display"></p>
-        <p id="speed-change" role="status" aria-live="polite"></p>
-        <p id="reader-status" role="status" aria-live="polite"></p>
-      </div>
+        <h1 class="zatam-game-title">
+          Auto <span lang="sa">श्लोकपाठक</span>
+        </h1>
 
-      <div class="buttons">
-        <button
-          type="button"
-          class="increase"
-          onclick="changeSpeed(1)"
-        >
-          Increase Speed (+1.56 px/s)
-        </button>
-
-        <button
-          type="button"
-          class="restart"
-          onclick="verseRestart()"
-        >
-          Restart
-        </button>
-
-        <button
-          type="button"
-          class="decrease"
-          onclick="changeSpeed(-1)"
-        >
-          Decrease Speed (−1.56 px/s)
-        </button>
-      </div>
-    </div>
-      <div id="vScroll" class="scroll-section" onmouseover="pauseScrolling()" onmouseout="resumeScrolling()">
-        <h1>श्रीमद् भगवद्गीता</h1>
-        <p id="verse" >
-           
+        <p class="zatam-game-subtitle">
+          Read shlokas from the
+          <span lang="sa">श्रीमद् भगवद्गीता</span>
+          at your own pace.
         </p>
-      </div>
-      <br>
-      <div class="buttons">
-        <button class="increase" onclick="changeSpeed(+0.1)">Increase Speed</button>
-        <button class="restart" onclick="verseRestart()">Restart</button>
-        <button class="decrease" onclick="changeSpeed(-0.1)">Decrease Speed</button>
-      </div>
-    </div>
-  
+      </header>
 
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
-</body>
-  <footer>Developed by Hussain</footer>
+      <section
+        class="zatam-game-instructions"
+        aria-label="Reading instructions"
+      >
+        <p>
+          The verses scroll automatically. Hover over the reading area
+          to pause, then move your pointer away to resume.
+          Use the buttons to adjust the speed or restart from the beginning.
+        </p>
+      </section>
+
+      <section class="zatam-game-card reader-card" aria-label="Shloka reader">
+        <div class="reader-heading">
+          <h2 id="reader-title" lang="sa">श्रीमद् भगवद्गीता</h2>
+          <span class="zatam-game-badge">Auto scroll</span>
+        </div>
+
+        <!-- One reading area only -->
+        <div
+          id="vScroll"
+          class="scroll-section"
+          role="region"
+          aria-labelledby="reader-title"
+          tabindex="0"
+        >
+          <p id="verse" lang="sa"></p>
+        </div>
+
+        <div class="reader-info">
+          <div class="reader-speed-panel">
+            <span class="zatam-game-stat-label">Reading speed</span>
+            <p id="speed-display"></p>
+
+            <p
+              id="speed-change"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            ></p>
+          </div>
+
+          <p
+            id="reader-status"
+            class="zatam-game-status zatam-game-status-info"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            Loading verses…
+          </p>
+        </div>
+
+        <!-- One set of controls only -->
+        <div class="buttons zatam-game-actions">
+          <button
+            type="button"
+            class="increase zatam-game-btn zatam-game-btn-primary"
+            onclick="changeSpeed(1)"
+          >
+            Increase Speed (+1.56 px/s)
+          </button>
+
+          <button
+            type="button"
+            class="restart zatam-game-btn zatam-game-btn-accent"
+            onclick="verseRestart()"
+          >
+            Restart
+          </button>
+
+          <button
+            type="button"
+            class="decrease zatam-game-btn zatam-game-btn-secondary"
+            onclick="changeSpeed(-1)"
+          >
+            Decrease Speed (−1.56 px/s)
+          </button>
+        </div>
+      </section>
+
+      <footer class="reader-footer">Developed by Hussain</footer>
+    </main>
+
+    <script type="module" src="../js/navbar-loader.js"></script>
+  </body>
 </html>

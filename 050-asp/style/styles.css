@@ -1,122 +1,136 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  margin-top: 4%;
+/* The shared game-theme.css supplies the page, cards and buttons. */
+
+.shloka-reader .zatam-game-title {
+  line-height: 1.35;
+}
+
+.shloka-reader .reader-card {
+  padding: 24px;
+}
+
+/* Reader heading */
+
+.shloka-reader .reader-heading {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
-h1 {
-  text-align: center;
-  color: #444;
+.shloka-reader .reader-heading h2 {
+  margin: 0;
+  color: var(--zatam-heading);
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+  line-height: 1.5;
 }
 
-.container {
+/* Vertically scrolling verses */
+
+.shloka-reader #vScroll {
   width: 100%;
-  background-color: #ffe9c5;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-top: 20px;
-  text-align: center;
-}
+  height: 70vh;
+  height: 70svh;
+  min-height: 320px;
 
-.scroll-section {
-  background-color: #ffcb7d;
-  border-radius: 5px;
-  overflow: hidden;
-  padding: 15px;
-}
-
-#vScroll {
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #a0e4a6;
-  height: 80vh;
-  padding: 10px;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  scroll-behavior: auto;
+  overflow-anchor: none;
+  scrollbar-gutter: stable;
+
+  padding: clamp(20px, 4vw, 44px);
+
+  background: var(--zatam-soft);
+  color: var(--zatam-text);
+
+  border: 1px solid var(--zatam-border);
+  border-top: 4px solid var(--zatam-gold);
+  border-radius: var(--zatam-radius);
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--zatam-gold) var(--zatam-soft);
 }
 
-.buttons {
-  margin-top: 15px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.shloka-reader #vScroll:focus-visible {
+  outline: 3px solid var(--zatam-blue);
+  outline-offset: 4px;
 }
 
-.buttons button {
-  padding: 10px 15px;
-  font-size: 0.9rem;
-  color: #fff;
-  background-color: #444;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.shloka-reader #verse {
+  margin: 0;
+  font-family: "Noto Sans Devanagari", "Nirmala UI", Mangal, sans-serif;
+  font-size: clamp(1.65rem, 3.6vw, 3rem);
+  line-height: 2.1;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
-.buttons button.increase {
-  background-color: #28a745;
-}
+/* Speed and status */
 
-.buttons button.restart {
-  background-color: #ffc107;
-}
-
-.buttons button.decrease {
-  background-color: #dc3545;
-}
-
-.buttons button:hover {
-  filter: brightness(0.9);
-}
-p {
-  font-size: 350%;
-}
-
-footer {
+.shloka-reader .reader-info {
   margin-top: 20px;
+}
+
+.shloka-reader .reader-speed-panel {
+  padding: 16px 18px;
+  background: var(--zatam-page);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+  text-align: center;
+}
+
+.shloka-reader #speed-display {
+  margin: 8px 0 0;
+  color: var(--zatam-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.shloka-reader #speed-change {
+  min-height: 1.5em;
+  margin: 6px 0 0;
+  color: var(--zatam-muted);
   font-size: 0.9rem;
-  color: #777;
-}
-
-.reader-info {
-  margin-top: 15px;
-}
-
-.reader-info p {
-  margin: 6px 0;
-  font-size: 0.95rem;
   line-height: 1.5;
 }
 
-#speed-display {
-  font-weight: bold;
+.shloka-reader #reader-status {
+  margin-bottom: 0;
+  font-size: 0.95rem;
 }
 
-#speed-change {
-  min-height: 1.5em;
-  color: #555;
+/* Controls use the shared theme's button styles. */
+
+.shloka-reader .buttons .zatam-game-btn {
+  line-height: 1.4;
+  text-align: center;
 }
 
-#reader-status {
-  color: #444;
+/* Footer */
+
+.shloka-reader .reader-footer {
+  margin-top: 24px;
+  color: var(--zatam-muted);
+  font-size: 0.85rem;
+  text-align: center;
 }
 
-.buttons {
-  flex-wrap: wrap;
-}
+/* Smaller screens */
 
-.buttons button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+@media (max-width: 700px) {
+  .shloka-reader .reader-card {
+    padding: 16px;
+  }
+
+  .shloka-reader .reader-heading {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .shloka-reader #vScroll {
+    padding: 20px 14px;
+  }
 }
