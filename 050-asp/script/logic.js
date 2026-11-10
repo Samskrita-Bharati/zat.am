@@ -214,4 +214,75 @@ document.addEventListener("DOMContentLoaded", async () => {
     statusDisplay.textContent =
       "Unable to load verses. Please refresh the page to try again.";
   }
+
+  function setupHoldSpeedButton(button, direction) {
+  let holdTimeout = null;
+  let repeatInterval = null;
+  let activePointerId = null;
+
+  function stopHolding() {
+      clearTimeout(holdTimeout);
+      clearInterval(repeatInterval);
+
+      holdTimeout = null;
+      repeatInterval = null;
+      activePointerId = null;
+    }
+
+    button.addEventListener("pointerdown", (event) => {
+      if (!event.isPrimary || event.button !== 0 || button.disabled) return;
+
+      stopHolding();
+
+      activePointerId = event.pointerId;
+      button.setPointerCapture(event.pointerId);
+
+      // Apply one change immediately.
+      changeSpeed(direction);
+
+      holdTimeout = setTimeout(() => {
+        repeatInterval = setInterval(() => {
+          if (button.disabled) {
+            stopHolding();
+            return;
+          }
+
+          changeSpeed(direction);
+        }, 100);
+      }, 350);
+    });
+
+    function stopForPointer(event) {
+      if (event.pointerId === activePointerId) {
+        stopHolding();
+      }
+    }
+
+    window.addEventListener("pointerup", stopForPointer);
+    window.addEventListener("pointercancel", stopForPointer);
+    button.addEventListener("lostpointercapture", stopHolding);
+    window.addEventListener("blur", stopHolding);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopHolding();
+    });
+
+    // Keyboard and assistive-technology clicks.
+    // Pointer clicks already changed the speed on pointerdown.
+    button.addEventListener("click", (event) => {
+      if (event.detail === 0 && !button.disabled) {
+        changeSpeed(direction);
+      }
+    });
+
+    // Prevent the touch-and-hold context menu.
+    button.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setupHoldSpeedButton(document.querySelector(".buttons .increase"), 1);
+    setupHoldSpeedButton(document.querySelector(".buttons .decrease"), -1);
+  });
 });
