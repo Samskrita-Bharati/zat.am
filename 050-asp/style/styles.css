@@ -142,3 +142,56 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+
+/* Shloka font sizes */
+
+.shloka-reader #verse[data-font-size="small"] {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+}
+
+.shloka-reader #verse[data-font-size="medium"] {
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+}
+
+.shloka-reader #verse[data-font-size="large"] {
+  font-size: clamp(1.65rem, 3.6vw, 3rem);
+}
+
+/* Font selector beside the speed buttons */
+
+.shloka-reader .reader-font-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 14px;
+
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+}
+
+.shloka-reader .reader-font-control label {
+  color: var(--zatam-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.shloka-reader .reader-font-control select {
+  min-height: 36px;
+  padding: 6px 10px;
+
+  background: var(--zatam-white);
+  color: var(--zatam-heading);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-sm);
+
+  font: inherit;
+  cursor: pointer;
+}
+
+.shloka-reader .reader-font-control select:focus-visible {
+  outline: 3px solid var(--zatam-blue);
+  outline-offset: 3px;
+}

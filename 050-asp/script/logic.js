@@ -167,6 +167,14 @@ function verseRestart() {
   scheduleScrolling();
 }
 
+function changeFontSize(size) {
+  const verse = document.getElementById("verse");
+
+  if (!["small", "medium", "large"].includes(size)) return;
+
+  verse.dataset.fontSize = size;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   reader = document.getElementById("vScroll");
   speedDisplay = document.getElementById("speed-display");
