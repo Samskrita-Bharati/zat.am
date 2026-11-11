@@ -46,7 +46,69 @@
         </p>
       </section>
 
-      <section class="zatam-game-card reader-card" aria-label="Shloka reader">
+      <section
+        id="reading-selection"
+        class="zatam-game-card"
+        aria-labelledby="selection-title"
+      >
+        <h2 id="selection-title" class="zatam-game-section-title">
+          Choose your reading
+        </h2>
+
+        <p>Read all shlokas together or choose an individual chapter.</p>
+
+        <fieldset class="reading-mode-options">
+          <legend>Reading mode</legend>
+
+          <label>
+            <input type="radio" name="reading-mode" value="all" checked />
+            All shlokas
+          </label>
+
+          <label>
+            <input type="radio" name="reading-mode" value="chapter" />
+            Choose a chapter
+          </label>
+        </fieldset>
+
+        <div id="chapter-picker" hidden>
+          <label for="chapter-select">Chapter</label>
+          <select id="chapter-select" disabled>
+            <option value="">Loading chapters…</option>
+          </select>
+        </div>
+
+        <p id="selection-status" role="status" aria-live="polite">
+          Loading verses…
+        </p>
+
+        <div class="zatam-game-actions">
+          <button
+            id="start-reading"
+            type="button"
+            class="zatam-game-btn zatam-game-btn-primary"
+            disabled
+          >
+            Start Reading
+          </button>
+
+          <button
+            id="retry-loading"
+            type="button"
+            class="zatam-game-btn zatam-game-btn-secondary"
+            hidden
+          >
+            Retry Loading
+          </button>
+        </div>
+      </section>
+
+      <section
+        id="reader-panel"
+        class="zatam-game-card reader-card"
+        aria-label="Shloka reader"
+        hidden
+      >
         <div class="reader-heading">
           <h2 id="reader-title" lang="sa">श्रीमद् भगवद्गीता</h2>
           <span class="zatam-game-badge">Auto scroll</span>
@@ -120,6 +182,14 @@
               <option value="large" selected>Large</option>
             </select>
           </div>
+
+          <button
+            id="change-reading"
+            type="button"
+            class="zatam-game-btn zatam-game-btn-secondary"
+          >
+            Change Reading
+          </button>
         </div>
       </section>
 

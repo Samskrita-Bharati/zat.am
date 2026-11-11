@@ -4,29 +4,73 @@ const SPEED_STEP = 0.1;
 const MIN_SPEED = 0.1;
 const START_DELAY_MS = 2400;
 
+const VERSE_URL =
+  "https://raw.githubusercontent.com/gita/gita/refs/heads/main/data/verse.json";
+
 let scrollSpeed = INITIAL_SPEED;
 let scrollInterval = null;
 let startTimeout = null;
 let verseData = [];
+let selectedVerses = [];
+let chapters = [];
+
 let isHovered = false;
 let isCompleted = false;
 let isLoaded = false;
+let isReading = false;
 let scrollPosition = 0;
+let selectedChapter = null;
 
 let reader;
 let speedDisplay;
 let statusDisplay;
 let decreaseButton;
+let selectionPanel;
+let readerPanel;
+let chapterPicker;
+let chapterSelect;
+let selectionStatus;
+let startButton;
+let retryButton;
+
+const stopHoldHandlers = [];
 
 function updateSpeedDisplay() {
-  const pixelsPerSecond = scrollSpeed * (1000 / SCROLL_INTERVAL_MS);
-  const stepPerSecond = SPEED_STEP * (1000 / SCROLL_INTERVAL_MS);
+  const current = scrollSpeed * (1000 / SCROLL_INTERVAL_MS);
+  const step = SPEED_STEP * (1000 / SCROLL_INTERVAL_MS);
 
   speedDisplay.textContent =
-    `Current speed: ${pixelsPerSecond.toFixed(2)} px/s · ` +
-    `Each click changes speed by ${stepPerSecond.toFixed(2)} px/s`;
+    `Current speed: ${current.toFixed(2)} px/s · ` +
+    `Each step changes speed by ${step.toFixed(2)} px/s`;
 
   decreaseButton.disabled = scrollSpeed <= MIN_SPEED;
+}
+
+function changeSpeed(direction) {
+  const previous = scrollSpeed;
+
+  scrollSpeed = Math.max(
+    MIN_SPEED,
+    Math.round((scrollSpeed + direction * SPEED_STEP) * 10) / 10
+  );
+
+  updateSpeedDisplay();
+
+  const change =
+    Math.abs(scrollSpeed - previous) *
+    (1000 / SCROLL_INTERVAL_MS);
+
+  document.getElementById("speed-change").textContent =
+    change === 0
+      ? "Minimum speed reached."
+      : `${direction > 0 ? "Increased" : "Decreased"} speed by ` +
+        `${change.toFixed(2)} px/s.`;
+}
+
+function changeFontSize(size) {
+  if (!["small", "medium", "large"].includes(size)) return;
+
+  document.getElementById("verse").dataset.fontSize = size;
 }
 
 function pauseScrolling() {
@@ -39,37 +83,50 @@ function cancelDelayedStart() {
   startTimeout = null;
 }
 
+function stopAllHolds() {
+  stopHoldHandlers.forEach((stop) => stop());
+}
+
 function completeReading() {
   pauseScrolling();
   isCompleted = true;
+
   statusDisplay.textContent =
-    "You have reached the end of the Bhagavad Gita. Press Restart to read again.";
+    selectedChapter === null
+      ? "You have finished all shlokas. Restart or choose another reading."
+      : `You have finished Chapter ${selectedChapter}. ` +
+        "Restart or choose another chapter.";
 }
 
 function startScrolling() {
-  // Always clear the previous timer before creating another.
   pauseScrolling();
 
-  if (!isLoaded || isHovered || isCompleted) return;
+  if (!isReading || !isLoaded || isHovered || isCompleted) return;
 
   scrollPosition = reader.scrollTop;
+  statusDisplay.textContent =
+    "Reading… Hover over the verses to pause.";
 
   scrollInterval = setInterval(() => {
-    const maxScroll = Math.max(
+    const maximum = Math.max(
       0,
       reader.scrollHeight - reader.clientHeight
     );
 
-    if (reader.scrollTop >= maxScroll - 1) {
+    if (reader.scrollTop >= maximum - 1) {
       completeReading();
       return;
     }
 
-    // Preserve fractional movement for slow speeds.
-    scrollPosition = Math.min(scrollPosition + scrollSpeed, maxScroll);
+    // Keep fractional movement so very slow speeds still work.
+    scrollPosition = Math.min(
+      scrollPosition + scrollSpeed,
+      maximum
+    );
+
     reader.scrollTop = scrollPosition;
 
-    if (scrollPosition >= maxScroll) {
+    if (scrollPosition >= maximum) {
       completeReading();
     }
   }, SCROLL_INTERVAL_MS);
@@ -85,80 +142,190 @@ function scheduleScrolling() {
 }
 
 function resumeScrolling() {
-  if (!isLoaded || isCompleted) return;
+  if (!isReading || !isLoaded || isCompleted) return;
 
-  // Preserve the initial delay if it is still pending.
   if (startTimeout !== null) {
     statusDisplay.textContent = "Scrolling will start shortly.";
     return;
   }
 
-  statusDisplay.textContent = "Reading… Hover over the verses to pause.";
   startScrolling();
 }
 
-async function fetchVerse() {
-  const response = await fetch(
-    "https://raw.githubusercontent.com/gita/gita/refs/heads/main/data/verse.json"
-  );
+function getChapterNumber(verse) {
+  return Number(verse.chapter_number ?? verse.chapter_id);
+}
 
-  if (!response.ok) {
-    throw new Error(`Could not load verses: HTTP ${response.status}`);
+function getReadingMode() {
+  return document.querySelector(
+    'input[name="reading-mode"]:checked'
+  ).value;
+}
+
+function updateReadingOptions() {
+  const chapterMode = getReadingMode() === "chapter";
+
+  chapterPicker.hidden = !chapterMode;
+  chapterSelect.disabled = !isLoaded || !chapterMode;
+  startButton.disabled = !isLoaded;
+
+  if (!isLoaded) return;
+
+  if (!chapterMode) {
+    selectionStatus.textContent =
+      `${verseData.length} shlokas across ${chapters.length} chapters.`;
+    return;
   }
 
-  verseData = await response.json();
+  const chapter = Number(chapterSelect.value);
+  const count = verseData.filter(
+    (verse) => getChapterNumber(verse) === chapter
+  ).length;
+
+  selectionStatus.textContent =
+    `Chapter ${chapter}: ${count} shlokas.`;
+}
+
+async function loadVerses() {
+  isLoaded = false;
+  startButton.disabled = true;
+  chapterSelect.disabled = true;
+  retryButton.hidden = true;
+  selectionStatus.textContent = "Loading verses…";
+
+  try {
+    const response = await fetch(VERSE_URL);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error("The verse data is empty or invalid.");
+    }
+
+    // Order chapters numerically and verses in their reading order.
+    verseData = data
+      .filter(
+        (verse) =>
+          Number.isFinite(getChapterNumber(verse)) &&
+          typeof verse.text === "string"
+      )
+      .sort(
+        (a, b) =>
+          getChapterNumber(a) - getChapterNumber(b) ||
+          Number(a.verse_order ?? a.verse_number ?? a.id) -
+            Number(b.verse_order ?? b.verse_number ?? b.id)
+      );
+
+    if (verseData.length === 0) {
+      throw new Error("No readable verses were found.");
+    }
+
+    chapters = [...new Set(verseData.map(getChapterNumber))];
+
+    chapterSelect.replaceChildren();
+
+    chapters.forEach((chapter) => {
+      const count = verseData.filter(
+        (verse) => getChapterNumber(verse) === chapter
+      ).length;
+
+      const option = document.createElement("option");
+      option.value = chapter;
+      option.textContent = `Chapter ${chapter} (${count} shlokas)`;
+      chapterSelect.appendChild(option);
+    });
+
+    isLoaded = true;
+    updateReadingOptions();
+  } catch (error) {
+    console.error("Error loading verses:", error);
+    selectionStatus.textContent =
+      "Unable to load verses. Check your connection and try again.";
+    retryButton.hidden = false;
+  }
 }
 
 function showVerse() {
+  // Keep #verse itself so its selected font size is preserved.
   const fragment = document.createDocumentFragment();
 
-  verseData.forEach((verse) => {
-    fragment.appendChild(document.createTextNode(verse.text));
-    fragment.appendChild(document.createElement("br"));
+  selectedVerses.forEach((verse) => {
+    const text = document.createElement("span");
+    text.className = "shloka-text";
+    text.textContent = verse.text.trim();
+
+    fragment.appendChild(text);
   });
 
   document.getElementById("verse").replaceChildren(fragment);
 }
 
-function changeSpeed(direction) {
-  const previousSpeed = scrollSpeed;
+function beginSelectedReading() {
+  if (!isLoaded) return;
 
-  scrollSpeed = Math.max(
-    MIN_SPEED,
-    Math.round((scrollSpeed + direction * SPEED_STEP) * 10) / 10
-  );
+  pauseScrolling();
+  cancelDelayedStart();
+  stopAllHolds();
 
-  updateSpeedDisplay();
+  selectedChapter =
+    getReadingMode() === "chapter"
+      ? Number(chapterSelect.value)
+      : null;
 
-  const actualChange =
-    Math.abs(scrollSpeed - previousSpeed) *
-    (1000 / SCROLL_INTERVAL_MS);
+  selectedVerses =
+    selectedChapter === null
+      ? verseData
+      : verseData.filter(
+          (verse) => getChapterNumber(verse) === selectedChapter
+        );
 
-  if (actualChange === 0) {
-    document.getElementById("speed-change").textContent =
-      "Minimum speed reached.";
+  if (selectedVerses.length === 0) {
+    selectionStatus.textContent =
+      "No verses were found for this selection.";
     return;
   }
 
-  document.getElementById("speed-change").textContent =
-    `${direction > 0 ? "Increased" : "Decreased"} speed by ` +
-    `${actualChange.toFixed(2)} px/s.`;
+  isCompleted = false;
+  isReading = true;
+
+  selectionPanel.hidden = true;
+  readerPanel.hidden = false;
+
+  document.getElementById("reader-title").textContent =
+    selectedChapter === null
+      ? "श्रीमद् भगवद्गीता — All Shlokas"
+      : `श्रीमद् भगवद्गीता — Chapter ${selectedChapter}`;
+
+  showVerse();
+
+  reader.scrollTop = 0;
+  scrollPosition = 0;
+  isHovered = reader.matches(":hover");
+
+  document.getElementById("speed-change").textContent = "";
+
+  statusDisplay.textContent = isHovered
+    ? "Paused. Move your pointer outside the reader to resume."
+    : "Scrolling will start in 2.4 seconds.";
+
+  scheduleScrolling();
 }
 
 function verseRestart() {
+  if (!isReading) return;
+
   pauseScrolling();
   cancelDelayedStart();
+  stopAllHolds();
 
   isCompleted = false;
-  scrollPosition = 0;
   reader.scrollTop = 0;
-
-  // Reuse the loaded verses; no extra fetch or rendering is needed.
-  if (!isLoaded) {
-    statusDisplay.textContent =
-      "Verses are not loaded. Refresh the page to try again.";
-    return;
-  }
+  scrollPosition = 0;
+  isHovered = reader.matches(":hover");
 
   statusDisplay.textContent = isHovered
     ? "Restarted. Move your pointer outside the reader to resume."
@@ -167,31 +334,131 @@ function verseRestart() {
   scheduleScrolling();
 }
 
-function changeFontSize(size) {
-  const verse = document.getElementById("verse");
+function changeReading() {
+  pauseScrolling();
+  cancelDelayedStart();
+  stopAllHolds();
 
-  if (!["small", "medium", "large"].includes(size)) return;
+  isReading = false;
+  isCompleted = false;
+  isHovered = false;
 
-  verse.dataset.fontSize = size;
+  readerPanel.hidden = true;
+  selectionPanel.hidden = false;
+
+  updateReadingOptions();
+  document.getElementById("selection-title").focus();
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+function setupHoldSpeedButton(button, direction) {
+  let holdTimeout = null;
+  let repeatInterval = null;
+  let activePointerId = null;
+
+  function stopHolding() {
+    clearTimeout(holdTimeout);
+    clearInterval(repeatInterval);
+
+    holdTimeout = null;
+    repeatInterval = null;
+    activePointerId = null;
+  }
+
+  stopHoldHandlers.push(stopHolding);
+
+  button.addEventListener("pointerdown", (event) => {
+    if (!event.isPrimary || event.button !== 0 || button.disabled) return;
+
+    stopAllHolds();
+
+    activePointerId = event.pointerId;
+    button.setPointerCapture(event.pointerId);
+
+    changeSpeed(direction);
+
+    if (button.disabled) {
+      stopHolding();
+      return;
+    }
+
+    holdTimeout = setTimeout(() => {
+      repeatInterval = setInterval(() => {
+        if (button.disabled || !isReading) {
+          stopHolding();
+          return;
+        }
+
+        changeSpeed(direction);
+
+        if (button.disabled) stopHolding();
+      }, 100);
+    }, 350);
+  });
+
+  function stopForPointer(event) {
+    if (event.pointerId === activePointerId) stopHolding();
+  }
+
+  window.addEventListener("pointerup", stopForPointer);
+  window.addEventListener("pointercancel", stopForPointer);
+  button.addEventListener("lostpointercapture", stopHolding);
+
+  button.addEventListener("click", (event) => {
+    if (event.detail === 0 && !button.disabled) {
+      changeSpeed(direction);
+    }
+  });
+
+  button.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
   reader = document.getElementById("vScroll");
   speedDisplay = document.getElementById("speed-display");
   statusDisplay = document.getElementById("reader-status");
   decreaseButton = document.querySelector(".buttons .decrease");
 
+  selectionPanel = document.getElementById("reading-selection");
+  readerPanel = document.getElementById("reader-panel");
+  chapterPicker = document.getElementById("chapter-picker");
+  chapterSelect = document.getElementById("chapter-select");
+  selectionStatus = document.getElementById("selection-status");
+  startButton = document.getElementById("start-reading");
+  retryButton = document.getElementById("retry-loading");
+
+  document.getElementById("selection-title").tabIndex = -1;
+
   updateSpeedDisplay();
 
-  setupHoldSpeedButton(document.querySelector(".buttons .increase"), 1);
-  setupHoldSpeedButton(document.querySelector(".buttons .decrease"), -1);
+  setupHoldSpeedButton(
+    document.querySelector(".buttons .increase"),
+    1
+  );
 
-  // These events do not fire when moving between child elements.
+  setupHoldSpeedButton(decreaseButton, -1);
+
+  document.querySelectorAll('input[name="reading-mode"]').forEach(
+    (input) => {
+      input.addEventListener("change", updateReadingOptions);
+    }
+  );
+
+  chapterSelect.addEventListener("change", updateReadingOptions);
+  startButton.addEventListener("click", beginSelectedReading);
+  retryButton.addEventListener("click", loadVerses);
+
+  document.getElementById("change-reading").addEventListener(
+    "click",
+    changeReading
+  );
+
   reader.addEventListener("mouseenter", () => {
     isHovered = true;
     pauseScrolling();
 
-    if (isLoaded && !isCompleted) {
+    if (isReading && !isCompleted) {
       statusDisplay.textContent =
         "Paused. Move your pointer outside the reader to resume.";
     }
@@ -202,93 +469,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     resumeScrolling();
   });
 
-  // Keep automatic scrolling aligned after manual scrolling.
-  reader.addEventListener("scroll", () => {
-    scrollPosition = reader.scrollTop;
+  // Update the fractional position only for manual scrolling.
+  // Automatic scrolling must retain its fractional remainder.
+  reader.addEventListener("wheel", () => {
+    pauseScrolling();
+    requestAnimationFrame(() => {
+      scrollPosition = reader.scrollTop;
+      if (!isHovered) resumeScrolling();
+    });
+  }, { passive: true });
+
+  window.addEventListener("blur", stopAllHolds);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAllHolds();
   });
 
-  statusDisplay.textContent = "Loading verses…";
+  const fontSelect = document.getElementById("font-size-select");
 
-  try {
-    await fetchVerse();
-    showVerse();
-    isLoaded = true;
-    reader.scrollTop = 0;
-
-    statusDisplay.textContent = isHovered
-      ? "Paused. Move your pointer outside the reader to resume."
-      : "Verses loaded. Scrolling will start in 2.4 seconds.";
-
-    scheduleScrolling();
-  } catch (error) {
-    console.error("Error fetching verses:", error);
-    statusDisplay.textContent =
-      "Unable to load verses. Please refresh the page to try again.";
+  if (fontSelect) {
+    changeFontSize(fontSelect.value);
   }
 
-  function setupHoldSpeedButton(button, direction) {
-  let holdTimeout = null;
-  let repeatInterval = null;
-  let activePointerId = null;
-
-  function stopHolding() {
-      clearTimeout(holdTimeout);
-      clearInterval(repeatInterval);
-
-      holdTimeout = null;
-      repeatInterval = null;
-      activePointerId = null;
-    }
-
-    button.addEventListener("pointerdown", (event) => {
-      if (!event.isPrimary || event.button !== 0 || button.disabled) return;
-
-      stopHolding();
-
-      activePointerId = event.pointerId;
-      button.setPointerCapture(event.pointerId);
-
-      // Apply one change immediately.
-      changeSpeed(direction);
-
-      holdTimeout = setTimeout(() => {
-        repeatInterval = setInterval(() => {
-          if (button.disabled) {
-            stopHolding();
-            return;
-          }
-
-          changeSpeed(direction);
-        }, 100);
-      }, 350);
-    });
-
-    function stopForPointer(event) {
-      if (event.pointerId === activePointerId) {
-        stopHolding();
-      }
-    }
-
-    window.addEventListener("pointerup", stopForPointer);
-    window.addEventListener("pointercancel", stopForPointer);
-    button.addEventListener("lostpointercapture", stopHolding);
-    window.addEventListener("blur", stopHolding);
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stopHolding();
-    });
-
-    // Keyboard and assistive-technology clicks.
-    // Pointer clicks already changed the speed on pointerdown.
-    button.addEventListener("click", (event) => {
-      if (event.detail === 0 && !button.disabled) {
-        changeSpeed(direction);
-      }
-    });
-
-    // Prevent the touch-and-hold context menu.
-    button.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
-    });
-  }
+  updateReadingOptions();
+  loadVerses();
 });

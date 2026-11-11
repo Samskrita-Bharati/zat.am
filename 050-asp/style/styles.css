@@ -195,3 +195,106 @@
   outline: 3px solid var(--zatam-blue);
   outline-offset: 3px;
 }
+
+/* Ensure hidden screens and controls stay hidden. */
+
+.shloka-reader [hidden] {
+  display: none !important;
+}
+
+/* Reading selection */
+
+.shloka-reader #reading-selection > p {
+  color: var(--zatam-muted);
+  line-height: 1.6;
+}
+
+.shloka-reader .reading-mode-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+
+  margin: 20px 0;
+  padding: 18px;
+
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+}
+
+.shloka-reader .reading-mode-options legend {
+  padding: 0 6px;
+  color: var(--zatam-heading);
+  font-weight: 700;
+}
+
+.shloka-reader .reading-mode-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-height: 44px;
+  padding: 10px 16px;
+
+  background: var(--zatam-white);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-sm);
+
+  color: var(--zatam-heading);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.shloka-reader .reading-mode-options input {
+  accent-color: var(--zatam-navy);
+}
+
+.shloka-reader #chapter-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.shloka-reader #chapter-picker label {
+  color: var(--zatam-heading);
+  font-weight: 700;
+}
+
+.shloka-reader #chapter-select {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 14px;
+
+  background: var(--zatam-white);
+  color: var(--zatam-heading);
+
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-sm);
+
+  font: inherit;
+}
+
+.shloka-reader #chapter-select:focus-visible {
+  outline: 3px solid var(--zatam-blue);
+  outline-offset: 3px;
+}
+
+/* Preserve verse line breaks and separate individual shlokas. */
+
+.shloka-reader #verse .shloka-text {
+  display: block;
+  white-space: pre-line;
+}
+
+.shloka-reader #verse .shloka-text + .shloka-text {
+  margin-top: 1.5em;
+}
+
+@media (max-width: 600px) {
+  .shloka-reader .reading-mode-options {
+    flex-direction: column;
+  }
+}
