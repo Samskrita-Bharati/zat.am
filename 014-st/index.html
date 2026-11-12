@@ -29,11 +29,86 @@
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
+    <header class="typer-dashboard">
+    <div class="typer-heading">
+      <span class="typer-eyebrow">शतम् · NUMBER CHALLENGE</span>
+      <h1>Sankhya Typer</h1>
+      <p>Protect the circle. Type the matching number to destroy it.</p>
+    </div>
+
+    <div class="typer-stats">
+      <div class="typer-stat">
+        <span class="typer-stat-label">Score</span>
+        <strong id="scoreValue">0</strong>
+        <span class="typer-stat-detail">out of 100</span>
+      </div>
+
+      <div class="typer-stat">
+        <span class="typer-stat-label">Time Passed</span>
+        <strong id="timerValue">00:00</strong>
+        <span class="typer-stat-detail">target 02:30</span>
+      </div>
+
+      <div class="typer-stat typer-stat-life">
+        <span class="typer-stat-label">Lives</span>
+        <strong id="livesValue">1</strong>
+        <span class="typer-stat-detail">one hit ends the game</span>
+      </div>
+    </div>
+
+    <div class="typer-instructions">
+      <strong>How to play</strong>
+
+      <div class="typer-rule-list">
+        <span><b> Type 0–9</b> to destroy matching numbers</span>
+        <span><b> +1 point</b> per second survived</span>
+        <span><b> −2 points</b> per incorrect number</span>
+        <span><b> 02:30</b> to complete the challenge</span>
+      </div>
+    </div>
+  </header>
+
     <!-- Auth Middleware-->
     <script type="module" src="/auth/api/middleware.js"></script>
     <canvas id="canvas">Your browser doesn't support HTML5.</canvas>
 
+    <section
+    id="resultPanel"
+    class="typer-result-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="resultTitle"
+    hidden
+  >
+    <div class="typer-result-card">
+      <h2 id="resultTitle">Game Over</h2>
+
+      <p id="resultDetails"></p>
+
+      <div class="typer-result-actions">
+        <button
+          id="submitScoreButton"
+          type="button"
+          class="btn btn-primary"
+        >
+          Submit Score
+        </button>
+
+        <button
+          id="tryAgainButton"
+          type="button"
+          class="btn btn-outline-secondary"
+        >
+          Try Again
+        </button>
+      </div>
+
+      <p id="scoreSaveStatus" role="status"></p>
+    </div>
+  </section>
+
     <!-- Shared Zat.am Navbar -->
     <script type="module" src="../js/navbar-loader.js"></script>
+    <script type="module" src="../js/game-score.js"></script>
   </body>
 </html>

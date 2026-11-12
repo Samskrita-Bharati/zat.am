@@ -1,0 +1,174 @@
+/* Page specific layout; the shared game theme styles the surrounding shell. */
+.archive-game-shell {
+  --zatam-content-width: 1120px;
+  --archive-panel-height: 500px;
+}
+
+.ap-score-modal[hidden] {
+  display: none;
+}
+
+.archive-game-card {
+  overflow: hidden;
+  padding: clamp(12px, 2.5vw, 24px);
+}
+
+.archive-game-card .archive-back-button {
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+.archive-title-translation {
+  color: var(--zatam-muted);
+  font-family: var(--zatam-font);
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+.archive-game-card > .container,
+.archive-game-card > .container-fluid {
+  width: 100%;
+  max-width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.archive-game-card .dynamic-page h1.title {
+  margin: 4px 0 24px;
+  color: var(--zatam-heading);
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+.archive-game-card .archive-heading-row {
+  flex: 0 0 83.333333%;
+  max-width: 83.333333%;
+  margin-right: auto;
+  margin-bottom: 16px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.archive-game-card .archive-heading-row h1.title {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.archive-game-card .archive-back-button {
+  line-height: 1.2;
+}
+
+.archive-game-card #list,
+.archive-game-card #if {
+  background: transparent;
+}
+
+.archive-game-card #if {
+  height: var(--archive-panel-height);
+  padding-top: 0 !important;
+  overflow: hidden;
+}
+
+.archive-game-card #list > .row,
+.archive-game-card #list .row.gray-back {
+  background: transparent;
+}
+
+.archive-game-card #list {
+  padding-top: 0 !important;
+  height: var(--archive-panel-height);
+  overflow-y: auto;
+}
+
+.archive-game-card #list > .row,
+.archive-game-card #if > .row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+/* Keep the year grid close to its original full-width archive layout. */
+.archive-game-card #list > .row > .col-md-10 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.archive-game-card #list .archive-structure-pictorial {
+  margin-bottom: 20px;
+}
+
+.archive-game-card #list .archive-structure-pictorial .card {
+  height: 100%;
+  border: 1px solid var(--zatam-border);
+  box-shadow: var(--zatam-shadow-sm);
+}
+
+.archive-game-card #list .archive-structure-pictorial img {
+  width: 120%;
+  max-width: none;
+  height: auto;
+  margin-left: -10%;
+}
+
+.archive-game-card #if iframe {
+  display: block;
+  width: 100%;
+  height: var(--archive-panel-height);
+  border: 0;
+  border-radius: var(--zatam-radius);
+  background: #fff;
+  overflow: auto;
+}
+
+.archive-game-shell .footer {
+  width: min(calc(100% - 32px), 1120px);
+  margin: 0 auto;
+  color: var(--zatam-muted);
+}
+
+@media (max-width: 767.98px) {
+  .archive-game-shell {
+    padding-top: 24px;
+  }
+
+  .archive-game-shell {
+    --archive-panel-height: clamp(360px, 72vh, 500px);
+  }
+
+  .archive-game-card #list .archive-structure-pictorial {
+    padding-right: 8px;
+    padding-left: 8px;
+    margin-bottom: 14px;
+  }
+
+  .archive-game-card .archive-heading-row {
+    flex-basis: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .archive-game-card .archive-heading-row h1.title {
+    margin: 0;
+  }
+
+  .archive-game-card .archive-back-button {
+    margin-bottom: 20px;
+  }
+
+  .archive-game-card #list .archive-structure-pictorial .card {
+    padding: 10px 10px 4px;
+  }
+
+}
+
+@media (max-width: 420px) {
+  .archive-game-card {
+    padding: 10px 6px;
+  }
+
+  .archive-game-card #list .archive-structure-pictorial {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+}

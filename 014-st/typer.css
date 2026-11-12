@@ -12,3 +12,198 @@ canvas {
   left: 50%;
   transform: translateX(-50%);
 }
+
+.typer-result-overlay[hidden] {
+  display: none !important;
+}
+
+.typer-result-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(9, 38, 74, 0.65);
+}
+
+.typer-result-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 32px;
+  border-radius: 20px;
+  background: white;
+  color: #09264a;
+  text-align: center;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.typer-result-card h2 {
+  margin-bottom: 16px;
+}
+
+.typer-result-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+#scoreSaveStatus {
+  margin-bottom: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #09264a;
+}
+
+.typer-dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 20px;
+}
+
+.typer-heading {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.typer-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #a4472b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.typer-heading h1 {
+  margin: 0 0 8px;
+  color: #09264a;
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 700;
+}
+
+.typer-heading p {
+  margin: 0;
+  color: #586980;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.typer-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.typer-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 18px 10px;
+  border: 1px solid #dfe7f1;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(9, 38, 74, 0.04);
+  text-align: center;
+}
+
+.typer-stat-label {
+  margin-bottom: 6px;
+  color: #586980;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.typer-stat strong {
+  color: #09264a;
+  font-size: 34px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.typer-stat-detail {
+  margin-top: 6px;
+  color: #586980;
+  font-size: 12px;
+}
+
+.typer-stat-life {
+  border-color: #f3d4c9;
+  background: #fff5ef;
+}
+
+.typer-stat-life strong {
+  color: #b54427;
+}
+
+.typer-instructions {
+  padding: 18px 20px;
+  border: 1px solid #dfe7f1;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.typer-instructions > strong {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.typer-rule-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+}
+
+.typer-rule-list span {
+  color: #586980;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.typer-rule-list b {
+  color: #09264a;
+}
+
+#canvas {
+  width: 100%;
+  background: #eef3f9;
+  border-top: 1px solid #dfe7f1;
+}
+
+@media (max-width: 540px) {
+  .typer-dashboard {
+    padding: 20px 12px 16px;
+  }
+
+  .typer-stats {
+    gap: 8px;
+  }
+
+  .typer-stat {
+    min-height: 105px;
+    padding: 14px 6px;
+  }
+
+  .typer-stat strong {
+    font-size: 28px;
+  }
+
+  .typer-stat-detail {
+    font-size: 11px;
+  }
+
+  .typer-rule-list {
+    grid-template-columns: 1fr;
+  }
+}

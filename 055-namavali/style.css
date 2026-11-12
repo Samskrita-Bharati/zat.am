@@ -1,166 +1,285 @@
-/* Our default values set as CSS variables */
-:root {
-  --color-bg: #69F7BE;
-  --color-text-main: #000000;
-  --color-primary: #FFFF00;
-  --wrapper-height: 87vh;
-  --image-max-width: 300px;
-  --image-margin: 3rem;
-  --font-family: "HK Grotesk";
-  --font-family-header: "HK Grotesk";
+.namavali-shell {
+  --namavali-board-width: 760px;
 }
 
-/* Basic page style resets */
-* {
-  box-sizing: border-box;
-}
-[hidden] {
-  display: none !important;
+.namavali-stats {
+  width: min(100%, 850px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  margin: 0 auto 12px;
 }
 
+.namavali-game-panel {
+  width: min(100%, 850px);
+  height: 480px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 28px);
+  background: var(--zatam-white);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius-lg);
+  box-shadow: var(--zatam-shadow);
+}
 
-h1 {
+.namavali-game-over-modal[hidden] {
+  display: none;
+}
+
+.namavali-actions {
+  margin-top: 0;
+  gap: 8px;
+}
+
+.zatam-game-instructions {
+  width: fit-content;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#game-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#game-content[hidden] {
+  display: none;
+}
+
+.namavali-clues {
+  min-height: 1.6em;
+  margin: 22px 0 12px;
+  color: var(--zatam-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.6;
   text-align: center;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 2em;
-  line-height: 100%;
-  color: black;
 }
 
-p {
-  text-align: center;
-  font-size: 1em;
+.namavali-clues .group1,
+.namavali-clues .group2,
+.namavali-clues .group3 {
+  display: inline-block;
+  margin: 3px 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.namavali-clues .group1,
+.grid-item.group1 {
+  color: var(--zatam-heading);
+  background: var(--zatam-gold);
+  border-color: var(--zatam-gold);
 }
 
-#grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    width: 90%;
-    height: 80%;
+.namavali-clues .group2,
+.grid-item.group2 {
+  color: var(--zatam-white);
+  background: var(--zatam-coral);
+  border-color: var(--zatam-coral);
 }
 
-.grid-item {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #000;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    font-weight: normal;
-    font-size: 100%; /* 30% larger */
+.namavali-clues .group3,
+.grid-item.group3 {
+  color: var(--zatam-white);
+  background: var(--zatam-blue);
+  border-color: var(--zatam-blue);
 }
 
-
-.selected {
-    background-color: lightgray;
+#status {
+  flex: 0 0 auto;
+  min-height: 44px;
+  margin: 12px auto 20px;
 }
 
-.group1 {
-    background-color: hsl(0, 100%, 80%);
-/*  pointer-events: none; */
-}
-.group2 {
-    background-color: hsl(120, 100%, 80%);
-/*  pointer-events: none; */
-}
-.group3 {
-    background-color: hsl(240, 100%, 80%);
-/*  pointer-events: none; */
-}
-.group4 {
-    background-color: hsl(60, 100%, 80%);
-/*  pointer-events: none; */
+#status:empty {
+  visibility: hidden;
 }
 
-.locked {
-/*    background-color: gray; */
-    pointer-events: none; 
+#status:not(:empty) {
+  background: #eef4ff;
+  color: var(--zatam-navy);
+  border: 1px solid #cddcff;
 }
-
-.hint_group1 {
-    color: hsl(0, 100%, 40%);
-}
-.hint_group2 {
-    color: hsl(120, 100%, 40%);
-}
-.hint_group3 {
-    color: hsl(240, 100%, 40%);
-}
-.hint_group4 {
-    color: hsl(40, 100%, 40%);
-}
-
-
-footer {
-  padding: 1rem;
-  display: grid;
-  place-items: center;
-  align-items: center;
-}
-
-.winner {
-  background-image: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/confetti.gif?v=1695663103834);
-}
-
-
 
 .tooltip {
   position: relative;
   display: inline-block;
+  margin: 8px 0 14px;
+}
+
+.namavali-actions .tooltip {
+  display: inline-flex;
+  margin: 0;
 }
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 140px;
-  background-color: #555555;
-  color: #ffffff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
   position: absolute;
   z-index: 1;
-  bottom: 150%;
+  bottom: calc(100% + 8px);
   left: 50%;
-  margin-left: -75px;
+  width: max-content;
+  max-width: 180px;
+  padding: 6px 9px;
+  transform: translateX(-50%);
+  border-radius: var(--zatam-radius-sm);
+  background: var(--zatam-navy);
+  color: var(--zatam-white);
+  font-size: 0.8rem;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.2s ease;
 }
 
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555555 transparent transparent transparent;
-}
-
-.tooltip:hover .tooltiptext {
+.tooltip:hover .tooltiptext,
+.tooltip:focus-within .tooltiptext {
   visibility: visible;
   opacity: 1;
 }
 
-.img {
+.namavali-grid {
   display: grid;
-  align-items: center;
-  place-items: center; 
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.5vw, 14px);
+  flex: 1;
+  min-height: 0;
+  width: min(100%, var(--namavali-board-width));
   margin: 0 auto;
-  padding: 20px; 
-  max-width: 350px;
+}
+
+.grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: clamp(48px, 5vw, 52px);
+  padding: 7px;
+  overflow-wrap: anywhere;
+  text-align: center;
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-radius: var(--zatam-radius);
+  box-shadow: var(--zatam-shadow-sm);
+  color: var(--zatam-heading);
+  cursor: pointer;
+  font-family: var(--zatam-font);
+  font-size: clamp(0.82rem, 1.5vw, 1rem);
+  font-weight: 700;
+  line-height: 1.35;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.grid-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--zatam-shadow);
+}
+
+.grid-item:focus-visible {
+  outline: 3px solid rgba(47, 109, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.grid-item.selected {
+  background: #dce8ff;
+  border-color: var(--zatam-blue);
+  box-shadow: inset 0 0 0 2px var(--zatam-blue);
+}
+
+.grid-item.locked { cursor: default; }
+
+.grid-item.hinted.hint_group1 {
+  color: #926800;
+}
+
+.grid-item.hinted.hint_group2 {
+  color: #b53a2a;
+}
+
+.grid-item.hinted.hint_group3 {
+  color: #3358bd;
+}
+
+.namavali-reference-image {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+  margin: 8px auto 0;
+}
+
+.namavali-reference-image img {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.namavali-footer {
+  width: min(calc(100% - 24px), 760px);
+  margin: 12px auto 0;
+  padding: 12px 0 24px;
+  color: var(--zatam-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.winner {
+  background-image: url(https://cdn.glitch.global/4adcabc2-60b0-4638-899f-af1599e3ba61/confetti.gif?v=1695663103834);
+  background-position: center;
+  background-attachment: fixed;
+}
+
+@media (max-width: 600px) {
+  .namavali-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .namavali-game-panel {
+    height: 480px;
+    padding: 14px 12px;
+  }
+
+  .namavali-actions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .namavali-actions .zatam-game-btn {
+    min-width: 0;
+    padding: 10px 4px;
+    font-size: clamp(0.62rem, 2.8vw, 0.82rem);
+  }
+
+  .grid-item {
+    min-height: clamp(40px, 12vw, 48px);
+    padding: 5px 4px;
+    font-size: clamp(0.72rem, 3vw, 0.88rem);
+  }
+}
+
+@media (max-width: 360px) {
+  .namavali-grid {
+    gap: 6px;
+  }
+
+  .grid-item {
+    min-height: 38px;
+    font-size: 0.68rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-item,
+  .tooltip .tooltiptext {
+    transition: none;
+  }
 }

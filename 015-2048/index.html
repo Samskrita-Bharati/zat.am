@@ -21,31 +21,54 @@
     <!-- Auth Middleware-->
     <script type="module" src="/auth/api/middleware.js"></script>
     <div class="container">
-        <div class="heading">
-            <h1 class="title" style="color:tomato">
-                <a href="">२०४८</a>
-            </h1>
-            <div class="scores-container">
-                <div class="score-container">
-                    <p class="title">SCORE</p>
-                    <P class="score">0</P>
-                    <div class="score-addition">
-                        +4
-                    </div>
-                </div>
-                <div class="best-container">
-                    <p class="title">BEST</p>
-                    <P class="score">66666</P>
-                </div>
+        <div class="container game-2048">
+        <header class="game-heading">
+            <span class="game-eyebrow">शतम् · NUMBER CHALLENGE</span>
+            <h1>२०४८</h1>
+            <p>Slide, merge, and reach the २०४८ tile.</p>
+        </header>
+
+        <div class="game-toolbar">
+            <div class="game-stat score-container">
+                <span class="game-stat-label">Score</span>
+                <strong class="score">०</strong>
+                <span class="game-stat-detail">merge points</span>
+                <div class="score-addition"></div>
             </div>
+
+            <div class="game-stat best-container">
+                <span class="game-stat-label">Best</span>
+                <strong class="score">०</strong>
+                <span class="game-stat-detail">personal best</span>
+            </div>
+
+            <div class="game-stat timer-container">
+                <span class="game-stat-label">Time Passed</span>
+                <strong id="timerValue">00:00</strong>
+                <span class="game-stat-detail">elapsed time</span>
+            </div>
+
+            <div class="failure-container pop-container">
+                <p>Game Over</p>
+                <span>No moves left. Select New Game to try again.</span>
+            </div>
+
+            <div class="winning-container pop-container">
+                <p>उत्तमम्!</p>
+                <span>You reached २०४८!</span>
+            </div>
+
+            <button type="button" class="restart-btn">
+                New Game
+            </button>
         </div>
-        <div class="game-intro">
-            <a href="" class="restart-btn">New २०४८</a>
-            <h2 class="subtitle">
-                Play २०४८ (2048)!
-            </h2>
-            <p class="above-game">
-                Join the numbers to get <strong>२०४८</strong> tile!
+
+        <div class="game-instructions">
+            <strong>How to play</strong>
+            <p>
+                Use the <b>arrow keys</b> or <b>swipe</b> to move tiles.
+                Matching numbers merge when they meet.
+                Reach <b>२०४८</b> to win!
             </p>
         </div>
         <div class="game-container">

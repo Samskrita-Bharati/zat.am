@@ -1,118 +1,211 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Lakaara Puzzle</title>
-    <link rel="icon" href="/052-lakaara/cover.jpg" type="image/x-icon" />
-    <link rel="manifest" href="/052-lakaara/manifest.json" />
-    <link rel="stylesheet" href="/052-lakaara/style.css" />
+    <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lakaara Puzzle</title>
+    <link rel="icon" href="/052-lakaara/cover.jpg"  type="image/x-icon">
+    <link rel="manifest" href="/052-lakaara/manifest.json" >
+    <link rel="stylesheet" href="../shared/game-theme.css">
+    <link rel="stylesheet" href="/052-lakaara/style.css?direct&amp;v=3">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
     <script src="/052-lakaara/DragDropTouch.js" defer></script>
     <script src="/052-lakaara/script.js" defer></script>
+  <style>
+  /* Movable word tiles in 052 and 053 */
+  #grid .drag-item {
+    position: relative;
+    padding: 6px;
+    background: #eaf0f6;
+  }
+
+  #grid .drag-item > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 4px 22px 4px 6px;
+    border: 2px solid #52779f;
+    border-bottom-width: 4px;
+    border-radius: 9px;
+    background: white;
+    box-shadow: 0 3px 5px #0b2b4f25;
+  }
+
+  /* Visible grip on every movable tile */
+  #grid .drag-item[draggable="true"]:not(.solved)::after {
+    content: "⠿";
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    color: #52779f;
+    font: 22px Arial, sans-serif;
+    pointer-events: none;
+  }
+
+  #grid .drag-item[draggable="true"]:not(.solved) {
+    cursor: grab;
+  }
+
+  #grid .drag-item[draggable="true"]:not(.solved):hover > span {
+    background: #fff6df;
+    border-color: #a46b13;
+  }
+
+  #grid .drag-item.drag-start {
+    opacity: .5;
+    cursor: grabbing;
+  }
+
+  #grid .drag-item.drag-enter {
+    opacity: 1;
+    transform: none;
+    outline: 3px dashed #a46b13;
+    outline-offset: -4px;
+    background: #ffe7ae;
+  }
+
+  #grid .drag-item.checked-correct > span,
+  #grid .drag-item.solved > span {
+    background: #e4f5e9;
+    border-color: #579471;
+    color: #145c36;
+  }
+
+  #grid .drag-item.solved > span {
+    padding-right: 6px;
+    border-bottom-width: 2px;
+    box-shadow: none;
+  }
+</style>
   </head>
-  <body data-page="games">
+  <body data-page="games" class="lakaara-page">
+
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-    <h1>Lakaara Puzzle</h1>
-    <p id="info">
-      Reorder this jumbled up verb conjugations. Check for each person or check
-      all
-      <br />
-      <br />
-      Click the start game button to begin
-    </p>
-    <button type="button" class="button" id="start">
-      Start Game <i class="rocket"></i>
-    </button>
-    <p id="Title"></p>
-    <p id="description"></p>
-    <p id="message"></p>
+    <main class="lakaara-game zatam-game-shell">
+      <header class="zatam-game-header">
+        <h1 class="zatam-game-title">Lakaara Puzzle</h1>
+      </header>
+      <div class="lakaara-layout">
+        <section class="lakaara-board" aria-label="Verb conjugation puzzle">
+          <p id="info">
+            Reorder the jumbled verb forms. Check each person separately or check the whole table.
+            <br>
+            <br> Click the start game button to begin
+          </p>
+          <button type="button" class="button" id="start">
+            Start Game
+          </button>
+          <div class="lakaara-stats" aria-label="Round statistics">
+            <div>Score <strong id="lakaara-score">100/100</strong></div>
+          </div>
+          <p id="Title"></p>
+          <p id="description"></p>
+          <p id="message" role="status"></p>
 
-    <div class="tooltip">
-      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
-        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-        Share
-      </button>
-    </div>
+          <p id="details" role="status"></p>
 
-    <p id="details"></p>
-
-    <div class="drag-list" id="grid" oncontextmenu="return false;">
-      <template id="tile">
-        <div class="drag-item" draggable="true"></div>
-      </template>
-      <div class="legend-item" id="Hd">Check for:</div>
-      <div class="legend-item" id="Role">Purusha</div>
-      <div class="legend-item" id="Sn">Singular</div>
-      <div class="legend-item" id="Du">Dual</div>
-      <div class="legend-item" id="Pl">Plural</div>
-      <div class="legend-item" id="3rd">
-        <button class="smallBtn" onclick="checkMatrix(1)">Third person</button>
+          <p class="tile-help">Drag a raised word tile onto another tile to swap them. Dotted grips mark movable tiles.</p>
+    <div class="lakaara-grid-scroll" tabindex="0" role="region" aria-label="Conjugation table — scroll horizontally on small screens">
+            <div class="drag-list" id="grid" oncontextmenu="return false;">
+              <div class="legend-item" id="Hd">Check for:</div>
+              <div class="legend-item" id="Role">Purusha</div>
+              <div class="legend-item" id="Sn">Singular</div>
+              <div class="legend-item" id="Du">Dual</div>
+              <div class="legend-item" id="Pl">Plural</div>
+              <div class="legend-item" id="3rd">
+                <button class="smallBtn" onclick="checkMatrix(1)">Third person</button>
+              </div>
+              <div class="legend-item">Prathama</div>
+              <div class="drag-item" id="A" draggable="true"></div>
+              <div class="drag-item" id="B" draggable="true"></div>
+              <div class="drag-item" id="C" draggable="true"></div>
+              <div class="legend-item" id="2nd">
+                <button class="smallBtn" onclick="checkMatrix(2)">Second person</button>
+              </div>
+              <div class="legend-item">Madhyama</div>
+              <div class="drag-item" id="D" draggable="true"></div>
+              <div class="drag-item" id="E" draggable="true"></div>
+              <div class="drag-item" id="F" draggable="true"></div>
+              <div class="legend-item" id="1st">
+                <button class="smallBtn" onclick="checkMatrix(3)">First person</button>
+              </div>
+              <div class="legend-item">Utthama</div>
+              <div class="drag-item" id="G" draggable="true"></div>
+              <div class="drag-item" id="H" draggable="true"></div>
+              <div class="drag-item" id="I" draggable="true"></div>
+            </div>
+          </div>
+          <button type="button" class="button" id="check">
+            Check All
+          </button>
+        </section>
+        <aside class="lakaara-sidebar">
+          <section class="lakaara-panel">
+            <h2>Options</h2>
+            <label for="settings">Choose a lakaara:</label>
+            <select name="lakara" id="settings" onchange="startGame()">
+              <option value="-1">All</option>
+              <option value="0">लट् - Present tense</option>
+              <option value="1">लङ् - Imperfect Past tense</option>
+              <option value="2">लुङ् - General Past tense</option>
+              <option value="3">लिट् - Perfect Past tense</option>
+              <option value="4">लृट् - Simple Future tense</option>
+              <option value="5">लुट् - Distant Future tense</option>
+              <option value="6">लोट् - Imperative mood</option>
+              <option value="7">विधिलिङ् - Potential mood</option>
+              <option value="8">आशिर्लिङ् - Benedictive mood</option>
+              <option value="9">लृङ् - Conditional mood</option>
+            </select>
+          </section>
+          <section class="lakaara-panel">
+            <h2>Personal best</h2>
+            <p id="lakaara-best-level">All</p>
+            <p id="lakaara-best">No completed rounds yet.</p>
+          </section>
+          <section class="lakaara-panel">
+            <h2>How to play</h2>
+            <div class="lakaara-instructions" tabindex="0">
+              <ol>
+                <li>Press <strong>Start Game</strong> to begin.</li>
+                <li>Drag the raised verb tiles onto one another to swap them into the correct person and number: Singular, Dual, or Plural.</li>
+                <li>Select a person button to check that row, or <strong>Check All</strong> to check the whole table.</li>
+                <li>Choose a lakaara to practice a specific tense or mood.</li>
+                <li>Start with 100 points. Each new wrong form in a checked cell costs 2 points. Rechecking it costs nothing. Correct forms turn green.</li>
+                <li>Select <strong>New Game</strong> for another puzzle.</li>
+              </ol>
+            </div>
+          </section>
+        </aside>
       </div>
-      <div class="legend-item">Prathama</div>
-      <div class="drag-item" id="A" draggable="true"></div>
-      <div class="drag-item" id="B" draggable="true"></div>
-      <div class="drag-item" id="C" draggable="true"></div>
-      <div class="legend-item" id="2nd">
-        <button class="smallBtn" onclick="checkMatrix(2)">Second person</button>
-      </div>
-      <div class="legend-item">Madhyama</div>
-      <div class="drag-item" id="D" draggable="true"></div>
-      <div class="drag-item" id="E" draggable="true"></div>
-      <div class="drag-item" id="F" draggable="true"></div>
-      <div class="legend-item" id="1st">
-        <button class="smallBtn" onclick="checkMatrix(3)">First person</button>
-      </div>
-      <div class="legend-item">Utthama</div>
-      <div class="drag-item" id="G" draggable="true"></div>
-      <div class="drag-item" id="H" draggable="true"></div>
-      <div class="drag-item" id="I" draggable="true"></div>
-    </div>
-
-    <button type="button" class="button" id="check" onclick="checkMatrix(0)">
-      Check All
-    </button>
-
-    <main>
-      <p></p>
-      <span>
-        <label for="lakara">Choose a lakaara:</label>
-        <select name="lakara" id="settings" onchange="startGame()">
-          <option value="-1">All</option>
-          <option value="0">लट् - Present tense</option>
-          <option value="1">लङ् - Imperfect Past tense</option>
-          <option value="2">लुङ् - General Past tense</option>
-          <option value="3">लिट् - Perfect Past tense</option>
-          <option value="4">लृट् - Simple Future tense</option>
-          <option value="5">लुट् - Distant Future tense</option>
-          <option value="6">लोट् - Imperative mood</option>
-          <option value="7">विधिलिङ् - Potential mood</option>
-          <option value="8">आशिर्लिङ् - Benedictive mood</option>
-          <option value="9">लृङ् - Conditional mood</option>
-        </select>
-      </span>
     </main>
     <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
+      // Let the local development server serve fresh game assets.
+      const isLocalLakaara = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
+      if (!isLocalLakaara && "serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
           navigator.serviceWorker
             .register("/052-lakaara/serviceWorker.js")
-            .then((res) => console.log("service worker registered"))
-            .catch((err) => console.log("service worker not registered", err));
-        });
+            .then(res => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+        })
       }
     </script>
-    <footer>
-      <span style="white-space: nowrap">
-        &copy; 2024
-        <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>,
-        <a href="https://www.iseek.page">iSeek</a>. Courtesy: Green Message,
-        greenmesg.org
-      </span>
-    </footer>
+  <footer class="lakaara-credit">
+    <span > &copy; 2024 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Courtesy: Green Message, greenmesg.org </span>
+  </footer>
+
 
     <!-- Shared Zat.am Navbar -->
-    <script type="module" src="../js/navbar-loader.js"></script>
-  </body>
+    <script
+      type="module"
+      src="../js/navbar-loader.js"
+    ></script>
+</body>
+
 </html>

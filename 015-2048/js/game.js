@@ -8,6 +8,60 @@ var Game = (function () {
 
     };
     Game.prototype = {
+        elapsedMs: 0,
+        timerStartedAt: null,
+        timerInterval: null,
+
+        getElapsedMs: function () {
+            return this.elapsedMs + (
+                this.timerStartedAt !== null
+                    ? Date.now() - this.timerStartedAt
+                    : 0
+            );
+        },
+
+        updateTimer: function () {
+            var timer = document.getElementById('timerValue');
+            if (!timer) return;
+
+            var seconds = Math.floor(this.getElapsedMs() / 1000);
+            var minutes = Math.floor(seconds / 60);
+
+            timer.textContent =
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds % 60).padStart(2, '0');
+        },
+
+        startTimer: function () {
+            if (this.timerStartedAt !== null) return;
+
+            var _this = this;
+            this.timerStartedAt = Date.now();
+
+            this.timerInterval = setInterval(function () {
+                _this.updateTimer();
+            }, 250);
+
+            this.updateTimer();
+        },
+
+        stopTimer: function () {
+            this.elapsedMs = this.getElapsedMs();
+            this.timerStartedAt = null;
+
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+
+            this.updateTimer();
+        },
+
+        resetTimer: function () {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+            this.timerStartedAt = null;
+            this.elapsedMs = 0;
+            this.updateTimer();
+        },
         init: function (view) {
             var _this = this;
             this.view = view;
@@ -19,6 +73,7 @@ var Game = (function () {
                 this.start();
             }
             this.setBest();
+            this.updateTimer();
             setTimeout(function () {
                 _this.view.setup();
             });
@@ -31,6 +86,7 @@ var Game = (function () {
         restart: function () {
             var _this = this;
             over = false;
+            this.resetTimer();
             this.initCell();
             this.view.restart();
             this.start();
@@ -45,10 +101,12 @@ var Game = (function () {
             localStorage.gameState = JSON.stringify({
                 cell: data.cell,
                 socre: data.score,
+                elapsedMs: this.getElapsedMs(),
             });
         },
         winning(){
             over = true;
+            this.stopTimer();
             localStorage.gameState = '';
             this.view.winning();
         },
@@ -62,6 +120,7 @@ var Game = (function () {
         },
         failure: function () {
             over = true;
+            this.stopTimer();
             localStorage.gameState = '';
             this.view.failure();
         },
@@ -96,16 +155,29 @@ var Game = (function () {
         },
         getHistory: function () {
             var gameState = getLocalStorage('gameState');
-            if (gameState && gameState.socre && gameState.cell) {
+            if (
+                gameState &&
+                typeof gameState.socre === 'number' &&
+                Array.isArray(gameState.cell) &&
+                gameState.cell.length === 16
+            ) {
                 return gameState;
             }
         },
+
         restoreHistory: function (history) {
             data.cell = history.cell;
             data.score = history.socre;
             cell = data.cell;
+
+            this.elapsedMs = Number.isFinite(history.elapsedMs)
+                ? Math.max(0, history.elapsedMs)
+                : 0;
+
             this.view.restoreTile();
+            this.updateTimer();
         },
+        
         initCell: function () {
             for (var i = 0; i < 16; i++) {
                 cell[i] = {
@@ -195,6 +267,7 @@ var Game = (function () {
             });
             this.addScore(_score);
             if (move) {
+                this.startTimer();
                 this.randomAddItem();
                 _move = true;
                 move = false;

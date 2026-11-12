@@ -3,9 +3,9 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.height = Math.max(800, window.innerHeight);
 
-const getTime = typeof performance === 'function' ? performance.now : Date.now;
+const getTime = () => performance.now();
 const FRAME_THRESHOLD = 300;
 const FRAME_DURATION = 1000 / 58;
 let then = getTime();
@@ -18,7 +18,6 @@ for (const element of window.document.getElementsByTagName('link')) {
     break;
   }
 }
-
 
 const label = {
   font: '24px Arial',

@@ -1,39 +1,137 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>संस्कृतम् Match the Numbers</title>
-  <meta name="description" content="Try to make all numbers equal by visiting them">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="mtn.css">
-<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Match the सङ्ख्या | Zat.am</title>
 
-  <script async src="https://kit.fontawesome.com/a1c4b21e48.js"></script>
-  <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <meta name="description"
+    content="Make all Sanskrit numbers equal by moving through the grid.">
+
+  <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="../shared/game-theme.css">
+  <link rel="stylesheet" href="mtn.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
+  <script defer src="https://kit.fontawesome.com/a1c4b21e48.js"></script>
+
+  <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
   <script defer src="https://berkerol.github.io/libraries/form.js"></script>
   <script defer src="mtn.js"></script>
 </head>
 
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game zatam-numbers-game">
 
-    <!-- Shared Zat.am Navbar -->
-    <div id="navbar-mount"></div>
+  <div id="navbar-mount"></div>
 
-<div class="border-top text-right text-gray">
-        Read instructions <a href="mts_ins2.html">here</a>.
+  <main class="zatam-game-shell">
+
+    <header class="zatam-game-header">
+      <span class="zatam-game-eyebrow">Sanskrit Puzzle</span>
+      <h1 class="zatam-game-title">Match the सङ्ख्या</h1>
+      <p class="zatam-game-subtitle">
+        Make all Sanskrit numbers equal by moving through the grid.
+      </p>
+    </header>
+
+    <section class="zatam-game-instructions">
+      <p>
+        <strong>How to play:</strong>
+        Use your arrow keys or the on-screen controls to move.
+        Each move changes a number according to your settings.
+        Make every number equal to complete the puzzle!
+      </p>
+      <p>
+        <a href="mts_ins2.html" target="_blank" rel="noopener">
+          Read detailed instructions
+        </a>
+      </p>
+    </section>
+
+    <section class="zatam-game-stats" aria-label="Game statistics">
+
+      <div class="zatam-game-stat zatam-game-score">
+        <span class="zatam-game-stat-label">Score</span>
+        <span class="zatam-game-stat-value" id="scoreValue">—</span>
       </div>
-  <canvas id="canvas">Your browser doesn't support HTML5.</canvas>
 
+      <div class="zatam-game-stat">
+        <span class="zatam-game-stat-label">Time</span>
+        <span class="zatam-game-stat-value" id="timerValue">00:00</span>
+      </div>
 
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
+      <div class="zatam-game-stat">
+        <span class="zatam-game-stat-label">Moves</span>
+        <span class="zatam-game-stat-value" id="movesValue">0</span>
+      </div>
+
+    </section>
+
+    <section class="zatam-game-play-area numbers-play-area">
+      <div class="numbers-board-wrapper">
+        <canvas id="canvas" aria-label="Sanskrit number puzzle">
+          Your browser doesn't support HTML5 Canvas.
+        </canvas>
+      </div>
+    </section>
+
+    <section class="numbers-mobile-controls" aria-label="Movement controls">
+      <button type="button" class="zatam-game-btn zatam-game-btn-secondary"
+        data-direction="ArrowUp">↑</button>
+
+      <div class="numbers-direction-row">
+        <button type="button" class="zatam-game-btn zatam-game-btn-secondary"
+          data-direction="ArrowLeft">←</button>
+        <button type="button" class="zatam-game-btn zatam-game-btn-secondary"
+          data-direction="ArrowDown">↓</button>
+        <button type="button" class="zatam-game-btn zatam-game-btn-secondary"
+          data-direction="ArrowRight">→</button>
+      </div>
+    </section>
+
+    <section id="resultPanel" class="zatam-game-result zatam-hidden"
+      aria-live="polite">
+
+      <h2 class="zatam-game-result-title">उत्तमम्! Puzzle Completed!</h2>
+
+      <div class="zatam-game-result-score">
+        <span id="finalScore">100</span>/100
+      </div>
+
+      <p class="zatam-game-result-message" id="resultDetails"></p>
+
+      <div id="scoreSaveStatus"
+        class="zatam-game-status zatam-game-status-info"
+        role="status"></div>
+
+      <div class="zatam-game-actions">
+        <button type="button" id="playAgainBtn"
+          class="zatam-game-btn zatam-game-btn-primary">
+          Play Again
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="../js/navbar-loader.js"></script>
+
+  <script type="module">
+    import { initGameScore } from "../js/game-score.js";
+
+    initGameScore({
+      gameId: "013-mts",
+      gameName: "Match the सङ्ख्या"
+    });
+  </script>
+
 </body>
-
 </html>

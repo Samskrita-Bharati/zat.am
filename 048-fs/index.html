@@ -2,59 +2,95 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Free Smash | Zat.am</title>
+    <link rel="stylesheet" href="../shared/game-theme.css" />
     <link rel="stylesheet" href="./gameStyle.css" />
-    <title>Free Smash</title>
   </head>
-
-  <body data-page="games">
-    <!-- Shared Zat.am Navbar -->
+  <body data-page="games" class="zatam-themed-game smash-page">
     <div id="navbar-mount"></div>
+    <script type="module" src="../auth/api/middleware.js"></script>
 
-    <!-- Auth Middleware-->
-    <script type="module" src="/auth/api/middleware.js"></script>
-    <!-- Game canvas -->
-    <canvas id="c"></canvas>
+    <main class="zatam-game-shell smash-shell">
+      <header class="zatam-game-header smash-header">
+        <span class="zatam-game-eyebrow">Zat.am · खेलतु पठतु</span>
+        <h1 class="zatam-game-title">Free <span>Smash</span></h1>
+        <p class="zatam-game-subtitle">A little Sanskrit in every smash.</p>
+      </header>
 
-    <!-- Gameplay HUD -->
-    <div class="hud">
-      <div class="hud__score">
-        <div class="score-lbl"></div>
-        <div class="cube-count-lbl"></div>
-      </div>
-      <div class="pause-btn">
-        <div></div>
-      </div>
-      <div class="slowmo">
-        <div class="slowmo__bar"></div>
-      </div>
-    </div>
+      <section class="smash-stage" aria-label="Free Smash game area">
+        <canvas id="c" aria-label="Swipe or drag across the game area to smash objects"></canvas>
 
-    <!-- Menu System -->
-    <div class="menus">
-      <div class="menu menu--main">
-        <h1>Free Smash</h1>
-        <button type="button" class="play-normal-btn">क्रीडां क्रीडतु</button>
-        <button type="button" class="play-casual-btn">Casual Mode</button>
-      </div>
-      <div class="menu menu--pause">
-        <h1>विरामः</h1>
-        <button type="button" class="resume-btn">पुनः क्रीडतु</button>
-        <button type="button" class="menu-btn--pause">Main Menu</button>
-      </div>
-      <div class="menu menu--score">
-        <h1>समाप्तम्</h1>
-        <h2>प्राप्ताङ्काः</h2>
-        <div class="final-score-lbl"></div>
-        <div class="high-score-lbl"></div>
-        <button type="button" class="play-again-btn">क्रीडां क्रीडतु</button>
-        <button type="button" class="menu-btn--score">Main Menu</button>
-      </div>
-    </div>
+        <div class="hud">
+          <div class="hud__score" aria-live="polite">
+            <span class="hud__eyebrow">YOUR SCORE</span>
+            <div class="score-lbl"></div>
+            <div class="cube-count-lbl"></div>
+            <div class="strike-lbl">
+              <span class="strike-caption" aria-hidden="true">MISSES</span>
+              <span class="zatam-visually-hidden strike-message">0 of 5 strikes</span>
+              <span class="strike-marks" aria-hidden="true"><span class="strike-mark">×</span><span class="strike-mark">×</span><span class="strike-mark">×</span><span class="strike-mark">×</span><span class="strike-mark">×</span></span>
+            </div>
+          </div>
+          <button type="button" class="pause-btn" aria-label="Pause game"><span aria-hidden="true"></span></button>
+          <div class="smash-vocabulary" role="status" aria-live="polite" aria-atomic="true">
+            <div class="smash-vocabulary-card" hidden>
+              <span class="smash-vocabulary-icon" aria-hidden="true"></span>
+              <span class="smash-vocabulary-copy">
+                <span class="smash-vocabulary-label">YOU DISCOVERED</span>
+                <span class="smash-vocabulary-word" lang="sa"></span>
+                <span class="smash-vocabulary-meaning"></span>
+              </span>
+            </div>
+          </div>
+          <div class="slowmo" aria-hidden="true"><div class="slowmo__bar"></div></div>
+        </div>
+
+        <div class="menus">
+          <div class="menu menu--main">
+            <div class="smash-menu-card">
+              <div class="smash-menu-art" aria-hidden="true"><span>🌼</span><span>☀️</span><span>🍎</span></div>
+              <span class="smash-kicker">A LITTLE GAME OF DISCOVERY</span>
+              <h2>Smash. Learn. <span>Repeat.</span></h2>
+              <p>Swipe through flying objects and discover what they’re called in Sanskrit.</p>
+              <div class="smash-rule"><span aria-hidden="true">✦</span> Five misses and the round is over</div>
+              <div class="smash-menu-actions">
+                <button type="button" class="zatam-game-btn zatam-game-btn-primary play-normal-btn">Play now <span aria-hidden="true">→</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="menu menu--pause">
+            <div class="smash-menu-card">
+              <div class="smash-menu-symbol" aria-hidden="true">Ⅱ</div>
+              <span class="smash-kicker">Take a breath</span>
+              <h2>विरामः</h2>
+              <p>Your game is paused.</p>
+              <div class="smash-menu-actions">
+                <button type="button" class="zatam-game-btn zatam-game-btn-primary resume-btn">पुनः क्रीडतु · Resume</button>
+                <button type="button" class="zatam-game-btn zatam-game-btn-secondary menu-btn--pause">Main menu</button>
+              </div>
+            </div>
+          </div>
+          <div class="menu menu--score">
+            <div class="smash-menu-card">
+              <div class="smash-menu-symbol" aria-hidden="true">✦</div>
+              <span class="smash-kicker">Round complete</span>
+              <h2>समाप्तम्</h2>
+              <p>Five objects missed.</p>
+              <p class="smash-score-label">प्राप्ताङ्काः · Score</p>
+              <div class="final-score-lbl"></div>
+              <div class="high-score-lbl"></div>
+              <div class="smash-menu-actions">
+                <button type="button" class="zatam-game-btn zatam-game-btn-primary play-again-btn">पुनः क्रीडतु · Play again</button>
+                <button type="button" class="zatam-game-btn zatam-game-btn-secondary menu-btn--score">Main menu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <script src="./gameLogic.js"></script>
-
-    <!-- Shared Zat.am Navbar -->
     <script type="module" src="../js/navbar-loader.js"></script>
   </body>
 </html>

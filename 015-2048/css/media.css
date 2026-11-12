@@ -1,55 +1,52 @@
-@media screen and (max-width:1250px){
-    html,body{
-        font-size: 15px;
-    }
-    .container{
-        width: 280px;
-    }
-    h1.title{
-        font-size: 31px;
-    }
-    .score-container,
-    .best-container{
-        padding: 3px 10px;
-    }
-    .game-container{
-        margin-top: 10px;
-        width: 280px;
-        height: 280px;
-    }
-    .grid-container,
-    .tile-container{
-        width: 260px;
-        height: 260px;
-    }
-    .grid-row,
-    .tile{
-        height: 22.75%;
-    }
-    .grid-cell,
-    .tile{
-        width: 22.75%;
-    }
-    .grid-row{
-        margin-bottom: 3%;
-    }
-    .grid-cell{
-        margin-right: 3%;
-    }
-    .tile{
-        font-size: 35px;
-    }
-    .tile[data-val="128"],
-    .tile[data-val="256"],
-    .tile[data-val="512"]{
-        font-size: 25px;
-    }
-    .tile[data-val="1024"],
-    .tile[data-val="2048"]{
-        font-size: 21px;
+@media screen and (max-width: 540px) {
+    .container.game-2048 {
+        padding: 20px 12px;
     }
 
-    .pop-container p{
-        font-size: 30px;
+    .game-toolbar {
+        gap: 6px;
+    }
+
+    .game-toolbar .game-stat,
+    .game-toolbar .restart-btn {
+        min-height: 96px;
+        padding: 12px 4px;
+        border-radius: 12px;
+    }
+
+    .game-stat-label {
+        font-size: 10px;
+        letter-spacing: 0;
+    }
+
+    .game-stat strong {
+        font-size: 23px;
+    }
+
+    .game-stat-detail {
+        font-size: 10px;
+    }
+
+    .game-toolbar .restart-btn {
+        font-size: 14px;
+    }
+
+    .game-instructions {
+        padding: 14px;
+    }
+
+    .game-2048 .tile {
+        font-size: clamp(26px, 9vw, 46px);
+    }
+
+    .game-2048 .tile[data-val="128"],
+    .game-2048 .tile[data-val="256"],
+    .game-2048 .tile[data-val="512"] {
+        font-size: clamp(22px, 7vw, 36px);
+    }
+
+    .game-2048 .tile[data-val="1024"],
+    .game-2048 .tile[data-val="2048"] {
+        font-size: clamp(18px, 5.8vw, 28px);
     }
 }

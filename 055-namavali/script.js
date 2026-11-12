@@ -1,16 +1,24 @@
-const info = document.getElementById("info");
 const gridContainer = document.getElementById("grid-container");
 const newGameButton = document.getElementById("newGameButton");
 const submitButton = document.getElementById("submitButton");
 const shuffleButton = document.getElementById("shuffleButton");
 const clues = document.getElementById("clues");
 const status = document.getElementById("status");
+const scoreDisplay = document.getElementById("game-score");
+const timeDisplay = document.getElementById("game-time");
+const hintsLeftDisplay = document.getElementById("hints-left");
+const mistakeCountDisplay = document.getElementById("mistake-count");
 const share =  document.getElementById("share");
 const tooltip = document.getElementById("myTooltip");
 const image = document.getElementById("image");
+const gameContent = document.getElementById("game-content");
 const HintButton = document.getElementById("GetaHintButton");
-
-// let wordsArray = [  "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"  ];
+const gameOverModal = document.getElementById("game-over-modal");
+const gameOverTitle = document.getElementById("game-over-title");
+const resultScore = document.getElementById("result-score");
+const resultTime = document.getElementById("result-time");
+const playAgainButton = document.getElementById("play-again");
+const leaderboardStatus = document.getElementById("score-save-status");
 
 const ashttotara = [
   { 
@@ -50,25 +58,50 @@ const ashttotara = [
 
 let numSelected, num_wrong_guesses = 0, num_found = 0, num_hint_given = 0;
 
-let already_guessed = [], all_guess_IDs = [], results = [];
+let already_guessed = [], all_guess_IDs = [];
 
-let list_hint_class = ["hinted", "hint_group1", "hint_group2", "hint_group3", "hint_group4"];
+let list_hint_class = ["hinted", "hint_group1", "hint_group2", "hint_group3"];
 
-let name_list = [];
+let name_gods = [];
+let gameStartedAt = null;
+let gameTimer = null;
+let scoreSubmitted = false;
+const scoreConfig = window.NAMAVALI_SCORE_CONFIG;
 
-let lastPlayedTs;
+function updateGameStats() {
+  const elapsedMilliseconds = gameStartedAt ? Date.now() - gameStartedAt : 0;
+  const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+  const timeBonus = num_found === 3
+    ? (scoreConfig.timeBonuses.find(bonus => elapsedMilliseconds < bonus.underSeconds * 1000)?.points || 0)
+    : 0;
+  const score = Math.max(
+    scoreConfig.minimumScore,
+    num_found * scoreConfig.groupPoints -
+      num_hint_given * scoreConfig.hintPenalty -
+      num_wrong_guesses * scoreConfig.mistakePenalty +
+      timeBonus
+  );
+  scoreDisplay.textContent = String(score);
+  hintsLeftDisplay.textContent = String(Math.max(0, 3 - num_hint_given));
+  mistakeCountDisplay.textContent = String(num_wrong_guesses);
+
+  const minutes = String(Math.floor(elapsedSeconds / 60)).padStart(2, "0");
+  const seconds = String(elapsedSeconds % 60).padStart(2, "0");
+  timeDisplay.textContent = `${minutes}:${seconds}`;
+}
 
 
 function createGame() {
   
-  // const inputWords = prompt("Enter 16 words separated by spaces:");
-  // let word_list = wordsArray[0].split(" ").map((word) => word.trim());
-  name_list = [];
-  document.body.className = "";
+  const name_list = [];
+  name_gods = [];
+  document.body.classList.remove("winner");
   status.innerHTML = ``;
-  info.innerHTML = ``;
   share.style.display = "none";
   image.style.display = "none";
+  gameContent.hidden = false;
+  gameOverModal.hidden = true;
+  leaderboardStatus.className = "zatam-game-status zatam-game-status-info";
   
   let num_gods = ashttotara.length;
   
@@ -87,8 +120,6 @@ function createGame() {
     clue.textContent = ` ${god_obj.god} `;
     clues.appendChild(clue);
     
-    // let nm_indices = Array.from({length: god.nama.length}, (x, i) => i);
-    // shuffle(nm_indices);
     let ids = [];
     
     for(let j=0; j<3; j++){
@@ -105,6 +136,7 @@ function createGame() {
       ids.push(nm_indx);
       
       name_list.push(god_obj.nama[nm_indx]);
+      name_gods.push(god_obj.god);
     }
   }
   
@@ -120,9 +152,16 @@ function createGame() {
   num_hint_given = 0;
   already_guessed = [];
   all_guess_IDs = [];
-//  selectedGroupIDs = [];   
   num_found = 0;
-  results = [];
+
+  if (gameTimer) clearInterval(gameTimer);
+  scoreSubmitted = false;
+  if (window.zatamScore && typeof window.zatamScore.reset === "function") {
+    window.zatamScore.reset();
+  }
+  gameStartedAt = Date.now();
+  updateGameStats();
+  gameTimer = setInterval(updateGameStats, 1000);
 }
 
 function shuffle(array) {
@@ -133,18 +172,16 @@ function shuffle(array) {
   return array;
 }
 
-// Function to create grid items
 function createGridItems(words) {
     gridContainer.innerHTML = "";
     words.forEach((word, index) => {
         const gridItem = document.createElement("div");
         gridItem.classList.add("grid-item"); 
         
-        gridItem.textContent = word; //.toUpperCase();
-        // gridItem.draggable = true;
+        gridItem.textContent = word;
         gridItem.setAttribute("data-id", `item-${index}`);
-        gridItem.setAttribute("data-selected", "false"); // Set data-selected attribute to "false" initially
-        gridItem.setAttribute("data-locked", "false"); // Set data-locked attribute to "false" initially
+        gridItem.setAttribute("data-selected", "false");
+        gridItem.setAttribute("data-locked", "false");
 
         gridItem.addEventListener("click", function() {
             toggleSelect(gridItem);
@@ -155,7 +192,6 @@ function createGridItems(words) {
 
 }
 
-// Function to toggle item lock
 function toggleSelect(item) {
   
   const isSelected = item.getAttribute("data-selected") === "true";
@@ -165,11 +201,8 @@ function toggleSelect(item) {
     }
   const newSelectState = isSelected ? "false" : "true";
   
-//  console.info(`Current state ${isSelected}`);
-  
   item.setAttribute("data-selected", newSelectState);
   item.classList.toggle("selected");
-//  item.draggable = newLockState === "false";
   if (newSelectState === "true") {
     numSelected += 1;  
   } else {
@@ -177,12 +210,10 @@ function toggleSelect(item) {
   }
 }
 
-// Function to shuffle unlocked items
 function shuffleGrid() {
     const unlockedItems = Array.from(gridContainer.querySelectorAll(".grid-item[data-locked='false']"));
     const shuffledItems = unlockedItems.sort(() => Math.random() - 0.5);
 
-    // Create a map of locked item positions
     const lockedItemPositions = new Map();
     const gridItems = gridContainer.querySelectorAll(".grid-item");
     gridItems.forEach((item, index) => {
@@ -191,13 +222,11 @@ function shuffleGrid() {
         }
     });
 
-    // Rearrange the unlocked items randomly
     gridContainer.innerHTML = "";
     shuffledItems.forEach((item) => {
         gridContainer.appendChild(item);
     });
 
-    // Restore locked items to their original positions
     lockedItemPositions.forEach((index, item) => {
         gridContainer.insertBefore(item, gridContainer.children[index]);
     });
@@ -229,25 +258,23 @@ function checkGroup() {
     selectedGroupIDs.push(selectedItemId.match(/\d+/)[0]);
   });
   
-//  console.info(selectedGroupIDs);
-  
   let guess = selectedGroupIDs.toSorted().join('');
-//  guess = guess.sort().join('');
-//  console.log(guess);
-//  selectedGroupIDs = [];
   
   if (already_guessed.includes(guess)) {
-    
-    status.innerHTML = `Already guessed`;
-    console.log('Already guessed');
-    
+    num_wrong_guesses += 1;
+    status.innerHTML = num_wrong_guesses >= 4
+      ? `Already guessed. Wrong guess no. ${num_wrong_guesses}. Game Over.`
+      : `Already guessed. Wrong guess no. ${num_wrong_guesses}`;
+
     numSelected = 0;
     
     selectedItems.forEach((item, index) => {
       item.classList.remove("selected");
       item.setAttribute("data-selected", false);
     });
-    
+
+    updateGameStats();
+    if (num_wrong_guesses >= 4) GameOver();
     return;
   }
   
@@ -258,7 +285,6 @@ function checkGroup() {
   let grp1 =0, grp2=0, grp3=0;
   
   selectedGroupIDs.forEach( (IDX, ind) => {
-    // console.log(IDX);
     let ID = Number(IDX);
     if ( ([0,1,2]).includes(ID) ) {
       grp1 += 1;
@@ -305,48 +331,6 @@ function checkGroup() {
     group = "group3";
   }
   
-/*  
-  if (guess == '0123') {
-    success = true;
-    group = "group1";
-    num_found += 1;
-    console.log('Found group 1');
-    status.innerHTML = `Found a group`;
-    
-  } else if (guess == '4567') {
-    success = true;
-    group = "group2";
-    num_found += 1;
-    console.log('Found group 2');
-    status.innerHTML = `Found a group`;
-    
-  } else if (guess == '101189') {
-    success = true;
-    group = "group3";
-    num_found += 1;
-    console.log('Found group 3');
-    status.innerHTML = `Found a group`;
-    
-  } else if (guess == '12131415') {
-    success = true;
-    group = "group4";
-    num_found += 1;
-    console.log('Found group 4');
-    status.innerHTML = `Found a group`;
-    
-  } else {
-    
-    num_wrong_guesses += 1;
-    
-    console.log(`Wrong guess no. ${num_wrong_guesses}`);
-    
-    if (num_wrong_guesses < 4)
-      status.innerHTML = `Wrong guess no. ${num_wrong_guesses}`;
-    else
-      status.innerHTML = `Wrong guess no. ${num_wrong_guesses}. Game Over.`;
-    
-  } */
-  
   if (num_wrong_guesses == 4) {
     status.innerHTML = `Wrong guess no. ${num_wrong_guesses}. Game Over.`;
     
@@ -355,10 +339,9 @@ function checkGroup() {
   if (num_found == 3) {
     status.innerHTML = `You won the Game.`;
     
-    document.body.className = "winner";
+    document.body.classList.add("winner");
   }
     
-  // const selectedItems = gridContainer.querySelectorAll(".selected");
   const targetItems = gridContainer.querySelectorAll(".grid-item[data-locked='false']");
 
   selectedItems.forEach((item, index) => {
@@ -367,10 +350,6 @@ function checkGroup() {
     item.setAttribute("data-selected", false);
     
     if (success) {
-      // const sourceItemId = item.dataTransfer.getData("text/plain");
-      // const sourceItem = gridContainer.querySelector(`[data-id="${sourceItemId}"]`);
-      // const targetItemId = e.target.getAttribute("data-id");
-      // const targetItem = gridContainer.querySelector(`[data-id="${targetItemId}"]`);
       const targetItem = targetItems[index];
             
       if (item && targetItem && !targetItem.classList.contains("locked")) {
@@ -412,6 +391,7 @@ function checkGroup() {
 
   numSelected = 0;
   
+  updateGameStats();
   
   if ( (num_found == 3) || (num_wrong_guesses == 4) ) {
     GameOver();
@@ -426,51 +406,105 @@ function GetaHint() {
       return;
     }
   
-  const solvedHints = gridContainer.querySelectorAll(".hinted.locked");
-  let num_solved_hints = solvedHints.length;
-  
-  if ((num_hint_given + num_found - num_solved_hints) >= 3) {
+  if (num_hint_given >= 3) {
     status.innerHTML = `All hints used up.`
     return;
   }
   
-  const unsolvedItems = gridContainer.querySelectorAll(".grid-item[data-locked='false']");
+  const availableItems = Array.from(gridContainer.querySelectorAll(
+    ".grid-item[data-locked='false']:not(.hinted):not(.selected)"
+  ));
   
-  let group, unsolvedIDs = [];
-  
-  unsolvedItems.forEach((item, index) => {
-    
-    const Id = item.getAttribute("data-id");
-    let id = parseInt(Id.match(/\d+/)[0]);
-    unsolvedIDs.push(id);
-    
-  });
-  
-  unsolvedIDs.sort((a,b) => a-b);
-  
-  let num_unsolved_hints = num_hint_given - num_solved_hints;
-  
-  let hint_indx = unsolvedIDs[num_unsolved_hints * 3 + num_unsolved_hints];
-  
-  let hintedItem = gridContainer.querySelector(`[data-id="item-${hint_indx}"]`);
-  
-  if ( ([0,1,2]).includes(hint_indx) ) {
-    group = "hint_group1";
-  } else if ( ([3,4,5]).includes(hint_indx) ) {
-    group = "hint_group2";
-  } else if ( ([6,7,8]).includes(hint_indx) ) {
-    group = "hint_group3";
+  if (availableItems.length === 0) {
+    status.textContent = "No unhinted names remain.";
+    return;
   }
+  
+  const hintedItem = availableItems[Math.floor(Math.random() * availableItems.length)];
+  const hint_indx = Number(hintedItem.getAttribute("data-id").match(/\d+/)[0]);
+  const group = `hint_group${Math.floor(hint_indx / 3) + 1}`;
   
   hintedItem.classList.add(group);
   hintedItem.classList.add("hinted");
   
   num_hint_given += 1;
-  
-  status.innerHTML = `Hint ${num_hint_given} used.`
+  updateGameStats();
+
+  const godNamesInEnglish = {
+    "गणेश": "Ganesha",
+    "हनूमान्": "Hanuman",
+    "विष्णु": "Vishnu",
+    "शिव": "Shiva",
+    "राम": "Rama",
+    "कृष्ण": "Krishna",
+    "लक्ष्मी": "Lakshmi",
+    "सरस्वती": "Saraswati"
+  };
+  const hintedGod = name_gods[hint_indx];
+  status.textContent = `Hint ${num_hint_given}: ${hintedItem.textContent} belongs to ${godNamesInEnglish[hintedGod] || hintedGod}'s group.`;
+}
+
+async function submitScoreToLeaderboard() {
+  if (scoreSubmitted) return;
+  scoreSubmitted = true;
+  leaderboardStatus.className = "zatam-game-status zatam-game-status-info";
+  leaderboardStatus.textContent = "Saving your score...";
+
+  const score = Number(scoreDisplay.textContent);
+  const elapsedSeconds = gameStartedAt
+    ? Math.floor((Date.now() - gameStartedAt) / 1000)
+    : 0;
+  const won = num_found === 3;
+  gameOverTitle.textContent = won ? "You won!" : "Game over";
+  resultScore.textContent = String(score);
+  resultTime.textContent = timeDisplay.textContent;
+  gameOverModal.hidden = false;
+  playAgainButton.focus();
+
+  if (!window.zatamScore || typeof window.zatamScore.submit !== "function") {
+    leaderboardStatus.className = "zatam-game-status zatam-game-status-error";
+    leaderboardStatus.textContent = "The leaderboard is not available right now.";
+    return;
+  }
+
+  try {
+    const result = await window.zatamScore.submit(score, {
+      result: won ? "won" : "lost",
+      metrics: {
+        pointsEarned: score,
+        gameTimerSeconds: elapsedSeconds,
+        completedGroups: num_found,
+        hintsUsed: num_hint_given,
+        mistakes: num_wrong_guesses,
+        won
+      }
+    });
+
+    if (result && result.ok) {
+      leaderboardStatus.className = "zatam-game-status zatam-game-status-success";
+      leaderboardStatus.textContent = "Score saved to the leaderboard ✓";
+    } else if (result && result.reason === "not-signed-in") {
+      leaderboardStatus.textContent = "Sign in to save your score to the leaderboard.";
+    } else if (result && result.reason === "already-submitted") {
+      leaderboardStatus.className = "zatam-game-status zatam-game-status-success";
+      leaderboardStatus.textContent = "Score already saved ✓";
+    } else {
+      leaderboardStatus.className = "zatam-game-status zatam-game-status-error";
+      leaderboardStatus.textContent = "Your score could not be saved.";
+    }
+  } catch (error) {
+    console.error("[055-namavali] Score submission failed:", error);
+    leaderboardStatus.className = "zatam-game-status zatam-game-status-error";
+    leaderboardStatus.textContent = "The leaderboard score could not be saved.";
+  }
 }
 
 function GameOver() {
+  if (gameTimer) {
+    clearInterval(gameTimer);
+    gameTimer = null;
+  }
+  updateGameStats();
   
   const targetItems = gridContainer.querySelectorAll(".grid-item[data-locked='false']");
   
@@ -485,14 +519,11 @@ function GameOver() {
   });
   
   sourceIDs.sort((a,b) => a-b);
-  // console.log("Items left out: " sourceIDs);
   
   targetItems.forEach((targetItem, index) => {
     
       const sourceItemId = sourceIDs[index];
       const sourceItem = gridContainer.querySelector(`[data-id="item-${sourceItemId}"]`);
-      // const targetItemId = targetItem.getAttribute("data-id");
-      // const targetItem = gridContainer.querySelector(`[data-id="${targetItemId}"]`);
             
       if ( sourceItem && targetItem && (sourceItem !== targetItem) ) {
         
@@ -530,57 +561,38 @@ function GameOver() {
         group = "group3";
       }
       
-    //  targetItem.classList.remove("group1 group2 group3 group4");
       targetItem.classList.add(group);
       targetItem.classList.add("locked");
       targetItem.setAttribute("data-locked", true);
   });
-  /*
-  let hinted = gridContainer.querySelectorAll(".hinted");
-  hinted.forEach((item, index) => {
-    item.classList.remove("hint_group1");
-    item.classList.remove("hint_group2");
-    item.classList.remove("hint_group3");
-    item.classList.remove("hint_group4");
-  });*/
 
-  lastPlayedTs = new Date();
-
-  save_history();
-  
   share.style.display = "revert";
-  share.focus();
-  ShareIt();
+  submitScoreToLeaderboard();
 }
-
-let copyText
 
 function ShareIt() {
   
-  // Share your results
-  let sq = [];
-  results = ""
-  all_guess_IDs.forEach((guess_ID, index) => {
-    // console.log(guess_ID);
-    guess_ID.forEach( (IDX, ind) => {
-      // console.log(IDX);
+  let square = "";
+  let results = "";
+  all_guess_IDs.forEach((guess_ID) => {
+    guess_ID.forEach((IDX) => {
       let ID = Number(IDX);
       if ( ([0,1,2]).includes(ID) ) {
-        sq = "🟥"; // "\u1F7E5"
+        square = "🟥";
       } else if ( ([3,4,5]).includes(ID) ) {
-        sq = "🟩"; // "\u1F7E9"
+        square = "🟩";
       } else if ( ([6,7,8]).includes(ID) ) {
-        sq = "🟦"; // "\u1F7E6"
+        square = "🟦";
       }
       
-      results += sq;
+      results += square;
     });
     results += "\n";
   });
   
   let linkURL = window.location.href;
   
-  copyText = `#Namavali game\n${results} at ${linkURL}`;
+  const copyText = `#Namavali game\n${results} at ${linkURL}`;
   
   navigator.clipboard.writeText(copyText);
   
@@ -588,55 +600,24 @@ function ShareIt() {
     navigator.share({
       title: 'Share results',
       text: `#Namavali game\n${results} at ${linkURL}`,
-      // url: linkURL,
     })
     .then(() => console.log('Successful share'))
     .catch((error) => console.log('Error sharing', error));
   }
   
-//  alert("Copied the results to clipboard");
   tooltip.innerHTML = "Results copied";
 }
 function outFunc() {
   tooltip.innerHTML = "Copy to clipboard";
 }
 
-document.addEventListener("keypress", function onPress(event) {
-    if (event.key === "@") {
-      console.log("cheat code for testing game");
-      num_found = 3;
-      GameOver();
-      return;
-    }
-});
-
-function Na(e, a) {
-    var s = new Date(e);
-    var t = new Date(a).setHours(0, 0, 0, 0) - s.setHours(0, 0, 0, 0);
-    return Math.round(t / 864e5);
-}
-
-function get_history() {
-  const noItemsFound_lastPlayedTs = 0;
-  const lpts = localStorage.getItem('lpts') || noItemsFound_lastPlayedTs;
-  
-  lastPlayedTs = JSON.parse(lpts);
-}
-
-function save_history() {
-  const lpts = JSON.stringify(lastPlayedTs);
-  localStorage.setItem('lpts', lpts);
-}
-
-get_history();
-
 share.style.display = "none";
 submitButton.style.display = "none";
 shuffleButton.style.display = "none";
 HintButton.style.display = "none";
 
-// Function to handle input
 newGameButton.addEventListener("click", createGame);
+playAgainButton.addEventListener("click", createGame);
 shuffleButton.addEventListener("click", shuffleGrid);
 submitButton.addEventListener("click", checkGroup);
 HintButton.addEventListener("click", GetaHint);

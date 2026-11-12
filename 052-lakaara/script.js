@@ -7,15 +7,12 @@ const grid = document.getElementById("grid");
 const message = document.getElementById("message");
 const details = document.getElementById("details");
 const settings = document.getElementById("settings");
-const share =  document.getElementById("share");
-const tooltip = document.getElementById("myTooltip");
 
-let verb, verbs, startTime, index = 0, is_playing;
+let verb, verbs, index = 0, is_playing;
 
 fetch('/052-lakaara/conjugations.txt')
   .then(responses => responses.json())
   .then(resp => {
-    console.log(resp);
     verbs = resp;
   })
   .catch(err => console.log(err));
@@ -50,7 +47,7 @@ DragNSort.prototype.onDragStart = function (_this, event) {
 };
 
 DragNSort.prototype.onDragEnd = function (_this) {
-	this.classList.remove(_this.dragStartClass);
+	_this.removeClasses();
 };
 
 DragNSort.prototype.onDragEnter = function (_this) {
@@ -82,6 +79,8 @@ DragNSort.prototype.onDrop = function (_this, event) {
   if ( (!this.classList.contains("solved")) && (_this.$activeItem !== this) ) {
     _this.$activeItem.innerHTML = this.innerHTML;
     this.innerHTML = event.dataTransfer.getData('text/html');
+    _this.$activeItem.classList.remove("checked-correct");
+    this.classList.remove("checked-correct");
   }
 
   _this.removeClasses();
@@ -118,6 +117,7 @@ const Place_ID_list = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','
 let num_errors, lakaara_num;
 
 function startGame() {
+  if (!verbs?.length || savingScore) return;
   console.log("new game started!");
   is_playing = true;
   
@@ -136,9 +136,7 @@ function startGame() {
   details.innerHTML = ``;
   info.innerHTML = ``;
   start.innerHTML = `New Game`;
-  share.style.display = "none";
   check.style.display = "block";
-  tooltip.innerHTML = "Copy to clipboard";
   
   if (lakaara_num == -1) {
     index++;
@@ -184,12 +182,12 @@ function startGame() {
     // Tile.style.width = `33.3%`;
     Tile.innerHTML = `<span id="${arr[i]}">${verb.conj[c][n]}</span>`;
     Tile.setAttribute("draggable",true);
-    Tile.classList.remove("solved");
+    Tile.classList.remove("solved", "checked-correct");
     // grid.appendChild(newTile);
     
   }
 
-  startTime = new Date().getTime();
+  beginScoring();
   
 //  document.body.className = "";
   grid.style.display = "revert";
@@ -216,7 +214,7 @@ let list_person = ["Third person","Second person","First person"];
 
 function checkMatrix(check_person_no) {
 
-  if (is_playing == false) {
+  if (!is_playing) {
     return;
   }
   
@@ -256,9 +254,12 @@ function checkMatrix(check_person_no) {
      
      if ( (check_person_no === person_no+1) || (check_person_no === 0) ) {
      
-       if (expected.localeCompare(Guess[i])) {
-          num_misplaced_words += 1;
-        }
+       const wrong = expected.localeCompare(Guess[i]) !== 0;
+       draggable.$items[i].classList.toggle("checked-correct", !wrong);
+       if (wrong) {
+         num_misplaced_words += 1;
+         chargedMistakes.add(JSON.stringify([i, Guess[i]]));
+       }
      }
      
       /*if (empty_tiles.includes(ans[i])) {
@@ -287,7 +288,8 @@ function checkMatrix(check_person_no) {
      }
   }  
   
-  // console.log(cur_guess);
+  roundScore = Math.max(0, 100 - 2 * chargedMistakes.size);
+  renderStats();
   if (check_person_no === 0) {
     if  (num_misplaced_words == 0)  {
       console.log("Successfully finished game");
@@ -314,15 +316,14 @@ function checkMatrix(check_person_no) {
 }
 }
 
-let elapsedTime;
 
-function gameOver() {
-  if (is_playing == false) {
+function gameOver(testRound = false) {
+  if (!is_playing) {
     return;
   } else {
     is_playing = false;
   }
-  elapsedTime = new Date().getTime() - startTime;
+  renderStats();
   
   for(var i=0; i<9; i++) {
     // for(var j=0; j<3; j++) {
@@ -336,7 +337,7 @@ function gameOver() {
   
   message.innerHTML = `
     <span class="congrats">Congrats!</span>
-    <br> You finished in ${elapsedTime/1000} seconds
+    <br> Score: ${roundScore}/100
     `;
   
   details.innerHTML = ` `;
@@ -345,19 +346,19 @@ function gameOver() {
   save_history();
   
   
-  share.style.display = "revert";
   check.style.display = "none";
-  share.focus();
-  ShareIt();
-
-//  document.body.className = "winner";
+  if (testRound) {
+    details.textContent = "Test round. Score not saved.";
+  } else {
+    saveRound();
+  }
 }
 
 document.addEventListener("keypress", function onPress(event) {
     if ( (event.key === "N") || (event.key === "n") ) {
       startGame();
     }
-    if (event.key === "@") {
+    if (event.key === "@" && is_playing) {
       console.log("cheat code for testing game");
       // words.innerHTML = ``;
       for(var i=0; i<9; i++) {
@@ -376,37 +377,10 @@ document.addEventListener("keypress", function onPress(event) {
         // grid.appendChild(newTile);
         // }
       }
-      gameOver();
+      gameOver(true);
       return;
     }
 });
-
-let copyText, linkURL = window.location.href;
-
-function ShareIt() {
-  
-  copyText = `I learnt the verb #conjugation in ${verb.tense} '${verb.lakaara} लकार' (${verb.padi}): "${verb.word}" Sanskrit for "${verb.meaning}" in ${Math.round(elapsedTime/1000)} sec at `;
-  
-  navigator.clipboard.writeText(copyText + linkURL);
-  
-   if (navigator.canShare) {
-    navigator.share({
-      title: 'Share results',
-      text: copyText + linkURL,
-      // url: linkURL,
-    })
-      .then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error));
-  }
-  
-//  alert("Copied the results to clipboard");
-  tooltip.innerHTML = "Results copied";
-}
-
-function outFunc() {
-  tooltip.innerHTML = "Copy to clipboard";
-}
-
 
 function get_history() {
   const noItemsFound = -1;
@@ -422,10 +396,99 @@ function save_history() {
 get_history();
 grid.style.display = "none";
 settings.style.display = "revert";
-share.style.display = "none";
 check.style.display = "none";
 
 start.addEventListener("click", startGame);
 check.addEventListener("click", () => {
   checkMatrix(0);
 });
+
+const levelIds = {
+  "-1": "all", 0: "present", 1: "imperfect-past", 2: "general-past",
+  3: "perfect-past", 4: "simple-future", 5: "distant-future",
+  6: "imperative", 7: "potential", 8: "benedictive", 9: "conditional",
+};
+const chargedMistakes = new Set();
+const bestKey = "zatam:052-lakaara:personal-best:";
+let roundScore = 100, roundLevel, scorerReady, savingScore = false;
+
+function selectedLevel() {
+  return {
+    levelId: levelIds[settings.value] || "all",
+    levelName: settings.selectedOptions[0]?.textContent.trim() || "All",
+  };
+}
+
+function renderStats() {
+  document.getElementById("lakaara-score").textContent = roundScore + "/100";
+}
+
+function readBest(level) {
+  try {
+    const best = JSON.parse(localStorage.getItem(bestKey + level.levelId));
+    return Number.isFinite(best?.score) && best.score >= 0 && best.score <= 100 ? best : null;
+  } catch {
+    return null;
+  }
+}
+
+function renderBest(level, best = readBest(level)) {
+  document.getElementById("lakaara-best-level").textContent = level.levelName;
+  document.getElementById("lakaara-best").textContent = best
+    ? best.score + "/100"
+    : "No completed rounds yet.";
+}
+
+function beginScoring() {
+  chargedMistakes.clear();
+  roundScore = 100;
+  roundLevel = selectedLevel();
+  renderStats();
+  renderBest(roundLevel);
+  const level = roundLevel;
+  scorerReady = import("../js/game-score.js").then((scorer) => {
+    if (roundLevel !== level) return null;
+    const config = scorer.initGameScore({
+      gameId: "052-lakaara", gameName: "Lakaara Puzzle", ...level,
+    });
+    if (config?.levelId !== level.levelId) throw new Error("Level-aware game-score.js required.");
+    return scorer;
+  }).catch((error) => {
+    console.error("Lakaara Puzzle scorer initialization failed:", error);
+    return null;
+  });
+}
+
+async function saveRound() {
+  const level = roundLevel;
+  const score = roundScore;
+  const stored = readBest(level);
+  const improved = !stored || score > stored.score;
+  const best = improved ? { score } : stored;
+  if (improved) {
+    try { localStorage.setItem(bestKey + level.levelId, JSON.stringify(best)); } catch {}
+  }
+  renderBest(level, best);
+  savingScore = true;
+  settings.disabled = start.disabled = true;
+  details.textContent = "Saving leaderboard score…";
+  try {
+    const scorer = await scorerReady;
+    if (!scorer) throw new Error("Leaderboard scorer unavailable.");
+    const saved = await scorer.submitGameScore(score, {
+      result: "completed", ...level,
+      metrics: { mistakes: chargedMistakes.size },
+    });
+    details.textContent = saved?.ok ? "Score saved to the leaderboard."
+      : saved?.reason === "not-signed-in" ? "Sign in to save scores to the leaderboard."
+      : "Leaderboard score could not be saved.";
+  } catch (error) {
+    details.textContent = "Leaderboard score could not be saved.";
+    console.error(error);
+  } finally {
+    savingScore = false;
+    settings.disabled = start.disabled = false;
+  }
+}
+
+renderBest(selectedLevel());

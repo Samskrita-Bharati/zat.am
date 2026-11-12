@@ -1,73 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" >
-    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fffaf2">
     <title>Namavali Game</title>
-    <link rel="icon" href="/055-namavali/Namavali_game_icon.png" type="image/x-icon">
-    <link rel="manifest" href="/055-namavali/manifest.json" >
-    <!-- The website stylesheet -->
-    <link rel="stylesheet" href="/055-namavali/style.css" >
-    
-    <!-- The website JavaScript file -->
+    <link rel="icon" href="/055-namavali/Namavali_game_icon.png" type="image/png">
+    <link rel="manifest" href="/055-namavali/manifest.json">
+    <link rel="stylesheet" href="../shared/game-theme.css">
+    <link rel="stylesheet" href="/055-namavali/style.css">
+    <script src="/055-namavali/score-config.js" defer></script>
     <script src="/055-namavali/script.js" defer></script>
   </head>
-  <body data-page="games">
-
-    <!-- Shared Zat.am Navbar -->
+  <body data-page="games" class="zatam-themed-game">
     <div id="navbar-mount"></div>
 
-    <h1>
-      Namavali game
-    </h1>
-    <p id="info">
-      You are presented with a grid of 9 jumbled up names of 3 Hindu gods (given as clues). 
-      Your task is to identify the 3 groups of 3 names in utmost 4 wrong attempts with the help of up to 3 hints.
-      <br><br>
-      Select 3 names  from the grid that you think belongs to the same god and click Submit to check if your guess is correct.
-      Find all the 3 groups without making 4 mistakes. You can get upto 3 hints revealed as coloured text.
-      <br>
-      <br> Click the New Game button to begin
-    </p>
-    <span>
-    <button id="submitButton">Submit</button>
-    <button id="GetaHintButton">Get a Hint</button>
-    <button id="shuffleButton">Shuffle</button>
-    <button id="newGameButton">New Game</button>
-    </span>
-    <p id="clues"></p>
-    <p id="status"></p>
-    
-    <p class="tooltip">
-      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
-      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-      Share</button>
-    </p>
-    
-    <div id="grid-container" oncontextmenu="return false;"></div>
-    <div id="image"><img alt="Eight grayscale icons of hindu gods viz. Vishnu, Shiva, Ganesha, Lakshmi, Hanuman, Krishna, Rama, Saraswati" class="img" src="/055-namavali/Namavali_small.png?v=1699892787915"></div>
+    <main class="zatam-game-shell namavali-shell">
+      <div id="game-over-modal" class="zatam-game-modal-backdrop namavali-game-over-modal" role="presentation" hidden>
+        <section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+          <h2 id="game-over-title" class="zatam-game-result-title">Round complete</h2>
+          <p class="zatam-game-result-message">Time: <strong id="result-time">00:00</strong></p>
+          <p class="zatam-game-result-score"><strong id="result-score">0</strong> points</p>
+          <div id="score-save-status" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite">Saving your score...</div>
+          <div class="zatam-game-actions">
+            <button id="play-again" class="zatam-game-btn zatam-game-btn-primary" type="button">Play again</button>
+          </div>
+        </section>
+      </div>
+      <header class="zatam-game-header">
+        <span class="zatam-game-eyebrow">Word grouping game</span>
+        <h1 class="zatam-game-title">Namavali</h1>
+        <p class="zatam-game-subtitle">Find the names that belong to each Hindu deity.</p>
+      </header>
+
+      <section class="zatam-game-instructions" aria-label="How to play">
+        <p>Select three names and press Submit. Find all three groups with fewer than four mistakes to win. You have three hints.</p>
+      </section>
+
+      <section class="zatam-game-stats namavali-stats" aria-label="Game stats">
+        <div class="zatam-game-stat zatam-game-score">
+          <span class="zatam-game-stat-label">Score</span>
+          <span class="zatam-game-stat-value" id="game-score">0</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">Time</span>
+          <span class="zatam-game-stat-value" id="game-time">00:00</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">Hints left</span>
+          <span class="zatam-game-stat-value" id="hints-left">3</span>
+        </div>
+        <div class="zatam-game-stat">
+          <span class="zatam-game-stat-label">Mistakes</span>
+          <span class="zatam-game-stat-value" id="mistake-count">0</span>
+        </div>
+      </section>
+
+      <section class="namavali-game-panel" aria-label="Namavali game">
+        <div class="zatam-game-actions namavali-actions" aria-label="Game controls">
+          <button class="zatam-game-btn zatam-game-btn-primary" id="newGameButton" type="button">New Game</button>
+          <button class="zatam-game-btn zatam-game-btn-secondary" id="submitButton" type="button">Submit</button>
+          <button class="zatam-game-btn zatam-game-btn-secondary" id="GetaHintButton" type="button">Get a Hint</button>
+          <button class="zatam-game-btn zatam-game-btn-secondary" id="shuffleButton" type="button">Shuffle</button>
+          <button class="zatam-game-btn zatam-game-btn-accent tooltip" id="share" type="button" onclick="ShareIt()" onmouseout="outFunc()">
+            <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>Share
+          </button>
+        </div>
+        <div id="game-content" hidden>
+          <div id="clues" class="namavali-clues" aria-live="polite"></div>
+          <p id="status" class="zatam-game-status" aria-live="polite"></p>
+          <div id="grid-container" class="namavali-grid" oncontextmenu="return false;" aria-label="Names grid"></div>
+        </div>
+        <div id="image" class="namavali-reference-image">
+          <img alt="Eight grayscale icons of Hindu gods: Vishnu, Shiva, Ganesha, Lakshmi, Hanuman, Krishna, Rama, and Saraswati" src="/055-namavali/Namavali_small.png?v=1699892787915">
+        </div>
+      </section>
+    </main>
+
+    <footer class="namavali-footer">&copy; 2023 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Reference: DrikPanchang</footer>
 
     <script>
       if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function() {
-          navigator.serviceWorker
-            .register("/055-namavali/serviceWorker.js")
-            .then(res => console.log("service worker registered"))
-            .catch(err => console.log("service worker not registered", err))
-        })
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/055-namavali/serviceWorker.js").catch(err => console.log("service worker not registered", err));
+        });
       }
     </script>
-    
-    <!-- The footer holds our remix button — you can keep or delete it ✂ -->
-    <footer class="footer">
-      <span style="white-space: nowrap"> &copy; 2023 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Ref: DrikPanchang </span>
-    </footer>
-  
+    <script type="module" src="../js/navbar-loader.js"></script>
+    <script type="module">
+      import { initGameScore } from "../js/game-score.js";
 
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
-</body>
+      initGameScore({ gameId: "055-namavali", gameName: "Namavali" });
+    </script>
+  </body>
 </html>

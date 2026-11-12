@@ -20,7 +20,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     	<script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.1.0/sanscript.min.js"></script>
 		
-		<script src="https://accounts.google.com/gsi/client" async defer></script>
     <!-- CSS
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -34,28 +33,8 @@
     <link rel="stylesheet" href="css/article.css?v=2.0">
     <link rel="stylesheet" href="css/form.css?v=2.0">
     <link rel="stylesheet" href="css/general.css?v=2.0">
-    <script type="text/javascript">
-        var base_url = "https://sambhashanasandesha.in/";
-        var nav_archive_volume = "सम्पुटः";
-        var nav_archive_issue = "सञ्चिका";
-    </script>
-
-    <style type="text/css">
-
-.mainpage .full-width-card h3.author.by:before{
- content: '— ';
- margin-right: 2px;
- margin-left: 20px;
-}
-.mainpage .full-width-card h3.author span:not(:first-of-type):last-of-type:before{
- content: ' ,  ';
-}
-
-.mainpage .full-width-card h3.fullText span:not(:first-of-type):last-of-type:before{
- content: ' ,  ';
-}
-
-</style>
+    <link rel="stylesheet" href="../shared/game-theme.css">
+    <link rel="stylesheet" href="game-layout.css">
     <!-- Fonts
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700" rel="stylesheet">
@@ -74,18 +53,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 </head>
 
-<!-- Google tag (gtag.js) -->
-<!--
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-39ST9HMHR3"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-39ST9HMHR3');
-</script>
--->
-<body data-page="games">
+<body data-page="games" class="zatam-themed-game zatam-game-page">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
@@ -96,40 +64,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
     <!-- Navigation
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <div class="container navbar-head">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1><span class="saffron">अन्विष्यन्तां पदानि</span> - सम्भाषणसन्देशः</h1>
-				<br>
-				<a href="?year=0000"><h5 class="archiveTitle" style="text-decoration:underline">सङ्ग्रहः</h5></a>
-<!--
-<div id="g_id_onload"
-     data-client_id="1014646747617-ngtebucrlp2vf02c31ek60i0lpre7ts4.apps.googleusercontent.com"
-     data-context="signin"
-     data-ux_mode="popup"
-	 data-callback="handleCredentialResponse"
-     xdata-login_uri="https://zat.am/"
-     data-auto_prompt="false">
-</div>
-
-<div class="g_id_signin"
-     data-type="standard"
-     data-shape="pill"
-     data-theme="outline"
-     data-text="signin_with"
-     data-size="medium"
-     data-logo_alignment="left">
-</div>
--->
+<main class="zatam-game-shell archive-game-shell">
+    <div id="score-submit-modal" class="zatam-game-modal-backdrop ap-score-modal" role="presentation" hidden>
+        <section class="zatam-game-result" role="dialog" aria-modal="true" aria-labelledby="score-submit-title">
+            <h2 id="score-submit-title" class="zatam-game-result-title">Puzzle complete</h2>
+            <p class="zatam-game-result-message">Time: <strong id="score-submit-time">Unavailable</strong></p>
+            <p class="zatam-game-result-score"><strong id="score-submit-value">0</strong> points</p>
+            <div id="score-submit-status" class="zatam-game-status zatam-game-status-info" role="status" aria-live="polite">Saving your score...</div>
+            <div class="zatam-game-actions">
+                <button id="score-submit-close" class="zatam-game-btn zatam-game-btn-primary" type="button">Close</button>
             </div>
-        </div>
+        </section>
     </div>
- 
+    <header class="zatam-game-header">
+        <h1 class="zatam-game-title"><span class="saffron">अन्विष्यन्तां पदानि</span></h1>
+        <p class="zatam-game-subtitle">A collection of Sanskrit word search puzzles published in सम्भाषणसन्देशः (Sambhashana Sandesha).</p>
+    </header>
 
+    <section class="zatam-game-card archive-game-card" aria-label="Year archive and embedded puzzle">
 <div class="container dynamic-page">
     <div class="row">
-        <div class="col-md-12">
-            <h1 class="title">सम्पुटाः</h1>
+        <div class="col-md-12 archive-heading-row">
+            <h1 class="title">सम्पुटाः <span class="archive-title-translation">(Volumes)</span></h1>
+            <a class="zatam-game-btn zatam-game-btn-primary archive-back-button" href="?year=0000" aria-label="Back to year archive">
+                सङ्ग्रहः <span class="archive-title-translation">(Year Archive)</span>
+            </a>
         </div>
     </div>
 </div>
@@ -137,7 +96,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="row gray-back">
-                            <iframe height="700px" width="100%" allowfullscreen="true" style="border:none; width: 100% !important; position: static;display: block !important; margin: 0 !important;" name="sanskritbharatiusa" src=""></iframe>
+                            <iframe title="अन्विष्यन्तां पदानि — वर्षस्य खेलाः" allowfullscreen="true" scrolling="yes" name="sanskritbharatiusa" src=""></iframe>
                             
                         </div>
         </div>
@@ -334,6 +293,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </div>
 </div>
+</section>
+</main>
     <div class="container footer"><!-- container -->
         <div class="row justify-content-center"><!-- row -->
             <div class="col-md text-center">
@@ -345,20 +306,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 	<!-- Javascript calls
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <script type="text/javascript" src="js/common.js?v=2.0"></script>
+<script src="score-config.js"></script>
 <script src="js/sig.js"></script>
-<script>
-
-  window.onload = function () {
-  if (!sessionStorage.getItem("pml")){
-    google.accounts.id.initialize({
-      client_id: '1014646747617-ngtebucrlp2vf02c31ek60i0lpre7ts4.apps.googleusercontent.com',
-      callback: handleCredentialResponse
-    });
-    google.accounts.id.prompt();
-	}
-  };
-</script>
 
 
     <!-- Shared Zat.am Navbar -->

@@ -7,10 +7,8 @@ const grid = document.getElementById("grid");
 const message = document.getElementById("message");
 const details = document.getElementById("details");
 const settings = document.getElementById("settings1");
-const share =  document.getElementById("share");
-const tooltip = document.getElementById("myTooltip");
 
-let noun, nouns, startTime, index, is_playing;
+let noun, nouns, index, is_playing;
 
 fetch('/053-shabd/declensions.txt')
   .then(responses => responses.json())
@@ -50,7 +48,7 @@ DragNSort.prototype.onDragStart = function (_this, event) {
 };
 
 DragNSort.prototype.onDragEnd = function (_this) {
-	this.classList.remove(_this.dragStartClass);
+	_this.removeClasses();
 };
 
 DragNSort.prototype.onDragEnter = function (_this) {
@@ -79,9 +77,11 @@ DragNSort.prototype.onDrop = function (_this, event) {
     event.stopPropagation();
   }
   
-  if ( (!this.classList.contains("solved")) && (_this.$activeItem !== this) ) {
+  if (_this.$activeItem && !this.classList.contains("solved") && _this.$activeItem !== this) {
     _this.$activeItem.innerHTML = this.innerHTML;
     this.innerHTML = event.dataTransfer.getData('text/html');
+    _this.$activeItem.classList.remove("checked-correct");
+    this.classList.remove("checked-correct");
   }
 
   _this.removeClasses();
@@ -118,6 +118,7 @@ const Place_ID_list = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','
 let num_errors, is_random, dropdown_num = -1;
 
 function startGame() {
+  if (!nouns?.length || savingScore) return;
   console.log("new game started!");
   is_playing = true;
   
@@ -133,9 +134,7 @@ function startGame() {
   details.innerHTML = ``;
   info.innerHTML = ``;
   start.innerHTML = `New Game`;
-  share.style.display = "none";
   check.style.display = "block";
-  tooltip.innerHTML = "Copy to clipboard";
   
   if (dropdown_num == -1) {
     index++;
@@ -250,18 +249,18 @@ function startGame() {
     // Tile.style.width = `33.3%`;
     Tile.innerHTML = `<span id="${arr[i]}">${noun.decl[c][n]}</span>`;
     Tile.setAttribute("draggable",true);
-    Tile.classList.remove("solved");
+    Tile.classList.remove("solved", "checked-correct");
     // grid.appendChild(newTile);
     
   }
 
-  startTime = new Date().getTime();
+  beginScoring();
   
 //  document.body.className = "";
   grid.style.display = "revert";
   
   if (typeof nouns[index].vocative !== 'undefined'){
-    checkMatrix('8');
+    checkMatrix(8, false);
   }
 }
 
@@ -280,9 +279,9 @@ let list_cases = ["Nominative","Accusative","Instrumental","Dative","Ablative","
 
 // let check_case_no = 0;
 
-function checkMatrix(check_case_no) {
+function checkMatrix(check_case_no, penalize = true) {
 
-  if (is_playing == false) {
+  if (!is_playing) {
     return;
   }
   
@@ -311,33 +310,24 @@ function checkMatrix(check_case_no) {
     check_case_no = 0;
   }
   
-  let case_no, num_no, expected, num_misplaced_words = 0;
-  
-   for (var i = 0; i < draggable.$items.length; i++) {
-     
-     case_no = Math.floor(i/3);
-     num_no = i%3;
-     
-     expected = noun.decl[case_no][num_no];
-     
-     if ( (check_case_no === case_no+1) || (check_case_no === 0) ) {
-     
-       if (expected.trimStart().localeCompare(Guess[i])) {
-          num_misplaced_words += 1;
-        }
-     }
-     
-      /*if (empty_tiles.includes(ans[i])) {
-       if ((empty_tiles.includes(parseInt(Guess[i])) == false)) {
-        num_misplaced_tiles += 1; 
-       }
-     } else { 
-      if (ans[i] != Guess_ID[i]) {
-        num_misplaced_tiles += 1;
+  let case_no, num_no, num_misplaced_words = 0;
+  for (let i = 0; i < draggable.$items.length; i++) {
+    const row = Math.floor(i / 3);
+    if (check_case_no !== 0 && check_case_no !== row + 1) continue;
+    const form = Guess[i];
+    const correct = noun.decl[row][i % 3].trimStart().localeCompare(form) === 0;
+    draggable.$items[i].classList.toggle("checked-correct", correct);
+    if (!correct) {
+      num_misplaced_words++;
+      const mistake = JSON.stringify([i, form]);
+      if (penalize && !chargedMistakes.has(mistake)) {
+        chargedMistakes.add(mistake);
+        roundScore = Math.max(0, roundScore - 2);
       }
-     }*/
-  }  
-  
+    }
+  }
+  renderStats();
+
   for(var i=0; i<draggable.$items.length; i++) {
 
      case_no = Math.floor(i/3);
@@ -380,7 +370,6 @@ function checkMatrix(check_case_no) {
 }
 }
 
-let elapsedTime;
 
 function gameOver() {
   if (is_playing == false) {
@@ -388,7 +377,7 @@ function gameOver() {
   } else {
     is_playing = false;
   }
-  elapsedTime = new Date().getTime() - startTime;
+  renderStats();
   
   for(var i=0; i<24; i++) {
     // for(var j=0; j<3; j++) {
@@ -402,7 +391,7 @@ function gameOver() {
   
   message.innerHTML = `
     <span class="congrats">Congrats!</span>
-    <br> You finished in ${elapsedTime/1000} seconds
+    <br> Score: ${roundScore}/100
     `;
   
   details.innerHTML = ` `;
@@ -411,10 +400,8 @@ function gameOver() {
   save_history();
   
   
-  share.style.display = "revert";
   check.style.display = "none";
-  share.focus();
-  ShareIt();
+  saveRound();
 
 //  document.body.className = "winner";
 }
@@ -423,59 +410,7 @@ document.addEventListener("keypress", function onPress(event) {
     if ( (event.key === "N") || (event.key === "n") ) {
       startGame();
     }
-    if (event.key === "@") {
-      console.log("cheat code for testing game");
-      // words.innerHTML = ``;
-      for(var i=0; i<24; i++) {
-        // for(var j=0; j<3; j++) {
-
-        let c = Math.floor(i/3);
-        let n = i%3;
-
-        // const newTile = template.content.cloneNode(true);
-        const Tile = document.getElementById(`${Place_ID_list[i]}`);
-        // const img = newTile.querySelector('.drag-item');
-
-        // Tile.style.width = `33.3%`;
-        Tile.innerHTML = `<span id="${i}">${noun.decl[c][n]}</span>`;
-
-        // grid.appendChild(newTile);
-        // }
-      }
-      gameOver();
-      return;
-    }
 });
-
-let copyText, linkURL = window.location.href;
-
-function ShareIt() {
-  
-  if (noun.ending.trim().length !== 0)
-    copyText = `I learnt the #declension of ${noun.gender} word ending in '${noun.ending}': "${noun.word}" Sanskrit for "${noun.meaning}" in ${Math.round(elapsedTime/1000)} sec at `;
-  else
-    copyText = `I learnt the #declension of ${noun.gender} word: "${noun.word}" Sanskrit pronoun for "${noun.meaning}" in ${Math.round(elapsedTime/1000)} sec at `;
-  
-  navigator.clipboard.writeText(copyText + linkURL);
-  
-   if (navigator.canShare) {
-    navigator.share({
-      title: 'Share results',
-      text: copyText + linkURL,
-      // url: linkURL,
-    })
-      .then(() => console.log('Successful share'))
-      .catch((error) => console.log('Error sharing', error));
-  }
-  
-//  alert("Copied the results to clipboard");
-  tooltip.innerHTML = "Results copied";
-}
-
-function outFunc() {
-  tooltip.innerHTML = "Copy to clipboard";
-}
-
 
 function get_history() {
   const noItemsFound = -1;
@@ -491,10 +426,124 @@ function save_history() {
 get_history();
 grid.style.display = "none";
 settings.style.display = "revert";
-share.style.display = "none";
 check.style.display = "none";
 
 start.addEventListener("click", startGame);
-check.addEventListener("click", () => {
-  checkMatrix(0);
+
+
+const levelIds = {
+  "-1": "all", 0: "noun-masculine", 1: "noun-feminine", 2: "noun-neuter",
+  3: "pronoun-masculine", 4: "pronoun-feminine", 5: "pronoun-neuter", 6: "pronoun-common",
+};
+const chargedMistakes = new Set();
+const bestKey = "zatam:053-shabd:personal-best:";
+let roundScore = 100, roundLevel, scorerReady, savingScore = false;
+
+function selectedLevel() {
+  return {
+    levelId: levelIds[settings.value] || "all",
+    levelName: settings.selectedOptions[0]?.textContent.trim() || "All",
+  };
+}
+
+function renderStats() {
+  document.getElementById("shabd-score").textContent = roundScore + "/100";
+}
+
+function readBest(level) {
+  try {
+    const best = JSON.parse(localStorage.getItem(bestKey + level.levelId));
+    return Number.isFinite(best?.score) && best.score >= 0 && best.score <= 100 ? best : null;
+  } catch {
+    return null;
+  }
+}
+
+function renderBest(level, best = readBest(level)) {
+  document.getElementById("shabd-best-level").textContent = level.levelName;
+  document.getElementById("shabd-best").textContent = best
+    ? best.score + "/100"
+    : "No completed rounds yet.";
+}
+
+function beginScoring() {
+  chargedMistakes.clear();
+  roundScore = 100;
+  roundLevel = selectedLevel();
+  renderStats();
+  renderBest(roundLevel);
+  const level = roundLevel;
+  scorerReady = import("../js/game-score.js").then((scorer) => {
+    if (roundLevel !== level) return null;
+    const config = scorer.initGameScore({
+      gameId: "053-shabd", gameName: "Shabd Puzzle", ...level,
+    });
+    if (config?.levelId !== level.levelId) throw new Error("Level-aware game-score.js required.");
+    return scorer;
+  }).catch((error) => {
+    console.error("Shabd Puzzle scorer initialization failed:", error);
+    return null;
+  });
+}
+
+async function saveRound() {
+  const level = roundLevel;
+  const score = roundScore;
+  const stored = readBest(level);
+  const improved = !stored || score > stored.score;
+  const best = improved ? { score } : stored;
+  if (improved) {
+    try { localStorage.setItem(bestKey + level.levelId, JSON.stringify(best)); } catch {}
+  }
+  renderBest(level, best);
+  savingScore = true;
+  settings.disabled = start.disabled = true;
+  details.textContent = "Saving leaderboard score…";
+  try {
+    const scorer = await scorerReady;
+    if (!scorer) throw new Error("Leaderboard scorer unavailable.");
+    const saved = await scorer.submitGameScore(score, {
+      result: "completed", ...level,
+      metrics: { mistakes: chargedMistakes.size },
+    });
+    details.textContent = saved?.ok ? "Score saved to the leaderboard."
+      : saved?.reason === "not-signed-in" ? "Sign in to save scores to the leaderboard."
+      : "Leaderboard score could not be saved.";
+  } catch (error) {
+    details.textContent = "Leaderboard score could not be saved.";
+    console.error(error);
+  } finally {
+    savingScore = false;
+    settings.disabled = start.disabled = false;
+  }
+}
+
+renderBest(selectedLevel());const categoryKey = "zatam:053-shabd:selected-category";
+
+function restoreCategoryAndBest() {
+  try {
+    const saved = localStorage.getItem(categoryKey);
+
+    if (
+      saved !== null &&
+      Array.from(settings.options).some(option => option.value === saved)
+    ) {
+      settings.value = saved;
+    }
+  } catch {
+    // Continue playing if browser storage is unavailable.
+  }
+
+  renderBest(selectedLevel());
+}
+
+settings.addEventListener("change", () => {
+  try {
+    localStorage.setItem(categoryKey, settings.value);
+  } catch {}
+
+  renderBest(selectedLevel());
 });
+
+restoreCategoryAndBest();
+window.addEventListener("pageshow", restoreCategoryAndBest);

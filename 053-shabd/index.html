@@ -1,44 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
     
     <title>Shabd Puzzle</title>
     <link rel="icon" href="/053-shabd/cover.jpg"  type="image/x-icon">
     <link rel="manifest" href="/053-shabd/manifest.json" >
+    <link rel="stylesheet" href="../shared/game-theme.css">
     <link rel="stylesheet" href="/053-shabd/style.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1" >
     <script src="/053-shabd/DragDropTouch.js" defer></script>
     <script src="/053-shabd/script.js" defer></script>
   </head>
-  <body data-page="games">
+  <body data-page="games" class="shabd-page">
 
     <!-- Shared Zat.am Navbar -->
     <div id="navbar-mount"></div>
 
-    <h1>
-      Shabd Puzzle
-    </h1>
+    <main class="shabd-game zatam-game-shell">
+      <header class="zatam-game-header">
+        <h1 class="zatam-game-title">Shabd Puzzle</h1>
+      </header>
+      <div class="shabd-layout">
+        <section class="shabd-board" aria-label="Noun declension puzzle">
     <p id="info">
       Reorder this jumbled up noun declensions. Check for each case or check all 
       <br>
       <br> Click the start game button to begin
     </p>
     <button type="button" class="button" id="start">
-      Start Game <i class="rocket"></i>
+      Start Game 
     </button>
+    <div class="shabd-stats" aria-label="Round statistics">
+      <div>Score <strong id="shabd-score">100/100</strong></div>
+    </div>
     <p id="Title"></p>
     <p id="description"></p>
-    <p id="message"></p>
+    <p id="message" role="status"></p>
     
-    <div class="tooltip">
-      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
-      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-      Share</button>
-    </div>
-  
-    <p id="details"></p>
+    <p id="details" role="status"></p>
     
+    <p class="tile-help">Drag a raised word tile onto another tile to swap them. Dotted grips mark movable tiles.</p>
+    <div class="shabd-grid-scroll" tabindex="0" role="region" aria-label="Declension table — scroll horizontally on small screens">
     <div class="drag-list" id="grid" oncontextmenu="return false;">
       <template id="tile"> <div class="drag-item" draggable="true"> </div> </template>
       <div class="legend-item" id="Hd" > Check for: </div>
@@ -88,12 +92,14 @@
       <div class="drag-item" id="X" draggable="true"> </div>
     </div>
     
+    </div>
     <button type="button" class="button" id="check" onclick="checkMatrix(0)"> Check All</button>
     
-  <main>
-    <p></p>
-    <span>
-  <label for="linga">Choose a Gender:</label>
+        </section>
+        <aside class="shabd-sidebar">
+          <section class="shabd-panel">
+            <h2>Options</h2>
+  <label for="settings1">Choose a Gender:</label>
   <select name="linga" id="settings1" onchange="startGame()">
     <option value="-1">All</option>
     <option value="0" >Noun - Masculine</option>
@@ -104,8 +110,28 @@
     <option value="5" >Pronoun - Neuter</option>
     <option value="6" >Pronoun - Common</option>
   </select>
-    </span>
-  </main>
+          </section>
+          <section class="shabd-panel">
+            <h2>Personal best</h2>
+            <p id="shabd-best-level">All</p>
+            <p id="shabd-best">No completed rounds yet.</p>
+          </section>
+          <section class="shabd-panel">
+            <h2>How to play</h2>
+            <div class="shabd-instructions" tabindex="0">
+              <ol>
+                <li>Press <strong>Start Game</strong> to begin.</li>
+                <li>Drag the raised noun tiles onto one another to swap them into the correct case and number: Singular, Dual, or Plural.</li>
+                <li>Select a case button to check that row, or <strong>Check All</strong> to check the whole table.</li>
+                <li>Use the gender selector to choose a noun or pronoun group.</li>
+                <li>Each new misplaced form in a checked cell costs 2 points. Correct forms turn green.</li>
+                <li>Select <strong>New Game</strong> for another puzzle.</li>
+              </ol>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function() {
@@ -116,8 +142,8 @@
         })
       }
     </script>
-  <footer>
-    <span style="white-space: nowrap"> &copy; 2025 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Courtesy: Green Message, greenmesg.org </span>
+  <footer class="shabd-credit">
+    <span > &copy; 2025 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Courtesy: Green Message, greenmesg.org </span>
   </footer>
   
 

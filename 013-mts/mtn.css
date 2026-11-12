@@ -1,18 +1,158 @@
-body {
-  background: #eee;
-  overflow: hidden;
+
+/* =========================================
+   013-MTS — MATCH THE NUMBERS
+   Zat.am Game-Specific Styles
+   ========================================= */
+
+.zatam-numbers-game {
+  overflow-x: hidden;
 }
 
-canvas {
-  margin-top: 40px;
+/* Main container */
+
+.zatam-numbers-game .zatam-game-shell {
+  max-width: 1100px;
 }
+
+/* Board */
+
+.numbers-play-area {
+  padding: 24px;
+}
+
+.numbers-board-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+#canvas {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+  background: var(--zatam-soft);
+  border: 2px solid var(--zatam-border);
+  border-radius: 16px;
+}
+
+/* Existing dynamically generated buttons */
+
+.numbers-board-wrapper .btn-group-center {
+  position: static;
+  left: auto;
+  transform: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.numbers-board-wrapper .btn-group-center .btn {
+  min-height: 44px;
+  background: var(--zatam-navy);
+  color: var(--zatam-white);
+  border: 1px solid var(--zatam-navy);
+  border-radius: 12px !important;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.numbers-board-wrapper .btn-group-center .btn:hover {
+  background: var(--zatam-heading);
+  color: var(--zatam-white);
+}
+
+/* Settings */
 
 input[type="number"] {
   width: 5em;
+  max-width: 100%;
 }
 
-.btn-group-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+/* Mobile directional buttons */
+
+.numbers-mobile-controls {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.numbers-direction-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.numbers-mobile-controls button {
+  min-width: 60px;
+  min-height: 52px;
+  font-size: 1.4rem;
+  touch-action: manipulation;
+}
+
+/* Completion */
+
+#resultPanel {
+  margin-top: 24px;
+}
+
+#scoreSaveStatus {
+  margin-top: 16px;
+}
+
+/* Tablet */
+
+@media (max-width: 800px) {
+  .numbers-play-area {
+    padding: 16px;
+  }
+
+  .numbers-mobile-controls {
+    display: flex;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+  .zatam-numbers-game .zatam-game-shell {
+    width: calc(100% - 16px);
+  }
+
+  .numbers-play-area {
+    padding: 10px;
+  }
+
+  #canvas {
+    border-radius: 10px;
+  }
+
+  .numbers-board-wrapper .btn-group-center {
+    width: 100%;
+  }
+
+  .numbers-board-wrapper .btn-group-center .btn {
+    flex: 1 1 auto;
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .numbers-mobile-controls button {
+    min-width: 56px;
+  }
+}
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .numbers-mobile-controls button,
+  .numbers-board-wrapper .btn {
+    transition: none;
+  }
 }
