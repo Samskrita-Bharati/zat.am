@@ -7,6 +7,7 @@ import {
 } from "../api/auth-api.js";
 import { db, doc, updateDoc } from "../api/firebase-config.js";
 import { initProfilePhotoEditor } from "./avatar-upload.js";
+import { resolveAvatarState } from "./avatar-state.js";
 
 const profileName = document.getElementById("profile-name");
 const profileEmail = document.getElementById("profile-email");
@@ -71,7 +72,7 @@ function renderProfileAvatar(user, profile) {
 
   profileIconElement.replaceChildren();
 
-  const photoURL = profile?.photoURL || user.photoURL;
+  const photoURL = resolveAvatarState(user, profile).photoURL;
   let validURL = null;
   try {
     const parsed = new URL(photoURL);
@@ -107,11 +108,11 @@ function renderProfileAvatar(user, profile) {
 initProfilePhotoEditor({
   getUser: () => currentUser,
   getProfile: () => currentProfile,
-  onSaved: (photoURL) => {
-    currentProfile = { ...(currentProfile || {}), photoURL };
+  onSaved: (patch) => {
+    currentProfile = { ...(currentProfile || {}), ...patch };
     renderProfileAvatar(currentUser, currentProfile);
     window.dispatchEvent(new CustomEvent("zatam:avatar-updated", {
-      detail: { photoURL },
+      detail: { photoURL: patch.photoURL },
     }));
   },
 });

@@ -5,6 +5,7 @@ import {
 } from "../auth/api/firebase-config.js";
 
 import { getCurrentUserProfile } from "../auth/api/auth-api.js";
+import { resolveAvatarState } from "../auth/js/avatar-state.js";
 
 import { updateStreak } from "../auth/api/streak.js";
 
@@ -73,12 +74,14 @@ const navbarTranslations = {
 // DEFAULT PROFILE AVATAR
 // =====================================================
 
-function fallbackAvatarMarkup(large = false) {
-  return `
-    <span class="zatam-profile-fallback ${large ? "large" : ""}">
-      👤
-    </span>
-  `;
+function fallbackAvatarElement(displayName, large = false) {
+  const avatar = document.createElement("span");
+  avatar.className = `zatam-profile-fallback${large ? " large" : ""}`;
+  const words = String(displayName || "Player").trim().split(/\s+/).filter(Boolean);
+  avatar.textContent = words.length > 1
+    ? `${words[0][0]}${words.at(-1)[0]}`.toUpperCase()
+    : (words[0]?.slice(0, 2) || "ZA").toUpperCase();
+  return avatar;
 }
 
 // Render safely: user profile URLs must never be interpolated into HTML.
@@ -90,14 +93,14 @@ function renderAvatarElement(container, photoURL, displayName, large = false) {
     if (parsed.protocol === "https:") safeURL = parsed.href;
   } catch { /* Keep the default avatar. */ }
   if (!safeURL) {
-    container.innerHTML = fallbackAvatarMarkup(large);
+    container.replaceChildren(fallbackAvatarElement(displayName, large));
     return;
   }
   const img = document.createElement("img");
   img.src = safeURL;
   img.alt = `${displayName} profile photo`;
   img.onerror = () => {
-    container.innerHTML = fallbackAvatarMarkup(large);
+    container.replaceChildren(fallbackAvatarElement(displayName, large));
   };
   container.replaceChildren(img);
 }
@@ -321,7 +324,7 @@ export async function initNavbarAuth() {
       // AVATAR
       // ===========================================
 
-      avatarDisplayName = displayName;
+      avatarDisplayName = user.displayName || displayName;
       refreshAvatars(user.photoURL);
 
       // ===========================================
@@ -330,8 +333,8 @@ export async function initNavbarAuth() {
 
       try {
         const profile = await getCurrentUserProfile();
-        // Custom Firestore avatar wins over Google/Firebase provider photo.
-        refreshAvatars(profile?.photoURL || user.photoURL);
+        avatarDisplayName = profile?.name || user.displayName || displayName;
+        refreshAvatars(resolveAvatarState(user, profile).photoURL);
 
         if (profile && profile.language) {
           window.zatPreferredLang = profile.language;
