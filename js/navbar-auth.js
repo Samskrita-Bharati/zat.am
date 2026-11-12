@@ -81,6 +81,27 @@ function fallbackAvatarMarkup(large = false) {
   `;
 }
 
+// Render safely: user profile URLs must never be interpolated into HTML.
+function renderAvatarElement(container, photoURL, displayName, large = false) {
+  if (!container) return;
+  let safeURL = null;
+  try {
+    const parsed = new URL(photoURL);
+    if (parsed.protocol === "https:") safeURL = parsed.href;
+  } catch { /* Keep the default avatar. */ }
+  if (!safeURL) {
+    container.innerHTML = fallbackAvatarMarkup(large);
+    return;
+  }
+  const img = document.createElement("img");
+  img.src = safeURL;
+  img.alt = `${displayName} profile photo`;
+  img.onerror = () => {
+    container.innerHTML = fallbackAvatarMarkup(large);
+  };
+  container.replaceChildren(img);
+}
+
 // =====================================================
 // LOCALIZED GREETING
 //
@@ -256,6 +277,16 @@ export async function initNavbarAuth() {
     }
   });
 
+  let avatarDisplayName = "Player";
+  function refreshAvatars(photoURL) {
+    renderAvatarElement(headerAvatar, photoURL, avatarDisplayName);
+    renderAvatarElement(dropdownAvatar, photoURL, avatarDisplayName, true);
+  }
+  // An avatar change on the profile page updates this navbar immediately.
+  window.addEventListener("zatam:avatar-updated", (event) => {
+    if (auth.currentUser) refreshAvatars(event.detail?.photoURL);
+  });
+
   // ===================================================
   // AUTH STATE
   // ===================================================
@@ -290,31 +321,8 @@ export async function initNavbarAuth() {
       // AVATAR
       // ===========================================
 
-      if (headerAvatar) {
-        if (user.photoURL) {
-          headerAvatar.innerHTML = `
-              <img
-                src="${user.photoURL}"
-                alt="${displayName}"
-              />
-            `;
-        } else {
-          headerAvatar.innerHTML = fallbackAvatarMarkup();
-        }
-      }
-
-      if (dropdownAvatar) {
-        if (user.photoURL) {
-          dropdownAvatar.innerHTML = `
-              <img
-                src="${user.photoURL}"
-                alt="${displayName}"
-              />
-            `;
-        } else {
-          dropdownAvatar.innerHTML = fallbackAvatarMarkup(true);
-        }
-      }
+      avatarDisplayName = displayName;
+      refreshAvatars(user.photoURL);
 
       // ===========================================
       // USER PROFILE / PREFERRED SCRIPT
@@ -322,6 +330,8 @@ export async function initNavbarAuth() {
 
       try {
         const profile = await getCurrentUserProfile();
+        // Custom Firestore avatar wins over Google/Firebase provider photo.
+        refreshAvatars(profile?.photoURL || user.photoURL);
 
         if (profile && profile.language) {
           window.zatPreferredLang = profile.language;

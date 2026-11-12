@@ -25,9 +25,53 @@
       <div class="profile-layout">
         <aside class="profile-summary-card" aria-label="Profile summary">
           <div class="profile-identity">
-            <span class="profile-icon" aria-label="Profile photo">
-              <span class="profile-avatar-fallback" aria-hidden="true">ZA</span>
-            </span>
+            <div class="avatar-photo-wrap">
+              <span class="profile-icon" aria-label="Current profile photo">
+                <span class="profile-avatar-fallback" aria-hidden="true">
+                  ZA
+                </span>
+              </span>
+
+              <button
+                class="avatar-camera-btn"
+                id="avatar-choose-btn"
+                type="button"
+                aria-label="Change profile photo"
+                title="Change profile photo"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M14.5 4h-5L7.8 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.8z"
+                  />
+                  <circle cx="12" cy="13" r="3" />
+                </svg>
+              </button>
+
+              <input
+                id="avatar-file-input"
+                class="avatar-visually-hidden"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                tabindex="-1"
+                aria-label="Upload a profile picture"
+              />
+            </div>
+
+            <p
+              id="avatar-status"
+              class="avatar-status"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></p>
 
             <h2 id="profile-name">Loading...</h2>
             <p id="profile-email">Loading...</p>
@@ -38,14 +82,14 @@
           <div class="profile-details">
             <div class="detail-row" id="role-row" style="display: none">
               <span class="detail-label">Role</span>
-              <span class="detail-value detail-badge" id="display-role"
-                >User</span
-              >
+              <span class="detail-value detail-badge" id="display-role">
+                User
+              </span>
             </div>
 
             <div class="detail-row">
               <span class="detail-label">Member Since</span>
-              <span class="detail-value" id="display-date">Loading...</span>
+              <span class="detail-value" id="display-date"> Loading... </span>
             </div>
 
             <div class="detail-row">
@@ -268,6 +312,87 @@
         </section>
       </div>
     </main>
+
+    <div id="avatar-editor" class="avatar-dialog-backdrop" hidden>
+      <section
+        class="avatar-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="avatar-dialog-title"
+        aria-describedby="avatar-dialog-description"
+      >
+        <header class="avatar-dialog-heading">
+          <div>
+            <p class="card-eyebrow">YOUR ZAT.AM PROFILE</p>
+            <h2 id="avatar-dialog-title">Adjust your photo</h2>
+            <p id="avatar-dialog-description">
+              Drag to position your photo. The circle previews how it will
+              appear.
+            </p>
+          </div>
+
+          <button
+            id="avatar-close-btn"
+            class="avatar-dialog-close"
+            type="button"
+            aria-label="Close photo editor"
+          >
+            ×
+          </button>
+        </header>
+
+        <div class="avatar-crop-frame">
+          <canvas
+            id="avatar-crop-canvas"
+            width="400"
+            height="400"
+            tabindex="0"
+            role="img"
+            aria-label="Photo crop preview. Drag to reposition, or use arrow keys."
+          ></canvas>
+          <span class="avatar-crop-outline" aria-hidden="true"></span>
+        </div>
+
+        <div class="avatar-zoom-controls">
+          <label for="avatar-zoom">Zoom</label>
+          <input
+            id="avatar-zoom"
+            type="range"
+            min="1"
+            max="3"
+            step="0.01"
+            value="1"
+          />
+          <span id="avatar-zoom-value" aria-hidden="true">100%</span>
+        </div>
+
+        <p class="avatar-editor-help">
+          Use the slider to zoom. You can also use arrow keys to adjust the
+          photo.
+        </p>
+
+        <p
+          id="avatar-dialog-error"
+          class="avatar-dialog-error"
+          role="alert"
+          hidden
+        ></p>
+
+        <div class="avatar-dialog-actions">
+          <button
+            id="avatar-cancel-btn"
+            type="button"
+            class="avatar-secondary-btn"
+          >
+            Cancel
+          </button>
+
+          <button id="avatar-save-btn" type="button" class="avatar-primary-btn">
+            Save photo
+          </button>
+        </div>
+      </section>
+    </div>
 
     <script type="module" src="../js/navbar-loader.js"></script>
     <script type="module" src="./js/profile.js"></script>
