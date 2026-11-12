@@ -3,9 +3,13 @@ const INITIAL_SPEED = 1;
 const SPEED_STEP = 0.1;
 const MIN_SPEED = 0.1;
 const START_DELAY_MS = 2400;
+const READING_STORAGE_KEY = "zatam-050-reading-progress";
 
 const VERSE_URL =
   "https://raw.githubusercontent.com/gita/gita/refs/heads/main/data/verse.json";
+
+let savedReading = null;
+let saveProgressTimeout = null;
 
 let scrollSpeed = INITIAL_SPEED;
 let scrollInterval = null;
@@ -32,6 +36,7 @@ let chapterSelect;
 let selectionStatus;
 let startButton;
 let retryButton;
+
 
 const stopHoldHandlers = [];
 
@@ -96,6 +101,154 @@ function completeReading() {
       ? "You have finished all shlokas. Restart or choose another reading."
       : `You have finished Chapter ${selectedChapter}. ` +
         "Restart or choose another chapter.";
+}
+
+function resetSpeed() {
+  stopAllHolds();
+  scrollSpeed = INITIAL_SPEED;
+  updateSpeedDisplay();
+
+  document.getElementById("speed-change").textContent =
+    "Speed reset to the original 15.63 px/s.";
+
+  saveReadingProgress();
+}
+
+function saveReadingProgress() {
+  if (!isReading || !selectedVerses.length) return;
+
+  // Save the visible shloka and the position within it.
+  // This also works when the window size changes.
+  const shlokas = [...document.querySelectorAll("#verse .shloka-text")];
+  const readerTop = reader.getBoundingClientRect().top + reader.clientTop;
+
+  let verseIndex = shlokas.findIndex(
+    (shloka) => shloka.getBoundingClientRect().bottom > readerTop
+  );
+
+  if (verseIndex < 0) verseIndex = shlokas.length - 1;
+
+  const bounds = shlokas[verseIndex].getBoundingClientRect();
+
+  const progress = {
+    chapter: selectedChapter,
+    verseIndex,
+    verseOffset: Math.max(
+      0,
+      Math.min(1, (readerTop - bounds.top) / Math.max(bounds.height, 1))
+    ),
+    speed: scrollSpeed,
+    fontSize: document.getElementById("font-size-select").value,
+    completed: isCompleted
+  };
+
+  try {
+    localStorage.setItem(READING_STORAGE_KEY, JSON.stringify(progress));
+    savedReading = progress;
+  } catch (error) {
+    console.warn("Reading progress could not be saved:", error);
+  }
+}
+
+function loadSavedReading() {
+  try {
+    const progress = JSON.parse(
+      localStorage.getItem(READING_STORAGE_KEY)
+    );
+
+    if (
+      !progress ||
+      !Number.isInteger(progress.verseIndex) ||
+      progress.verseIndex < 0 ||
+      !Number.isFinite(progress.verseOffset) ||
+      !Number.isFinite(progress.speed) ||
+      !["small", "medium", "large"].includes(progress.fontSize) ||
+      !(
+        progress.chapter === null ||
+        Number.isInteger(progress.chapter)
+      )
+    ) {
+      return;
+    }
+
+    savedReading = progress;
+  } catch (error) {
+    console.warn("Saved reading could not be loaded:", error);
+  }
+}
+
+function updateResumeOptions() {
+  const available =
+    isLoaded &&
+    savedReading !== null &&
+    (
+      savedReading.chapter === null ||
+      chapters.includes(savedReading.chapter)
+    );
+
+  document.getElementById("resume-options").hidden = !available;
+  document.getElementById("resume-reading").disabled = !available;
+  document.getElementById("start-over").disabled = !available;
+
+  if (!available) return;
+
+  const readingName = savedReading.chapter === null
+    ? "All shlokas"
+    : `Chapter ${savedReading.chapter}`;
+
+  document.getElementById("resume-description").textContent =
+    `${readingName} — your previous reading position is saved.`;
+}
+
+function openSavedReading(fromBeginning = false) {
+  if (!isLoaded || !savedReading) return;
+
+  // Keep a copy because starting a reading updates the saved progress.
+  const progress = { ...savedReading };
+
+  const mode = progress.chapter === null ? "all" : "chapter";
+
+  document.querySelector(
+    `input[name="reading-mode"][value="${mode}"]`
+  ).checked = true;
+
+  if (progress.chapter !== null) {
+    chapterSelect.value = String(progress.chapter);
+  }
+
+  scrollSpeed = Math.max(MIN_SPEED, progress.speed);
+  updateSpeedDisplay();
+
+  document.getElementById("font-size-select").value = progress.fontSize;
+  changeFontSize(progress.fontSize);
+
+  updateReadingOptions();
+  beginSelectedReading();
+
+  if (!fromBeginning) {
+    const shlokas = document.querySelectorAll("#verse .shloka-text");
+    const index = Math.min(progress.verseIndex, shlokas.length - 1);
+    const shloka = shlokas[index];
+
+    if (shloka) {
+      const readerTop =
+        reader.getBoundingClientRect().top + reader.clientTop;
+      const bounds = shloka.getBoundingClientRect();
+
+      reader.scrollTop +=
+        bounds.top - readerTop +
+        bounds.height * Math.max(0, Math.min(1, progress.verseOffset));
+
+      scrollPosition = reader.scrollTop;
+    }
+
+    if (progress.completed) {
+      cancelDelayedStart();
+      completeReading();
+    }
+  }
+
+  saveReadingProgress();
 }
 
 function startScrolling() {
@@ -241,6 +394,7 @@ async function loadVerses() {
 
     isLoaded = true;
     updateReadingOptions();
+    updateResumeOptions();
   } catch (error) {
     console.error("Error loading verses:", error);
     selectionStatus.textContent =
@@ -313,6 +467,7 @@ function beginSelectedReading() {
     : "Scrolling will start in 2.4 seconds.";
 
   scheduleScrolling();
+  saveReadingProgress();
 }
 
 function verseRestart() {
@@ -332,9 +487,11 @@ function verseRestart() {
     : "Restarted. Scrolling will start in 2.4 seconds.";
 
   scheduleScrolling();
+  saveReadingProgress();
 }
 
 function changeReading() {
+  saveReadingProgress();
   pauseScrolling();
   cancelDelayedStart();
   stopAllHolds();
@@ -348,6 +505,7 @@ function changeReading() {
 
   updateReadingOptions();
   document.getElementById("selection-title").focus();
+  updateResumeOptions();
 }
 
 function setupHoldSpeedButton(button, direction) {
@@ -490,6 +648,29 @@ document.addEventListener("DOMContentLoaded", () => {
   if (fontSelect) {
     changeFontSize(fontSelect.value);
   }
+
+  loadSavedReading();
+
+  document.getElementById("resume-reading").addEventListener("click", () => {
+    openSavedReading(false);
+  });
+
+  document.getElementById("start-over").addEventListener("click", () => {
+    openSavedReading(true);
+  });
+
+  reader.addEventListener("scroll", () => {
+    clearTimeout(saveProgressTimeout);
+    saveProgressTimeout = setTimeout(saveReadingProgress, 250);
+  });
+
+  setInterval(saveReadingProgress, 2000);
+
+  window.addEventListener("pagehide", saveReadingProgress);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) saveReadingProgress();
+  });
 
   updateReadingOptions();
   loadVerses();

@@ -298,3 +298,18 @@
     flex-direction: column;
   }
 }
+
+.shloka-reader .resume-options {
+  margin-bottom: 24px;
+  padding: 20px;
+
+  background: var(--zatam-soft);
+  border: 1px solid var(--zatam-border);
+  border-left: 4px solid var(--zatam-gold);
+  border-radius: var(--zatam-radius);
+}
+
+.shloka-reader .resume-options p {
+  color: var(--zatam-muted);
+  line-height: 1.6;
+}

@@ -51,6 +51,31 @@
         class="zatam-game-card"
         aria-labelledby="selection-title"
       >
+        <div id="resume-options" class="resume-options" hidden>
+          <h2 class="zatam-game-section-title">Continue your reading?</h2>
+
+          <p id="resume-description"></p>
+
+          <div class="zatam-game-actions">
+            <button
+              id="resume-reading"
+              type="button"
+              class="zatam-game-btn zatam-game-btn-primary"
+              disabled
+            >
+              Resume Previous Reading
+            </button>
+
+            <button
+              id="start-over"
+              type="button"
+              class="zatam-game-btn zatam-game-btn-secondary"
+              disabled
+            >
+              Start from Beginning
+            </button>
+          </div>
+        </div>
         <h2 id="selection-title" class="zatam-game-section-title">
           Choose your reading
         </h2>
@@ -189,6 +214,14 @@
             class="zatam-game-btn zatam-game-btn-secondary"
           >
             Change Reading
+          </button>
+
+          <button
+            type="button"
+            class="zatam-game-btn zatam-game-btn-secondary"
+            onclick="resetSpeed()"
+          >
+            Reset Speed
           </button>
         </div>
       </section>
