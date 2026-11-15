@@ -433,6 +433,45 @@ function ready() {
             localStorage.setItem("bodhaWordsScore", totalScore);
             updateScore();
         }
+const scorerReady = import("../js/game-score.js")
+    .then((scorer) => {
+      scorer.initGameScore({
+            gameId: "bp26-bodha-words", 
+            gameName: "Bodha Words "
+      })
+    return scorer;
+  }).catch((error) => {
+    console.error("Bodha Words scorer initialization failed:", error);
+    return null;
+  });
+
+
+  async function saveBohdaScore(finalScore) {
+      try {
+        const scorer = await scorerReady;
+
+        if (!scorer){
+          throw new Error("Leaderboard not successfully implemented.");
+        }
+        const saved = await scorer.submitGameScore(finalScore, {
+            result: "completed",
+            metrics: {
+                wrongAnswers: wrong.score
+            }
+        });
+   
+        if (saved?.ok) {
+          console.log("Bodha Words saved successfully!");
+        } else if (saved?.reason === "not-signed-in") {
+            console.log("Sign in to save score.");
+        } else{
+            console.warn("Score could not be saved.", saved);
+
+        }
+        } catch (error){
+          console.error("Bodha Words leaderboard error: ", error);
+        }
+      }
 
         let special;
 
@@ -651,9 +690,9 @@ new Label({
                         addWinningPoints(finalScore);
 
                         timeout(0.5, () => {
-                            submitScoreNow(finalScore);
+                                    saveBohdaScore(finalScore);
 
-                            new Pane({
+                            const winningPopup = new Pane({
                                 content: new Label({
                                     text: pnmsg + "\nScore: " + finalScore,
                                     font: "Fredoka",
@@ -661,18 +700,26 @@ new Label({
                                     align: CENTER
                                 }),
 
-                                backing: new Rectangle({
-                                    width: 280,
-                                    height: 200,
+                                   backing: new Rectangle({
+                                     width: 290,
+                                    height: 180,
                                     color: "#fff1e4",
                                     borderColor: "#f4bfa5",
                                     borderWidth: 4,
                                     corner: 15
-                                }),
-
+                                    }),
+                                
                                 backdropColor: "transparent",
                                 close: true
-                            }).show(() => {
+                            })
+                            winningPopup.close.y += 10;
+                            winningPopup.close.x += 9;
+
+                            S.update();
+
+                            
+                            
+                                winningPopup.show(() => {
                                 sessionStorage.setItem("bodhaAutoReload", "true");
                                 window.location.reload();
                             });
@@ -793,42 +840,12 @@ new Label({
         timeGroup.addChildAt(timeBox, 0);
         S.update();
 
-        const playAgainGroup = new Container(350, 50);
 
-        // addLucideIcon(RotateCcw, playAgainGroup, 70, 0, 23, "#c58b64");
-        // const playAgainText = new Label("Play Again", 26.5, "Arial", "#77574e");
-        // playAgainText.addTo(playAgainGroup).loc(120,0);
-
-        // const playAgainBox = new createjs.Shape();
-        // playAgainBox.graphics
-        //     .setStrokeStyle(2)
-        //     .beginLinearGradientStroke(
-        //         ["#f4bfa5"],
-        //         [0, 0.5, 1],
-        //         0, 0,
-        //         playAgainGroup.width,
-        //         playAgainGroup.height
-        //     )
-        //     .drawRoundRect(
-        //         -10, -11,
-        //         playAgainGroup.width + 48,
-        //         playAgainGroup.height,
-        //         12
-        //     );
-        // playAgainGroup.addChildAt(playAgainBox, 0);
-
-        // playAgainGroup.cursor = "pointer";
-
-        // playAgainGroup.on("click", () => {
-        //     window.location.reload();
-        // });
-        // S.update();
 
         const scoreBoard = new Container(768, 60);
 
         wrongGroup.addTo(scoreBoard).loc(115, -30);
         timeGroup.addTo(scoreBoard).loc(440, -30);
-        playAgainGroup.addTo(scoreBoard).loc(190, 85);
 
         scoreBoard.pos(0, 90, LEFT, BOTTOM);
         S.update();
@@ -859,15 +876,57 @@ new Label({
             backdropColor: "transparent"
         };
 
-        const end = new Pane({
-            content: new Label({
+        const playAgainGroup = new Container(350, 50);
+
+        addLucideIcon(RotateCcw, playAgainGroup, 15, 0, 23, "#c58b64");
+        const playAgainText = new Label("Play Again", 26.5, "Arial", "#77574e");
+        playAgainText.addTo(playAgainGroup).loc(50,0);
+
+        const playAgainBox = new createjs.Shape();
+        playAgainBox.graphics
+            .setStrokeStyle(2)
+            .beginLinearGradientStroke(
+                ["#f4bfa5"],
+                [0, 0.5, 1],
+                0, 0,
+                playAgainGroup.width,
+                playAgainGroup.height
+            )
+             .beginFill("#fffdf9")
+            .drawRoundRect(
+                0, -11,
+                playAgainGroup.width -140,
+                playAgainGroup.height,
+                12
+            );
+        playAgainGroup.addChildAt(playAgainBox, 0);
+
+        playAgainGroup.cursor = "pointer";
+
+        playAgainGroup.on("click", () => {
+            window.location.reload();
+        });
+        S.update();
+
+        const endContent = new Container(300, 190);
+
+             new Label({
                 text: "समाप्तम्" + "\nउत्तरम्: " + winmsg,
                 font: "Fredoka",
                 color: "#77574e",
                 align: CENTER
-            }),
+            })
 
-            backing: new Rectangle({
+            .addTo(endContent)
+            .pos(0, 20, CENTER, TOP);
+
+            playAgainGroup
+            .addTo(endContent)
+            .pos(80, 125, CENTER, TOP);       
+            const end = new Pane({
+                content: endContent,
+
+                 backing: new Rectangle({
                 width: 309,
                 height: 200,
                 color: "#fff1e4",
@@ -879,6 +938,10 @@ new Label({
             backdropColor: "transparent",
             close: true
         });
+           end.close.y += 60;
+           end.close.x -= 58;
+
+            S.update();
 
         timer.on("complete", () => {
             end.show();

@@ -226,6 +226,7 @@ function show_result(res) {
   if(gameover) return;
   
   gameover = true;
+  saveNumeraleScore(res);
   let share_data;
 
   if (res==1){
@@ -317,6 +318,49 @@ function addWinningPoints(){
 
 updateScore();
 
+const scorerReady = import("../js/game-score.js")
+    .then((scorer) => {
+      scorer.initGameScore({
+            gameId: "051-numerale", 
+            gameName: "Numerale"
+      })
+    return scorer;
+  }).catch((error) => {
+    console.error("Numerale scorer initialization failed:", error);
+    return null;
+  });
+
+
+  async function saveNumeraleScore(res) {
+      try {
+        const scorer = await scorerReady;
+
+        if (!scorer){
+          throw new Error("Leaderboard not successfully implemented.");
+        }
+        const saved = await scorer.submitGameScore(
+          res === 1 ? 100:0,
+          {
+            result: res === 1 ? "completed" : "failed", 
+            metrics: {
+              attempts: row_no, 
+              scriptType: script_type
+            }
+          }
+        );
+
+        if (saved?.ok) {
+          console.log("Numerale saved successfully!");
+        }else if (saved?.reason === "not-signed-in"){
+          console.log("Sign in to save score");
+        } else{
+          console.warn("Score could not be saved.", saved);
+        }
+        } catch (error){
+          console.error("Numerale leaderboard error: ", error);
+        }
+      }
+  
 document.getElementById("sharebutton").addEventListener("click", async () => {
   try {
     
@@ -403,4 +447,4 @@ window.add_Numeral = add_Numeral;
 window.remove_Numeral = remove_Numeral;
 window.submitNumber = submitNumber;
 window.togglePanel = togglePanel;
-
+ 
