@@ -1,275 +1,867 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>संस्कृतम्  Bingo</title>
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<style>
-       div {
-            text-align: center;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housie Number Generator | BodhaPlay</title>
 
-        .bigNumberDisplay {
-            font-size: 6em;
-        }
+    <link rel="stylesheet" href="/shared/navbar.css">
+    <link rel="stylesheet" href="/bp26/css/header.css">
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 
-        .numbersTable {
-            font-size: 1.6em;
-        }
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
 
-        table {
-            margin-left: auto;
-            margin-right: auto;
-        }
+    background: linear-gradient(
+        180deg,
+        #fff1e4 0%,
+        #fff8f1 50%,
+        #ffffff 100%
+    );
 
-        table, tr, td {
-            border-collapse: collapse;
-            border: solid 1px #999;
-        }
+    background-attachment: fixed;
 
-        td {
-            min-width: 100px;
-            color: #fff;
-        }
+    scroll-behavior: smooth;
+}
 
-        td.selected {
-            color: #f00;
-        }
-                </style>
-<script>
-       var musicOn = true;
-$(function() {
-    var bingo = {
-        selectedNumbers: [],
-        generateRandom: function() {
-            var min = 1;
-            var max = 25;
-            var random = Math.floor(Math.random() * (max - min + 1)) + min;
-            return random;
-        },
-        generateNextRandom: function() {
-            if (bingo.selectedNumbers.length > 24) {
-                alert("All numbers Exhausted");
-                return 0;
-            }
-            var random = bingo.generateRandom();
-            while ($.inArray(random, bingo.selectedNumbers) > -1) {
-                random = bingo.generateRandom();
-            }
-            bingo.selectedNumbers.push(random);
-            return random;
-        }
-    };
-    $('td').each(function() {
-        var concatClass = this.cellIndex + "" + this.parentNode.rowIndex;
-        var numberString = parseInt(concatClass, 10).toString();
-        $(this).addClass("cell" + numberString);
-                if (numberString == 21) numberString = 30;
-                if (numberString == 22) numberString = 40;
-                if (numberString == 23) numberString = 50;
-                if (numberString == 24) numberString = 100;
-                if (numberString == 25) numberString = 0;
-                $(this).text(numberString);
-    });
-    $('#btnGenerate').click(function() {
-        var random_num = bingo.generateNextRandom();
-                var random = random_num.toString();
-          if (true === musicOn)  musicelements[random-1].play();
-                var sans_array = ['ekam एकम्','dve द्वे','triiNi त्रीणि','chatvaari चत्वारि','pa~ncha पञ्च','ShaT षट्','sapta सप्त','aShTa अष्ट','nava नव','dasha दश','ekaadasha एकादश','dvaadasha द्वादश','trayodasha त्रयोदश','chaturdasha चतुर्दश','pa~nchadasha पञ्चदश','ShoDasha षोडश','saptadasha सप्तदश','aShTaadasha अष्टादश','navadasha नवदश','viMshatiH विंशतिः','triMshat त्रिंशत्','chatvaariMshat चत्वारिंशत्','pa~nchaashat पञ्चाशत्','shatam शतम्','om'];
-                $('td.cell' + random).addClass('selected');
-                if (random == 21) random = 30;
-                if (random == 22) random = 40;
-                if (random == 23) random = 50;
-                if (random == 24) random = 100;
-                if (random == 25) random = 0;
-        $('.bigNumberDisplay span').text(sans_array[random_num-1]);
+/* ==========================================
+   MAIN GAME CONTAINER
+========================================== */
 
-    });
-       musicNode = document.getElementById('music');
-            musicNode.onclick = function() {
-                var mStatus = 'Sound On';
-                if (false === musicOn) {
-                    musicOn = true;
-                    mStatus = 'Sound On';
-                } else {
-                    musicOn = false;
-                    mStatus = 'Sound Off';
-                }
-               musicNode.getElementsByTagName('button')[0].innerHTML = mStatus; 
-            };
-       $("td").click(function() { 
-              if (this.className.indexOf("selected") > 0) { 
-                     console.log(this.innerHTML);
-                     musicelements[this.innerHTML-1].play();
-              }
-       });
-       musicelements = document.getElementsByTagName("audio");
-    window.onbeforeunload = function(e) {
-        e = e || window.event;
-        var returnString = 'Are you sure?';
-        if (e) {
-            e.returnValue = returnString;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin: auto;
+    margin-top: -10px;
+    box-sizing: border-box;
+
+    transform: scale(1.05);
+    transform-origin: top center;
+
+    background: transparent;
+}
+
+.container.scale-out {
+    transform: scale(1.17);
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: auto;
+    margin-top: -10px;
+    box-sizing: border-box;
+}
+
+.container h2 {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================
+   GAME TITLE AND NAVIGATION
+========================================== */
+
+.nav-top {
+    position: relative;
+}
+
+.nav-top h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: #795747;
+    text-align: center;
+}
+
+/* ==========================================
+   INSTRUCTIONS BUTTON
+========================================== */
+
+/* .show-instructions {
+    position: absolute;
+    right: -100px;
+    top: 58.5%;
+    transform: translateY(-50%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
+    margin: 0;
+
+    background: #fffaf6;
+    border: 1.5px solid #ffc4a8;
+    border-radius: 9px;
+
+    color: #c88d6a;
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.show-instructions svg {
+    width: 17px;
+    height: 17px;
+    stroke: #c88d6a;
+    stroke-width: 2;
+}
+
+.show-instructions:hover {
+    background: #ffecdf;
+    border-color: #e8aa89;
+} */
+
+/* ==========================================
+   HOME BUTTON (IF USED)
+========================================== */
+
+.homeBtn {
+    position: absolute;
+    left: -100px;
+    top: 58.5%;
+    transform: translateY(-50%);
+
+    margin: 0;
+    padding: 5px;
+
+    background: transparent;
+    border: none;
+    color: #c88d6a;
+    cursor: pointer;
+}
+
+.homeBtn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #c88d6a;
+}
+
+/* ==========================================
+   SEPARATOR
+========================================== */
+
+.line-seperator {
+    width: 20%;
+    height: 1px;
+
+    margin: -15px auto 20px;
+
+    background-color: #d6a48d;
+    
+}
+
+.instruct-line-seperator {
+    width: 40%;
+    height: 1px;
+
+    margin: -40px auto 20px;
+
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        #d6a48d 50%,
+        transparent 100%
+    );
+}
+
+/* ==========================================
+   CURRENT NUMBER DISPLAY
+========================================== */
+/* 
+.bigNumberDisplay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: -25px;
+
+    font-family: 'Poppins', sans-serif;
+}
+
+.bigNumberDisplay h4 {
+    font-size: 21px;
+    font-weight: 700;
+
+    color: #795747;
+    margin: 0 auto;
+} */
+
+/* ==========================================
+   SANSKRIT AUDIO BUTTON
+========================================== */
+
+.san-tts {
+    font-size: 18px;
+
+    margin-top: -35px;
+    margin-right: 0px;
+
+    background: transparent;
+    border: none;
+    color: #c88d6a;
+
+    cursor: pointer;
+}
+
+.san-tts:hover {
+    opacity: 0.75;
+}
+
+/* ==========================================
+   NUMBER DISPLAY CONTAINER
+========================================== */
+
+.displayed-btn {
+    background: transparent;
+    border: none;
+
+    font-size: 20px;
+    color: #795747;
+
+    cursor: default;
+    padding: 8px;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* ==========================================
+   GENERATE AND RESET BUTTONS
+========================================== */
+
+.btnReset,
+.btnGenerate {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    background: #fffffe;
+    color: #795747;
+
+    border: 1.5px solid #ffc4a8;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    margin-top: -10px;
+    padding: 6px 9px;
+
+    line-height: 1.2;
+    vertical-align: middle;
+
+    box-shadow: 0 2px 5px rgba(
+        101, 75, 64, 0.06
+    );
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* .btnGenerate:hover,
+.btnReset:hover {
+    background: #f7d2bc;
+    transform: translateY(-2px);
+} */
+
+.btnGenerate:active,
+.btnReset:active {
+    transform: translateY(0);
+}
+
+.btnGenerate:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+    margin-top: 0px;
+}
+
+/* ==========================================
+   HOUSIE BOARD
+========================================== */
+
+.numberTable {
+    display: grid;
+
+    grid-template-columns: repeat(3, 105px);
+    grid-template-rows: repeat(10, 36px);
+    
+    gap: 2px;
+    /* column-gap: px;
+    row-gap: 6px; */
+    padding: 10px;
+    margin-top: 10px;
+
+    box-shadow: 0 4px 10px rgba(120, 87, 71, 0.08);
+
+    border: 1.5px solid #ffc4a8;
+    border-radius: 12px;
+    background-color: #fffffe;
+
+    box-shadow: 0 3px 8px rgba(
+        101, 75, 64, 0.05
+    ); 
+}
+
+/* ==========================================
+   INDIVIDUAL NUMBER CELLS
+========================================== */
+
+.cell {
+    border: 1.8px solid #eeb89e;
+    background-color: #fffdf9;
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    color: #77574e;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    /* font-weight: 500; */
+}
+
+/* ==========================================
+   GENERATED NUMBER CELLS
+========================================== */
+
+.cell.selected {
+        background: #ffffff;
+    border-color: #f0b293;
+    color: #795747;
+    font-weight: 600;
+;
+}
+
+/* ==========================================
+   SANSKRIT WORD DISPLAY
+========================================== */
+
+.san-generator {
+    min-height: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 0px;
+}
+
+.san-generator h2 {
+    margin-top: -20px;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #795747;
+}
+
+/* ==========================================
+   INSTRUCTIONS POPUP
+========================================== */
+
+/* ==========================================
+   INSTRUCTIONS TEXT
+========================================== */
+
+.instructions-list {
+    width: fit-content;
+    max-width: 100%;
+
+    margin: 5px auto 0;
+    text-align: left;
+}
+
+.instructions-list p {
+    margin: 15px 0;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+
+    color: #795747;
+    text-align: left;
+
+    transform: translateY(-3px);
+}
+
+/* ==========================================
+   COMPLETION POPUP
+========================================== */
+
+.popup {
+    
+    margin-top: 20px;
+    border: 1.5px solid #f4bfa5;
+    padding: 20px 23px;
+    border-radius: 18px;
+    background-color: #fffdf9;
+    color: #77574e;
+    box-shadow: 0 12px 30px rgba(120, 87, 71, 0.16);
+}
+
+.popup h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+
+    color: #795747;
+    text-align: center;
+}
+
+.popup p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+
+    color: #795747;
+    text-align: center;
+
+    transform: translateY(-10px);
+}
+
+/* ==========================================
+   POPUP CLOSE BUTTONS
+========================================== */
+
+.instructionXBtn,
+.completeXBtn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+
+    background: transparent;
+    border: none;
+
+    color: #c88d6a;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.instructionXBtn:hover,
+.completeXBtn:hover {
+    color: #a66f51;
+}
+
+/* ==========================================
+   HIDDEN ELEMENTS
+========================================== */
+
+[hidden] {
+    display: none !important;
+}
+
+/* ==========================================
+   MOBILE SUPPORT
+========================================== */
+
+@media (max-width: 480px) {
+    .container,
+    .container.scale-out {
+        transform: none;
+        margin-top: 10px;
+    }
+
+    .nav-top h2 {
+        font-size: 19px;
+    }
+
+    .homeBtn {
+        left: -35px;
+    }
+
+    .show-instructions {
+        right: -35px;
+    }
+
+    .numberTable {
+    display: grid;
+    grid-template-columns: repeat(3, 105px);
+    grid-template-rows: repeat(10, 36px);
+     gap: 2px;
+    padding: 10px;
+    margin: 10px auto 0;
+
+    column-gap: 6px;
+    row-gap: 5px;
+
+    background: #fffdf9;
+    border: 2px solid #f4bfa5;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 10px rgba(120, 87, 71, 0.08);
+    }
+
+    .popup-instructions {
+        padding: 25px 10px;
+        box-sizing: border-box;
+    }
+}
+        [hidden] {
+            display: none !important;
         }
-        return returnString;
-    };
-});
-       
-</script>
+    </style>
+</head>
+
 <body data-page="games">
 
-    <!-- Shared Zat.am Navbar -->
-    <div id="navbar-mount"></div>
+    <!-- SHARED NAVBAR -->
+   <div id="navbar-mount"></div>    
 
-<div class="container">
-    <div>
-        <span>Bingo/Housie Number Generator</span>
+    <script>
+        document.addEventListener("click", function(event) {
+            const navbar = document.getElementById("header-placeholder");
+
+            if (!navbar || !navbar.contains(event.target)) return;
+
+            const clickedElement = event.target.closest(
+                ".zatam-logo, [data-nav-page='contest'], #navbar-login-btn"
+            );
+
+            if (!clickedElement) return;
+
+            let destination = null;
+
+            if (clickedElement.matches(".zatam-logo") ||
+                clickedElement.matches("[data-nav-page='contest']")) {
+                destination = "https://zat.am/bp26/index.html";
+            }
+
+            else if (clickedElement.matches("#navbar-login-btn")) {
+                const isLocal =
+                    window.location.hostname === "localhost" ||
+                    window.location.hostname === "127.0.0.1";
+
+                const loginUrl = new URL(
+                    "/auth/login.html",
+                    "https://zat.am"
+                );
+
+                if (!isLocal) {
+                    loginUrl.searchParams.set(
+                        "redirect",
+                        window.location.href
+                    );
+                }
+
+                destination = loginUrl.href;
+            }
+
+            if (destination) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                window.location.assign(destination);
+            }
+        }, true); 
+    </script>
+
+        <script type="module" src="/js/navbar-loader.js"></script>   
+ 
+    <!-- HOUSIE GAME HTML -->
+    <div class="container" id="gameContainer">
+
+        <div class="nav-top">
+            <h2>Housie Number Generator</h2>
+        </div>
+
+        <div class="line-seperator"></div>
+
+        <div class="san-generator" id="sanskritContainer">
+            <h2 id="sanskritWord"></h2>
+            <button class="san-tts" id="soundBtn" type="button">
+                    🔈
+                </button>
+            </div>
+
+        <div>
+            <div class="btn-container">
+                <button class="btnGenerate"
+                        id="generateBtn" type="button">
+                    Generate 🎲
+                </button>
+
+                <button class="btnReset"
+                        id="resetBtn" type="button">
+                    Reset ⟲
+                </button>
+            </div>
+
+            <div class="numberTable" id="numberTable"></div>
+        </div>
+
+        <div class="popup" id="completePopup" hidden>
+            <button class="completeXBtn"
+                    id="closeComplete" type="button">
+                X
+            </button>
+
+            <h2>⭐ All Numbers Filled ⭐</h2>
+            <p>Click Reset to try again</p>
+        </div>
+
+        <div class="audioFiles" id="audioFiles"></div>
+
     </div>
-    <div class="bigNumberDisplay">
-        <span>0</span>
-    </div>
-    <div>
-        <input id="btnGenerate" type="button" value="Generate"/>
-    </div>
 
-    <br/>
+    <!-- VANILLA JAVASCRIPT -->
+    <script>
+    (() => {
+        "use strict";
 
-    <div class="numbersTable">
-        <table>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const grid = {
+            rows: 10,
+            columns: 3
+        };
 
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const displayNumbers = [
+            ...Array.from({ length: 20 }, (_, i) => i + 1),
+            30, 40, 50, 60, 70, 80, 90, 100
+        ];
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const sanskritWords = [
+               "एकम् (ekam)", "द्वे (dve)", "त्रीणि (triiNi)", "चत्वारि (chatvaari)", "पञ्च (pa~ncha)",
+            "षट् (ShaT)", "सप्त (sapta)", "अष्ट (aShTa)", "नव (nava)", "दश (dasha)",
+    "एकादश (ekaadasha)", "द्वादश (dvaadasha)", "त्रयोदश (trayodasha)", "चतुर्दश (chaturdasha)", "पञ्चदश (pa~nchadasha)",
+    "षोडश (ShoDasha)", "सप्तदश (saptadasha)", "अष्टादश (aShTaadasha)", "नवदश (navadasha)", "विंशतिः (viMshatiH)",
+    "त्रिंशत् (triMshat)", "चत्वारिंशत् (chatvaariMshat)", "पञ्चाशत् (pa~nchaashat)", "षष्टिः (ShaShTiH)",
+    "सप्ततिः (saptatiH)", "अशीतिः (ashiitiH)", "नवतिः (navatiH)", "शतम् (shatam)"
+        ];
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        let currentNumber = 0;
+        let selectedNumbers = [];
+        let isSanEnabled = true;
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const numberTable =
+            document.getElementById("numberTable");
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const sanskritContainer =
+            document.getElementById("sanskritContainer");
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const sanskritWordElement =
+            document.getElementById("sanskritWord");
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const generateButton =
+            document.getElementById("generateBtn");
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const resetButton =
+            document.getElementById("resetBtn");
 
-            </tr>            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+        const soundButton =
+            document.getElementById("soundBtn");
 
-            </tr>        </table>
-    </div>
+        const completePopup =
+            document.getElementById("completePopup");
 
-    <br/>
-</div>
-       <div id="music"><button>Sound On</button></div>
-<audio autobuffer preload=auto>
-<source src="res/1.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/2.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/3.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/4.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/5.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/6.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/7.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/8.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/9.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/10.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/11.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/12.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/13.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/14.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/15.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/16.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/17.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/18.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/19.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/20.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/30.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/40.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/50.mp3" />
-</audio>
-<audio autobuffer preload=auto>
-<source src="res/100.mp3" />
-</audio>
+        const closeCompleteButton =
+            document.getElementById("closeComplete");
+
+        const audioContainer =
+            document.getElementById("audioFiles");
+
+        function getDisplayNumber(number) {
+            return displayNumbers[number - 1];
+        }
+
+        function getSanskritWord(number) {
+            const index = displayNumbers.indexOf(number);
+
+            return index === -1 ? "" : sanskritWords[index];
+        }
+
+        function createAudioFiles() {
+            audioContainer.innerHTML = "";
+
+            displayNumbers.forEach(number => {
+                const audio = document.createElement("audio");
+                audio.id = `audio-${number}`;
+                audio.preload = "none";
+
+                const source = document.createElement("source");
+                source.src = `./res/${number}.mp3`;
+                source.type = "audio/mpeg";
+
+                audio.appendChild(source);
+                audioContainer.appendChild(audio);
+            });
+        }
+
+        function playAudio(number) {
+            const audio = document.getElementById(
+                `audio-${number}`
+            );
+
+            if (!audio) return;
+
+            audio.currentTime = 0;
+
+            audio.play().catch(error => {
+                console.warn("Audio could not play:", error);
+            });
+        }
+
+        function toggleSan() {
+            isSanEnabled = !isSanEnabled;
+            soundButton.textContent =
+                isSanEnabled ? "🔈" : "🔇";
+        }
+
+        function createGrid() {
+            numberTable.innerHTML = "";
+
+            const totalCells = grid.rows * grid.columns;
+
+            for (let index = 0; index < totalCells; index++) {
+                const row = Math.floor(index / grid.columns);
+                const column = index % grid.columns;
+
+                const number = column * grid.rows + row;
+                const freeCell = index === 0;
+
+                const selected =
+                    number >= 1 &&
+                    number <= 28 &&
+                    selectedNumbers.includes(number);
+
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+
+                if (freeCell) {
+                    cell.classList.add("free");
+                } else if (selected) {
+                    cell.classList.add("selected");
+                }
+
+                if (selected && !freeCell) {
+                    const displayNumber =
+                        getDisplayNumber(number);
+
+                    cell.textContent = displayNumber;
+
+                    cell.addEventListener("click", () => {
+                        playAudio(displayNumber);
+                    });
+                }
+
+                numberTable.appendChild(cell);
+            }
+        }
+
+        function handleGenerate() {
+            const remainingNumbers =
+                Array.from({ length: 28 }, (_, i) => i + 1)
+                    .filter(number =>
+                        !selectedNumbers.includes(number)
+                    );
+
+            if (remainingNumbers.length === 0) {
+                completePopup.hidden = false;
+                return;
+            }
+
+            const randomIndex = Math.floor(
+                Math.random() * remainingNumbers.length
+            );
+
+            const selectedNumber = remainingNumbers[randomIndex];
+
+            selectedNumbers.push(selectedNumber);
+
+            currentNumber = getDisplayNumber(selectedNumber);
+            sanskritWordElement.textContent =
+                getSanskritWord(currentNumber);
+
+            sanskritContainer.hidden = false;
+
+            createGrid();
+
+            if (isSanEnabled) {
+                playAudio(currentNumber);
+            }
+
+            if (selectedNumbers.length === 28) {
+                completePopup.hidden = false;
+                generateButton.disabled = true;
+
+                requestAnimationFrame(() => {
+                    completePopup.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                  })
+                }
+            }
+        
+
+        function handleRestart() {
+            currentNumber = 0;
+            selectedNumbers = [];
+            sanskritWordElement.textContent = "";
+            completePopup.hidden = true;
+            generateButton.disabled = false;
+
+            createGrid();
+        }
+
+        function instruction() {
+            instructionsPopup.hidden = false;
+        }
+
+        function closeInstructions() {
+            instructionsPopup.hidden = true;
+        }
+
+        function closeIsComplete() {
+            completePopup.hidden = true;
+        }
+
+        generateButton.addEventListener(
+            "click", handleGenerate
+        );
+
+        resetButton.addEventListener(
+            "click", handleRestart
+        );
+
+        soundButton.addEventListener(
+            "click", toggleSan
+        );
+
+        closeCompleteButton.addEventListener(
+            "click", closeIsComplete
+        );
 
 
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
+        createAudioFiles();
+        createGrid();
+
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+    })();
+    </script>
+
 </body>
 </html>

@@ -6,7 +6,14 @@
 }
 
 body{
-  background:#f2e6ff;
+  background:linear-gradient(
+    180deg,
+        #fff1e4 0%,
+        #fff8f1 50%,
+        #ffffff 100%
+    );
+    background-attachment: fixed;
+  min-height: 100vh;
 }
 
 hr{
@@ -23,15 +30,19 @@ table{
 }
 td{
 /*   width:16%; */
-  border:2px solid #555;
+  border:2px solid #A77F6A;
+  border-radius: 14px;
+  background: #FFF9F4;
   position: relative;
+  box-shadow: 0 3px 7px rgba(101, 75, 64, 0.08);
   transition: transform  1s;
   animation: newgame 0.5s forwards;
   animation-delay: calc(var(--animation-order) * 100ms);
 }
 
 td.void {
-  background:#aaa;
+  background:#E8DCD3;
+  border-color: #A9ADB4;
 }
 
 td:after {
@@ -71,7 +82,7 @@ td.both:before{
 }
 
 td.left, td.right, td.both{
-  background:gold;
+  background:#F2C66D;
 }
 td.left, td.right, td.both, td.left p, td.right p, td.both p{
   color:#555;
@@ -111,7 +122,18 @@ form{
   background:transparent;
 }
 .smallbutton:hover, .smallbutton:hover p{
-  color:#aaa;
+  color:#000;
+}
+
+#hardmodebutton .fa-language {
+  position: relative;
+  font-size: 21px;
+  color: #000;
+  top: -15px;
+}
+
+#hardmodebutton:hover .fa-language{
+  color: #000;
 }
 
 #newgamebutton{
@@ -121,22 +143,33 @@ form{
 }
 
 #numpad {
-/*  max-width: 400px;*/
+
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 5px;
+
+  width: 390px;
+  max-width: 95%;
+  margin: 10px auto;
 }
 
-#numpad button{
-  max-width: 100px;
-  width:15%;
-  background:#999;
-  border-radius:6px;
-  margin:2px;
+#numpad br{
+  display: none;
+}
+
+#numpad button {
+    max-width: none;
+    width: 100%;
+    background: #D6BFB2 !important;
+    border-radius: 12px;
+    margin: 0px;
 }
 
 #numpad button:hover, #numpad button:hover p{  
-  color:#ccc;
-  font-size: 150%;
-  background:#333;
-  border-radius:6px;
+  color:#000;
+  /* font-size: 150%; */
+  background: #D6BFB2 !important;
+  border-radius:12px;
 }
 
 
@@ -156,10 +189,38 @@ form{
   align-items: center;
   justify-content: center;
   margin:0;
-  font-size:30px;
+  font-size:20px;
   font-weight:600;
 }
 
+#numpad button .numpad-content{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+#numpad button .english-number{
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  color: #604334
+}
+
+#numpad button  .sanskrit-number{
+  display: block;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.1;
+  color: #604334
+}
  #sharebutton{
   width:100px;
    height:40px;
@@ -178,11 +239,70 @@ form{
   right:0;
 }
 
+#header >.absright{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.scoreDisplay {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    border: none;
+    padding: 0;
+    position: relative;
+     top: -5px;
+
+}
+
 .center{
   position:relative;
   margin:0 auto;
   left:0;
   right:0;
+}
+
+#scoreButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 24px;
+
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+#scoreButton .fa-trophy {
+  position: relative;
+  font-size: 17px;
+  color: #000;
+}
+
+#scoreButton:hover .fa-trophy {
+  color: #000
+}
+
+#trophyScore {
+    position: static;
+    display: inline-block;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+
+    min-width: 14px;
+    line-height: 1;
+    text-align: center;
 }
 
 .flex{
@@ -207,7 +327,7 @@ form{
 }
 #winner, #about{
   background:#fff;
-  border-radius:6px;
+  border-radius:12px;
   padding:40px;
   position:relative;
   transform-style: flat;
@@ -253,7 +373,7 @@ form{
   
   100% { 
     transform: rotateX(360deg);
-    background-color:#32a852;
+    background-color:#70C98B;;
   }
 }
 
@@ -277,13 +397,42 @@ form{
 }
 
 #wrapper{
-  width:600px;
-  transform-style: flat;
-  perspective:1000;
+   width: 500px;
+  max-width: 90%;
+  margin: 20px auto;
 }
 
-@media only screen and (max-width:600px){
-  #wrapper{
-    width:100%;
-  }
+#header .absright .smallbutton .material-icons {
+    font-size: 19px;
+    margin-top: 2.5px;
 }
+
+@media only screen and (max-width: 600px) {
+  #wrapper {
+    width: 100%;
+  }
+
+  #header {
+    padding-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 35px;
+  }
+
+  #header > .absleft {
+    top: 0;
+    left: 0px;
+  }
+
+  #header > .absright {
+    top: 0;
+    right: 0px;
+    gap: 4px;
+  }
+
+  #header h1 {
+    font-size: 22px;
+    margin: 0;
+  }
+}  
