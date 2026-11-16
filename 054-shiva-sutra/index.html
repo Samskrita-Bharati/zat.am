@@ -1,50 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <!-- 
-      This is an HTML comment
-      You can write text in a comment and the content won't be visible in the page
-    -->
-    <meta charset="utf-8" >
-    <meta name="viewport" content="width=device-width, initial-scale=1" >
-    <link rel="icon" href="/054-shiva-sutra/damaru_1.png" >
-    <link rel="manifest" href="/054-shiva-sutra/manifest.json" >
-    
-    <title>Shiva Sutra!</title>
-
-    <!-- The website stylesheet -->
-    <link rel="stylesheet" href="/054-shiva-sutra/style.css" >
-
-    <!-- The website JavaScript file -->
-    <script src="/054-shiva-sutra/script.js" defer></script>
-  </head>
-  <body data-page="games">
-
-    <!-- Shared Zat.am Navbar -->
-    <div id="navbar-mount"></div>
-
-    <h1>
-      Shiva Sutra
-    </h1>
-    <p id="info">
-      Also known as Akṣara samāmnāya, it refers to a set of 14 aphorisms devised as 
-      an arrangement of the sounds of Sanskrit for grammatical exposition by Pāṇini.
-      <br><br>
-      Your challenge is to arrange the tiles (with aksharas) of this sliding puzzle in the correct order.
-      <br>
-      <br> Click the New Game button to begin. Click Listen button to play the Shiva sutra.
-    </p>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shiva Sutra | Zat.am</title>
+  <link rel="icon" href="./damaru_1.png">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="../shared/game-theme.css">
+  <link rel="stylesheet" href="./style.css?direct&amp;v=score2">
+  <script src="./script.js?v=cleanup-2" defer></script>
+</head>
+<body class="zatam-themed-game shiva-page" data-page="games">
+  <div id="navbar-mount"></div>
+  <main class="zatam-game-shell shiva-game">
+    <header class="shiva-header">
+      <p class="shiva-kicker">Sanskrit sliding puzzle</p>
+      <h1>Shiva Sutra</h1>
+      <p>Slide Sanskrit sound tiles into their original order.</p>
+    </header>
+    <div class="shiva-layout">
+      <section class="shiva-panel shiva-play" aria-labelledby="puzzle-heading">
+        <h2 id="puzzle-heading">Puzzle board</h2>
+        <p id="info">Choose a challenge and start a new game.</p>
     <audio id="SS_Audio">
       <source src="/054-shiva-sutra/shivasutra-damaru.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
-    <span>
-    <button id="check">Submit</button>
-    <button id="play_pause" type="button">Listen</button>
-    <button id="randomize">New Game</button>
-    </span>
-    <span id="status"></span>
-    <br>
+
+        <div class="shiva-controls">
+          <button type="button" id="randomize">New Game</button>
+          <button type="button" id="play_pause" class="secondary">Listen</button>
+          <button type="button" id="check" class="secondary">Check arrangement</button>
+        </div>
+        <div class="round-stats" aria-label="Round statistics">
+          <span>Time <strong id="round-time">0:00</strong></span>
+          <span>Moves <strong id="round-moves">0</strong></span>
+          <span>Score <strong id="round-score">100/100</strong></span>
+        </div>
+        <p id="status" role="status"></p>
+        <p id="score-status" role="status"></p>
+        <button type="button" id="retry-score" hidden>Retry saving score</button>
     <div id="board">
       <div class="tile" data-tile-number="1" data-row="0" data-col="0" id="1" >1</div>
       <div class="tile" data-tile-number="2" data-row="0" data-col="1" id="2" >2</div>
@@ -63,46 +58,49 @@
       <div class="tile" data-tile-number="15" data-row="3" data-col="2" id="15" >15</div>
       <div class="tile" data-tile-number="space" data-row="3" data-col="3" id="space" ></div>
     </div>
-    
-  <main>
-    <br>
-    <div class="tooltip">
-      <button id="share" onclick="ShareIt()" onmouseout="outFunc()">
-      <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-      Share</button>
-    </div>
-    <br>
-    <br>
-    <span id="settings_2" onchange="CreateGame()">
-      Challenge:
-    <input type="radio" id="shiva" name="challenge" value="1" checked="checked"><label for="shiva"> Shiva sutra </label>
-    <input type="radio" id="alpha"  name="challenge" value="2"><label for="alpha"> Alphabets </label>
-    </span>
-  </main>
-    
-    <p id="image">
-      <img alt="An idol of dancing nataraja with list of panini's shiva sutras or maheshwarani sutrani" src="/054-shiva-sutra/Maheshwarani_Sutras.jpg">
-    </p>
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function() {
-          navigator.serviceWorker
-            .register("/054-shiva-sutra/serviceWorker.js")
-            .then(res => console.log("service worker registered"))
-            .catch(err => console.log("service worker not registered", err))
-        })
-      }
-    </script>
-    
-    <footer class="footer">
-    <span style="white-space: nowrap"> &copy; 2023 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Audio Courtesy: themathesontrust.org </span>
-    </footer>
-  
 
-    <!-- Shared Zat.am Navbar -->
-    <script
-      type="module"
-      src="../js/navbar-loader.js"
-    ></script>
+        <figure id="image">
+          <img src="./Maheshwarani_Sutras.jpg" alt="Dancing Nataraja beside the fourteen Shiva Sutras">
+        </figure>
+      </section>
+      <aside class="shiva-sidebar">
+        <section class="shiva-panel" aria-labelledby="challenge-heading">
+          <h2 id="challenge-heading">Choose a challenge</h2>
+    <span id="settings_2" onchange="CreateGame()">
+    <input type="radio" id="shiva" name="challenge" value="1" checked="checked"><label for="shiva"> Shiva sutra </label>
+    <input type="radio" id="alpha"  name="challenge" value="2"><label for="alpha"> Alphabet </label>
+    </span>
+
+        </section>
+        <section class="shiva-panel" aria-labelledby="best-heading">
+          <h2 id="best-heading">Personal best</h2>
+          <p id="best-level">Shiva Sutra</p>
+          <p id="best-score">— / 100</p>
+          <p>Moves: <span id="best-moves">—</span> · Time: <span id="best-time">—</span></p>
+          <p id="best-status" role="status"></p>
+        </section>
+        <section class="shiva-panel">
+          <h2>How to play</h2>
+          <ol>
+            <li>Select <strong>New Game</strong> to shuffle the tiles.</li>
+            <li>Select a tile next to the empty square to slide it.</li>
+            <li>Arrange the tiles left to right, top to bottom, then check your arrangement.</li>
+            <li>Scoring starts with 2,000 raw points; each second and legal move costs 2. The raw score has a 100-point minimum and is converted to a score out of 100.</li>
+          </ol>
+        </section>
+        <section class="shiva-panel">
+          <h2>About the sutras</h2>
+          <p>The Shiva Sutras, also called Akṣara samāmnāya, group the sounds of Sanskrit into fourteen short sequences used in Pāṇini’s grammar.</p>
+        </section>
+      </aside>
+    </div>
+    <footer class="shiva-credit">© 2023 <a href="https://www.pradeepd.com/hobbies/apps">Pradeep D</a>, <a href="https://www.iseek.page">iSeek</a>. Audio courtesy of themathesontrust.org.</footer>
+  </main>
+  <script type="module" src="../js/navbar-loader.js"></script>
+  <script>
+    if ("serviceWorker" in navigator && !["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./serviceWorker.js").catch(console.error));
+    }
+  </script>
 </body>
 </html>

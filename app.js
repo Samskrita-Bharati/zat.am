@@ -393,6 +393,22 @@ export const menu = [
     dir: "bp26",
     desc: `BodhaPlay संस्कृतम् competition 2026 coming soon - <pre>shiighram aagamiShyati... </pre>`,
   },
+  {
+    id: 60,
+    title: "Sanskrit Dialogue Game",
+    category: "RG",
+    dir: "060-sanskrit-dialogue",
+    cover: "./060-sanskrit-dialogue/Dialogue-thumbnail.png",
+    desc: `Learn conversational Sanskrit through interactive dialogue stories.`,
+  },
+  {
+    id: 61,
+    title: "Sanskrit Pronunciation",
+    category: "RG",
+    dir: "061-sanskrit-pronunciation",
+    cover: "./061-sanskrit-pronunciation/cover.png",
+    desc: `Practice Sanskrit pronunciation through interactive exercises.`,
+  },
 ];
 
 // =====================================================
@@ -490,7 +506,7 @@ function getGameCover(item) {
     return "./शत.म्.png";
   }
 
-  return `./${item.dir}/cover.jpg`;
+  return item.cover || `./${item.dir}/cover.jpg`;
 }
 
 // =====================================================

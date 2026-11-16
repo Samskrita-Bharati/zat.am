@@ -270,20 +270,3 @@ body.fw-page {
   background: var(--zatam-navy);
   color: var(--zatam-white);
 }
-
-@media (min-width: 951px) {
-  body.fw-page #header-placeholder .zatam-header {
-    min-height: 96px;
-  }
-
-  body.fw-page #header-placeholder .zatam-nav {
-    align-self: stretch;
-    height: auto;
-    font-size: 20px;
-  }
-
-  body.fw-page #header-placeholder .bp26-navbar-logo {
-    height: 68px !important;
-    max-height: 68px !important;
-  }
-}

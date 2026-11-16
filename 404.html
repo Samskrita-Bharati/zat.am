@@ -1,85 +1,124 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-  <title>The page you were looking for doesn't exist (404)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-  body {
-    height: 100%;
-    width: 100%;
-    background: #fefefe url('/construction.png')center bottom fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    color: #2E2F30;
-    font-family: sans-serif;
-    margin: 0;
-  }
-
-  footer {
-    position: absolute;
-    bottom: 1%;
-    width: 100%;
-    text-align: center;
-    font-size: .6em;
-    color: #fff
-  }
-
-  a {
-    color: #fff;
-  }
-
-  a:hover {
-    color: #393939;
-  }
-
-  .dialog {
-    float:left;
-    text-align: left;
-    width: 50%;
-    margin: 2% auto 0;
-    padding-left: 10%;
-  }
-
-  h1 { 
-    font-size: 3.5em;
-    color: #393939;
-    line-height: 1em;
-  }
-
-  h2 { 
-    font-size: 2em;
-    color: #393939;
-    line-height: .5em;
-  }
-
-  p {
-    font-size: 1.4em;
-    color: #393939;
-    
-  }
-  
-  @media only screen and (max-width: 767px) {
-    .dialog {
-    float:none;
-    text-align: center;
-    width: 90%;
-  }
-  }  
-  </style>
-</head>
-
-<body>  
-  <div>
-    <div class="dialog">
-      <h1>क्षम्यताम् kShamyataam</h1>
-      <p>नास्ति  पृष्ठम् (naasti pRRiShTham) page doesn't exist</p>
-	  <h3><a href="https://zat.am">मुखपृष्ठम् mukhapRRiShTham - Main Page</a></h3>
-	  <img src="/शत.म्.png" width="25%" alt="शत.म् zat.am"/>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fffaf2" />
+    <title>Page Not Found (404) | Zat.am</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      :root {
+        --navy: #0b2b4f;
+        --navy-light: #143d6b;
+        --gold: #f6b23b;
+        --gold-light: #ffd36b;
+        --cream: #fffaf2;
+        --cream-dark: #fff7e8;
+        --border: #eadfce;
+        --muted: #687789;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { min-height: 100%; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(circle at 92% 16%, rgba(246, 178, 59, .25) 0 105px, transparent 107px),
+          radial-gradient(circle at 8% 88%, rgba(246, 178, 59, .12) 0 145px, transparent 147px),
+          linear-gradient(125deg, #fff2db 0%, var(--cream) 52%, #ffedcc 100%);
+        color: var(--navy);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.5;
+      }
+      a { color: inherit; text-decoration: none; }
+      button, a { -webkit-tap-highlight-color: transparent; }
+      a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+      .page-shell { width: min(1180px, calc(100% - 56px)); min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; }
+      .site-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 0; border-bottom: 1px solid rgba(11,43,79,.10); }
+      .brand { display: inline-flex; align-items: center; font-size: 28px; font-weight: 900; letter-spacing: -.055em; line-height: 1; }
+      .brand-dot { color: #d48a12; }
+      .header-tagline { font-size: 12px; font-weight: 800; color: #647286; letter-spacing: .14em; text-transform: uppercase; }
+      .error-layout { flex: 1; display: grid; grid-template-columns: minmax(0,1fr) minmax(360px,.9fr); align-items: center; gap: clamp(34px,5vw,75px); padding: 48px 0 64px; }
+      .error-copy { position: relative; z-index: 1; }
+      .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px; color: #b47713; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+      .eyebrow span { display: grid; place-items: center; min-width: 47px; min-height: 28px; padding: 0 8px; background: #ffe4a6; border: 1px solid #efc36b; border-radius: 999px; color: var(--navy); letter-spacing: 0; }
+      .error-copy h1 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(50px,6.2vw,82px); font-weight: 700; line-height: 1.13; letter-spacing: -.02em; }
+      .title-underline { width: 76px; height: 5px; margin: 24px 0; background: var(--gold); border-radius: 999px; }
+      .transliteration { margin: 0 0 21px; color: #8a622e; font-size: 15px; font-weight: 700; }
+      .error-copy h2 { margin: 0 0 11px; color: var(--navy); font-family: Georgia, 'Times New Roman', serif; font-size: clamp(22px,2.5vw,31px); line-height: 1.3; }
+      .error-copy h2 small { display: block; margin-top: 6px; color: #596a7b; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 500; }
+      .error-description { max-width: 460px; margin: 0 0 27px; color: #41546a; font-size: 16px; line-height: 1.7; }
+      .home-button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 11px; padding: 12px 22px; background: var(--navy); color: #fff; border: 1px solid var(--navy); border-radius: 9px; font-size: 15px; font-weight: 800; box-shadow: 0 10px 22px rgba(11,43,79,.18); transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+      .home-button:hover { background: var(--navy-light); transform: translateY(-2px); box-shadow: 0 14px 26px rgba(11,43,79,.2); }
+      .home-button span { color: var(--gold-light); font-size: 21px; line-height: 1; }
+      .error-art { position: relative; isolation: isolate; width: 100%; max-width: 530px; aspect-ratio: 1.14; margin: 0 auto; display: grid; place-items: center; }
+      .art-orbit { position: absolute; inset: 7%; border: 2px dashed rgba(11,43,79,.15); border-radius: 50%; transform: rotate(-12deg); }
+      .art-sun { position: absolute; top: 10%; right: 9%; width: 74px; height: 74px; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 0 18px rgba(255,211,107,.2); }
+      .art-hill { position: absolute; inset: 48% 3% 7%; z-index: -1; border-radius: 52% 48% 23px 23px / 86% 85% 23px 23px; background: linear-gradient(120deg, #f1d69f, #db9d34); opacity: .28; }
+      .tile-set { position: relative; display: flex; align-items: center; justify-content: center; gap: clamp(10px,1.5vw,20px); width: 100%; padding: 0 10px; transform: rotate(-3deg); }
+      .number-tile { width: clamp(86px,9vw,132px); height: clamp(106px,11vw,154px); display: grid; place-items: center; background: #fff; border: 3px solid var(--navy); border-radius: 19px; box-shadow: 0 15px 0 rgba(11,43,79,.13), 0 25px 28px rgba(11,43,79,.11); font-size: clamp(54px,6.4vw,90px); font-weight: 900; line-height: 1; }
+      .number-tile:nth-child(1) { background: #ffd06a; transform: translateY(25px) rotate(-10deg); }
+      .number-tile:nth-child(2) { transform: translateY(-22px) rotate(4deg); }
+      .number-tile:nth-child(3) { background: #d7e7ad; transform: translateY(13px) rotate(10deg); }
+      .art-star { position: absolute; top: 13%; left: 8%; color: #ce8a1d; font-size: 40px; }
+      .art-star-small { position: absolute; right: 14%; bottom: 13%; color: var(--navy); font-size: 31px; }
+      .site-footer { border-top: 1px solid rgba(11,43,79,.1); padding: 17px 0 22px; text-align: center; color: #687789; font-size: 12px; }
+      @media (max-width: 850px) {
+        .error-layout { grid-template-columns: 1fr; gap: 12px; padding: 45px 0 45px; text-align: center; }
+        .eyebrow { justify-content: center; }
+        .title-underline { margin: 20px auto; }
+        .error-description { margin-left: auto; margin-right: auto; }
+        .error-art { order: -1; max-width: 365px; aspect-ratio: 1.5; }
+        .art-sun { width: 52px; height: 52px; }
+        .number-tile { width: 86px; height: 95px; font-size: 56px; }
+      }
+      @media (max-width: 460px) {
+        .page-shell { width: calc(100% - 32px); }
+        .site-header { padding: 20px 0; }
+        .brand { font-size: 25px; }
+        .header-tagline { font-size: 9px; max-width: 115px; text-align: right; }
+        .error-layout { padding-top: 26px; }
+        .error-art { max-width: 310px; }
+        .number-tile { width: 74px; height: 84px; border-radius: 13px; font-size: 47px; }
+        .eyebrow { margin-bottom: 15px; }
+        .error-copy h1 { font-size: 49px; }
+        .error-copy h2 { font-size: 24px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="https://zat.am/" aria-label="Zat.am homepage">zat<span class="brand-dot">.</span>am</a>
+        <span class="header-tagline">Learn Sanskrit through play</span>
+      </header>
+      <main class="error-layout">
+        <section class="error-copy" aria-labelledby="page-title">
+          <p class="eyebrow"><span>404</span> Page not found</p>
+          <h1 id="page-title" lang="sa">क्षम्यताम्</h1>
+          <div class="title-underline" aria-hidden="true"></div>
+          <p class="transliteration">kShamyataam · We're sorry</p>
+          <h2><span lang="sa">नास्ति पृष्ठम्</span><small>naasti pRRiShTham · This page doesn't exist</small></h2>
+          <p class="error-description">The page you're looking for may have moved, or the link may be incorrect. Head back to Zat.am and keep exploring.</p>
+          <a class="home-button" href="https://zat.am/">Back to Zat.am <span aria-hidden="true">→</span></a>
+        </section>
+        <div class="error-art" aria-hidden="true">
+          <div class="art-orbit"></div>
+          <div class="art-sun"></div>
+          <div class="art-hill"></div>
+          <span class="art-star">✳</span>
+          <div class="tile-set">
+            <span class="number-tile">४</span>
+            <span class="number-tile">०</span>
+            <span class="number-tile">४</span>
+          </div>
+          <span class="art-star-small">✦</span>
+        </div>
+      </main>
+      <footer class="site-footer">© 2026 Zat.am · Learning Sanskrit together</footer>
     </div>
-  </div> 
-</body>
-<footer>:)</footer>
+  </body>
 </html>
