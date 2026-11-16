@@ -6,6 +6,8 @@ import {
   getCurrentUserProfile,
 } from "../api/auth-api.js";
 import { db, doc, updateDoc } from "../api/firebase-config.js";
+import { initProfilePhotoEditor } from "./avatar-upload.js";
+import { resolveAvatarState } from "./avatar-state.js";
 
 const profileName = document.getElementById("profile-name");
 const profileEmail = document.getElementById("profile-email");
@@ -70,11 +72,25 @@ function renderProfileAvatar(user, profile) {
 
   profileIconElement.replaceChildren();
 
-  if (user.photoURL) {
+  const photoURL = resolveAvatarState(user, profile).photoURL;
+  let validURL = null;
+  try {
+    const parsed = new URL(photoURL);
+    if (parsed.protocol === "https:") validURL = parsed.href;
+  } catch { /* No valid photo URL; show initials. */ }
+
+  if (validURL) {
     const image = document.createElement("img");
-    image.src = user.photoURL;
+    image.src = validURL;
     image.alt = `${profile?.name || user.displayName || "User"} profile`;
     image.className = "profile-avatar-img";
+    image.onerror = () => {
+      image.remove();
+      const fallback = document.createElement("span");
+      fallback.className = "profile-avatar-fallback";
+      fallback.textContent = getInitials(profile?.name || user.displayName, user.email);
+      profileIconElement.appendChild(fallback);
+    };
     profileIconElement.appendChild(image);
     return;
   }
@@ -87,6 +103,19 @@ function renderProfileAvatar(user, profile) {
   );
   profileIconElement.appendChild(fallback);
 }
+
+// This editor reads the currently authenticated user only at save time.
+initProfilePhotoEditor({
+  getUser: () => currentUser,
+  getProfile: () => currentProfile,
+  onSaved: (patch) => {
+    currentProfile = { ...(currentProfile || {}), ...patch };
+    renderProfileAvatar(currentUser, currentProfile);
+    window.dispatchEvent(new CustomEvent("zatam:avatar-updated", {
+      detail: { photoURL: patch.photoURL },
+    }));
+  },
+});
 
 // Load all countries
 async function loadAllCountries() {
