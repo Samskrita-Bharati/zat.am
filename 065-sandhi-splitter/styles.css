@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 550px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.score-display {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    background-color: #0f172a;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prompt-box {
+    background-color: #0f172a;
+    padding: 30px 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.prompt-box p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+.split-string-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 4px;
+}
+
+.slice-char {
+    position: relative;
+    padding: 0 4px;
+}
+
+.slice-gap {
+    width: 12px;
+    height: 45px;
+    background-color: transparent;
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.15s;
+    border-radius: 3px;
+    margin: 0 -4px;
+}
+
+.slice-gap:hover {
+    background-color: #6366f1;
+    box-shadow: 0 0 10px #6366f1;
+}
+
+.preview-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.word-part {
+    background-color: #0f172a;
+    border: 1px dashed #475569;
+    padding: 15px 25px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    min-width: 120px;
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.part-plus {
+    font-size: 1.5rem;
+    color: #94a3b8;
+    font-weight: bold;
+}
