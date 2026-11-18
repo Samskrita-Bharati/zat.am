@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.score-display {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    background-color: #0f172a;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.conveyor-belt {
+    background-color: #0f172a;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px dashed rgba(99, 102, 241, 0.3);
+    min-height: 140px;
+}
+
+.conveyor-belt p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.sorting-item {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #38bdf8;
+    display: inline-block;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.bins-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.bin {
+    background-color: #334155;
+    border: 2px solid #475569;
+    padding: 20px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #f8fafc;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+.bin:hover {
+    background-color: #475569;
+    border-color: #6366f1;
+    transform: translateY(-3px);
+}
+
+.bin-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.bin-subtitle {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
