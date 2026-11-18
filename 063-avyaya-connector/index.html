@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="sa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avyaya Connector</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="score-display">
+            Score: <span id="score-counter">0</span> | 
+            Streak: <span id="streak-counter" style="color: #6366f1;">0</span> | 
+            High: <span id="high-counter" style="color: #eab308;">0</span> |
+            Time: <span id="timer-display" style="color: #ef4444;">10</span>s
+        </div>
+        
+        <div class="flashcard">
+            <h1 id="sanskrit-sentence">Loading...</h1>
+            <p id="english-translation">Translation will appear here</p>
+        </div>
+
+        <div class="bin-grid" id="options-container">
+            </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
